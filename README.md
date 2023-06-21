@@ -27,7 +27,7 @@ Welcome to the Flash SSD Simulator! This simulator allows you to experience the 
 
 By providing this comprehensive range of functionalities, the Flash SSD Simulator offers an interactive and educational environment for users to explore the inner workings of flash-based SSDs. It enables users to develop a deeper understanding of the technology behind SSDs and the factors that influence their performance and longevity. So go ahead, dive in, and experience the fascinating world of flash SSDs firsthand!
 
-## Table 1: Specifications of a NAND Flash Device
+## Table 01: Specifications of a NAND Flash Device
 | Parameter | Value |
 |----------|----------|
 Page Size | 4 KB
@@ -35,3 +35,17 @@ Block Size | 256 KB (64 pages)
 Page Read | 25 μs
 Page Program (Write) | 200 μs
 Block Erase | 1.5 ms
+
+
+## Figure 01: Internal Architecture of a Typical NAND Flash Device
+![Example Image](readme_documentation_srcs/ssd-package.webp)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Figure 01 above shows the internals of a NAND-flash package, which is organized as a hierarchical structure. The levels are channel, package, chip, plane, block, and page. Those different levels offer parallelism as follows:
+
+1. Channel-level parallelism:  The flash controller communicates with the flash packages through multiple channels. Those channels can be accessed independently and simultaneously. Each individual channel is shared by multiple packages.
+
+2. Package-level parallelism: The packages on a channel can be accessed independently. Interleaving can be used to run commands simultaneously on the packages shared by the same channel.
+
+3. Chip-level parallelism: A package contains two or more chips, which can be accessed independently in parallel. Note: chips are also called “dies”.
+
+4. Plane-level parallelism: A chip contains two or more planes. The same operation (read, write or erase) can be run simultaneously on multiple planes inside a chip. Planes contain blocks, which themselves contains pages. The plane also contains registers (small RAM buffers), which are used for plane-level operations.
