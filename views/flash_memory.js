@@ -1,83 +1,204 @@
-class FlashMemory {
-    constructor(packageCount, dieCount, blockCount, pageCount) {
-      this.packageCount = packageCount;
-      this.dieCount = dieCount;
-      this.blockCount = blockCount;
-      this.pageCount = pageCount;
-  
-      this.flashMemoryArray = this.createFlashMemoryArray();
-    }
-  
-    createFlashMemoryArray() {
-      const flashMemoryArray = [];
-  
-      for (let packageIndex = 0; packageIndex < this.packageCount; packageIndex++) {
-        const packageData = [];
-  
-        for (let dieIndex = 0; dieIndex < this.dieCount; dieIndex++) {
-          const dieData = [];
-  
-          for (let blockIndex = 0; blockIndex < this.blockCount; blockIndex++) {
-            const blockData = [];
-  
-            for (let pageIndex = 0; pageIndex < this.pageCount; pageIndex++) {
-              // Initializing with empty data
-              blockData.push(null);
-            }
-  
-            dieData.push(blockData);
-          }
-  
-          packageData.push(dieData);
-        }
-  
-        flashMemoryArray.push(packageData);
-      }
-  
-      return flashMemoryArray;
-    }
-  
-    readData(packageIndex, dieIndex, blockIndex, pageIndex) {
-      if (
-        packageIndex < 0 ||
-        packageIndex >= this.packageCount ||
-        dieIndex < 0 ||
-        dieIndex >= this.dieCount ||
-        blockIndex < 0 ||
-        blockIndex >= this.blockCount ||
-        pageIndex < 0 ||
-        pageIndex >= this.pageCount
-      ) {
-        throw new Error("Invalid memory address.");
-      }
-  
-      return this.flashMemoryArray[packageIndex][dieIndex][blockIndex][pageIndex];
-    }
-  
-    writeData(packageIndex, dieIndex, blockIndex, pageIndex, data) {
-      if (
-        packageIndex < 0 ||
-        packageIndex >= this.packageCount ||
-        dieIndex < 0 ||
-        dieIndex >= this.dieCount ||
-        blockIndex < 0 ||
-        blockIndex >= this.blockCount ||
-        pageIndex < 0 ||
-        pageIndex >= this.pageCount
-      ) {
-        throw new Error("Invalid memory address.");
-      }
-  
-      this.flashMemoryArray[packageIndex][dieIndex][blockIndex][pageIndex] = data;
-    }
+// Objective: Flash memory page
+// Get the select element
+var select = document.getElementById("pageCount");
+// Add event listener for the "change" event
+select.addEventListener("change", function () {
+  // Get the selected value
+  var selectedValue = select.value;
+
+  // Perform actions based on the selected value
+  if (selectedValue === "2") {
+    // Code to execute when the value "16" is selected
+    console.log("Selected value is 16");
+  } else if (selectedValue === "4") {
+    // Code to execute when the value "32" is selected
+    console.log("Selected value is 32");
   }
-  
-  // Example usage
-  const flashMemory = new FlashMemory(2, 4, 16, 64);
-  
-  // Write data
-  flashMemory.writeData(0, 0, 0, 0, "Data1");
-  
-  // Read data
-  const data = flashMemory.readData(0, 0, 0, 0);
-  console.log(data); // Output: "Data1"
+});
+
+// --------------------------------------Flash memory Block----------------------------------------------------------//
+var blockSelect = document.getElementById("blockCount");
+// Add event listener for the "change" event
+blockSelect.addEventListener("change", function () {
+  // Get the selected value
+  var blockValue = blockSelect.value;
+  console.log(blockValue);
+  var p0d0p0b0ct = document.getElementById("p0d0p0b0ct");
+  var p0d0p0b1ct = document.getElementById("p0d0p0b1ct");
+  var p0d0p0b2ct = document.getElementById("p0d0p0b2ct");
+  var p0d0p0b3ct = document.getElementById("p0d0p0b3ct");
+  var p0d0p1b0ct = document.getElementById("p0d0p1b0ct");
+  var p0d0p1b1ct = document.getElementById("p0d0p1b1ct");
+  var p0d0p1b2ct = document.getElementById("p0d0p1b2ct");
+  var p0d0p1b3ct = document.getElementById("p0d0p1b3ct");
+  var p0d1p0b0ct = document.getElementById("p0d1p0b0ct");
+  var p0d1p0b1ct = document.getElementById("p0d1p0b1ct");
+  var p0d1p0b2ct = document.getElementById("p0d1p0b2ct");
+  var p0d1p0b3ct = document.getElementById("p0d1p0b3ct");
+  var p0d1p1b0ct = document.getElementById("p0d1p1b0ct");
+  var p0d1p1b1ct = document.getElementById("p0d1p1b1ct");
+  var p0d1p1b2ct = document.getElementById("p0d1p1b2ct");
+  var p0d1p1b3ct = document.getElementById("p0d1p1b3ct");
+  var p1d0p0b0ct = document.getElementById("p1d0p0b0ct");
+  var p1d0p0b1ct = document.getElementById("p1d0p0b1ct");
+  var p1d0p0b2ct = document.getElementById("p1d0p0b2ct");
+  var p1d0p0b3ct = document.getElementById("p1d0p0b3ct");
+  var p1d0p1b0ct = document.getElementById("p1d0p1b0ct");
+  var p1d0p1b1ct = document.getElementById("p1d0p1b1ct");
+  var p1d0p1b2ct = document.getElementById("p1d0p1b2ct");
+  var p1d0p1b3ct = document.getElementById("p1d0p1b3ct");
+  var p1d1p0b0ct = document.getElementById("p1d1p0b0ct");
+  var p1d1p0b1ct = document.getElementById("p1d1p0b1ct");
+  var p1d1p0b2ct = document.getElementById("p1d1p0b2ct");
+  var p1d1p0b3ct = document.getElementById("p1d1p0b3ct");
+  var p1d1p1b0ct = document.getElementById("p1d1p1b0ct");
+  var p1d1p1b1ct = document.getElementById("p1d1p1b1ct");
+  var p1d1p1b2ct = document.getElementById("p1d1p1b2ct");
+  var p1d1p1b3ct = document.getElementById("p1d1p1b3ct");
+
+  // Perform actions based on the selected value
+  if (blockValue === "1") {
+    // Code to execute when the value "16" is selected
+    p0d0p0b1ct.style.display = "none";
+    p0d0p0b2ct.style.display = "none";
+    p0d0p0b3ct.style.display = "none";
+    p0d0p1b1ct.style.display = "none";
+    p0d0p1b2ct.style.display = "none";
+    p0d0p1b3ct.style.display = "none";
+    p0d1p0b1ct.style.display = "none";
+    p0d1p0b2ct.style.display = "none";
+    p0d1p0b3ct.style.display = "none";
+    p0d1p1b1ct.style.display = "none";
+    p0d1p1b2ct.style.display = "none";
+    p0d1p1b3ct.style.display = "none";
+    p1d0p0b1ct.style.display = "none";
+    p1d0p0b2ct.style.display = "none";
+    p1d0p0b3ct.style.display = "none";
+    p1d0p1b1ct.style.display = "none";
+    p1d0p1b2ct.style.display = "none";
+    p1d0p1b3ct.style.display = "none";
+    p1d1p0b1ct.style.display = "none";
+    p1d1p0b2ct.style.display = "none";
+    p1d1p0b3ct.style.display = "none";
+    p1d1p1b1ct.style.display = "none";
+    p1d1p1b2ct.style.display = "none";
+    p1d1p1b3ct.style.display = "none";
+  } else if (blockValue === "2") {
+    // Code to execute when the value "32" is selected
+    p0d0p0b1ct.style.display = "table";
+    p0d0p0b2ct.style.display = "none";
+    p0d0p0b3ct.style.display = "none";
+    p0d0p1b1ct.style.display = "table";
+    p0d0p1b2ct.style.display = "none";
+    p0d0p1b3ct.style.display = "none";
+    p0d1p0b1ct.style.display = "table";
+    p0d1p0b2ct.style.display = "none";
+    p0d1p0b3ct.style.display = "none";
+    p0d1p1b1ct.style.display = "table";
+    p0d1p1b2ct.style.display = "none";
+    p0d1p1b3ct.style.display = "none";
+    p1d0p0b1ct.style.display = "table";
+    p1d0p0b2ct.style.display = "none";
+    p1d0p0b3ct.style.display = "none";
+    p1d0p1b1ct.style.display = "table";
+    p1d0p1b2ct.style.display = "none";
+    p1d0p1b3ct.style.display = "none";
+    p1d1p0b1ct.style.display = "table";
+    p1d1p0b2ct.style.display = "none";
+    p1d1p0b3ct.style.display = "none";
+    p1d1p1b1ct.style.display = "table";
+    p1d1p1b2ct.style.display = "none";
+    p1d1p1b3ct.style.display = "none";
+  }else if (blockValue === "4") {
+    // Code to execute when the value "32" is selected
+    p0d0p0b1ct.style.display = "table";
+    p0d0p0b2ct.style.display = "table";
+    p0d0p0b3ct.style.display = "table";
+    p0d0p1b1ct.style.display = "table";
+    p0d0p1b2ct.style.display = "table";
+    p0d0p1b3ct.style.display = "table";
+    p0d1p0b1ct.style.display = "table";
+    p0d1p0b2ct.style.display = "table";
+    p0d1p0b3ct.style.display = "table";
+    p0d1p1b1ct.style.display = "table";
+    p0d1p1b2ct.style.display = "table";
+    p0d1p1b3ct.style.display = "table";
+    p1d0p0b1ct.style.display = "table";
+    p1d0p0b2ct.style.display = "table";
+    p1d0p0b3ct.style.display = "table";
+    p1d0p1b1ct.style.display = "table";
+    p1d0p1b2ct.style.display = "table";
+    p1d0p1b3ct.style.display = "table";
+    p1d1p0b1ct.style.display = "table";
+    p1d1p0b2ct.style.display = "table";
+    p1d1p0b3ct.style.display = "table";
+    p1d1p1b1ct.style.display = "table";
+    p1d1p1b2ct.style.display = "table";
+    p1d1p1b3ct.style.display = "table";
+  }
+});
+
+// --------------------------------------Flash memory Plane----------------------------------------------------------//
+var planeSelect = document.getElementById("planeCount");
+// Add event listener for the "change" event
+planeSelect.addEventListener("change", function () {
+  // Get the selected value
+  var planeValue = planeSelect.value;
+  console.log(planeValue);
+  var planeTable1 = document.getElementById("p0d0p1ct");
+  var planeTable2 = document.getElementById("p0d1p1ct");
+  var planeTable3 = document.getElementById("p1d0p1ct");
+  var planeTable4 = document.getElementById("p1d1p1ct");
+  // Perform actions based on the selected value
+  if (planeValue === "1") {
+    // Code to execute when the value "16" is selected
+    planeTable1.style.display = "none";
+    planeTable2.style.display = "none";
+    planeTable3.style.display = "none";
+    planeTable4.style.display = "none";
+  } else if (planeValue === "2") {
+    // Code to execute when the value "32" is selected
+    planeTable1.style.display = "table";
+    planeTable2.style.display = "table";
+    planeTable3.style.display = "table";
+    planeTable4.style.display = "table";
+  }
+});
+
+// ---------------------------------------Flash memory Die---------------------------------------------------------//
+var dieSelect = document.getElementById("dieCount");
+// Add event listener for the "change" event
+dieSelect.addEventListener("change", function () {
+  // Get the selected value
+  var dieValue = dieSelect.value;
+  var table1 = document.getElementById("p0d1ct");
+  var table2 = document.getElementById("p1d1ct");
+  if (dieValue === "1") {
+    // Code to execute when the value "16" is selected
+    table1.style.display = "none";
+    table2.style.display = "none";
+  }
+  // Perform actions based on the selected value
+  else if (dieValue === "2") {
+    // Code to execute when the value "32" is selected
+    table1.style.display = "table";
+    table2.style.display = "table";
+  }
+});
+
+// ------------------------------------------Flash memory Package------------------------------------------------------//
+var packageSelect = document.getElementById("packageCount");
+// Add event listener for the "change" event
+packageSelect.addEventListener("change", function () {
+  // Get the selected value
+  var packageValue = packageSelect.value;
+  var packageTable = document.getElementById("p0ct");
+  // Perform actions based on the selected value
+  if (packageValue === "1") {
+    // Code to execute when the value "16" is selected
+    packageTable.style.display = "none";
+  } else if (packageValue === "2") {
+    // Code to execute when the value "32" is selected
+    packageTable.style.display = "table";
+  }
+});
