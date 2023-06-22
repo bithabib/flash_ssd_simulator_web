@@ -249,7 +249,7 @@ function calculateFlashMemorySize() {
       cell.parentNode.removeChild(cell);
     }
   }
-  var n = blockCount * planeCount * dieCount * packageCount; // Number of rows to create
+  var n = pageCount * blockCount * planeCount * dieCount * packageCount; // Number of rows to create
 
   for (var i = 1; i <= n; i++) {
     var row = document.createElement("tr");
@@ -269,4 +269,5 @@ function calculateFlashMemorySize() {
     row.appendChild(cell2);
     mapping_table.appendChild(row);
   }
+  document.getElementById("mapping_table_entries").textContent = n;
 }
