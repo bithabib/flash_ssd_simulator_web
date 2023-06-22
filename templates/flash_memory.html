@@ -2,7 +2,10 @@
 <html>
 
 <head>
-    <title>Flash Memory Array Visualization</title>
+
+    <title>Your SSD Simulation Website</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
     <style>
         table {
             border-collapse: collapse;
@@ -33,1057 +36,1157 @@
         .data {
             background-color: #C0C0C0;
         }
+
+        header {
+            background-color: #f2f2f2;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #777;
+            font-size: 18px;
+        }
+
+        /* SSD Simulation div styles */
+        .simulation-container {
+            margin: 20px auto;
+            max-width: 500px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        select {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
     </style>
 </head>
 
 <body>
-    <table>
-        <caption>Flash SSD</caption>
-        <tr>
-            <th>Package 0</th>
-            <th>Package 1</th>
-        </tr>
-        <tr>
-            <td>
-                <table>
-                    <tr>
-                        <th>Die 0</th>
-                        <th>Die 1</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <table>
-                                <tr>
-                                    <th>Plane 0</th>
-                                    <th>Plane 1</th>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <table>
-                                            <tr>
-                                                <th>Block 0</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 1</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 2</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 3</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table>
-                                            <tr>
-                                                <th>Block 0</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 1</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 2</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 3</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Register</td>
-                                    <td>Register</td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td>
-                            <table>
-                                <tr>
-                                    <th>Plane 0</th>
-                                    <th>Plane 1</th>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <table>
-                                            <tr>
-                                                <th>Block 0</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 1</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 2</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 3</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table>
-                                            <tr>
-                                                <th>Block 0</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 1</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 2</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 3</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Register</td>
-                                    <td>Register</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    
-                </table>
-            </td>
-            <td>
-                <table>
-                    <tr>
-                        <th>Die 0</th>
-                        <th>Die 1</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <table>
-                                <tr>
-                                    <th>Plane 0</th>
-                                    <th>Plane 1</th>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <table>
-                                            <tr>
-                                                <th>Block 0</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 1</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 2</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 3</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table>
-                                            <tr>
-                                                <th>Block 0</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 1</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 2</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 3</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Register</td>
-                                    <td>Register</td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td>
-                            <table>
-                                <tr>
-                                    <th>Plane 0</th>
-                                    <th>Plane 1</th>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <table>
-                                            <tr>
-                                                <th>Block 0</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 1</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 2</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 3</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table>
-                                            <tr>
-                                                <th>Block 0</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 1</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 2</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Block 3</th>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <th>PPN</th>
-                                                            <th>Data</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">0</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">1</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">2</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="ppn">3</td>
-                                                            <td class="data">null</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Register</td>
-                                    <td>Register</td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    
-                </table>
-            </td>
-        </tr>
-    </table>
+    <header class="bg-light py-4 text-center">
+        <div class="container">
+            <h1 class="display-4">Flash SSD Simulation</h1>
+            <p class="lead">Explore the inner workings of Solid-State Drives</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="bg-light border row">
+            <div class="col">
+                <label for="pageCount" class="form-label">Page/Block:</label>
+                <select id="pageCount" class="form-select">
+                    <option value="16">2</option>
+                    <option value="32">4</option>
+                    <option value="64">8</option>
+                </select>
+            </div>
+
+            <div class="col">
+                <label for="blockCount" class="form-label">Block/Plane:</label>
+                <select id="blockCount" class="form-select">
+                    <option value="256">2</option>
+                    <option value="512">4</option>
+                    <option value="1024">8</option>
+                </select>
+            </div>
+
+            <div class="col">
+                <label for="lineCount" class="form-label">Plane/Die</label>
+                <select id="lineCount" class="form-select">
+                    <option value="4">2</option>
+                    <option value="8">4</option>
+                    <option value="16">8</option>
+                </select>
+            </div>
+
+            <div class="col">
+                <label for="dieCount" class="form-label">Die/Package:</label>
+                <select id="dieCount" class="form-select">
+                    <option value="4">2</option>
+                    <option value="8">4</option>
+                    <option value="16">8</option>
+                </select>
+            </div>
+
+            <div class="col">
+                <label for="packageCount" class="form-label">Number of Packages:</label>
+                <select id="packageCount" class="form-select">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+            </div>
+        </div>
+        <table class="container">
+            <tr>
+                <th>Package 0</th>
+                <th>Package 1</th>
+            </tr>
+            <tr>
+                <td>
+                    <table class="container">
+                        <tr>
+                            <th>Die 0</th>
+                            <th>Die 1</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table class="container">
+                                    <tr>
+                                        <th>Plane 0</th>
+                                        <th>Plane 1</th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <table class="container">
+                                                <tr>
+                                                    <th>Block 0</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 1</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 2</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 3</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <table class="container">
+                                                <tr>
+                                                    <th>Block 0</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 1</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 2</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 3</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Register</td>
+                                        <td>Register</td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td>
+                                <table class="container">
+                                    <tr>
+                                        <th>Plane 0</th>
+                                        <th>Plane 1</th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <table class="container">
+                                                <tr>
+                                                    <th>Block 0</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 1</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 2</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 3</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <table class="container">
+                                                <tr>
+                                                    <th>Block 0</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 1</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 2</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 3</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Register</td>
+                                        <td>Register</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+    
+                    </table>
+                </td>
+                <td>
+                    <table class="container">
+                        <tr>
+                            <th>Die 0</th>
+                            <th>Die 1</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table class="container">
+                                    <tr>
+                                        <th>Plane 0</th>
+                                        <th>Plane 1</th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <table class="container">
+                                                <tr>
+                                                    <th>Block 0</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 1</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 2</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 3</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <table class="container">
+                                                <tr>
+                                                    <th>Block 0</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 1</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 2</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 3</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Register</td>
+                                        <td>Register</td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td>
+                                <table class="container">
+                                    <tr>
+                                        <th>Plane 0</th>
+                                        <th>Plane 1</th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <table class="container">
+                                                <tr>
+                                                    <th>Block 0</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 1</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 2</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 3</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <table class="container">
+                                                <tr>
+                                                    <th>Block 0</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 1</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 2</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Block 3</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="container">
+                                                            <tr>
+                                                                <th>PPN</th>
+                                                                <th>Data</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">0</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">1</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">2</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="ppn">3</td>
+                                                                <td class="data">null</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Register</td>
+                                        <td>Register</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+    
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+   
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 </body>
 
 </html>
