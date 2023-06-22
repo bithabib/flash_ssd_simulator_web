@@ -1,3 +1,7 @@
+window.onload = function(){
+  calculateFlashMemorySize();
+}
+
 // Objective: Flash memory page
 // Get the select element
 var select = document.getElementById("pageCount");
@@ -109,7 +113,7 @@ blockSelect.addEventListener("change", function () {
     p1d1p1b1ct.style.display = "table";
     p1d1p1b2ct.style.display = "none";
     p1d1p1b3ct.style.display = "none";
-  }else if (blockValue === "4") {
+  } else if (blockValue === "4") {
     // Code to execute when the value "32" is selected
     p0d0p0b1ct.style.display = "table";
     p0d0p0b2ct.style.display = "table";
@@ -207,7 +211,6 @@ packageSelect.addEventListener("change", function () {
   calculateFlashMemorySize();
 });
 
-
 // create a function to calculate the size of the flash memory
 function calculateFlashMemorySize() {
   var pageSize = 4;
@@ -224,12 +227,46 @@ function calculateFlashMemorySize() {
   var die = document.getElementById("dieSize");
   die.textContent = pageSize * pageCount * blockCount * planeCount + "kb";
   var package = document.getElementById("packageSize");
-  package.textContent = pageSize * pageCount * blockCount * planeCount * dieCount + "kb";
+  package.textContent =
+    pageSize * pageCount * blockCount * planeCount * dieCount + "kb";
   var flashSSDSize = document.getElementById("flashSSDSize");
-  flashSSDSize.textContent = pageSize * pageCount * blockCount * planeCount * dieCount * packageCount + "kb";
+  flashSSDSize.textContent =
+    pageSize * pageCount * blockCount * planeCount * dieCount * packageCount +
+    "kb";
 
-  // package.textContent = pageSize * pageCount * blockCount * planeCount * dieCount;
-  var flashMemorySize = pageSize * pageCount * blockCount * planeCount * dieCount * packageCount;
-  console.log(flashMemorySize);
-  // document.getElementById("flashMemorySize").value = flashMemorySize;
+  // create mapping table based on the number of block
+  var mapping_table = document.getElementById("mapping_table");
+  var rows = mapping_table.getElementsByTagName("tr");
+
+  // Start from the second row (index 1) to avoid removing the header row
+  for (var i = rows.length - 1; i > 0; i--) {
+    var row = rows[i];
+    var cells = row.getElementsByTagName("td");
+
+    // Remove all the cells in the current row
+    for (var j = cells.length - 1; j >= 0; j--) {
+      var cell = cells[j];
+      cell.parentNode.removeChild(cell);
+    }
+  }
+  var n = blockCount * planeCount * dieCount * packageCount; // Number of rows to create
+
+  for (var i = 1; i <= n; i++) {
+    var row = document.createElement("tr");
+    var cell1 = document.createElement("td");
+    var cell2 = document.createElement("td");
+
+    cell1.textContent = "null";
+    cell2.textContent = "null";
+
+    cell1.setAttribute("class", "la");
+    cell2.setAttribute("class", "pa");
+
+    cell1.setAttribute("id", "la" + i);
+    cell2.setAttribute("id", "pa" + i);
+
+    row.appendChild(cell1);
+    row.appendChild(cell2);
+    mapping_table.appendChild(row);
+  }
 }
