@@ -91,14 +91,13 @@
             <p class="lead">Explore the inner workings of Solid-State Drives</p>
         </div>
     </header>
-    
+
     <div class="container">
         <div class="bg-light border row">
             <div class="col">
                 <label for="pageCount" class="form-label">Page/Block:</label>
                 <select id="pageCount" class="form-select">
-                    <option value="2">2</option>
-                    <option value="4">4</option>
+                    <option value="4" selected>4</option>
                 </select>
             </div>
 
@@ -107,7 +106,7 @@
                 <select id="blockCount" class="form-select">
                     <option value="1">1</option>
                     <option value="2">2</option>
-                    <option value="4">4</option>
+                    <option value="4" selected>4</option>
                 </select>
             </div>
 
@@ -115,7 +114,7 @@
                 <label for="planeCount" class="form-label">Plane/Die</label>
                 <select id="planeCount" class="form-select">
                     <option value="1">1</option>
-                    <option value="2">2</option>
+                    <option value="2" selected>2</option>
                 </select>
             </div>
 
@@ -123,7 +122,7 @@
                 <label for="dieCount" class="form-label">Die/Package:</label>
                 <select id="dieCount" class="form-select">
                     <option value="1">1</option>
-                    <option value="2">2</option>
+                    <option value="2" selected>2</option>
                 </select>
             </div>
 
@@ -131,8 +130,41 @@
                 <label for="packageCount" class="form-label">Number of Packages:</label>
                 <select id="packageCount" class="form-select">
                     <option value="1">1</option>
-                    <option value="2">2</option>
+                    <option value="2" selected>2</option>
                 </select>
+            </div>
+        </div>
+        <div class="container center">
+            <div class="row">
+                <div class="col">
+                    <!-- 
+                        Page Size = 4kb
+                        Block Size = page size * number of page = ...kb
+                        Plane Size = Block Size * number of block = ....kb
+                        Die Size = Plane Size * number of Plane  = ...kb
+                        Package Size = Die Size * number of page = ...kb
+                        Size of Flash SSD = Package Size * number of Package = ...kb 
+                    -->
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Page Size</th>
+                            <th>Block Size</th>
+                            <th>Plane Size</th>
+                            <th>Die Size</th>
+                            <th>Package Size</th>
+                            <th>Flash SSD Size</th>
+                        </tr>
+                        <tr>
+                            <td id="pageSize">4kb</td>
+                            <td id="blockSize">16kb</td>
+                            <td id="planeSize">64kb</td>
+                            <td id="dieSize">128kb</td>
+                            <td id="packageSize">256kb</td>
+                            <td id="flashSSDSize">512kb</td>
+                        </tr>
+                    </table>
+                    
+                </div>
             </div>
         </div>
         <table class="container">
@@ -661,7 +693,7 @@
                                 </table>
                             </td>
                         </tr>
-    
+
                     </table>
                 </td>
                 <td>
@@ -1180,13 +1212,13 @@
                                 </table>
                             </td>
                         </tr>
-    
+
                     </table>
                 </td>
             </tr>
         </table>
     </div>
-   
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="../views/flash_memory.js"></script>

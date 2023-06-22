@@ -136,6 +136,7 @@ blockSelect.addEventListener("change", function () {
     p1d1p1b2ct.style.display = "table";
     p1d1p1b3ct.style.display = "table";
   }
+  calculateFlashMemorySize();
 });
 
 // --------------------------------------Flash memory Plane----------------------------------------------------------//
@@ -163,6 +164,7 @@ planeSelect.addEventListener("change", function () {
     planeTable3.style.display = "table";
     planeTable4.style.display = "table";
   }
+  calculateFlashMemorySize();
 });
 
 // ---------------------------------------Flash memory Die---------------------------------------------------------//
@@ -184,6 +186,7 @@ dieSelect.addEventListener("change", function () {
     table1.style.display = "table";
     table2.style.display = "table";
   }
+  calculateFlashMemorySize();
 });
 
 // ------------------------------------------Flash memory Package------------------------------------------------------//
@@ -201,4 +204,32 @@ packageSelect.addEventListener("change", function () {
     // Code to execute when the value "32" is selected
     packageTable.style.display = "table";
   }
+  calculateFlashMemorySize();
 });
+
+
+// create a function to calculate the size of the flash memory
+function calculateFlashMemorySize() {
+  var pageSize = 4;
+  var pageCount = document.getElementById("pageCount").value;
+  var blockCount = document.getElementById("blockCount").value;
+  var planeCount = document.getElementById("planeCount").value;
+  var dieCount = document.getElementById("dieCount").value;
+  var packageCount = document.getElementById("packageCount").value;
+
+  var block = document.getElementById("blockSize");
+  block.textContent = pageSize * pageCount + "kb";
+  var plane = document.getElementById("planeSize");
+  plane.textContent = pageSize * pageCount * blockCount + "kb";
+  var die = document.getElementById("dieSize");
+  die.textContent = pageSize * pageCount * blockCount * planeCount + "kb";
+  var package = document.getElementById("packageSize");
+  package.textContent = pageSize * pageCount * blockCount * planeCount * dieCount + "kb";
+  var flashSSDSize = document.getElementById("flashSSDSize");
+  flashSSDSize.textContent = pageSize * pageCount * blockCount * planeCount * dieCount * packageCount + "kb";
+
+  // package.textContent = pageSize * pageCount * blockCount * planeCount * dieCount;
+  var flashMemorySize = pageSize * pageCount * blockCount * planeCount * dieCount * packageCount;
+  console.log(flashMemorySize);
+  // document.getElementById("flashMemorySize").value = flashMemorySize;
+}
