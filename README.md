@@ -14,7 +14,7 @@ Click [here](https://schoolofthought.tech/templates/flash_memory.html) to dive i
 ## Garbage Collection:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Witness the intelligent garbage collection process in action. Learn how the SSD manages free space by reclaiming invalid or deleted data, ensuring optimal utilization of the flash memory.
 
-## Mapping (VP to PA):
+## Mapping (Logical Address to Physical Address):
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Explore the mapping process that converts virtual addresses (VAs) to physical addresses (PAs) within the SSD. Understand how the controller maps logical blocks to specific physical locations, enabling efficient read and write operations.
 
 ## Wear Leveling:
