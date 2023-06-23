@@ -5,7 +5,7 @@ function readTableRow(tableName, rowNumber, fileSizeInKB) {
 
   if (rowNumber >= 0 && rowNumber < rows.length) {
     var row = rows[rowNumber];
-    row.style.backgroundColor = "red";
+    row.style.backgroundColor = "green";
     row.cells[1].innerHTML = fileSizeInKB + "kb";
   } else {
     console.log("Invalid row number.");
@@ -20,7 +20,7 @@ function selectRowMappingTable(rowNumber, logicalAddress, physicalAddress) {
     
     if (rowNumber >= 0 && rowNumber < rows.length) {
         var row = rows[rowNumber];
-        row.style.backgroundColor = "red";
+        row.style.backgroundColor = "green";
         row.cells[0].innerHTML = logicalAddress;
         row.cells[1].innerHTML = physicalAddress;
     } else {
