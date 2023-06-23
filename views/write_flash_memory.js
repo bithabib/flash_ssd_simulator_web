@@ -1,3 +1,39 @@
+// This is global variable to store the sequence of blocks after random selection that block will be removed from the sequence
+const sequence = [
+  "p0d0p0b0ct",
+  "p0d0p0b1ct",
+  "p0d0p0b2ct",
+  "p0d0p0b3ct",
+  "p0d0p1b0ct",
+  "p0d0p1b1ct",
+  "p0d0p1b2ct",
+  "p0d0p1b3ct",
+  "p0d1p0b0ct",
+  "p0d1p0b1ct",
+  "p0d1p0b2ct",
+  "p0d1p0b3ct",
+  "p0d1p1b0ct",
+  "p0d1p1b1ct",
+  "p0d1p1b2ct",
+  "p0d1p1b3ct",
+  "p1d0p0b0ct",
+  "p1d0p0b1ct",
+  "p1d0p0b2ct",
+  "p1d0p0b3ct",
+  "p1d0p1b0ct",
+  "p1d0p1b1ct",
+  "p1d0p1b2ct",
+  "p1d0p1b3ct",
+  "p1d1p0b0ct",
+  "p1d1p0b1ct",
+  "p1d1p0b2ct",
+  "p1d1p0b3ct",
+  "p1d1p1b0ct",
+  "p1d1p1b1ct",
+  "p1d1p1b2ct",
+  "p1d1p1b3ct",
+];
+
 // Scroll the table to the selected row so that user don't have to scroll manually
 function scrollToSelectedRow(table) {
   parentElement = table.parentElement;
@@ -70,40 +106,7 @@ async function handleFileInputChange(e) {
       var logicalAddressTracer = 0;
       // divide the file size by 16kb (block size) to get the number of blocks
       while (fileSizeInKB > 0) {
-        const sequence = [
-          "p0d0p0b0ct",
-          "p0d0p0b1ct",
-          "p0d0p0b2ct",
-          "p0d0p0b3ct",
-          "p0d0p1b0ct",
-          "p0d0p1b1ct",
-          "p0d0p1b2ct",
-          "p0d0p1b3ct",
-          "p0d1p0b0ct",
-          "p0d1p0b1ct",
-          "p0d1p0b2ct",
-          "p0d1p0b3ct",
-          "p0d1p1b0ct",
-          "p0d1p1b1ct",
-          "p0d1p1b2ct",
-          "p0d1p1b3ct",
-          "p1d0p0b0ct",
-          "p1d0p0b1ct",
-          "p1d0p0b2ct",
-          "p1d0p0b3ct",
-          "p1d0p1b0ct",
-          "p1d0p1b1ct",
-          "p1d0p1b2ct",
-          "p1d0p1b3ct",
-          "p1d1p0b0ct",
-          "p1d1p0b1ct",
-          "p1d1p0b2ct",
-          "p1d1p0b3ct",
-          "p1d1p1b0ct",
-          "p1d1p1b1ct",
-          "p1d1p1b2ct",
-          "p1d1p1b3ct",
-        ];
+        
         // taking a random number
         var random = Math.floor(Math.random() * 32);
         // Get the block number from the sequence
@@ -128,6 +131,8 @@ async function handleFileInputChange(e) {
           blockPageTracer++;
           await new Promise((resolve) => setTimeout(resolve, 1000));
         }
+        // Remove the block from the sequence
+        sequence.splice(random, 1);
       }
       file_tracer++;
     }
