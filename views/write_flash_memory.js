@@ -48,8 +48,8 @@ function handleFileInputChange(e) {
       return;
     } else {
       var logicalAddressTracer = 0;
+      // divide the file size by 16kb (block size) to get the number of blocks
       while (fileSizeInKB > 0) {
-        // List of block in flash memory (32 blocks)
         const sequence = [
           "p0d0p0b0ct",
           "p0d0p0b1ct",
@@ -88,24 +88,25 @@ function handleFileInputChange(e) {
         var random = Math.floor(Math.random() * 32);
         // Get the block number from the sequence
         var block = sequence[random];
-        // taking a random number for selecting page from 1 to 4
-        var randomPage = Math.floor(Math.random() * 3) + 1;
-        console.log("Block: " + block);
-        console.log("Page: " + randomPage);
-        if (fileSizeInKB < 4) {
-          readTableRow(block, randomPage, fileSizeInKB);
-        } else {
-          readTableRow(block, randomPage, 4);
-        }
+        // divide the file size by 4kb (page size) to get the number of pages
+        blockPageTracer = 1;
+        while (fileSizeInKB > 0 && blockPageTracer <= 4) {
+          if (fileSizeInKB < 4) {
+            readTableRow(block, blockPageTracer, fileSizeInKB);
+          } else {
+            readTableRow(block, blockPageTracer, 4);
+          }
 
-        selectRowMappingTable(
-          mapping_table_row,
-          "f" + file_tracer + logicalAddressTracer,
-          block + randomPage
-        );
-        // decrease the file size by 4kb
-        fileSizeInKB = (fileSizeInKB-4).toFixed(2);
-        logicalAddressTracer++;
+          selectRowMappingTable(
+            mapping_table_row,
+            "f" + file_tracer + logicalAddressTracer,
+            block + blockPageTracer
+          );
+          // decrease the file size by 4kb
+          fileSizeInKB = (fileSizeInKB - 4).toFixed(2);
+          logicalAddressTracer++;
+          blockPageTracer++;
+        }
       }
       file_tracer++;
     }
