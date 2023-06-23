@@ -1,8 +1,26 @@
+// Scroll the table to the selected row so that user don't have to scroll manually
+function scrollToSelectedRow(table) {
+  parentElement = table.parentElement;
+  while (parentElement.tagName != "DIV") {
+    parentElement = parentElement.parentElement;
+    // console.log(parentElement.tagName);
+  }
+  parentElementTop = parentElement.getBoundingClientRect().top;
+  tableTop = table.getBoundingClientRect().top;
+  console.log(parentElementTop);
+  console.log(tableTop);
+  // Scroll the table to the selected row so that user don't have to scroll manually
+  parentElement.scrollTop = tableTop - parentElementTop;
+
+  // console.log(table.getBoundingClientRect());
+  
+}
+
 // reading the table row
 function readTableRow(tableName, rowNumber, fileSizeInKB) {
   var table = document.getElementById(tableName);
   var rows = table.getElementsByTagName("tr");
-
+  scrollToSelectedRow(table);
   if (rowNumber >= 0 && rowNumber < rows.length) {
     var row = rows[rowNumber];
     row.style.backgroundColor = "green";
@@ -108,7 +126,7 @@ async function handleFileInputChange(e) {
           fileSizeInKB = (fileSizeInKB - 4).toFixed(2);
           logicalAddressTracer++;
           blockPageTracer++;
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          await new Promise((resolve) => setTimeout(resolve, 1000));
         }
       }
       file_tracer++;
