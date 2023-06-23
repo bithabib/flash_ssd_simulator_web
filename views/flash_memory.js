@@ -256,8 +256,8 @@ function calculateFlashMemorySize() {
     var cell1 = document.createElement("td");
     var cell2 = document.createElement("td");
 
-    cell1.textContent = "null";
-    cell2.textContent = "null";
+    cell1.textContent = "";
+    cell2.textContent = "";
 
     cell1.setAttribute("class", "la");
     cell2.setAttribute("class", "pa");
