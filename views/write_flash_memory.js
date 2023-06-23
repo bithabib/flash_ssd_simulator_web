@@ -31,9 +31,11 @@ function selectRowMappingTable(rowNumber, logicalAddress, physicalAddress) {
 // File tracer from logical address
 var file_tracer = 0;
 // Read the uploaded file from input onchange
-function handleFileInputChange(e) {
+async function handleFileInputChange(e) {
   var fileInput = document.getElementById("fileUpload");
   var file = fileInput.files[0];
+  // make delay based on user choice in seconds
+
   // Check if a file is selected
   if (file) {
     // Get the size of the file in bytes
@@ -106,6 +108,7 @@ function handleFileInputChange(e) {
           fileSizeInKB = (fileSizeInKB - 4).toFixed(2);
           logicalAddressTracer++;
           blockPageTracer++;
+          await new Promise(resolve => setTimeout(resolve, 1000));
         }
       }
       file_tracer++;
