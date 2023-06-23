@@ -173,9 +173,22 @@
                     <div class="btn btn-primary">
                         <input type="file" id="fileUpload" onchange="handleFileInputChange()">
                     </div>
-                    <button type="button" class="btn btn-primary ms-1">Update/Replace File</button>
-                    <button type="button" class="btn btn-primary ms-1">Download/Read File</button>
-                    <button type="button" class="btn btn-danger ms-1">Delete File</button>
+                    <button type="button" class="btn btn-primary ms-1">
+                        <select id="update_file" class="form-select">
+                            <option value="update_file" selected>Update</option>
+                        </select>
+                        <input type="file" id="fileUpdate" onchange="handleFileInputChange()">
+                    </button>
+                    <button type="button" class="btn btn-primary ms-1">
+                        <select id="read_file" class="form-select">
+                            <option value="read_file" selected>Read</option>
+                        </select>
+                    </button>
+                    <button type="button" class="btn btn-danger ms-1">
+                        <select id="delete_file" class="form-select">
+                            <option value="delete_file" selected>Delete</option>
+                        </select>
+                    </button>
                 </div>
             </div>
         </div>
