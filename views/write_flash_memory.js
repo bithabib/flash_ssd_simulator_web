@@ -170,7 +170,7 @@ async function handleFileInputChange(e) {
       // divide the file size by 16kb (block size) to get the number of blocks
       while (fileSizeInKB > 0) {
         // taking a random number
-        var random = Math.floor(Math.random() * 32);
+        var random = Math.floor(Math.random() * sequence.length);
         // Get the block number from the sequence
         var block = sequence[random];
         console.log(block);
