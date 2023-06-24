@@ -347,3 +347,15 @@ selectedFileName.addEventListener("change", function () {
   console.log("Selected file name: " + fileName);
   readSelectedFile(fileName);
 });
+
+
+// ----------------------------------------- Delete File -------------------------------------------//
+var selectedFileName = document.getElementById("delete_file");
+// Add event listener for the "change" event
+selectedFileName.addEventListener("change", function () {
+  // Get the selected value
+  var fileName = selectedFileName.value;
+  // Display the selected value
+  console.log("Selected file name: " + fileName);
+  handleSelection(fileName);
+});
