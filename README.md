@@ -1,4 +1,4 @@
-# Web-Based Flash SSD Simulator: Exploring the Inner Workings of Solid-State Drives
+# Eyana: The SSD Simulator
 Welcome to the Flash SSD Simulator! This simulator allows you to experience the inner workings of a flash-based Solid-State Drive (SSD) right from your web browser. Whether you're a student studying computer architecture or a curious tech enthusiast, this simulator provides a hands-on understanding of the key operations and concepts related to flash SSDs.
 
 ## Enjoy the Simulation
