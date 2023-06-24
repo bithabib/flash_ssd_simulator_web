@@ -40,11 +40,7 @@ class FileMapping {
     this.mappingEntries = [];
   }
 
-  addMapping(fileName, firstRowOfMappingFile, lastRowOfMappingFile) {
-    const entry = { fileName, firstRowOfMappingFile, lastRowOfMappingFile };
-    this.mappingEntries.push(entry);
-    // add the file name to the update select element
-    // Get the select element
+  updateSelectionAdd(fileName) {
     var selectElement = document.getElementById("update_file");
     // Create a new option element
     var newOption = document.createElement("option");
@@ -74,10 +70,57 @@ class FileMapping {
     selectElement.appendChild(newOption);
   }
 
+  updateSelectionRemove(fileName) {
+    var selectElement = document.getElementById("update_file");
+    var optionToRemove = fileName;
+
+    for (let i = 0; i < selectElement.options.length; i++) {
+      if (selectElement.options[i].text === optionToRemove) {
+        selectElement.remove(i);
+        break;
+      }
+    }
+
+    // remove the file name from the delete select element
+    // Get the select element
+    var selectElement = document.getElementById("delete_file");
+    // Create a new option element
+    var optionToRemove = fileName;
+    for (let i = 0; i < selectElement.options.length; i++) {
+      if (selectElement.options[i].text === optionToRemove) {
+        selectElement.remove(i);
+        break;
+      }
+    }
+
+    // remove the file name from the read select element
+    // Get the select element
+    var selectElement = document.getElementById("read_file");
+    // Create a new option element
+    var optionToRemove = fileName;
+    for (let i = 0; i < selectElement.options.length; i++) {
+      if (selectElement.options[i].text === optionToRemove) {
+        selectElement.remove(i);
+        break;
+      }
+    }
+  }
+
+  addMapping(fileName, firstRowOfMappingFile, lastRowOfMappingFile) {
+    const entry = { fileName, firstRowOfMappingFile, lastRowOfMappingFile };
+    this.mappingEntries.push(entry);
+    // add the file name to the update select element
+    // Get the select element
+    this.updateSelectionAdd(fileName);
+  }
+
   removeMapping(fileName) {
     this.mappingEntries = this.mappingEntries.filter(
       (entry) => entry.fileName !== fileName
     );
+    // remove the file name from the update select element
+    // Get the select element
+    this.updateSelectionRemove(fileName);
   }
 
   updateMapping(fileName, firstRowOfMappingFile, lastRowOfMappingFile) {
@@ -245,23 +288,62 @@ async function handleSelection(fileName) {
     row.cells[1].innerHTML = "";
     row.style.backgroundColor = "white";
   }
+  fileMapping.removeMapping(fileName);
 }
 
-var selectedFileName = document.getElementById("update_file");
+// Update change handler
+function handleFileUpdate() {
+  var fileInput = document.getElementById("fileUpdate");
+  var file = fileInput.files[0];
+  var selectedFileName = document.getElementById("update_file");
+  var fileName = selectedFileName.value;
+  handleSelection(fileName);
+  if (file) {
+    FileUpload(file);
+  }
+}
+
+// ----------------------------------------- Read File -------------------------------------------//
+
+async function readSelectedFile(fileName) {
+  var getFileInformation = fileMapping.getMapping(fileName);
+  console.log(getFileInformation);
+  var table = document.getElementById("mapping_table");
+  var rows = table.getElementsByTagName("tr");
+  console.log(getFileInformation.firstRowOfMappingFile);
+  console.log(getFileInformation.lastRowOfMappingFile);
+  for (
+    firstRow = getFileInformation.firstRowOfMappingFile;
+    firstRow < getFileInformation.lastRowOfMappingFile;
+    firstRow++
+  ) {
+    var row = rows[firstRow];
+    logicalAddress = row.cells[0].innerHTML;
+    physicalAddressWithRow = row.cells[1].innerHTML;
+    physicalAddressBlockRow = physicalAddressWithRow.charAt(
+      physicalAddressWithRow.length - 1
+    );
+    physicalAddress = physicalAddressWithRow.slice(0, -1);
+    console.log(logicalAddress);
+    console.log(physicalAddress);
+    console.log(physicalAddressBlockRow);
+    // Update the table row
+    row.style.backgroundColor = "blue";
+    blockTable = document.getElementById(physicalAddress);
+    blockTable.rows[physicalAddressBlockRow].style.backgroundColor = "blue";
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // make it green again
+    row.style.backgroundColor = "green";
+    blockTable.rows[physicalAddressBlockRow].style.backgroundColor = "green";
+  }
+}
+
+var selectedFileName = document.getElementById("read_file");
 // Add event listener for the "change" event
 selectedFileName.addEventListener("change", function () {
   // Get the selected value
   var fileName = selectedFileName.value;
   // Display the selected value
   console.log("Selected file name: " + fileName);
-  handleSelection(fileName);
+  readSelectedFile(fileName);
 });
-
-// Update change handler
-function handleFileUpdate() {
-  var fileInput = document.getElementById("fileUpdate");
-  var file = fileInput.files[0];
-  if (file) {
-    FileUpload(file);
-  }
-}
