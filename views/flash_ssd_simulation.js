@@ -36,7 +36,41 @@ const sequence = [
 
 class BlockList {
   constructor() {
-    this.block_list = [];
+    this.block_list = [
+      { block: "p0d0p0b0ct", write_count: 0, erase_count: 0 },
+      { block: "p0d0p0b1ct", write_count: 0, erase_count: 0 },
+      { block: "p0d0p0b2ct", write_count: 0, erase_count: 0 },
+      { block: "p0d0p0b3ct", write_count: 0, erase_count: 0 },
+      { block: "p0d0p1b0ct", write_count: 0, erase_count: 0 },
+      { block: "p0d0p1b1ct", write_count: 0, erase_count: 0 },
+      { block: "p0d0p1b2ct", write_count: 0, erase_count: 0 },
+      { block: "p0d0p1b3ct", write_count: 0, erase_count: 0 },
+      { block: "p0d1p0b0ct", write_count: 0, erase_count: 0 },
+      { block: "p0d1p0b1ct", write_count: 0, erase_count: 0 },
+      { block: "p0d1p0b2ct", write_count: 0, erase_count: 0 },
+      { block: "p0d1p0b3ct", write_count: 0, erase_count: 0 },
+      { block: "p0d1p1b0ct", write_count: 0, erase_count: 0 },
+      { block: "p0d1p1b1ct", write_count: 0, erase_count: 0 },
+      { block: "p0d1p1b2ct", write_count: 0, erase_count: 0 },
+      { block: "p0d1p1b3ct", write_count: 0, erase_count: 0 },
+      { block: "p1d0p0b0ct", write_count: 0, erase_count: 0 },
+      { block: "p1d0p0b1ct", write_count: 0, erase_count: 0 },
+      { block: "p1d0p0b2ct", write_count: 0, erase_count: 0 },
+      { block: "p1d0p0b3ct", write_count: 0, erase_count: 0 },
+      { block: "p1d0p1b0ct", write_count: 0, erase_count: 0 },
+      { block: "p1d0p1b1ct", write_count: 0, erase_count: 0 },
+      { block: "p1d0p1b2ct", write_count: 0, erase_count: 0 },
+      { block: "p1d0p1b3ct", write_count: 0, erase_count: 0 },
+      { block: "p1d1p0b0ct", write_count: 0, erase_count: 0 },
+      { block: "p1d1p0b1ct", write_count: 0, erase_count: 0 },
+      { block: "p1d1p0b2ct", write_count: 0, erase_count: 0 },
+      { block: "p1d1p0b3ct", write_count: 0, erase_count: 0 },
+      { block: "p1d1p1b0ct", write_count: 0, erase_count: 0 },
+      { block: "p1d1p1b1ct", write_count: 0, erase_count: 0 },
+      { block: "p1d1p1b2ct", write_count: 0, erase_count: 0 },
+      { block: "p1d1p1b3ct", write_count: 0, erase_count: 0 },
+    ];
+    this.removed_block_list = [];
   }
 
   // Add a block object to the block_list
@@ -46,7 +80,11 @@ class BlockList {
 
   // Remove a block from the block_list based on blockName
   removeBlock(blockName) {
-    this.block_list = this.block_list.filter((block) => block.block !== blockName);
+    const removedBlock = this.block_list.find((block) => block.block === blockName);
+    if (removedBlock) {
+      this.block_list = this.block_list.filter((block) => block.block !== blockName);
+      this.removed_block_list.push(removedBlock);
+    }
   }
 
   // Update an existing block in the block_list with an updatedBlockObj
@@ -59,8 +97,46 @@ class BlockList {
   // Delete all blocks from the block_list
   deleteAllBlocks() {
     this.block_list = [];
+    this.removed_block_list = [];
   }
 }
+
+// Usage example
+// const blockList = new BlockList();
+
+// Add a block
+// blockList.addBlock({
+//   block: "p0d0p0b1ct",
+//   write_count: 4,
+//   erase_count: 5
+// });
+
+// console.log(blockList.block_list);
+
+// // Remove a block
+// blockList.removeBlock("p0d0p0b1ct");
+
+// console.log(blockList.block_list);
+
+// // Update a block
+// blockList.addBlock({
+//   block: "p0d0p0b1ct",
+//   write_count: 4,
+//   erase_count: 5
+// });
+
+// blockList.updateBlock("p0d0p0b1ct", {
+//   block: "p0d0p0b1ct",
+//   write_count: 8,
+//   erase_count: 9
+// });
+
+// console.log(blockList.block_list);
+
+// // Delete all blocks
+// blockList.deleteAllBlocks();
+
+// console.log(blockList.block_list);
 
 // for tracing uploaded file and get later to update, remove or add
 class FileMapping {
@@ -375,7 +451,6 @@ selectedFileName.addEventListener("change", function () {
   console.log("Selected file name: " + fileName);
   readSelectedFile(fileName);
 });
-
 
 // ----------------------------------------- Delete File -------------------------------------------//
 var selectedFileName = document.getElementById("delete_file");
