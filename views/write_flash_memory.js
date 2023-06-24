@@ -146,7 +146,7 @@ function selectRowMappingTable(rowNumber, logicalAddress, physicalAddress) {
 // File tracer from logical address
 var file_tracer = 0;
 // Read the uploaded file from input onchange
-async function handleFileInputChange(e) {
+async function handleFileInputChange() {
   var fileInput = document.getElementById("fileUpload");
   var file = fileInput.files[0];
   // make delay based on user choice in seconds
