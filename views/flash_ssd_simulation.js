@@ -34,6 +34,34 @@ const sequence = [
   "p1d1p1b3ct",
 ];
 
+class BlockList {
+  constructor() {
+    this.block_list = [];
+  }
+
+  // Add a block object to the block_list
+  addBlock(blockObj) {
+    this.block_list.push(blockObj);
+  }
+
+  // Remove a block from the block_list based on blockName
+  removeBlock(blockName) {
+    this.block_list = this.block_list.filter((block) => block.block !== blockName);
+  }
+
+  // Update an existing block in the block_list with an updatedBlockObj
+  updateBlock(blockName, updatedBlockObj) {
+    this.block_list = this.block_list.map((block) =>
+      block.block === blockName ? updatedBlockObj : block
+    );
+  }
+
+  // Delete all blocks from the block_list
+  deleteAllBlocks() {
+    this.block_list = [];
+  }
+}
+
 // for tracing uploaded file and get later to update, remove or add
 class FileMapping {
   constructor() {
