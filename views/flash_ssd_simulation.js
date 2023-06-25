@@ -442,11 +442,11 @@ async function readSelectedFile(fileName) {
   }
 }
 
-var selectedFileName = document.getElementById("read_file");
+var readSelectedFileName = document.getElementById("read_file");
 // Add event listener for the "change" event
-selectedFileName.addEventListener("change", function () {
+readSelectedFileName.addEventListener("change", function () {
   // Get the selected value
-  var fileName = selectedFileName.value;
+  var fileName = readSelectedFileName.value;
   // Display the selected value
   console.log("Selected file name: " + fileName);
   readSelectedFile(fileName);
