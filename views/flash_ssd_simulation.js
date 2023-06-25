@@ -1,39 +1,3 @@
-// This is global variable to store the sequence of blocks after random selection that block will be removed from the sequence
-const sequence = [
-  "p0d0p0b0ct",
-  "p0d0p0b1ct",
-  "p0d0p0b2ct",
-  "p0d0p0b3ct",
-  "p0d0p1b0ct",
-  "p0d0p1b1ct",
-  "p0d0p1b2ct",
-  "p0d0p1b3ct",
-  "p0d1p0b0ct",
-  "p0d1p0b1ct",
-  "p0d1p0b2ct",
-  "p0d1p0b3ct",
-  "p0d1p1b0ct",
-  "p0d1p1b1ct",
-  "p0d1p1b2ct",
-  "p0d1p1b3ct",
-  "p1d0p0b0ct",
-  "p1d0p0b1ct",
-  "p1d0p0b2ct",
-  "p1d0p0b3ct",
-  "p1d0p1b0ct",
-  "p1d0p1b1ct",
-  "p1d0p1b2ct",
-  "p1d0p1b3ct",
-  "p1d1p0b0ct",
-  "p1d1p0b1ct",
-  "p1d1p0b2ct",
-  "p1d1p0b3ct",
-  "p1d1p1b0ct",
-  "p1d1p1b1ct",
-  "p1d1p1b2ct",
-  "p1d1p1b3ct",
-];
-
 class BlockList {
   constructor() {
     this.block_list = [
@@ -102,7 +66,7 @@ class BlockList {
 }
 
 // Usage example
-// const blockList = new BlockList();
+const blockList = new BlockList();
 
 // Add a block
 // blockList.addBlock({
@@ -307,24 +271,26 @@ async function FileUpload(file) {
     var logicalAddressTracer = 0;
     // divide the file size by 16kb (block size) to get the number of blocks
     while (fileSizeInKB > 0) {
-      // taking a random number
-      var random = Math.floor(Math.random() * sequence.length);
+      // taking a random number from the block list
+      console.log("Length of the blockList: " + blockList.block_list.length);
+      var random = Math.floor(Math.random() * blockList.block_list.length);
+      // var random = Math.floor(Math.random() * blockList.length);
       // Get the block number from the sequence
-      var block = sequence[random];
+      var block = blockList.block_list[random];
       console.log(block);
       // divide the file size by 4kb (page size) to get the number of pages
       blockPageTracer = 1;
       while (fileSizeInKB > 0 && blockPageTracer <= 4) {
         if (fileSizeInKB < 4) {
-          readTableRow(block, blockPageTracer, fileSizeInKB);
+          readTableRow(block["block"], blockPageTracer, fileSizeInKB);
         } else {
-          readTableRow(block, blockPageTracer, 4);
+          readTableRow(block["block"], blockPageTracer, 4);
         }
 
         selectRowMappingTable(
           mapping_table_row,
           "f" + file_tracer + logicalAddressTracer,
-          block + blockPageTracer
+          block["block"] + blockPageTracer
         );
         // Save the filename, logical address and mapping_table_row in the java class
         // decrease the file size by 4kb
@@ -334,7 +300,10 @@ async function FileUpload(file) {
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
       // Remove the block from the sequence
-      sequence.splice(random, 1);
+      blockList.block_list.splice(random, 1);
+      // add the removed block to the removed_block list by updating the write count and erase count
+      block["write_count"]++;
+      blockList.removed_block_list.push(block);
     }
     file_tracer++;
     var getFileInformation = fileMapping.getMapping(file.name);
