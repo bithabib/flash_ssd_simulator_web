@@ -1,38 +1,38 @@
 class BlockList {
   constructor() {
     this.block_list = [
-      { block: "p0d0p0b0ct", write_count: 0, erase_count: 0 },
-      { block: "p0d0p0b1ct", write_count: 0, erase_count: 0 },
-      { block: "p0d0p0b2ct", write_count: 0, erase_count: 0 },
-      { block: "p0d0p0b3ct", write_count: 0, erase_count: 0 },
-      { block: "p0d0p1b0ct", write_count: 0, erase_count: 0 },
-      { block: "p0d0p1b1ct", write_count: 0, erase_count: 0 },
-      { block: "p0d0p1b2ct", write_count: 0, erase_count: 0 },
-      { block: "p0d0p1b3ct", write_count: 0, erase_count: 0 },
-      { block: "p0d1p0b0ct", write_count: 0, erase_count: 0 },
-      { block: "p0d1p0b1ct", write_count: 0, erase_count: 0 },
-      { block: "p0d1p0b2ct", write_count: 0, erase_count: 0 },
-      { block: "p0d1p0b3ct", write_count: 0, erase_count: 0 },
-      { block: "p0d1p1b0ct", write_count: 0, erase_count: 0 },
-      { block: "p0d1p1b1ct", write_count: 0, erase_count: 0 },
-      { block: "p0d1p1b2ct", write_count: 0, erase_count: 0 },
-      { block: "p0d1p1b3ct", write_count: 0, erase_count: 0 },
-      { block: "p1d0p0b0ct", write_count: 0, erase_count: 0 },
-      { block: "p1d0p0b1ct", write_count: 0, erase_count: 0 },
-      { block: "p1d0p0b2ct", write_count: 0, erase_count: 0 },
-      { block: "p1d0p0b3ct", write_count: 0, erase_count: 0 },
-      { block: "p1d0p1b0ct", write_count: 0, erase_count: 0 },
-      { block: "p1d0p1b1ct", write_count: 0, erase_count: 0 },
-      { block: "p1d0p1b2ct", write_count: 0, erase_count: 0 },
-      { block: "p1d0p1b3ct", write_count: 0, erase_count: 0 },
-      { block: "p1d1p0b0ct", write_count: 0, erase_count: 0 },
-      { block: "p1d1p0b1ct", write_count: 0, erase_count: 0 },
-      { block: "p1d1p0b2ct", write_count: 0, erase_count: 0 },
-      { block: "p1d1p0b3ct", write_count: 0, erase_count: 0 },
-      { block: "p1d1p1b0ct", write_count: 0, erase_count: 0 },
-      { block: "p1d1p1b1ct", write_count: 0, erase_count: 0 },
-      { block: "p1d1p1b2ct", write_count: 0, erase_count: 0 },
-      { block: "p1d1p1b3ct", write_count: 0, erase_count: 0 },
+      { block: "p0d0p0b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d0p0b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d0p0b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d0p0b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d0p1b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d0p1b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d0p1b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d0p1b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d1p0b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d1p0b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d1p0b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d1p0b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d1p1b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d1p1b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d1p1b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d1p1b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d0p0b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d0p0b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d0p0b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d0p0b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d0p1b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d0p1b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d0p1b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d0p1b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d1p0b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d1p0b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d1p0b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d1p0b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d1p1b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d1p1b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d1p1b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d1p1b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
     ];
     this.removed_block_list = [];
   }
@@ -292,6 +292,8 @@ async function FileUpload(file) {
           "f" + file_tracer + logicalAddressTracer,
           block["block"] + blockPageTracer
         );
+        // update the block page
+        block["writenpage"][blockPageTracer-1]["data"] = fileSizeInKB;
         // Save the filename, logical address and mapping_table_row in the java class
         // decrease the file size by 4kb
         fileSizeInKB = (fileSizeInKB - 4).toFixed(2);
@@ -431,3 +433,37 @@ selectedFileName.addEventListener("change", function () {
   console.log("Selected file name: " + fileName);
   handleSelection(fileName);
 });
+
+// ----------------------------------------- Garbage Collection -----------------------------------------//
+
+async function garbageCollection() {
+  console.log("Garbage Collection");
+  // get removed block elements from the garbage collection
+  var removedBlockElements = blockList.removed_block_list;
+  console.log(removedBlockElements);
+  // get the removed block elements
+  for (var i = 0; i < removedBlockElements.length; i++) {
+    var removedBlock = removedBlockElements[i];
+    console.log(removedBlock);
+    // get the block table id and page number from block address
+    var blockAddress = removedBlock["block"];
+    console.log(blockAddress);
+    console.log(blockAddress);
+    // get the table using the block address
+    var blockTable = document.getElementById(blockAddress);
+    // get written page using for loop 
+    for (var j = 0; j < removedBlock.writenpage.length; j++) {
+      if (removedBlock.writenpage[j].data != 0){
+        // colsole the page number
+        console.log(removedBlock.writenpage[j].page);
+        // page number is the row number of the block table 
+        var row = blockTable.rows[removedBlock.writenpage[j].page+1];
+        // update the row color to red
+        row.style.backgroundColor = "red";
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // update the row color to white
+        row.style.backgroundColor = "white";
+      }
+    }
+  }
+}
