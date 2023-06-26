@@ -77,7 +77,17 @@ Block Erase | 1.5 ms
 4. Plane-level parallelism: A chip contains two or more planes. The same operation (read, write or erase) can be run simultaneously on multiple planes inside a chip. Planes contain blocks, which themselves contains pages. The plane also contains registers (small RAM buffers), which are used for plane-level operations.
 
 ## Cache 
-Introducing cache memory machanism in Flash SSD.
+1. Least Recently Used (LRU): LRU is one of the most widely used cache replacement algorithms. It evicts the cache line that has not been accessed for the longest period of time. It assumes that the cache line that has been accessed least recently is the least likely to be accessed again in the near future.
+
+2. First-In, First-Out (FIFO): FIFO is a simple cache replacement algorithm that evicts the cache line that was inserted first when the cache is full. It maintains a queue structure, and the cache line at the front of the queue is evicted. This algorithm does not consider the recency or frequency of cache line accesses.
+
+3. Random Replacement: In this algorithm, a cache line is selected randomly for eviction when the cache is full. It does not consider any access patterns or history of cache line usage. Random replacement can be simple to implement, but it may not always result in optimal cache performance.
+
+4. Least Frequently Used (LFU): LFU replaces the cache line that has been accessed the fewest number of times. It keeps track of the access frequency for each cache line and evicts the one with the lowest count. This algorithm assumes that cache lines with lower access frequency are less likely to be accessed in the future.
+
+5. Most Recently Used (MRU): MRU evicts the cache line that has been accessed most recently. It assumes that recently accessed cache lines are more likely to be accessed again in the near future. MRU is useful in situations where temporal locality is important, but it can be less effective in handling certain access patterns.
+
+6. Not Recently Used (NRU): NRU is a variation of the MRU algorithm that distinguishes between recently used and not recently used cache lines. It divides the cache lines into two categories: "recently used" and "not recently used." When eviction is required, it chooses a cache line from the "not recently used" category. This algorithm provides a simple approximation of LRU and is often used in hardware implementations due to its lower complexity.
 
 ## License
 This simulation is provided under the [MIT License](LICENSE). You are free to use, modify, and distribute the simulation in accordance with the terms of the license.
