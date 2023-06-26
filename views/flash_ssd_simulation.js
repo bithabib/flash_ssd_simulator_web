@@ -3,38 +3,38 @@
 class BlockList {
   constructor() {
     this.block_list = [
-      { block: "p0d0p0b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d0p0b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d0p0b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d0p0b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d0p1b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d0p1b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d0p1b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d0p1b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d1p0b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d1p0b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d1p0b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d1p0b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d1p1b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d1p1b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d1p1b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d1p1b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d0p0b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d0p0b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d0p0b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d0p0b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d0p1b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d0p1b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d0p1b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d0p1b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d1p0b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d1p0b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d1p0b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d1p0b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d1p1b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d1p1b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d1p1b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d1p1b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 },{ page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d0p0b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d0p0b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d0p0b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d0p0b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d0p1b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d0p1b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d0p1b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d0p1b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d1p0b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d1p0b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d1p0b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d1p0b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d1p1b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d1p1b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d1p1b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p0d1p1b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d0p0b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d0p0b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d0p0b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d0p0b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d0p1b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d0p1b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d0p1b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d0p1b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d1p0b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d1p0b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d1p0b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d1p0b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d1p1b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d1p1b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d1p1b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      { block: "p1d1p1b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
     ];
     this.removed_block_list = [];
   }
@@ -261,7 +261,7 @@ async function FileUpload(file) {
           block["block"] + blockPageTracer
         );
         // update the block page
-        block["writenpage"][blockPageTracer-1]["data"] = fileSizeInKB;
+        block["writenpage"][blockPageTracer - 1]["data"] = fileSizeInKB;
         // Save the filename, logical address and mapping_table_row in the java class
         // decrease the file size by 4kb
         fileSizeInKB = (fileSizeInKB - 4).toFixed(2);
@@ -421,20 +421,20 @@ async function garbageCollection() {
     var blockTable = document.getElementById(blockAddress);
     // get written page using for loop 
     for (var j = 0; j < removedBlock.writenpage.length; j++) {
-      if (removedBlock.writenpage[j].data != 0){
+      if (removedBlock.writenpage[j].data != 0) {
         // colsole the page number
         console.log(removedBlock.writenpage[j].page);
         // page number is the row number of the block table 
-        var row = blockTable.rows[removedBlock.writenpage[j].page+1];
+        var row = blockTable.rows[removedBlock.writenpage[j].page + 1];
         // if the color is yellow then change the color of the block table
-        if (row.style.backgroundColor == "yellow"){
+        if (row.style.backgroundColor == "yellow") {
           // update the row color to red and cell to empty
           row.style.backgroundColor = "red";
           row.cells[1].innerHTML = "";
           await new Promise((resolve) => setTimeout(resolve, 1000));
           // update the row color to white
           row.style.backgroundColor = "white";
-          
+
         }
       }
     }
@@ -448,7 +448,7 @@ async function garbageCollection() {
 
 //-------------------------------------  Flash Memory Design ------------------------------------//
 //-------------------------------------  Flash Memory Design ------------------------------------//
-window.onload = function(){
+window.onload = function () {
   calculateFlashMemorySize();
 }
 
@@ -476,119 +476,47 @@ var blockSelect = document.getElementById("blockCount");
 blockSelect.addEventListener("change", function () {
   // Get the selected value
   var blockValue = blockSelect.value;
-  console.log(blockValue);
-  var p0d0p0b0ct = document.getElementById("p0d0p0b0ct");
-  var p0d0p0b1ct = document.getElementById("p0d0p0b1ct");
-  var p0d0p0b2ct = document.getElementById("p0d0p0b2ct");
-  var p0d0p0b3ct = document.getElementById("p0d0p0b3ct");
-  var p0d0p1b0ct = document.getElementById("p0d0p1b0ct");
-  var p0d0p1b1ct = document.getElementById("p0d0p1b1ct");
-  var p0d0p1b2ct = document.getElementById("p0d0p1b2ct");
-  var p0d0p1b3ct = document.getElementById("p0d0p1b3ct");
-  var p0d1p0b0ct = document.getElementById("p0d1p0b0ct");
-  var p0d1p0b1ct = document.getElementById("p0d1p0b1ct");
-  var p0d1p0b2ct = document.getElementById("p0d1p0b2ct");
-  var p0d1p0b3ct = document.getElementById("p0d1p0b3ct");
-  var p0d1p1b0ct = document.getElementById("p0d1p1b0ct");
-  var p0d1p1b1ct = document.getElementById("p0d1p1b1ct");
-  var p0d1p1b2ct = document.getElementById("p0d1p1b2ct");
-  var p0d1p1b3ct = document.getElementById("p0d1p1b3ct");
-  var p1d0p0b0ct = document.getElementById("p1d0p0b0ct");
-  var p1d0p0b1ct = document.getElementById("p1d0p0b1ct");
-  var p1d0p0b2ct = document.getElementById("p1d0p0b2ct");
-  var p1d0p0b3ct = document.getElementById("p1d0p0b3ct");
-  var p1d0p1b0ct = document.getElementById("p1d0p1b0ct");
-  var p1d0p1b1ct = document.getElementById("p1d0p1b1ct");
-  var p1d0p1b2ct = document.getElementById("p1d0p1b2ct");
-  var p1d0p1b3ct = document.getElementById("p1d0p1b3ct");
-  var p1d1p0b0ct = document.getElementById("p1d1p0b0ct");
-  var p1d1p0b1ct = document.getElementById("p1d1p0b1ct");
-  var p1d1p0b2ct = document.getElementById("p1d1p0b2ct");
-  var p1d1p0b3ct = document.getElementById("p1d1p0b3ct");
-  var p1d1p1b0ct = document.getElementById("p1d1p1b0ct");
-  var p1d1p1b1ct = document.getElementById("p1d1p1b1ct");
-  var p1d1p1b2ct = document.getElementById("p1d1p1b2ct");
-  var p1d1p1b3ct = document.getElementById("p1d1p1b3ct");
-
   // Perform actions based on the selected value
   if (blockValue === "1") {
-    // Code to execute when the value "16" is selected
-    p0d0p0b1ct.style.display = "none";
-    p0d0p0b2ct.style.display = "none";
-    p0d0p0b3ct.style.display = "none";
-    p0d0p1b1ct.style.display = "none";
-    p0d0p1b2ct.style.display = "none";
-    p0d0p1b3ct.style.display = "none";
-    p0d1p0b1ct.style.display = "none";
-    p0d1p0b2ct.style.display = "none";
-    p0d1p0b3ct.style.display = "none";
-    p0d1p1b1ct.style.display = "none";
-    p0d1p1b2ct.style.display = "none";
-    p0d1p1b3ct.style.display = "none";
-    p1d0p0b1ct.style.display = "none";
-    p1d0p0b2ct.style.display = "none";
-    p1d0p0b3ct.style.display = "none";
-    p1d0p1b1ct.style.display = "none";
-    p1d0p1b2ct.style.display = "none";
-    p1d0p1b3ct.style.display = "none";
-    p1d1p0b1ct.style.display = "none";
-    p1d1p0b2ct.style.display = "none";
-    p1d1p0b3ct.style.display = "none";
-    p1d1p1b1ct.style.display = "none";
-    p1d1p1b2ct.style.display = "none";
-    p1d1p1b3ct.style.display = "none";
+    // get the block from blockList where block contain b1, b2, b3 through loop
+    console.log(blockList.block_list.length);
+    console.log(blockList.block_list.length);
+    console.log(blockList.block_list.length);
+    console.log(blockList.block_list.length);
+    var removed_list = [];
+    var length_of_the_list = blockList.block_list.length
+    for (var i = 0; i < length_of_the_list; i++) {
+      // select block contain b1, b2, b3
+      if (blockList.block_list[i].block.includes("b1") || blockList.block_list[i].block.includes("b2") || blockList.block_list[i].block.includes("b3")) {
+        // hide the block
+        document.getElementById(blockList.block_list[i].block).style.display = "none";
+        // remove the block
+        removed_list.push(blockList.block_list[i].block);
+      }
+    }
+    // remove the block from blockList
+    for (var i = 0; i < removed_list.length; i++) {
+      blockList.removeBlock(removed_list[i]);
+      console.log(blockList.block_list.length);
+      console.log(blockList.removed_block_list.length);
+    }
   } else if (blockValue === "2") {
     // Code to execute when the value "32" is selected
-    p0d0p0b1ct.style.display = "table";
-    p0d0p0b2ct.style.display = "none";
-    p0d0p0b3ct.style.display = "none";
-    p0d0p1b1ct.style.display = "table";
-    p0d0p1b2ct.style.display = "none";
-    p0d0p1b3ct.style.display = "none";
-    p0d1p0b1ct.style.display = "table";
-    p0d1p0b2ct.style.display = "none";
-    p0d1p0b3ct.style.display = "none";
-    p0d1p1b1ct.style.display = "table";
-    p0d1p1b2ct.style.display = "none";
-    p0d1p1b3ct.style.display = "none";
-    p1d0p0b1ct.style.display = "table";
-    p1d0p0b2ct.style.display = "none";
-    p1d0p0b3ct.style.display = "none";
-    p1d0p1b1ct.style.display = "table";
-    p1d0p1b2ct.style.display = "none";
-    p1d0p1b3ct.style.display = "none";
-    p1d1p0b1ct.style.display = "table";
-    p1d1p0b2ct.style.display = "none";
-    p1d1p0b3ct.style.display = "none";
-    p1d1p1b1ct.style.display = "table";
-    p1d1p1b2ct.style.display = "none";
-    p1d1p1b3ct.style.display = "none";
+    var removed_list = [];
+    var length_of_the_list = blockList.block_list.length
+    for (var i = 0; i < length_of_the_list; i++) {
+      if (blockList.block_list[i].block.includes("b2") || blockList.block_list[i].block.includes("b3")) {
+        document.getElementById(blockList.block_list[i].block).style.display = "none";
+        removed_list.push(blockList.block_list[i].block);
+      } else {
+        document.getElementById(blockList.block_list[i].block).style.display = "table";
+      }
+    }
   } else if (blockValue === "4") {
     // Code to execute when the value "32" is selected
-    p0d0p0b1ct.style.display = "table";
-    p0d0p0b2ct.style.display = "table";
-    p0d0p0b3ct.style.display = "table";
-    p0d0p1b1ct.style.display = "table";
-    p0d0p1b2ct.style.display = "table";
-    p0d0p1b3ct.style.display = "table";
-    p0d1p0b1ct.style.display = "table";
-    p0d1p0b2ct.style.display = "table";
-    p0d1p0b3ct.style.display = "table";
-    p0d1p1b1ct.style.display = "table";
-    p0d1p1b2ct.style.display = "table";
-    p0d1p1b3ct.style.display = "table";
-    p1d0p0b1ct.style.display = "table";
-    p1d0p0b2ct.style.display = "table";
-    p1d0p0b3ct.style.display = "table";
-    p1d0p1b1ct.style.display = "table";
-    p1d0p1b2ct.style.display = "table";
-    p1d0p1b3ct.style.display = "table";
-    p1d1p0b1ct.style.display = "table";
-    p1d1p0b2ct.style.display = "table";
-    p1d1p0b3ct.style.display = "table";
-    p1d1p1b1ct.style.display = "table";
-    p1d1p1b2ct.style.display = "table";
-    p1d1p1b3ct.style.display = "table";
+    for (var i = 0; i < blockList.block_list.length; i++) {
+      document.getElementById(blockList.block_list[i].block).style.display = "table";
+    }
   }
   calculateFlashMemorySize();
 });
