@@ -13,6 +13,19 @@ Click [here](https://schoolofthought.tech/templates/flash_memory.html) to dive i
 
 ## Garbage Collection:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Witness the intelligent garbage collection process in action. Learn how the SSD manages free space by reclaiming invalid or deleted data, ensuring optimal utilization of the flash memory.
+1. Mark-and-Sweep: This is one of the simplest and most basic garbage collection algorithms. It works by traversing the object graph, starting from a set of root objects, and marking all reachable objects. Then, it sweeps through the memory, deallocating any objects that were not marked.
+
+2. Stop-and-Copy: This algorithm divides the memory into two halves: the "from" space and the "to" space. It starts by marking all reachable objects, and then it copies the live objects from the "from" space to the "to" space, updating all references accordingly. After the copying is complete, the roles of the two spaces are swapped, and the process repeats.
+
+3. Mark-and-Compact: This algorithm is similar to the mark-and-sweep algorithm, but it includes an additional step of compacting the memory after marking. It moves the live objects closer together to eliminate fragmentation and improve memory locality.
+
+4. Generational: This algorithm takes advantage of the observation that most objects become garbage relatively quickly after being allocated. It divides the heap into multiple generations based on the age of the objects. Younger objects are allocated in one generation, while older objects are allocated in other generations. Garbage collection is performed more frequently on the younger generations, while the older generations are collected less often.
+
+5. Reference Counting: Unlike the previous algorithms, reference counting keeps track of the number of references to an object. Each object has a reference count associated with it, and when the count reaches zero, the object is considered garbage and can be deallocated. However, reference counting has the drawback of not being able to detect and collect cyclic references, where objects refer to each other in a cycle.
+
+6. Concurrent and Parallel: These algorithms aim to minimize pauses or reduce the impact of garbage collection on the overall application performance. Concurrent garbage collectors perform garbage collection concurrently with the application, allowing it to continue executing while garbage collection is in progress. Parallel garbage collectors use multiple threads or processors to perform garbage collection in parallel, reducing the overall time spent on garbage collection.
+
+These are some of the commonly used garbage collection algorithms, but there are variations and combinations of these algorithms as well. The choice of garbage collection algorithm depends on various factors, such as the programming language, runtime environment, and specific requirements of the application.
 
 ## Mapping (Logical Address to Physical Address):
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Explore the mapping process that converts virtual addresses (VAs) to physical addresses (PAs) within the SSD. Understand how the controller maps logical blocks to specific physical locations, enabling efficient read and write operations.
