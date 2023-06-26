@@ -3,38 +3,358 @@
 class BlockList {
   constructor() {
     this.block_list = [
-      { block: "p0d0p0b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d0p0b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d0p0b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d0p0b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d0p1b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d0p1b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d0p1b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d0p1b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d1p0b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d1p0b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d1p0b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d1p0b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d1p1b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d1p1b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d1p1b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p0d1p1b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d0p0b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d0p0b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d0p0b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d0p0b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d0p1b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d0p1b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d0p1b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d0p1b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d1p0b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d1p0b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d1p0b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d1p0b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d1p1b0ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d1p1b1ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d1p1b2ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
-      { block: "p1d1p1b3ct", write_count: 0, erase_count: 0, writenpage: [{ page: 0, data: 0 }, { page: 1, data: 0 }, { page: 2, data: 0 }, { page: 3, data: 0 }] },
+      {
+        block: "p0d0p0b0ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p0d0p0b1ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p0d0p0b2ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p0d0p0b3ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p0d0p1b0ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p0d0p1b1ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p0d0p1b2ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p0d0p1b3ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p0d1p0b0ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p0d1p0b1ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p0d1p0b2ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p0d1p0b3ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p0d1p1b0ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p0d1p1b1ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p0d1p1b2ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p0d1p1b3ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p1d0p0b0ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p1d0p0b1ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p1d0p0b2ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p1d0p0b3ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p1d0p1b0ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p1d0p1b1ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p1d0p1b2ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p1d0p1b3ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p1d1p0b0ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p1d1p0b1ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p1d1p0b2ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p1d1p0b3ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p1d1p1b0ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p1d1p1b1ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p1d1p1b2ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
+      {
+        block: "p1d1p1b3ct",
+        write_count: 0,
+        erase_count: 0,
+        writenpage: [
+          { page: 0, data: 0 },
+          { page: 1, data: 0 },
+          { page: 2, data: 0 },
+          { page: 3, data: 0 },
+        ],
+      },
     ];
     this.removed_block_list = [];
   }
@@ -46,9 +366,13 @@ class BlockList {
 
   // Remove a block from the block_list based on blockName
   removeBlock(blockName) {
-    const removedBlock = this.block_list.find((block) => block.block === blockName);
+    const removedBlock = this.block_list.find(
+      (block) => block.block === blockName
+    );
     if (removedBlock) {
-      this.block_list = this.block_list.filter((block) => block.block !== blockName);
+      this.block_list = this.block_list.filter(
+        (block) => block.block !== blockName
+      );
       this.removed_block_list.push(removedBlock);
     }
   }
@@ -419,12 +743,12 @@ async function garbageCollection() {
     console.log(blockAddress);
     // get the table using the block address
     var blockTable = document.getElementById(blockAddress);
-    // get written page using for loop 
+    // get written page using for loop
     for (var j = 0; j < removedBlock.writenpage.length; j++) {
       if (removedBlock.writenpage[j].data != 0) {
         // colsole the page number
         console.log(removedBlock.writenpage[j].page);
-        // page number is the row number of the block table 
+        // page number is the row number of the block table
         var row = blockTable.rows[removedBlock.writenpage[j].page + 1];
         // if the color is yellow then change the color of the block table
         if (row.style.backgroundColor == "yellow") {
@@ -434,23 +758,17 @@ async function garbageCollection() {
           await new Promise((resolve) => setTimeout(resolve, 1000));
           // update the row color to white
           row.style.backgroundColor = "white";
-
         }
       }
     }
   }
 }
 
-
-
-
-
-
 //-------------------------------------  Flash Memory Design ------------------------------------//
 //-------------------------------------  Flash Memory Design ------------------------------------//
 window.onload = function () {
   calculateFlashMemorySize();
-}
+};
 
 // Objective: Flash memory page
 // Get the select element
@@ -484,12 +802,17 @@ blockSelect.addEventListener("change", function () {
     console.log(blockList.block_list.length);
     console.log(blockList.block_list.length);
     var removed_list = [];
-    var length_of_the_list = blockList.block_list.length
+    var length_of_the_list = blockList.block_list.length;
     for (var i = 0; i < length_of_the_list; i++) {
       // select block contain b1, b2, b3
-      if (blockList.block_list[i].block.includes("b1") || blockList.block_list[i].block.includes("b2") || blockList.block_list[i].block.includes("b3")) {
+      if (
+        blockList.block_list[i].block.includes("b1") ||
+        blockList.block_list[i].block.includes("b2") ||
+        blockList.block_list[i].block.includes("b3")
+      ) {
         // hide the block
-        document.getElementById(blockList.block_list[i].block).style.display = "none";
+        document.getElementById(blockList.block_list[i].block).style.display =
+          "none";
         // remove the block
         removed_list.push(blockList.block_list[i].block);
       }
@@ -503,19 +826,25 @@ blockSelect.addEventListener("change", function () {
   } else if (blockValue === "2") {
     // Code to execute when the value "32" is selected
     var removed_list = [];
-    var length_of_the_list = blockList.block_list.length
+    var length_of_the_list = blockList.block_list.length;
     for (var i = 0; i < length_of_the_list; i++) {
-      if (blockList.block_list[i].block.includes("b2") || blockList.block_list[i].block.includes("b3")) {
-        document.getElementById(blockList.block_list[i].block).style.display = "none";
+      if (
+        blockList.block_list[i].block.includes("b2") ||
+        blockList.block_list[i].block.includes("b3")
+      ) {
+        document.getElementById(blockList.block_list[i].block).style.display =
+          "none";
         removed_list.push(blockList.block_list[i].block);
       } else {
-        document.getElementById(blockList.block_list[i].block).style.display = "table";
+        document.getElementById(blockList.block_list[i].block).style.display =
+          "table";
       }
     }
   } else if (blockValue === "4") {
     // Code to execute when the value "32" is selected
     for (var i = 0; i < blockList.block_list.length; i++) {
-      document.getElementById(blockList.block_list[i].block).style.display = "table";
+      document.getElementById(blockList.block_list[i].block).style.display =
+        "table";
     }
   }
   calculateFlashMemorySize();
@@ -619,13 +948,7 @@ function calculateFlashMemorySize() {
   // Start from the second row (index 1) to avoid removing the header row
   for (var i = rows.length - 1; i > 0; i--) {
     var row = rows[i];
-    var cells = row.getElementsByTagName("td");
-
-    // Remove all the cells in the current row
-    for (var j = cells.length - 1; j >= 0; j--) {
-      var cell = cells[j];
-      cell.parentNode.removeChild(cell);
-    }
+    row.parentNode.removeChild(row);
   }
   var n = pageCount * blockCount * planeCount * dieCount * packageCount; // Number of rows to create
 
