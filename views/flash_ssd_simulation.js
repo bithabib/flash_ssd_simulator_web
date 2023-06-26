@@ -390,9 +390,52 @@ class BlockList {
     this.removed_block_list = [];
   }
 }
-
 // for tracing uploaded file and get later to update, remove or add
 const blockList = new BlockList();
+
+// Block information tracer function --------------------------------------------------//
+function TraceBlockInformation() {
+  dataset = blockList.block_list.concat(blockList.removed_block_list);
+  console.log(dataset);
+  var table = document.getElementById("block_information_tracer");
+  var tbody = table.getElementsByTagName("tbody")[0];
+  while (tbody.firstChild) {
+    tbody.removeChild(tbody.firstChild);
+  }
+  // Iterate through the dataset and dynamically create table rows
+  dataset.forEach(function (entry) {
+    var block = entry.block;
+    var writeCount = entry.write_count;
+    var eraseCount = entry.erase_count;
+    console.log(entry);
+
+    entry.writenpage.forEach(function (pageData) {
+      var row = document.createElement("tr");
+
+      var blockCell = document.createElement("td");
+      blockCell.textContent = block;
+      row.appendChild(blockCell);
+
+      var writeCountCell = document.createElement("td");
+      writeCountCell.textContent = writeCount;
+      row.appendChild(writeCountCell);
+
+      var eraseCountCell = document.createElement("td");
+      eraseCountCell.textContent = eraseCount;
+      row.appendChild(eraseCountCell);
+
+      var pageCell = document.createElement("td");
+      pageCell.textContent = pageData.page;
+      row.appendChild(pageCell);
+
+      var dataCell = document.createElement("td");
+      dataCell.textContent = pageData.data;
+      row.appendChild(dataCell);
+
+      tbody.appendChild(row);
+    });
+  });
+}
 
 // for tracing uploaded file and get later to update, remove or add
 class FileMapping {
@@ -618,6 +661,7 @@ function handleFileInputChange() {
   if (file) {
     FileUpload(file);
   }
+  TraceBlockInformation();
 }
 
 // ----------------------------------------- Update File -------------------------------------------//
