@@ -364,6 +364,11 @@ class BlockList {
     this.block_list.push(blockObj);
   }
 
+  // Get a block object from the block_list based on blockName
+  getBlock(blockName) {
+    return this.block_list.find((block) => block.block === blockName);
+  }
+
   // Remove a block from the block_list based on blockName
   removeBlock(blockName) {
     const removedBlock = this.block_list.find(
@@ -711,13 +716,15 @@ async function handleSelection(fileName) {
       physicalAddressWithRow.length - 1
     );
     physicalAddress = physicalAddressWithRow.slice(0, -1);
-    console.log(logicalAddress);
-    console.log(physicalAddress);
-    console.log(physicalAddressBlockRow);
     // Update the table row
     row.style.backgroundColor = "yellow";
     blockTable = document.getElementById(physicalAddress);
     blockTable.rows[physicalAddressBlockRow].style.backgroundColor = "yellow";
+    // Get the block mapping table to update the page state
+    var block = blockList.getBlock(physicalAddress);
+    block["writenpage"][physicalAddressBlockRow - 1]["state"] = "invalid";
+    // update the block page tracer 
+    TraceBlockInformation()
     await new Promise((resolve) => setTimeout(resolve, 1000));
     row.cells[0].innerHTML = "";
     row.cells[1].innerHTML = "";
