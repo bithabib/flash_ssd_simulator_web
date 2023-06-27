@@ -365,8 +365,10 @@ class BlockList {
   }
 
   // Get a block object from the block_list based on blockName
-  getBlock(blockName) {
-    return this.block_list.find((block) => block.block === blockName);
+  getBlockRemoveBlockList(blockName) {
+    console.log(blockName);
+    console.log(blockName);
+    return this.removed_block_list.find((block) => block.block === blockName);
   }
 
   // Remove a block from the block_list based on blockName
@@ -721,7 +723,7 @@ async function handleSelection(fileName) {
     blockTable = document.getElementById(physicalAddress);
     blockTable.rows[physicalAddressBlockRow].style.backgroundColor = "yellow";
     // Get the block mapping table to update the page state
-    var block = blockList.getBlock(physicalAddress);
+    var block = blockList.getBlockRemoveBlockList(physicalAddress);
     block["writenpage"][physicalAddressBlockRow - 1]["state"] = "invalid";
     // update the block page tracer 
     TraceBlockInformation()
