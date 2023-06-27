@@ -577,7 +577,7 @@ var mapping_table_row = 1;
 function selectRowMappingTable(rowNumber, logicalAddress, physicalAddress) {
   var table = document.getElementById("mapping_table");
   var rows = table.getElementsByTagName("tr");
-
+  // scrollToSelectedRow(table);
   if (rowNumber >= 0 && rowNumber < rows.length) {
     var row = rows[rowNumber];
     row.style.backgroundColor = "green";
@@ -588,6 +588,7 @@ function selectRowMappingTable(rowNumber, logicalAddress, physicalAddress) {
   }
   mapping_table_row++;
 }
+
 // File tracer from logical address
 var file_tracer = 0;
 async function FileUpload(file) {
