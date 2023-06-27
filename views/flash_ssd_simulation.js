@@ -8,10 +8,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -19,10 +19,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -30,10 +30,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -41,10 +41,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -52,10 +52,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -63,10 +63,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -74,10 +74,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -85,10 +85,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -96,10 +96,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -107,10 +107,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -118,10 +118,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -129,10 +129,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -140,10 +140,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -151,10 +151,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -162,10 +162,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -173,10 +173,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -184,10 +184,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -195,10 +195,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -206,10 +206,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -217,10 +217,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -228,10 +228,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -239,10 +239,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -250,10 +250,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -261,10 +261,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -272,10 +272,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -283,10 +283,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -294,10 +294,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -305,10 +305,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -316,10 +316,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -327,10 +327,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -338,10 +338,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
       {
@@ -349,10 +349,10 @@ class BlockList {
         write_count: 0,
         erase_count: 0,
         writenpage: [
-          { page: 0, data: 0 },
-          { page: 1, data: 0 },
-          { page: 2, data: 0 },
-          { page: 3, data: 0 },
+          { page: 0, data: 0, state: "free" },
+          { page: 1, data: 0, state: "free" },
+          { page: 2, data: 0, state: "free" },
+          { page: 3, data: 0, state: "free" },
         ],
       },
     ];
@@ -430,6 +430,10 @@ function TraceBlockInformation() {
 
       var dataCell = document.createElement("td");
       dataCell.textContent = pageData.data;
+      row.appendChild(dataCell);
+
+      var dataCell = document.createElement("td");
+      dataCell.textContent = pageData.state;
       row.appendChild(dataCell);
 
       tbody.appendChild(row);
@@ -627,10 +631,12 @@ async function FileUpload(file) {
           readTableRow(block["block"], blockPageTracer, fileSizeInKB);
           // update the block page
           block["writenpage"][blockPageTracer - 1]["data"] = fileSizeInKB;
+          block["writenpage"][blockPageTracer - 1]["state"] = "valid";
         } else {
           readTableRow(block["block"], blockPageTracer, 4);
           // update the block page
           block["writenpage"][blockPageTracer - 1]["data"] = 4;
+          block["writenpage"][blockPageTracer - 1]["state"] = "valid";
           console.log(block);
         }
 
