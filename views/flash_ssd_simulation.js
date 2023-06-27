@@ -602,19 +602,20 @@ function selectRowMappingTable(rowNumber, logicalAddress, physicalAddress) {
 
 // File tracer from logical address
 var file_tracer = 0;
-async function FileUpload(file) {
+async function FileUpload(fileSize, fileName) {
   // Get the size of the file in bytes
-  var fileSize = file.size;
+  // var fileSize = file.size;
 
   // Display the file size
-  console.log("File Size: " + fileSize + " bytes");
+  console.log(fileName + "File Size: " + fileSize + " bytes");
+  console.log(fileName + "File Size: " + fileSize + " bytes");
   // Bytes to kb 2 decimal places
   var fileSizeInKB = (fileSize / 1024).toFixed(2);
   if (fileSizeInKB >= 512) {
     alert("File size is too large, please select a file less than 512kb");
     return;
   } else {
-    fileMapping.addMapping(file.name, mapping_table_row, 0);
+    fileMapping.addMapping(fileName, mapping_table_row, 0);
     var logicalAddressTracer = 0;
     // divide the file size by 16kb (block size) to get the number of blocks
     while (fileSizeInKB > 0) {
@@ -674,13 +675,13 @@ async function FileUpload(file) {
       }
     }
     file_tracer++;
-    var getFileInformation = fileMapping.getMapping(file.name);
+    var getFileInformation = fileMapping.getMapping(fileName);
     fileMapping.updateMapping(
       getFileInformation.fileName,
       getFileInformation.firstRowOfMappingFile,
       mapping_table_row
     );
-    console.log(fileMapping.getMapping(file.name));
+    // console.log(fileMapping.getMapping(file.name));
     TraceBlockInformation();
   }
 
@@ -691,7 +692,8 @@ function handleFileInputChange() {
   var fileInput = document.getElementById("fileUpload");
   var file = fileInput.files[0];
   if (file) {
-    FileUpload(file);
+    var fileSize = file.size;
+    FileUpload(fileSize, file.name);
   }
 }
 
@@ -725,8 +727,8 @@ async function handleSelection(fileName) {
     // Get the block mapping table to update the page state
     var block = blockList.getBlockRemoveBlockList(physicalAddress);
     block["writenpage"][physicalAddressBlockRow - 1]["state"] = "invalid";
-    // update the block page tracer 
-    TraceBlockInformation()
+    // update the block page tracer
+    TraceBlockInformation();
     await new Promise((resolve) => setTimeout(resolve, 1000));
     row.cells[0].innerHTML = "";
     row.cells[1].innerHTML = "";
@@ -743,7 +745,8 @@ function handleFileUpdate() {
   var fileName = selectedFileName.value;
   handleSelection(fileName);
   if (file) {
-    FileUpload(file);
+    var fileSize = file.size;
+    FileUpload(fileSize, file.name);
   }
 }
 
@@ -820,24 +823,157 @@ async function garbageCollection() {
     console.log(blockAddress);
     // get the table using the block address
     var blockTable = document.getElementById(blockAddress);
-    // get written page using for loop
-    for (var j = 0; j < removedBlock.writenpage.length; j++) {
-      if (removedBlock.writenpage[j].data != 0) {
-        // colsole the page number
-        console.log(removedBlock.writenpage[j].page);
-        // page number is the row number of the block table
-        var row = blockTable.rows[removedBlock.writenpage[j].page + 1];
-        // if the color is yellow then change the color of the block table
-        if (row.style.backgroundColor == "yellow") {
-          // update the row color to red and cell to empty
-          row.style.backgroundColor = "red";
-          row.cells[1].innerHTML = "";
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          // update the row color to white
-          row.style.backgroundColor = "white";
-        }
-      }
+
+    if (
+      removedBlock.writenpage[0].state == "invalid" &&
+      removedBlock.writenpage[1].state == "invalid" &&
+      removedBlock.writenpage[2].state == "invalid" &&
+      removedBlock.writenpage[3].state == "invalid"
+    ) {
+      var row1 = blockTable.rows[removedBlock.writenpage[0].page + 1];
+      row1.style.backgroundColor = "red";
+      row1.cells[1].innerHTML = "";
+      removedBlock.writenpage[0].data = 0;
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      row1.style.backgroundColor = "white";
+      var row2 = blockTable.rows[removedBlock.writenpage[1].page + 1];
+      row2.style.backgroundColor = "red";
+      row2.cells[1].innerHTML = "";
+      removedBlock.writenpage[1].data = 0;
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      row2.style.backgroundColor = "white";
+      var row3 = blockTable.rows[removedBlock.writenpage[2].page + 1];
+      row3.style.backgroundColor = "red";
+      row3.cells[1].innerHTML = "";
+      removedBlock.writenpage[2].data = 0;
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      row3.style.backgroundColor = "white";
+      var row4 = blockTable.rows[removedBlock.writenpage[3].page + 1];
+      row4.style.backgroundColor = "red";
+      row4.cells[1].innerHTML = "";
+      removedBlock.writenpage[3].data = 0;
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      row4.style.backgroundColor = "white";
+      removedBlock.erase_count++;
+    } else if (
+      removedBlock.writenpage[0].state == "invalid" &&
+      removedBlock.writenpage[1].state == "invalid" &&
+      removedBlock.writenpage[2].state == "invalid"
+    ) {
+      var row1 = blockTable.rows[removedBlock.writenpage[0].page + 1];
+      row1.style.backgroundColor = "red";
+      row1.cells[1].innerHTML = "";
+      removedBlock.writenpage[0].data = 0;
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row1.style.backgroundColor = "white";
+      var row2 = blockTable.rows[removedBlock.writenpage[1].page + 1];
+      row2.style.backgroundColor = "red";
+      row2.cells[1].innerHTML = "";
+      removedBlock.writenpage[1].data = 0;
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row2.style.backgroundColor = "white";
+      var row3 = blockTable.rows[removedBlock.writenpage[2].page + 1];
+      row3.style.backgroundColor = "red";
+      row3.cells[1].innerHTML = "";
+      removedBlock.writenpage[2].data = 0;
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row3.style.backgroundColor = "white";
+      var row4 = blockTable.rows[removedBlock.writenpage[3].page + 1];
+      row4.style.backgroundColor = "red";
+      row4.cells[1].innerHTML = "";
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row4.style.backgroundColor = "white";
+      removedBlock.erase_count++;
+      FileUpload(removedBlock.writenpage[3].data * 1024, "garbage");
+      removedBlock.writenpage[3].data = 0;
+    } else if (
+      removedBlock.writenpage[0].state == "invalid" &&
+      removedBlock.writenpage[1].state == "invalid"
+    ) {
+      var row1 = blockTable.rows[removedBlock.writenpage[0].page + 1];
+      row1.style.backgroundColor = "red";
+      row1.cells[1].innerHTML = "";
+      removedBlock.writenpage[0].data = 0;
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row1.style.backgroundColor = "white";
+      var row2 = blockTable.rows[removedBlock.writenpage[1].page + 1];
+      row2.style.backgroundColor = "red";
+      row2.cells[1].innerHTML = "";
+      removedBlock.writenpage[1].data = 0;
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row2.style.backgroundColor = "white";
+      var row3 = blockTable.rows[removedBlock.writenpage[2].page + 1];
+      row3.style.backgroundColor = "red";
+      row3.cells[1].innerHTML = "";
+
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row3.style.backgroundColor = "white";
+      var row4 = blockTable.rows[removedBlock.writenpage[3].page + 1];
+      row4.style.backgroundColor = "red";
+      row4.cells[1].innerHTML = "";
+
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row4.style.backgroundColor = "white";
+      removedBlock.erase_count++;
+      FileUpload(
+        (removedBlock.writenpage[2].data + removedBlock.writenpage[3].data) *
+          1024,
+        "garbage"
+      );
+      removedBlock.writenpage[2].data = 0;
+      removedBlock.writenpage[3].data = 0;
+    } else if (removedBlock.writenpage[0].state == "invalid") {
+      var row1 = blockTable.rows[removedBlock.writenpage[0].page + 1];
+      row1.style.backgroundColor = "red";
+      row1.cells[1].innerHTML = "";
+      removedBlock.writenpage[0].data = 0;
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row1.style.backgroundColor = "white";
+      var row2 = blockTable.rows[removedBlock.writenpage[1].page + 1];
+      row2.style.backgroundColor = "red";
+      row2.cells[1].innerHTML = "";
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row2.style.backgroundColor = "white";
+      var row3 = blockTable.rows[removedBlock.writenpage[2].page + 1];
+      row3.style.backgroundColor = "red";
+      row3.cells[1].innerHTML = "";
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row3.style.backgroundColor = "white";
+      var row4 = blockTable.rows[removedBlock.writenpage[3].page + 1];
+      row4.style.backgroundColor = "red";
+      row4.cells[1].innerHTML = "";
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row4.style.backgroundColor = "white";
+      removedBlock.erase_count++;
+      FileUpload(
+        (removedBlock.writenpage[1].data +
+          removedBlock.writenpage[2].data +
+          removedBlock.writenpage[3].data) *
+          1024,
+        "garbage"
+      );
+      removedBlock.writenpage[1].data = 0;
+      removedBlock.writenpage[2].data = 0;
+      removedBlock.writenpage[3].data = 0;
     }
+    // get written page using for loop
+    // for (var j = 0; j < removedBlock.writenpage.length; j++) {
+    //   if (removedBlock.writenpage[j].data != 0) {
+    //     // colsole the page number
+    //     console.log(removedBlock.writenpage[j].page);
+    //     // page number is the row number of the block table
+    //     var row = blockTable.rows[removedBlock.writenpage[j].page + 1];
+    //     // if the color is yellow then change the color of the block table
+    //     if (row.style.backgroundColor == "yellow") {
+    //       // update the row color to red and cell to empty
+    //       row.style.backgroundColor = "red";
+    //       row.cells[1].innerHTML = "";
+    //       await new Promise((resolve) => setTimeout(resolve, 1000));
+    //       // update the row color to white
+    //       row.style.backgroundColor = "white";
+    //     }
+    //   }
+    // }
   }
 }
 
