@@ -956,24 +956,6 @@ async function garbageCollection() {
       removedBlock.writenpage[2].data = 0;
       removedBlock.writenpage[3].data = 0;
     }
-    // get written page using for loop
-    // for (var j = 0; j < removedBlock.writenpage.length; j++) {
-    //   if (removedBlock.writenpage[j].data != 0) {
-    //     // colsole the page number
-    //     console.log(removedBlock.writenpage[j].page);
-    //     // page number is the row number of the block table
-    //     var row = blockTable.rows[removedBlock.writenpage[j].page + 1];
-    //     // if the color is yellow then change the color of the block table
-    //     if (row.style.backgroundColor == "yellow") {
-    //       // update the row color to red and cell to empty
-    //       row.style.backgroundColor = "red";
-    //       row.cells[1].innerHTML = "";
-    //       await new Promise((resolve) => setTimeout(resolve, 1000));
-    //       // update the row color to white
-    //       row.style.backgroundColor = "white";
-    //     }
-    //   }
-    // }
   }
 }
 
