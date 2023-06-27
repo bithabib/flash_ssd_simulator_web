@@ -1,0 +1,77 @@
+.feedback-section {
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+
+.feedback-section h2 {
+    margin-bottom: 20px;
+}
+
+#feedback-form {
+    margin-bottom: 20px;
+}
+
+#feedback-input {
+    width: 100%;
+    height: 100px;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+#comments-container {
+    margin-top: 20px;
+}
+
+.comment {
+    display: flex;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.comment img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.comment-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.comment-content h3 {
+    margin: 0;
+}
+
+.comment-content p {
+    margin: 5px 0;
+}
+
+.comment-actions {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.comment-actions .like-button {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.comment-actions .like-button:hover {
+    background-color: #eee;
+}
+
+.comment-actions .like-button i {
+    margin-right: 5px;
+}
+
+.comment-actions .like-count {
+    font-weight: bold;
+}
