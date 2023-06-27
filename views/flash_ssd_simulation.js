@@ -614,8 +614,14 @@ async function FileUpload(file) {
       // Get the block number from the sequence
       var block = blockList.block_list[random];
       console.log(block);
+      // Get the block page tracer from the correct page
+      for (i = 0; i < block.writenpage.length; i++) {
+        if (block.writenpage[i].data == 0) {
+          blockPageTracer = i + 1;
+          break;
+        }
+      }
       // divide the file size by 4kb (page size) to get the number of pages
-      blockPageTracer = 1;
       while (fileSizeInKB > 0 && blockPageTracer <= 4) {
         if (fileSizeInKB < 4) {
           readTableRow(block["block"], blockPageTracer, fileSizeInKB);
@@ -641,10 +647,18 @@ async function FileUpload(file) {
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
       // Remove the block from the sequence
-      blockList.block_list.splice(random, 1);
-      // add the removed block to the removed_block list by updating the write count and erase count
-      block["write_count"]++;
-      blockList.removed_block_list.push(block);
+      if (blockPageTracer === 5) {
+        // remove the block from the block list
+        blockList.block_list.splice(random, 1);
+        // add the removed block to the removed_block list by updating the write count and erase count
+        block["write_count"]++;
+        blockList.removed_block_list.push(block);
+      } else {
+        // blockList.block_list.splice(random, 1);
+        // add the removed block to the removed_block list by updating the write count and erase count
+        block["write_count"]++;
+        // blockList.removed_block_list.push(block);
+      }
     }
     file_tracer++;
     var getFileInformation = fileMapping.getMapping(file.name);
