@@ -83,6 +83,7 @@
             border-radius: 4px;
         }
     </style>
+    <link rel="stylesheet" type="text/css" href="../src/css/comments_section.css">
 </head>
 
 <body>
@@ -1289,7 +1290,7 @@
             </table>
         </div>
 
-        <div class="container mt-5">
+        <div class="container mt-5" style="overflow-y: auto; max-height: 200px;">
             <h2>
                 Block Information Tracer
             </h2>
@@ -1312,10 +1313,21 @@
             </table>
         </div>
     </div>
+    <div class="feedback-section">
+        <h2>Feedback</h2>
+        <form id="feedback-form">
+            <textarea id="feedback-input" placeholder="Write your feedback here"></textarea>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="comments-container">
+            <!-- User comments and admin replies will be dynamically added here -->
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="../views/flash_ssd_simulation.js"></script>
+    <script src="../views/feedback.js"></script>
     <!-- <script src="../views/update_data_flash_ssd.js"></script> -->
 </body>
 
