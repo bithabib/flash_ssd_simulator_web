@@ -619,8 +619,13 @@ async function FileUpload(file) {
       while (fileSizeInKB > 0 && blockPageTracer <= 4) {
         if (fileSizeInKB < 4) {
           readTableRow(block["block"], blockPageTracer, fileSizeInKB);
+          // update the block page
+          block["writenpage"][blockPageTracer - 1]["data"] = fileSizeInKB;
         } else {
           readTableRow(block["block"], blockPageTracer, 4);
+          // update the block page
+          block["writenpage"][blockPageTracer - 1]["data"] = 4;
+          console.log(block);
         }
 
         selectRowMappingTable(
@@ -628,8 +633,6 @@ async function FileUpload(file) {
           "f" + file_tracer + logicalAddressTracer,
           block["block"] + blockPageTracer
         );
-        // update the block page
-        block["writenpage"][blockPageTracer - 1]["data"] = fileSizeInKB;
         // Save the filename, logical address and mapping_table_row in the java class
         // decrease the file size by 4kb
         fileSizeInKB = (fileSizeInKB - 4).toFixed(2);
@@ -651,6 +654,7 @@ async function FileUpload(file) {
       mapping_table_row
     );
     console.log(fileMapping.getMapping(file.name));
+    TraceBlockInformation();
   }
 
   // divide the file size by 4kb (page size) to get the number of pages
@@ -662,7 +666,6 @@ function handleFileInputChange() {
   if (file) {
     FileUpload(file);
   }
-  TraceBlockInformation();
 }
 
 // ----------------------------------------- Update File -------------------------------------------//
