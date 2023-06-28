@@ -4,11 +4,66 @@
   <title>SSD Simulator Feedback</title>
   <!-- Include Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .container {
+      max-width: 600px;
+      margin-top: 50px;
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .form-group label {
+      font-weight: bold;
+    }
+
+    .form-group h2 {
+      font-size: 1.2rem;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .feedback-message {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+      padding: 10px;
+    }
+
+    .btn-submit {
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1 class="mt-4">SSD Simulator Feedback</h1>
+    <h1>SSD Simulator Feedback</h1>
     <form id="surveyForm">
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" class="form-control" name="name" id="name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" name="email" id="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="profession">Profession:</label>
+        <input type="text" class="form-control" name="profession" id="profession" required>
+      </div>
+
       <div class="form-group">
         <h2>On a scale of 1 to 10, how satisfied are you with the SSD simulator?</h2>
         <input type="number" class="form-control" name="satisfaction" min="1" max="10" required>
@@ -51,14 +106,18 @@
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-submit">Submit</button>
+      </div>
     </form>
+
+    <div id="feedbackMessage" class="feedback-message"></div>
   </div>
 
   <!-- Include Bootstrap JS and jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  
+
   <script>
     var form_id_js = "surveyForm";
 
@@ -96,6 +155,9 @@
         }
       };
 
+      var name = document.getElementById("name").value;
+      var email = document.getElementById("email").value;
+      var profession = document.getElementById("profession").value;
       var satisfaction = document.getElementsByName("satisfaction")[0].value;
       var understandability = document.getElementsByName("understandability")[0].value;
       var simulatorRating = document.getElementsByName("simulator-rating")[0].value;
@@ -105,7 +167,10 @@
       var data_js = {
         "access_token": "rp8thxqxvee0fpz3lvw6qr39",
         "subject": "SSD Simulator Feedback",
-        "text": "Satisfaction: " + satisfaction +
+        "text": "Name: " + name +
+                "\nEmail: " + email +
+                "\nProfession: " + profession +
+                "\nSatisfaction: " + satisfaction +
                 "\nUnderstandability: " + understandability +
                 "\nSimulator Rating: " + simulatorRating +
                 "\nComments: " + comments +
