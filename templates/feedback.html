@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SSD Simulator Feedback</title>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1 class="mt-4">SSD Simulator Feedback</h1>
+    <form id="surveyForm">
+      <div class="form-group">
+        <h2>On a scale of 1 to 10, how satisfied are you with the SSD simulator?</h2>
+        <input type="number" class="form-control" name="satisfaction" min="1" max="10" required>
+      </div>
+
+      <div class="form-group">
+        <h2>How easy was it for you to understand the concept of Flash SSD while using the simulator?</h2>
+        <select class="form-control" name="understandability" required>
+          <option value="very-easy">Very easy</option>
+          <option value="somewhat-easy">Somewhat easy</option>
+          <option value="neutral">Neutral</option>
+          <option value="somewhat-difficult">Somewhat difficult</option>
+          <option value="very-difficult">Very difficult</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <h2>On a scale of 1 to 10, please rate the simulator itself.</h2>
+        <input type="number" class="form-control" name="simulator-rating" min="1" max="10" required>
+      </div>
+
+      <div class="form-group">
+        <h2>Please provide any comments or feedback you have about the simulator.</h2>
+        <textarea class="form-control" name="comments" rows="4" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <h2>Do you feel that the simulator covers the main concepts of Flash SSD?</h2>
+        <div class="form-check">
+          <input type="radio" class="form-check-input" name="concept-coverage" value="covers-all" required>
+          <label class="form-check-label">Yes, it covers all the main concepts</label>
+        </div>
+        <div class="form-check">
+          <input type="radio" class="form-check-input" name="concept-coverage" value="some-missing">
+          <label class="form-check-label">Yes, but some concepts are missing or unclear</label>
+        </div>
+        <div class="form-check">
+          <input type="radio" class="form-check-input" name="concept-coverage" value="not-covering">
+          <label class="form-check-label">No, it does not cover the main concepts</label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+
+  <!-- Include Bootstrap JS and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+  <script>
+    var form_id_js = "surveyForm";
+
+    function js_onSuccess() {
+      var feedbackMessage = document.getElementById("feedbackMessage");
+      feedbackMessage.innerText = "Survey responses successfully sent!";
+      feedbackMessage.style.display = "block";
+      document.getElementById(form_id_js).reset();
+    }
+
+    function js_onError(error) {
+      var feedbackMessage = document.getElementById("feedbackMessage");
+      feedbackMessage.innerText = "Error sending the survey responses.";
+      feedbackMessage.style.display = "block";
+    }
+
+    var sendButton = document.getElementById(form_id_js).querySelector("button[type='submit']");
+
+    function js_send(event) {
+      event.preventDefault();
+
+      sendButton.innerText = "Sending...";
+      sendButton.disabled = true;
+
+      var request = new XMLHttpRequest();
+      request.onreadystatechange = function () {
+        if (request.readyState == 4) {
+          if (request.status == 200) {
+            js_onSuccess();
+          } else {
+            js_onError(request.response);
+          }
+          sendButton.innerText = "Submit";
+          sendButton.disabled = false;
+        }
+      };
+
+      var satisfaction = document.getElementsByName("satisfaction")[0].value;
+      var understandability = document.getElementsByName("understandability")[0].value;
+      var simulatorRating = document.getElementsByName("simulator-rating")[0].value;
+      var comments = document.getElementsByName("comments")[0].value;
+      var conceptCoverage = document.querySelector("input[name='concept-coverage']:checked").value;
+
+      var data_js = {
+        "access_token": "rp8thxqxvee0fpz3lvw6qr39",
+        "subject": "SSD Simulator Feedback",
+        "text": "Satisfaction: " + satisfaction +
+                "\nUnderstandability: " + understandability +
+                "\nSimulator Rating: " + simulatorRating +
+                "\nComments: " + comments +
+                "\nConcept Coverage: " + conceptCoverage
+      };
+
+      var params = toParams(data_js);
+
+      request.open("POST", "https://postmail.invotes.com/send", true);
+      request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+      request.send(params);
+    }
+
+    sendButton.addEventListener("click", js_send);
+
+    function toParams(data_js) {
+      var form_data = [];
+      for (var key in data_js) {
+        form_data.push(encodeURIComponent(key) + "=" + encodeURIComponent(data_js[key]));
+      }
+
+      return form_data.join("&");
+    }
+  </script>
+</body>
+</html>
