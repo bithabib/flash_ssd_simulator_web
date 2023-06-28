@@ -7,7 +7,7 @@ class BlockList {
         block: "p0d0p0b0ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -18,7 +18,7 @@ class BlockList {
         block: "p0d0p0b1ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -29,7 +29,7 @@ class BlockList {
         block: "p0d0p0b2ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -40,7 +40,7 @@ class BlockList {
         block: "p0d0p0b3ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -51,7 +51,7 @@ class BlockList {
         block: "p0d0p1b0ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -62,7 +62,7 @@ class BlockList {
         block: "p0d0p1b1ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -73,7 +73,7 @@ class BlockList {
         block: "p0d0p1b2ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -84,7 +84,7 @@ class BlockList {
         block: "p0d0p1b3ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -95,7 +95,7 @@ class BlockList {
         block: "p0d1p0b0ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -106,7 +106,7 @@ class BlockList {
         block: "p0d1p0b1ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -117,7 +117,7 @@ class BlockList {
         block: "p0d1p0b2ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -128,7 +128,7 @@ class BlockList {
         block: "p0d1p0b3ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -139,7 +139,7 @@ class BlockList {
         block: "p0d1p1b0ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -150,7 +150,7 @@ class BlockList {
         block: "p0d1p1b1ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -161,7 +161,7 @@ class BlockList {
         block: "p0d1p1b2ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -172,7 +172,7 @@ class BlockList {
         block: "p0d1p1b3ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -183,7 +183,7 @@ class BlockList {
         block: "p1d0p0b0ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -194,7 +194,7 @@ class BlockList {
         block: "p1d0p0b1ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -205,7 +205,7 @@ class BlockList {
         block: "p1d0p0b2ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -216,7 +216,7 @@ class BlockList {
         block: "p1d0p0b3ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -227,7 +227,7 @@ class BlockList {
         block: "p1d0p1b0ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -238,7 +238,7 @@ class BlockList {
         block: "p1d0p1b1ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -249,7 +249,7 @@ class BlockList {
         block: "p1d0p1b2ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -260,7 +260,7 @@ class BlockList {
         block: "p1d0p1b3ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -271,7 +271,7 @@ class BlockList {
         block: "p1d1p0b0ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -282,7 +282,7 @@ class BlockList {
         block: "p1d1p0b1ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -293,7 +293,7 @@ class BlockList {
         block: "p1d1p0b2ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -304,7 +304,7 @@ class BlockList {
         block: "p1d1p0b3ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -315,7 +315,7 @@ class BlockList {
         block: "p1d1p1b0ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -326,7 +326,7 @@ class BlockList {
         block: "p1d1p1b1ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -337,7 +337,7 @@ class BlockList {
         block: "p1d1p1b2ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -348,7 +348,7 @@ class BlockList {
         block: "p1d1p1b3ct",
         write_count: 0,
         erase_count: 0,
-        writenpage: [
+        written_page: [
           { page: 0, data: 0, state: "free" },
           { page: 1, data: 0, state: "free" },
           { page: 2, data: 0, state: "free" },
@@ -369,6 +369,13 @@ class BlockList {
     console.log(blockName);
     console.log(blockName);
     return this.removed_block_list.find((block) => block.block === blockName);
+  }
+
+  // Get a block object from the block_list based on blockName
+  getBlock(blockName) {
+    console.log(blockName);
+    console.log(blockName);
+    return this.block_list.find((block) => block.block === blockName);
   }
 
   // Remove a block from the block_list based on blockName
@@ -416,7 +423,7 @@ function TraceBlockInformation() {
     var eraseCount = entry.erase_count;
     console.log(entry);
 
-    entry.writenpage.forEach(function (pageData) {
+    entry.written_page.forEach(function (pageData) {
       var row = document.createElement("tr");
 
       var blockCell = document.createElement("td");
@@ -627,8 +634,8 @@ async function FileUpload(fileSize, fileName) {
       var block = blockList.block_list[random];
       console.log(block);
       // Get the block page tracer from the correct page
-      for (i = 0; i < block.writenpage.length; i++) {
-        if (block.writenpage[i].data == 0) {
+      for (i = 0; i < block.written_page.length; i++) {
+        if (block.written_page[i].data == 0) {
           blockPageTracer = i + 1;
           break;
         }
@@ -638,13 +645,13 @@ async function FileUpload(fileSize, fileName) {
         if (fileSizeInKB < 4) {
           readTableRow(block["block"], blockPageTracer, fileSizeInKB);
           // update the block page
-          block["writenpage"][blockPageTracer - 1]["data"] = fileSizeInKB;
-          block["writenpage"][blockPageTracer - 1]["state"] = "valid";
+          block["written_page"][blockPageTracer - 1]["data"] = fileSizeInKB;
+          block["written_page"][blockPageTracer - 1]["state"] = "valid";
         } else {
           readTableRow(block["block"], blockPageTracer, 4);
           // update the block page
-          block["writenpage"][blockPageTracer - 1]["data"] = 4;
-          block["writenpage"][blockPageTracer - 1]["state"] = "valid";
+          block["written_page"][blockPageTracer - 1]["data"] = 4;
+          block["written_page"][blockPageTracer - 1]["state"] = "valid";
           console.log(block);
         }
 
@@ -726,7 +733,11 @@ async function handleSelection(fileName) {
     blockTable.rows[physicalAddressBlockRow].style.backgroundColor = "yellow";
     // Get the block mapping table to update the page state
     var block = blockList.getBlockRemoveBlockList(physicalAddress);
-    block["writenpage"][physicalAddressBlockRow - 1]["state"] = "invalid";
+    // If the block is not in the removed block list then get it from the block list
+    if (block == undefined) {
+      block = blockList.getBlock(physicalAddress);
+    }
+    block["written_page"][physicalAddressBlockRow - 1]["state"] = "invalid";
     // update the block page tracer
     TraceBlockInformation();
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -825,90 +836,90 @@ async function garbageCollection() {
     var blockTable = document.getElementById(blockAddress);
 
     if (
-      removedBlock.writenpage[0].state == "invalid" &&
-      removedBlock.writenpage[1].state == "invalid" &&
-      removedBlock.writenpage[2].state == "invalid" &&
-      removedBlock.writenpage[3].state == "invalid"
+      removedBlock.written_page[0].state == "invalid" &&
+      removedBlock.written_page[1].state == "invalid" &&
+      removedBlock.written_page[2].state == "invalid" &&
+      removedBlock.written_page[3].state == "invalid"
     ) {
-      var row1 = blockTable.rows[removedBlock.writenpage[0].page + 1];
+      var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
       row1.style.backgroundColor = "red";
       row1.cells[1].innerHTML = "";
-      removedBlock.writenpage[0].data = 0;
+      removedBlock.written_page[0].data = 0;
       await new Promise((resolve) => setTimeout(resolve, 1000));
       row1.style.backgroundColor = "white";
-      var row2 = blockTable.rows[removedBlock.writenpage[1].page + 1];
+      var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
       row2.style.backgroundColor = "red";
       row2.cells[1].innerHTML = "";
-      removedBlock.writenpage[1].data = 0;
+      removedBlock.written_page[1].data = 0;
       await new Promise((resolve) => setTimeout(resolve, 1000));
       row2.style.backgroundColor = "white";
-      var row3 = blockTable.rows[removedBlock.writenpage[2].page + 1];
+      var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
       row3.style.backgroundColor = "red";
       row3.cells[1].innerHTML = "";
-      removedBlock.writenpage[2].data = 0;
+      removedBlock.written_page[2].data = 0;
       await new Promise((resolve) => setTimeout(resolve, 1000));
       row3.style.backgroundColor = "white";
-      var row4 = blockTable.rows[removedBlock.writenpage[3].page + 1];
+      var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
       row4.style.backgroundColor = "red";
       row4.cells[1].innerHTML = "";
-      removedBlock.writenpage[3].data = 0;
+      removedBlock.written_page[3].data = 0;
       await new Promise((resolve) => setTimeout(resolve, 1000));
       row4.style.backgroundColor = "white";
       removedBlock.erase_count++;
     } else if (
-      removedBlock.writenpage[0].state == "invalid" &&
-      removedBlock.writenpage[1].state == "invalid" &&
-      removedBlock.writenpage[2].state == "invalid"
+      removedBlock.written_page[0].state == "invalid" &&
+      removedBlock.written_page[1].state == "invalid" &&
+      removedBlock.written_page[2].state == "invalid"
     ) {
-      var row1 = blockTable.rows[removedBlock.writenpage[0].page + 1];
+      var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
       row1.style.backgroundColor = "red";
       row1.cells[1].innerHTML = "";
-      removedBlock.writenpage[0].data = 0;
+      removedBlock.written_page[0].data = 0;
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row1.style.backgroundColor = "white";
-      var row2 = blockTable.rows[removedBlock.writenpage[1].page + 1];
+      var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
       row2.style.backgroundColor = "red";
       row2.cells[1].innerHTML = "";
-      removedBlock.writenpage[1].data = 0;
+      removedBlock.written_page[1].data = 0;
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row2.style.backgroundColor = "white";
-      var row3 = blockTable.rows[removedBlock.writenpage[2].page + 1];
+      var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
       row3.style.backgroundColor = "red";
       row3.cells[1].innerHTML = "";
-      removedBlock.writenpage[2].data = 0;
+      removedBlock.written_page[2].data = 0;
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row3.style.backgroundColor = "white";
-      var row4 = blockTable.rows[removedBlock.writenpage[3].page + 1];
+      var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
       row4.style.backgroundColor = "red";
       row4.cells[1].innerHTML = "";
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row4.style.backgroundColor = "white";
       removedBlock.erase_count++;
-      FileUpload(removedBlock.writenpage[3].data * 1024, "garbage");
-      removedBlock.writenpage[3].data = 0;
+      FileUpload(removedBlock.written_page[3].data * 1024, "garbage");
+      removedBlock.written_page[3].data = 0;
     } else if (
-      removedBlock.writenpage[0].state == "invalid" &&
-      removedBlock.writenpage[1].state == "invalid"
+      removedBlock.written_page[0].state == "invalid" &&
+      removedBlock.written_page[1].state == "invalid"
     ) {
-      var row1 = blockTable.rows[removedBlock.writenpage[0].page + 1];
+      var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
       row1.style.backgroundColor = "red";
       row1.cells[1].innerHTML = "";
-      removedBlock.writenpage[0].data = 0;
+      removedBlock.written_page[0].data = 0;
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row1.style.backgroundColor = "white";
-      var row2 = blockTable.rows[removedBlock.writenpage[1].page + 1];
+      var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
       row2.style.backgroundColor = "red";
       row2.cells[1].innerHTML = "";
-      removedBlock.writenpage[1].data = 0;
+      removedBlock.written_page[1].data = 0;
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row2.style.backgroundColor = "white";
-      var row3 = blockTable.rows[removedBlock.writenpage[2].page + 1];
+      var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
       row3.style.backgroundColor = "red";
       row3.cells[1].innerHTML = "";
 
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row3.style.backgroundColor = "white";
-      var row4 = blockTable.rows[removedBlock.writenpage[3].page + 1];
+      var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
       row4.style.backgroundColor = "red";
       row4.cells[1].innerHTML = "";
 
@@ -916,45 +927,45 @@ async function garbageCollection() {
       row4.style.backgroundColor = "white";
       removedBlock.erase_count++;
       FileUpload(
-        (removedBlock.writenpage[2].data + removedBlock.writenpage[3].data) *
+        (removedBlock.written_page[2].data + removedBlock.written_page[3].data) *
           1024,
         "garbage"
       );
-      removedBlock.writenpage[2].data = 0;
-      removedBlock.writenpage[3].data = 0;
-    } else if (removedBlock.writenpage[0].state == "invalid") {
-      var row1 = blockTable.rows[removedBlock.writenpage[0].page + 1];
+      removedBlock.written_page[2].data = 0;
+      removedBlock.written_page[3].data = 0;
+    } else if (removedBlock.written_page[0].state == "invalid") {
+      var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
       row1.style.backgroundColor = "red";
       row1.cells[1].innerHTML = "";
-      removedBlock.writenpage[0].data = 0;
+      removedBlock.written_page[0].data = 0;
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row1.style.backgroundColor = "white";
-      var row2 = blockTable.rows[removedBlock.writenpage[1].page + 1];
+      var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
       row2.style.backgroundColor = "red";
       row2.cells[1].innerHTML = "";
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row2.style.backgroundColor = "white";
-      var row3 = blockTable.rows[removedBlock.writenpage[2].page + 1];
+      var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
       row3.style.backgroundColor = "red";
       row3.cells[1].innerHTML = "";
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row3.style.backgroundColor = "white";
-      var row4 = blockTable.rows[removedBlock.writenpage[3].page + 1];
+      var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
       row4.style.backgroundColor = "red";
       row4.cells[1].innerHTML = "";
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row4.style.backgroundColor = "white";
       removedBlock.erase_count++;
       FileUpload(
-        (removedBlock.writenpage[1].data +
-          removedBlock.writenpage[2].data +
-          removedBlock.writenpage[3].data) *
+        (removedBlock.written_page[1].data +
+          removedBlock.written_page[2].data +
+          removedBlock.written_page[3].data) *
           1024,
         "garbage"
       );
-      removedBlock.writenpage[1].data = 0;
-      removedBlock.writenpage[2].data = 0;
-      removedBlock.writenpage[3].data = 0;
+      removedBlock.written_page[1].data = 0;
+      removedBlock.written_page[2].data = 0;
+      removedBlock.written_page[3].data = 0;
     }
   }
 }
