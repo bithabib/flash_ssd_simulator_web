@@ -391,6 +391,19 @@ class BlockList {
     }
   }
 
+  // Remove a block from the removed_block_list based on blockName
+  removeBlockFromRemovedBlockList(blockName) {
+    const removedBlock = this.removed_block_list.find(
+      (block) => block.block === blockName
+    );
+    if (removedBlock) {
+      this.removed_block_list = this.removed_block_list.filter(
+        (block) => block.block !== blockName
+      );
+      this.block_list.push(removedBlock);
+    }
+  }
+
   // Update an existing block in the block_list with an updatedBlockObj
   updateBlock(blockName, updatedBlockObj) {
     this.block_list = this.block_list.map((block) =>
@@ -866,6 +879,8 @@ async function garbageCollection() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       row4.style.backgroundColor = "white";
       removedBlock.erase_count++;
+      // remove the block from the removed block list and add it to the block list
+      blockList.removeBlockFromRemovedBlockList(blockAddress);
     } else if (
       removedBlock.written_page[0].state == "invalid" &&
       removedBlock.written_page[1].state == "invalid" &&
@@ -895,8 +910,10 @@ async function garbageCollection() {
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row4.style.backgroundColor = "white";
       removedBlock.erase_count++;
+
       FileUpload(removedBlock.written_page[3].data * 1024, "garbage");
       removedBlock.written_page[3].data = 0;
+      blockList.removeBlockFromRemovedBlockList(blockAddress);
     } else if (
       removedBlock.written_page[0].state == "invalid" &&
       removedBlock.written_page[1].state == "invalid"
@@ -933,6 +950,7 @@ async function garbageCollection() {
       );
       removedBlock.written_page[2].data = 0;
       removedBlock.written_page[3].data = 0;
+      blockList.removeBlockFromRemovedBlockList(blockAddress);
     } else if (removedBlock.written_page[0].state == "invalid") {
       var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
       row1.style.backgroundColor = "red";
@@ -966,6 +984,7 @@ async function garbageCollection() {
       removedBlock.written_page[1].data = 0;
       removedBlock.written_page[2].data = 0;
       removedBlock.written_page[3].data = 0;
+      blockList.removeBlockFromRemovedBlockList(blockAddress);
     }
   }
 }
