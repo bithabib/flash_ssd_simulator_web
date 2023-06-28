@@ -1,0 +1,74 @@
+table {
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+th,
+td {
+    padding: 5px;
+    border: 1px solid black;
+    text-align: center;
+}
+
+.package {
+    background-color: #F0F0F0;
+    font-weight: bold;
+}
+
+.block {
+    background-color: #E0E0E0;
+}
+
+.ppn {
+    font-weight: bold;
+}
+
+.data {
+    background-color: #C0C0C0;
+}
+
+header {
+    background-color: #f2f2f2;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #777;
+    font-size: 18px;
+}
+
+/* SSD Simulation div styles */
+.simulation-container {
+    margin: 20px auto;
+    max-width: 500px;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+select {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
