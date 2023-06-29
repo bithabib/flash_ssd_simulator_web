@@ -1,19 +1,21 @@
-var form_id_js = "feedbackForm";
+var form_id_js = "surveyForm";
 
 function js_onSuccess() {
   var feedbackMessage = document.getElementById("feedbackMessage");
-  feedbackMessage.innerText = "Email Successfully Sent!";
+  feedbackMessage.innerText = "Survey responses successfully sent!";
   feedbackMessage.style.display = "block";
   document.getElementById(form_id_js).reset();
 }
 
 function js_onError(error) {
   var feedbackMessage = document.getElementById("feedbackMessage");
-  feedbackMessage.innerText = "Email could not be sent.";
+  feedbackMessage.innerText = "Error sending the survey responses.";
   feedbackMessage.style.display = "block";
 }
 
-var sendButton = document.getElementById("feedbackForm").querySelector("button[type='submit']");
+var sendButton = document
+  .getElementById(form_id_js)
+  .querySelector("button[type='submit']");
 
 function js_send(event) {
   event.preventDefault();
@@ -36,12 +38,36 @@ function js_send(event) {
 
   var name = document.getElementById("name").value;
   var email = document.getElementById("email").value;
-  var message = document.getElementById("message").value;
+  var profession = document.getElementById("profession").value;
+  var satisfaction = document.getElementsByName("satisfaction")[0].value;
+  var understandability =
+    document.getElementsByName("understandability")[0].value;
+  var simulatorRating = document.getElementsByName("simulator-rating")[0].value;
+  var comments = document.getElementsByName("comments")[0].value;
+  var conceptCoverage = document.querySelector(
+    "input[name='concept-coverage']:checked"
+  ).value;
 
   var data_js = {
-    "access_token": "rp8thxqxvee0fpz3lvw6qr39",
-    "subject": "User Feedback",
-    "text": "Name: " + name + "\nEmail: " + email + "\nMessage: " + message
+    access_token: "rp8thxqxvee0fpz3lvw6qr39",
+    subject: "SSD Simulator Feedback",
+    text:
+      "Name: " +
+      name +
+      "\nEmail: " +
+      email +
+      "\nProfession: " +
+      profession +
+      "\nSatisfaction: " +
+      satisfaction +
+      "\nUnderstandability: " +
+      understandability +
+      "\nSimulator Rating: " +
+      simulatorRating +
+      "\nComments: " +
+      comments +
+      "\nConcept Coverage: " +
+      conceptCoverage,
   };
 
   var params = toParams(data_js);
@@ -57,7 +83,9 @@ sendButton.addEventListener("click", js_send);
 function toParams(data_js) {
   var form_data = [];
   for (var key in data_js) {
-    form_data.push(encodeURIComponent(key) + "=" + encodeURIComponent(data_js[key]));
+    form_data.push(
+      encodeURIComponent(key) + "=" + encodeURIComponent(data_js[key])
+    );
   }
 
   return form_data.join("&");
