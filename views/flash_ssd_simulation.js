@@ -1198,21 +1198,3 @@ function calculateFlashMemorySize() {
   }
   document.getElementById("mapping_table_entries").textContent = n;
 }
-// Close the tab
-// window.addEventListener("beforeunload", function (event) {
-//   var confirmationMessage = `
-//   <div class="row justify-content-center">
-//     <div class="col-md-6 text-center">
-//       <p class="h4 mt-5">We value your feedback!</p>
-//       <p>Please take a moment to provide us with your valuable feedback:</p>
-//       <a href="feedback.html" class="btn btn-primary btn-lg mt-3">Give Feedback</a>
-//     </div>
-//   </div>
-// `;
-//   event.returnValue = confirmationMessage;
-//   return confirmationMessage;
-// });
-window.onbeforeunload = function() {
-  alert("Wait don't go!");
-  return false;
-}
