@@ -89,6 +89,9 @@ Block Erase | 1.5 ms
 
 6. Not Recently Used (NRU): NRU is a variation of the MRU algorithm that distinguishes between recently used and not recently used cache lines. It divides the cache lines into two categories: "recently used" and "not recently used." When eviction is required, it chooses a cache line from the "not recently used" category. This algorithm provides a simple approximation of LRU and is often used in hardware implementations due to its lower complexity.
 
+## References
+- [1] Coding for SSDs – Part 1: Introduction and Table of Contents https://codecapsule.com/2014/02/12/coding-for-ssds-part-1-introduction-and-table-of-contents/
+
 ## License
 This simulation is provided under the [MIT License](LICENSE). You are free to use, modify, and distribute the simulation in accordance with the terms of the license.
 
