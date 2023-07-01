@@ -1,8 +1,16 @@
 class TopicStorage {
   constructor() {
     this.definitions = {
-        "eyana_ssd_simulator":"Eyana: The SSD Simulator offers an immersive experience to understand the intricate workings of Solid-State Drives (SSDs). Through realistic simulations, users can delve into the complexities of flash memory technology, data management algorithms, wear leveling techniques, and performance optimizations employed by SSDs. Eyana provides a hands-on platform for learning and experimentation, enabling users to gain insights into the inner workings of SSDs and their impact on storage performance and reliability.",
-        "page_block_plane_die_package": "Page: A page refers to the smallest unit of data that can be read from or written to in a NAND-flash memory. It is typically a fixed-size portion of memory, such as 2 KB, 4 KB, 8 KB, or 16 KB. Pages are organized within blocks. \n Block: A block is a group of pages in NAND-flash memory that can be erased as a single unit. The block size can vary depending on the SSD, typically ranging from 256 KB to 4 MB. All pages within a block need to be erased together before new data can be written to them. \n Plane: A plane is a higher-level grouping of blocks within NAND-flash memory. It consists of multiple blocks that are organized together. The purpose of having planes is to allow parallel operations, such as simultaneous reading or writing, to improve overall performance and efficiency. \nDie: A die is a physical unit within a NAND-flash memory chip. It contains multiple planes and is responsible for storing and accessing data. A die is typically a square or rectangular piece of semiconductor material that contains the necessary circuitry to operate the memory cells.\nPackage: A package refers to the overall physical enclosure that houses one or more NAND-flash memory dies. It includes the necessary components for the memory chip to function, such as the controller, interface, and other supporting circuitry. The package is what is typically visible and connects to a computer or device when using an SSD or other NAND-flash-based storage device."
+      popup_description1: `
+        <p>Eyana: The SSD Simulator offers an immersive experience to understand the intricate workings of Solid-State Drives (SSDs). Through realistic simulations, users can delve into the complexities of flash memory technology, data management algorithms, wear leveling techniques, and performance optimizations employed by SSDs. Eyana provides a hands-on platform for learning and experimentation, enabling users to gain insights into the inner workings of SSDs and their impact on storage performance and reliability.</p>
+      `,
+      popup_description2: `
+        <p>Page: A page refers to the smallest unit of data that can be read from or written to in a NAND-flash memory. It is typically a fixed-size portion of memory, such as 2 KB, 4 KB, 8 KB, or 16 KB. Pages are organized within blocks.</p>
+        <p>Block: A block is a group of pages in NAND-flash memory that can be erased as a single unit. The block size can vary depending on the SSD, typically ranging from 256 KB to 4 MB. All pages within a block need to be erased together before new data can be written to them.</p>
+        <p>Plane: A plane is a higher-level grouping of blocks within NAND-flash memory. It consists of multiple blocks that are organized together. The purpose of having planes is to allow parallel operations, such as simultaneous reading or writing, to improve overall performance and efficiency.</p>
+        <p>Die: A die is a physical unit within a NAND-flash memory chip. It contains multiple planes and is responsible for storing and accessing data. A die is typically a square or rectangular piece of semiconductor material that contains the necessary circuitry to operate the memory cells.</p>
+        <p>Package: A package refers to the overall physical enclosure that houses one or more NAND-flash memory dies. It includes the necessary components for the memory chip to function, such as the controller, interface, and other supporting circuitry. The package is what is typically visible and connects to a computer or device when using an SSD or other NAND-flash-based storage device.</p>
+      `,
     };
   }
 
@@ -26,56 +34,66 @@ class TopicStorage {
     this.definitions = {};
   }
 }
-
 const storage = new TopicStorage();
-var hoverArea = document.getElementById("ssd_defination_hover");
-var popup = document.getElementById("popup_description");
-var hoverTimeout;
+let hoverTimeout;
 
-function showPopup(x, y) {
+function handleOkButtonClick() {
+  const popup = this.parentNode;
+  popup.style.display = "none";
+  clearTimeout(hoverTimeout);
+}
+
+function showPopup(div, popup, popupId, event) {
+  const mouseX = event.clientX + window.pageXOffset;
+  const mouseY = event.clientY + window.pageYOffset;
+  const popupX = mouseX;
+  const popupY = mouseY;
+
+  popup.style.left = popupX + "px";
+  popup.style.top = popupY + "px";
   popup.style.display = "block";
-  popup.style.left = x + "px";
-  popup.style.top = y + "px";
+
+  var popupContent = document.createElement("p");
+  popupContent.innerHTML = storage.getDefinition(popupId);
+  popup.appendChild(popupContent);
+  var okButton = document.createElement("button");
+  okButton.textContent = "OK";
+  okButton.addEventListener("click", handleOkButtonClick);
+  popup.appendChild(okButton);
 }
 
 function hidePopup() {
-  popup.style.display = "none";
+  const popups = document.querySelectorAll(".popup");
+  popups.forEach((popup) => {
+    popup.style.display = "none";
+    const okButton = popup.querySelector(".ok-button");
+    if (okButton) {
+      okButton.removeEventListener("click", handleOkButtonClick);
+      okButton.remove();
+    }
+  });
 }
 
-function startTimer(x, y) {
-  hoverTimeout = setTimeout(function () {
-    showPopup(x, y);
-  }, 2000);
-}
+const divs = document.querySelectorAll('div[id^="defination_hover"]');
+divs.forEach((div) => {
+  let popupTimeout;
 
-function resetTimer() {
-  clearTimeout(hoverTimeout);
-  var rect = hoverArea.getBoundingClientRect();
-  startTimer(rect.left, rect.top);
-}
+  div.addEventListener("mouseover", (event) => {
+    clearTimeout(popupTimeout);
 
-function handleMouseOver(event) {
-  resetTimer();
-}
+    const popupId = "popup_description" + div.id.substr(16);
+    const popup = document.getElementById(popupId);
 
-function handleMouseOut() {
-  clearTimeout(hoverTimeout);
-}
+    hoverTimeout = setTimeout(() => {
+      showPopup(div, popup, popupId, event);
+    }, 3000);
+  });
 
-function handleOkButtonClick() {
-  hidePopup();
-  clearTimeout(hoverTimeout);
-}
+  div.addEventListener("mouseout", () => {
+    clearTimeout(hoverTimeout);
 
-hoverArea.addEventListener("mouseover", handleMouseOver);
-hoverArea.addEventListener("mouseout", handleMouseOut);
-
-// Generate dynamic content and OK button for the popup
-var popupContent = document.createElement("p");
-popupContent.textContent = storage.getDefinition("eyana_ssd_simulator");
-popup.appendChild(popupContent);
-
-var okButton = document.createElement("button");
-okButton.textContent = "OK";
-okButton.addEventListener("click", handleOkButtonClick);
-popup.appendChild(okButton);
+    const popupId = "popup_description" + div.id.substr(16);
+    const popup = document.getElementById(popupId);
+    hidePopup();
+  });
+});
