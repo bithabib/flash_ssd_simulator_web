@@ -1021,6 +1021,7 @@ blockSelect.addEventListener("change", function () {
   // Get the selected value
   var blockValue = blockSelect.value;
   // Perform actions based on the selected value
+  blockList.block_list = blockList.block_list.concat(blockList.removed_block_list);
   if (blockValue === "1") {
     // get the block from blockList where block contain b1, b2, b3 through loop
     console.log(blockList.block_list.length);
@@ -1028,6 +1029,8 @@ blockSelect.addEventListener("change", function () {
     console.log(blockList.block_list.length);
     console.log(blockList.block_list.length);
     var removed_list = [];
+    // Add two list 
+    
     var length_of_the_list = blockList.block_list.length;
     for (var i = 0; i < length_of_the_list; i++) {
       // select block contain b1, b2, b3
@@ -1065,6 +1068,13 @@ blockSelect.addEventListener("change", function () {
         document.getElementById(blockList.block_list[i].block).style.display =
           "table";
       }
+
+    }
+    // remove the block from blockList
+    for (var i = 0; i < removed_list.length; i++) {
+      blockList.removeBlock(removed_list[i]);
+      console.log(blockList.block_list.length);
+      console.log(blockList.removed_block_list.length);
     }
   } else if (blockValue === "4") {
     // Code to execute when the value "32" is selected
