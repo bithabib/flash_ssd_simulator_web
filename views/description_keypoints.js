@@ -26,6 +26,7 @@ class TopicStorage {
     this.definitions = {};
   }
 }
+
 const storage = new TopicStorage();
 var hoverArea = document.getElementById("ssd_defination_hover");
 var popup = document.getElementById("popup_description");
