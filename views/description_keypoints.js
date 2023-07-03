@@ -42,9 +42,11 @@ infoButton.addEventListener("click", function () {
   const buttonX = buttonRect.left + buttonRect.width / 2;
   const buttonY = buttonRect.top + buttonRect.height / 2;
   const popupDescription = document.getElementById("popup_description");
-  var popupContent = document.createElement("p");
-  popupContent.innerHTML = storage.getDefinition("definition_ssd");
-  popupDescription.appendChild(popupContent);
+  const popupDescriptionTitle = document.getElementById("defination_title");
+  const popupDescriptionContent = document.getElementById("defination_description");
+  popupDescriptionTitle.innerHTML = "SSD Simulator";
+  popupDescriptionContent.innerHTML = storage.getDefinition("definition_ssd");
+
   popupDescription.style.display = "block";
   popupDescription.style.top = `${buttonY}px`;
   popupDescription.style.left = `${buttonX}px`;
