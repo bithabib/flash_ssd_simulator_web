@@ -1,7 +1,7 @@
 class TopicStorage {
   constructor() {
     this.definitions = {
-      popup_description1: `
+      definition_ssd: `
         <p>Eyana: The SSD Simulator offers an immersive experience to understand the intricate workings of Solid-State Drives (SSDs). Through realistic simulations, users can delve into the complexities of flash memory technology, data management algorithms, wear leveling techniques, and performance optimizations employed by SSDs. Eyana provides a hands-on platform for learning and experimentation, enabling users to gain insights into the inner workings of SSDs and their impact on storage performance and reliability.</p>
       `,
       popup_description2: `
@@ -35,65 +35,25 @@ class TopicStorage {
   }
 }
 const storage = new TopicStorage();
-let hoverTimeout;
-
-function handleOkButtonClick() {
-  const popup = this.parentNode;
-  popup.style.display = "none";
-  clearTimeout(hoverTimeout);
-}
-
-function showPopup(div, popup, popupId, event) {
-  const mouseX = event.clientX + window.pageXOffset;
-  const mouseY = event.clientY + window.pageYOffset;
-  const popupX = mouseX;
-  const popupY = mouseY;
-
-  popup.style.left = popupX + "px";
-  popup.style.top = popupY + "px";
-  popup.style.display = "block";
-
+const infoButton = document.querySelector(".definition_ssd");
+const closePopupButton = document.getElementById("closePopupButton");
+infoButton.addEventListener("click", function () {
+  const buttonRect = infoButton.getBoundingClientRect();
+  const buttonX = buttonRect.left + buttonRect.width / 2;
+  const buttonY = buttonRect.top + buttonRect.height / 2;
+  const popupDescription = document.getElementById("popup_description");
   var popupContent = document.createElement("p");
-  popupContent.innerHTML = storage.getDefinition(popupId);
-  popup.appendChild(popupContent);
-  var okButton = document.createElement("button");
-  okButton.textContent = "OK";
-  okButton.addEventListener("click", handleOkButtonClick);
-  popup.appendChild(okButton);
-}
+  popupContent.innerHTML = storage.getDefinition("definition_ssd");
+  popupDescription.appendChild(popupContent);
+  popupDescription.style.display = "block";
+  popupDescription.style.top = `${buttonY}px`;
+  popupDescription.style.left = `${buttonX}px`;
+});
 
-function hidePopup() {
-  const popups = document.querySelectorAll(".popup");
-  popups.forEach((popup) => {
-    popup.style.display = "none";
-    const okButton = popup.querySelector(".ok-button");
-    if (okButton) {
-      okButton.removeEventListener("click", handleOkButtonClick);
-      okButton.remove();
-    }
-  });
-}
+closePopupButton.addEventListener("click", function () {
+  const popupDescription = document.getElementById("popup_description");
+  popupDescription.style.display = "none";
+  // Remove p tag child from popupDescription
+  
 
-const divs = document.querySelectorAll('div[id^="defination_hover"]');
-divs.forEach((div) => {
-  let popupTimeout;
-
-  div.addEventListener("mouseover", (event) => {
-    clearTimeout(popupTimeout);
-
-    const popupId = "popup_description" + div.id.substr(16);
-    const popup = document.getElementById(popupId);
-
-    hoverTimeout = setTimeout(() => {
-      showPopup(div, popup, popupId, event);
-    }, 3000);
-  });
-
-  div.addEventListener("mouseout", () => {
-    clearTimeout(hoverTimeout);
-
-    const popupId = "popup_description" + div.id.substr(16);
-    const popup = document.getElementById(popupId);
-    hidePopup();
-  });
 });
