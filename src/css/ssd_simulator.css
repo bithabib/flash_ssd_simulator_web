@@ -74,23 +74,27 @@ select {
 }
 
 /* This is for description design */
-.definition_ssd {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 20px;
-    height: 20px;
+.definition-header {
+  display: flex;
+  align-items: center;
+}
 
-    margin-right: -20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-    background-color: yellow;
-    /* Adjust the color as desired */
-    border-radius: 10%;
-    color: #af1616;
-    /* Adjust the color as desired */
+.definition_ssd {
+  margin-right: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: yellow;
+  border-radius: 50%;
+  color: #af1616;
+}
+
+.definition_ssd:hover {
+  background-color: #ffd700;
+  color: #ffffff;
 }

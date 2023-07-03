@@ -4,6 +4,7 @@ class TopicStorage {
       definition_ssd: `
         <p>Eyana: The SSD Simulator offers an immersive experience to understand the intricate workings of Solid-State Drives (SSDs). Through realistic simulations, users can delve into the complexities of flash memory technology, data management algorithms, wear leveling techniques, and performance optimizations employed by SSDs. Eyana provides a hands-on platform for learning and experimentation, enabling users to gain insights into the inner workings of SSDs and their impact on storage performance and reliability.</p>
       `,
+
       popup_description2: `
         <p>Page: A page refers to the smallest unit of data that can be read from or written to in a NAND-flash memory. It is typically a fixed-size portion of memory, such as 2 KB, 4 KB, 8 KB, or 16 KB. Pages are organized within blocks.</p>
         <p>Block: A block is a group of pages in NAND-flash memory that can be erased as a single unit. The block size can vary depending on the SSD, typically ranging from 256 KB to 4 MB. All pages within a block need to be erased together before new data can be written to them.</p>
@@ -79,7 +80,4 @@ infoButton.addEventListener("click", function() {
 closePopupButton.addEventListener("click", function () {
   const popupDescription = document.getElementById("popup_description");
   popupDescription.style.display = "none";
-  // Remove p tag child from popupDescription
-  
-
 });
