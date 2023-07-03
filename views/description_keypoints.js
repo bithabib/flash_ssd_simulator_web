@@ -37,7 +37,7 @@ class TopicStorage {
 const storage = new TopicStorage();
 const infoButton = document.querySelector(".definition_ssd");
 const closePopupButton = document.getElementById("closePopupButton");
-infoButton.addEventListener("click", function () {
+infoButton.addEventListener("click", function() {
   const buttonRect = infoButton.getBoundingClientRect();
   const buttonX = buttonRect.left + buttonRect.width / 2;
   const buttonY = buttonRect.top + buttonRect.height / 2;
@@ -47,10 +47,34 @@ infoButton.addEventListener("click", function () {
   popupDescriptionTitle.innerHTML = "SSD Simulator";
   popupDescriptionContent.innerHTML = storage.getDefinition("definition_ssd");
 
+  // Get the dimensions of the popup
+  const popupWidth = popupDescription.offsetWidth;
+  const popupHeight = popupDescription.offsetHeight;
+
+  // Calculate the desired position of the popup
+  let popupX = window.innerWidth / 2 - popupWidth / 2;
+  let popupY = Math.max(10, buttonY - popupHeight - 10);
+
+  // Check if the popup would go off the screen
+  if (popupX < 0) {
+    popupX = 0;
+  } else if (popupX + popupWidth > window.innerWidth) {
+    popupX = window.innerWidth - popupWidth;
+  }
+
+  if (popupY < 0) {
+    popupY = 0;
+  } else if (popupY + popupHeight > window.innerHeight) {
+    popupY = window.innerHeight - popupHeight;
+  }
+
+  // Set the position of the popup
   popupDescription.style.display = "block";
-  popupDescription.style.top = `${buttonY}px`;
-  popupDescription.style.left = `${buttonX}px`;
+  popupDescription.style.top = `${popupY}px`;
+  popupDescription.style.left = `${popupX}px`;
 });
+
+
 
 closePopupButton.addEventListener("click", function () {
   const popupDescription = document.getElementById("popup_description");
