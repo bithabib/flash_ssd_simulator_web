@@ -73,8 +73,8 @@ select {
     border-radius: 4px;
 }
 
-
-.info {
+/* This is for description design */
+.definition_ssd {
     position: absolute;
     top: 0;
     right: 0;

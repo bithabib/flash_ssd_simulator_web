@@ -1,4 +1,4 @@
-#popup_description1 {
+#popup_description {
     display: none;
     position: fixed;
     background-color: #f2f2f2;
@@ -7,16 +7,6 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     z-index: 999;
 }
-#popup_description2 {
-    display: none;
-    position: fixed;
-    background-color: #f2f2f2;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    z-index: 999;
-}
-
 
 #popup_description__close {
     margin-top: 10px;
