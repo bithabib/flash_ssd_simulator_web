@@ -89,13 +89,13 @@ select {
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
-  background-color: yellow;
+  background-color: #0000CD;
   border-radius: 50%;
-  color: #af1616;
+  color: #ffffff;
 }
 
 .definition_ssd:hover {
-  background-color: #ffd700;
+  background-color: #00008B;
   color: #ffffff;
 }
 .btn-custom {
