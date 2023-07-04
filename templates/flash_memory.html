@@ -64,6 +64,13 @@
                     <option value="2" selected>2</option>
                 </select>
             </div>
+            <div class="col">
+                <label for="ssd_type" class="form-label">SSD Type</label>
+                <select id="ssd_type" class="form-select">
+                    <option value="single" selected>Single-Channel SSD</option>
+                    <option value="multi">Multi-Channel SSD</option>
+                </select>
+            </div>
         </div>
         <div class="container center">
             <div class="row">
@@ -131,27 +138,27 @@
         </div>
         <div class="container">
             <div class="option-container">
-                <div class="btn-group d-flex justify-content-center" role="group">
-                    <div class="btn btn-primary">
+                <div class="row btn-group d-flex justify-content-center" role="group">
+                    <button type="button" class="btn btn-primary col-2">
                         <input type="file" id="fileUpload" onchange="handleFileInputChange()">
-                    </div>
-                    <button type="button" class="btn btn-primary ms-1">
+                    </button>
+                    <button type="button" class="btn btn-primary ms-1 col-2">
                         <select id="update_file" class="form-select">
                             <option value="update_file" selected>Update</option>
                         </select>
                         <input type="file" id="fileUpdate" onchange="handleFileUpdate()">
                     </button>
-                    <button type="button" class="btn btn-primary ms-1">
+                    <button type="button" class="btn btn-primary ms-1 col-2">
                         <select id="read_file" class="form-select">
                             <option value="read_file" selected>Read</option>
                         </select>
                     </button>
-                    <button type="button" class="btn btn-danger ms-1">
+                    <button type="button" class="btn btn-danger ms-1 col-2">
                         <select id="delete_file" class="form-select">
                             <option value="delete_file" selected>Delete</option>
                         </select>
                     </button>
-                    <button type="button" class="btn btn-primary ms-1" onclick="garbageCollection()">
+                    <button type="button" class="btn btn-primary ms-1 col-2" onclick="garbageCollection()">
                         Garbage Collection
                     </button>
                 </div>
@@ -1226,11 +1233,12 @@
             </table>
             <table class="container col-2">
                 <tr>
-                    
+
                     <th>
                         <div class="definition-header">
                             <span class="definition_ssd" id="mapping">?</span>
-                        </div>Page Level Address Mapping Table</th>
+                        </div>Page Level Address Mapping Table
+                    </th>
                 </tr>
 
                 <tr>
