@@ -608,7 +608,7 @@ var mapping_table_row = 1;
 function selectRowMappingTable(rowNumber, logicalAddress, physicalAddress) {
   var table = document.getElementById("mapping_table");
   var rows = table.getElementsByTagName("tr");
-  // scrollToSelectedRow(table);
+
   if (rowNumber >= 0 && rowNumber < rows.length) {
     var row = rows[rowNumber];
     row.style.backgroundColor = "green";
@@ -619,7 +619,15 @@ function selectRowMappingTable(rowNumber, logicalAddress, physicalAddress) {
   }
   mapping_table_row++;
 }
-
+// garbage collection update mapping table 
+function garbageUpdateMappingTable(garbageFileName) {
+  var table = document.getElementById("mapping_table");
+  var rows = table.getElementsByTagName("tr");
+  // check each rows in the mapping table
+  for (i = 0; i < rows.length; i++) {
+    // is contain physical address
+  }
+}
 // File tracer from logical address
 var file_tracer = 0;
 async function FileUpload(fileSize, fileName) {
@@ -635,7 +643,11 @@ async function FileUpload(fileSize, fileName) {
     alert("File size is too large, please select a file less than 512kb");
     return;
   } else {
-    fileMapping.addMapping(fileName, mapping_table_row, 0);
+    garbage_file_cheker = fileName.includes("garbage");
+    if (!garbage_file_cheker) {
+      fileMapping.addMapping(fileName, mapping_table_row, 0);
+    }
+
     var logicalAddressTracer = 0;
     // divide the file size by 16kb (block size) to get the number of blocks
     while (fileSizeInKB > 0) {
@@ -668,11 +680,17 @@ async function FileUpload(fileSize, fileName) {
           console.log(block);
         }
 
-        selectRowMappingTable(
-          mapping_table_row,
-          "f" + file_tracer + logicalAddressTracer,
-          block["block"] + blockPageTracer
-        );
+        if (garbage_file_cheker) {
+          garbageUpdateMappingTable(fileName);
+        } else {
+          // Select the row in the mapping table
+          selectRowMappingTable(
+            mapping_table_row,
+            "f" + file_tracer + logicalAddressTracer,
+            block["block"] + blockPageTracer
+          );
+        }
+
         // Save the filename, logical address and mapping_table_row in the java class
         // decrease the file size by 4kb
         fileSizeInKB = (fileSizeInKB - 4).toFixed(2);
@@ -910,8 +928,11 @@ async function garbageCollection() {
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row4.style.backgroundColor = "white";
       removedBlock.erase_count++;
-
-      FileUpload(removedBlock.written_page[3].data * 1024, "garbage");
+      var garbage_collection_tracer = "garbage" + removedBlock["block"] + "4";
+      FileUpload(
+        removedBlock.written_page[3].data * 1024,
+        garbage_collection_tracer
+      );
       removedBlock.written_page[3].data = 0;
       blockList.removeBlockFromRemovedBlockList(blockAddress);
     } else if (
@@ -943,11 +964,12 @@ async function garbageCollection() {
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row4.style.backgroundColor = "white";
       removedBlock.erase_count++;
+      var garbage_collection_tracer = "garbage" + removedBlock["block"] + "34";
       FileUpload(
         (removedBlock.written_page[2].data +
           removedBlock.written_page[3].data) *
           1024,
-        "garbage"
+        garbage_collection_tracer
       );
       removedBlock.written_page[2].data = 0;
       removedBlock.written_page[3].data = 0;
@@ -975,12 +997,13 @@ async function garbageCollection() {
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row4.style.backgroundColor = "white";
       removedBlock.erase_count++;
+      var garbage_collection_tracer = "garbage" + removedBlock["block"] + "234";
       FileUpload(
         (removedBlock.written_page[1].data +
           removedBlock.written_page[2].data +
           removedBlock.written_page[3].data) *
           1024,
-        "garbage"
+        garbage_collection_tracer
       );
       removedBlock.written_page[1].data = 0;
       removedBlock.written_page[2].data = 0;
@@ -1021,7 +1044,9 @@ blockSelect.addEventListener("change", function () {
   // Get the selected value
   var blockValue = blockSelect.value;
   // Perform actions based on the selected value
-  blockList.block_list = blockList.block_list.concat(blockList.removed_block_list);
+  blockList.block_list = blockList.block_list.concat(
+    blockList.removed_block_list
+  );
   if (blockValue === "1") {
     // get the block from blockList where block contain b1, b2, b3 through loop
     console.log(blockList.block_list.length);
@@ -1029,8 +1054,8 @@ blockSelect.addEventListener("change", function () {
     console.log(blockList.block_list.length);
     console.log(blockList.block_list.length);
     var removed_list = [];
-    // Add two list 
-    
+    // Add two list
+
     var length_of_the_list = blockList.block_list.length;
     for (var i = 0; i < length_of_the_list; i++) {
       // select block contain b1, b2, b3
@@ -1068,7 +1093,6 @@ blockSelect.addEventListener("change", function () {
         document.getElementById(blockList.block_list[i].block).style.display =
           "table";
       }
-
     }
     // remove the block from blockList
     for (var i = 0; i < removed_list.length; i++) {
