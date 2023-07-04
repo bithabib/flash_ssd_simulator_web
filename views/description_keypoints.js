@@ -26,6 +26,14 @@ class TopicStorage {
         title: "Package",
         description: `<p>Package: A package is a collection of dies. It is the smallest unit of data that can be erased from a NAND-flash memory. A package is typically 16 MB in size. Packages are organized within SSDs.</p>`,
       },
+      mapping: {
+        title: "Logical Block Mapping",
+        description: `
+        <p>The logical block mapping translates logical block addresses (LBAs) from the host space into physical block addresses (PBAs) in the physical NAND-flash memory space. This mapping takes the form of a table, which for any LBA gives the corresponding PBA. This mapping table is stored in the RAM of the SSD for speed of access, and is persisted in flash memory in case of power failure. When the SSD powers up, the table is read from the persisted version and reconstructed into the RAM of the SSD.</p>
+        <p>The naive approach is to use a page-level mapping to map any logical page from the host to a physical page. This mapping policy offers a lot of flexibility, but the major drawback is that the mapping table requires a lot of RAM, which can significantly increase the manufacturing costs. A solution to that would be to map blocks instead of pages, using a block-level mapping. Let’s assume that an SSD drive has 256 pages per block. This means that block-level mapping requires 256 times less memory than page-level mapping, which is a huge improvement for space utilization. However, the mapping still needs to be persisted on disk in case of power failure, and in case of workloads with a lot of small updates, full blocks of flash memory will be written whereas pages would have been enough. This increases the write amplification and makes block-level mapping widely inefficient</p>
+        <p>The tradeoff between page-level mapping and block-level mapping is the one of performance versus space. Some researcher have tried to get the best of both worlds, giving birth to the so-called “hybrid” approaches [10]. The most common is the log-block mapping, which uses an approach similar to log-structured file systems. Incoming write operations are written sequentially to log blocks. When a log block is full, it is merged with the data block associated to the same logical block number (LBN) into a free block. Only a few log blocks need to be maintained, which allows to maintain them with a page granularity. Data blocks on the contrary are maintained with a block granularity [9, 10].</p>
+        `,
+      },
     };
   }
 
@@ -66,8 +74,10 @@ for (const infoButton of infoButtons) {
     );
     // get the id of the clicked span
     const defination_id = infoButton.id;
-    popupDescriptionTitle.innerHTML = storage.getDefinition(defination_id).title;
-    popupDescriptionContent.innerHTML = storage.getDefinition(defination_id).description;
+    popupDescriptionTitle.innerHTML =
+      storage.getDefinition(defination_id).title;
+    popupDescriptionContent.innerHTML =
+      storage.getDefinition(defination_id).description;
 
     // Get the dimensions of the popup
     const popupWidth = popupDescription.offsetWidth;
