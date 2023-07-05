@@ -619,11 +619,21 @@ function selectRowMappingTable(rowNumber, logicalAddress, physicalAddress) {
   }
   mapping_table_row++;
 }
-// garbage collection update mapping table 
+// garbage collection update mapping table
 function garbageUpdateMappingTable(garbageFileName) {
   var table = document.getElementById("mapping_table");
   var rows = table.getElementsByTagName("tr");
   // check each rows in the mapping table
+  console.log(garbageFileName);
+  console.log(garbageFileName);
+  console.log(garbageFileName);
+  console.log(garbageFileName);
+  console.log(garbageFileName);
+  console.log(garbageFileName);
+  console.log(garbageFileName);
+  console.log(garbageFileName);
+  console.log(garbageFileName);
+  console.log(garbageFileName);
   for (i = 0; i < rows.length; i++) {
     // is contain physical address
   }
@@ -712,13 +722,15 @@ async function FileUpload(fileSize, fileName) {
         // blockList.removed_block_list.push(block);
       }
     }
-    file_tracer++;
-    var getFileInformation = fileMapping.getMapping(fileName);
-    fileMapping.updateMapping(
-      getFileInformation.fileName,
-      getFileInformation.firstRowOfMappingFile,
-      mapping_table_row
-    );
+    if (!garbage_file_cheker) {
+      file_tracer++;
+      var getFileInformation = fileMapping.getMapping(fileName);
+      fileMapping.updateMapping(
+        getFileInformation.fileName,
+        getFileInformation.firstRowOfMappingFile,
+        mapping_table_row
+      );
+    }
     // console.log(fileMapping.getMapping(file.name));
     TraceBlockInformation();
   }
