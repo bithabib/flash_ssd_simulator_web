@@ -366,15 +366,15 @@ class BlockList {
 
   // Get a block object from the block_list based on blockName
   getBlockRemoveBlockList(blockName) {
-    console.log(blockName);
-    console.log(blockName);
+    // console.log(blockName);
+    // console.log(blockName);
     return this.removed_block_list.find((block) => block.block === blockName);
   }
 
   // Get a block object from the block_list based on blockName
   getBlock(blockName) {
-    console.log(blockName);
-    console.log(blockName);
+    // console.log(blockName);
+    // console.log(blockName);
     return this.block_list.find((block) => block.block === blockName);
   }
 
@@ -423,7 +423,7 @@ const blockList = new BlockList();
 // Block information tracer function --------------------------------------------------//
 function TraceBlockInformation() {
   dataset = blockList.block_list.concat(blockList.removed_block_list);
-  console.log(dataset);
+  // console.log(dataset);
   var table = document.getElementById("block_information_tracer");
   var tbody = table.getElementsByTagName("tbody")[0];
   while (tbody.firstChild) {
@@ -434,7 +434,7 @@ function TraceBlockInformation() {
     var block = entry.block;
     var writeCount = entry.write_count;
     var eraseCount = entry.erase_count;
-    console.log(entry);
+    // console.log(entry);
 
     entry.written_page.forEach(function (pageData) {
       var row = document.createElement("tr");
@@ -590,7 +590,7 @@ function scrollToSelectedRow(table) {
 
 // reading the table row
 function readTableRow(tableName, rowNumber, fileSizeInKB) {
-  console.log(tableName);
+  // console.log(tableName);
   var table = document.getElementById(tableName);
   var rows = table.getElementsByTagName("tr");
   scrollToSelectedRow(table);
@@ -620,22 +620,32 @@ function selectRowMappingTable(rowNumber, logicalAddress, physicalAddress) {
   mapping_table_row++;
 }
 // garbage collection update mapping table
-function garbageUpdateMappingTable(garbageFileName) {
+async function garbageUpdateMappingTable(garbageFileName, logicalAddressTracer, block, blockPageTracer) {
   var table = document.getElementById("mapping_table");
   var rows = table.getElementsByTagName("tr");
-  // check each rows in the mapping table
-  console.log(garbageFileName);
-  console.log(garbageFileName);
-  console.log(garbageFileName);
-  console.log(garbageFileName);
-  console.log(garbageFileName);
-  console.log(garbageFileName);
-  console.log(garbageFileName);
-  console.log(garbageFileName);
-  console.log(garbageFileName);
-  console.log(garbageFileName);
+  // remove "garbage" from string
+  logical_address_with_page_info = garbageFileName.replace("garbage", "");
+  // remove pageinfo from string
+  logical_address = logical_address_with_page_info.substring(0, 10);
+  page_info = logical_address_with_page_info.substring(10);
+  page_number = page_info[logicalAddressTracer];
+  console.log(page_number);
+  console.log(page_number);
+  console.log(page_number);
+  console.log(logical_address);
+  console.log(logical_address);
+  console.log(logical_address);
+  console.log(logical_address);
+
   for (i = 0; i < rows.length; i++) {
-    // is contain physical address
+    // if logical address is found in the mapping table
+    if (rows[i].cells[1].innerHTML == logical_address + page_number) {
+      rows[i].style.backgroundColor = "yellow";
+      rows[i].cells[1].innerHTML = block + blockPageTracer;
+      // sleep for 1 second
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      break;
+    }
   }
 }
 // File tracer from logical address
@@ -645,8 +655,8 @@ async function FileUpload(fileSize, fileName) {
   // var fileSize = file.size;
 
   // Display the file size
-  console.log(fileName + "File Size: " + fileSize + " bytes");
-  console.log(fileName + "File Size: " + fileSize + " bytes");
+  // console.log(fileName + "File Size: " + fileSize + " bytes");
+  // console.log(fileName + "File Size: " + fileSize + " bytes");
   // Bytes to kb 2 decimal places
   var fileSizeInKB = (fileSize / 1024).toFixed(2);
   if (fileSizeInKB >= 512) {
@@ -662,12 +672,12 @@ async function FileUpload(fileSize, fileName) {
     // divide the file size by 16kb (block size) to get the number of blocks
     while (fileSizeInKB > 0) {
       // taking a random number from the block list
-      console.log("Length of the blockList: " + blockList.block_list.length);
+      // console.log("Length of the blockList: " + blockList.block_list.length);
       var random = Math.floor(Math.random() * blockList.block_list.length);
       // var random = Math.floor(Math.random() * blockList.length);
       // Get the block number from the sequence
       var block = blockList.block_list[random];
-      console.log(block);
+      // console.log(block);
       // Get the block page tracer from the correct page
       for (i = 0; i < block.written_page.length; i++) {
         if (block.written_page[i].data == 0) {
@@ -687,11 +697,16 @@ async function FileUpload(fileSize, fileName) {
           // update the block page
           block["written_page"][blockPageTracer - 1]["data"] = 4;
           block["written_page"][blockPageTracer - 1]["state"] = "valid";
-          console.log(block);
+          // console.log(block);
         }
 
         if (garbage_file_cheker) {
-          garbageUpdateMappingTable(fileName);
+          garbageUpdateMappingTable(
+            fileName,
+            logicalAddressTracer,
+            block["block"],
+            blockPageTracer
+          );
         } else {
           // Select the row in the mapping table
           selectRowMappingTable(
@@ -753,11 +768,11 @@ async function handleSelection(fileName) {
   // const fileMapping = new FileMapping();
   var getFileInformation = fileMapping.getMapping(fileName);
 
-  console.log(getFileInformation);
+  // console.log(getFileInformation);
   var table = document.getElementById("mapping_table");
   var rows = table.getElementsByTagName("tr");
-  console.log(getFileInformation.firstRowOfMappingFile);
-  console.log(getFileInformation.lastRowOfMappingFile);
+  // console.log(getFileInformation.firstRowOfMappingFile);
+  // console.log(getFileInformation.lastRowOfMappingFile);
   for (
     firstRow = getFileInformation.firstRowOfMappingFile;
     firstRow < getFileInformation.lastRowOfMappingFile;
@@ -808,11 +823,11 @@ function handleFileUpdate() {
 
 async function readSelectedFile(fileName) {
   var getFileInformation = fileMapping.getMapping(fileName);
-  console.log(getFileInformation);
+  // console.log(getFileInformation);
   var table = document.getElementById("mapping_table");
   var rows = table.getElementsByTagName("tr");
-  console.log(getFileInformation.firstRowOfMappingFile);
-  console.log(getFileInformation.lastRowOfMappingFile);
+  // console.log(getFileInformation.firstRowOfMappingFile);
+  // console.log(getFileInformation.lastRowOfMappingFile);
   for (
     firstRow = getFileInformation.firstRowOfMappingFile;
     firstRow < getFileInformation.lastRowOfMappingFile;
@@ -825,9 +840,9 @@ async function readSelectedFile(fileName) {
       physicalAddressWithRow.length - 1
     );
     physicalAddress = physicalAddressWithRow.slice(0, -1);
-    console.log(logicalAddress);
-    console.log(physicalAddress);
-    console.log(physicalAddressBlockRow);
+    // console.log(logicalAddress);
+    // console.log(physicalAddress);
+    // console.log(physicalAddressBlockRow);
     // Update the table row
     row.style.backgroundColor = "blue";
     blockTable = document.getElementById(physicalAddress);
@@ -845,7 +860,7 @@ readSelectedFileName.addEventListener("change", function () {
   // Get the selected value
   var fileName = readSelectedFileName.value;
   // Display the selected value
-  console.log("Selected file name: " + fileName);
+  // console.log("Selected file name: " + fileName);
   readSelectedFile(fileName);
 });
 
@@ -856,25 +871,25 @@ selectedFileName.addEventListener("change", function () {
   // Get the selected value
   var fileName = selectedFileName.value;
   // Display the selected value
-  console.log("Selected file name: " + fileName);
+  // console.log("Selected file name: " + fileName);
   handleSelection(fileName);
 });
 
 // ----------------------------------------- Garbage Collection -----------------------------------------//
 
 async function garbageCollection() {
-  console.log("Garbage Collection");
+  // console.log("Garbage Collection");
   // get removed block elements from the garbage collection
   var removedBlockElements = blockList.removed_block_list;
-  console.log(removedBlockElements);
+  // console.log(removedBlockElements);
   // get the removed block elements
   for (var i = 0; i < removedBlockElements.length; i++) {
     var removedBlock = removedBlockElements[i];
-    console.log(removedBlock);
+    // console.log(removedBlock);
     // get the block table id and page number from block address
     var blockAddress = removedBlock["block"];
-    console.log(blockAddress);
-    console.log(blockAddress);
+    // console.log(blockAddress);
+    // console.log(blockAddress);
     // get the table using the block address
     var blockTable = document.getElementById(blockAddress);
 
@@ -1042,10 +1057,10 @@ select.addEventListener("change", function () {
   // Perform actions based on the selected value
   if (selectedValue === "2") {
     // Code to execute when the value "16" is selected
-    console.log("Selected value is 16");
+    // console.log("Selected value is 16");
   } else if (selectedValue === "4") {
     // Code to execute when the value "32" is selected
-    console.log("Selected value is 32");
+    // console.log("Selected value is 32");
   }
 });
 
@@ -1061,10 +1076,10 @@ blockSelect.addEventListener("change", function () {
   );
   if (blockValue === "1") {
     // get the block from blockList where block contain b1, b2, b3 through loop
-    console.log(blockList.block_list.length);
-    console.log(blockList.block_list.length);
-    console.log(blockList.block_list.length);
-    console.log(blockList.block_list.length);
+    // console.log(blockList.block_list.length);
+    // console.log(blockList.block_list.length);
+    // console.log(blockList.block_list.length);
+    // console.log(blockList.block_list.length);
     var removed_list = [];
     // Add two list
 
@@ -1086,8 +1101,8 @@ blockSelect.addEventListener("change", function () {
     // remove the block from blockList
     for (var i = 0; i < removed_list.length; i++) {
       blockList.removeBlock(removed_list[i]);
-      console.log(blockList.block_list.length);
-      console.log(blockList.removed_block_list.length);
+      // console.log(blockList.block_list.length);
+      // console.log(blockList.removed_block_list.length);
     }
   } else if (blockValue === "2") {
     // Code to execute when the value "32" is selected
@@ -1109,8 +1124,8 @@ blockSelect.addEventListener("change", function () {
     // remove the block from blockList
     for (var i = 0; i < removed_list.length; i++) {
       blockList.removeBlock(removed_list[i]);
-      console.log(blockList.block_list.length);
-      console.log(blockList.removed_block_list.length);
+      // console.log(blockList.block_list.length);
+      // console.log(blockList.removed_block_list.length);
     }
   } else if (blockValue === "4") {
     // Code to execute when the value "32" is selected
@@ -1128,7 +1143,7 @@ var planeSelect = document.getElementById("planeCount");
 planeSelect.addEventListener("change", function () {
   // Get the selected value
   var planeValue = planeSelect.value;
-  console.log(planeValue);
+  // console.log(planeValue);
   var planeTable1 = document.getElementById("p0d0p1ct");
   var planeTable2 = document.getElementById("p0d1p1ct");
   var planeTable3 = document.getElementById("p1d0p1ct");
