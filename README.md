@@ -64,7 +64,7 @@ Block Erase | 1.5 ms
 
 
 ## Figure 01: Internal Architecture of a Typical NAND Flash Device
-![Example Image](readme_documentation_src/figure/ssd-package.webp)
+![Example Image](readme_documentation_src/figure/flash_ssd_simulator.png)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Figure 01 above shows the internals of a NAND-flash package, which is organized as a hierarchical structure. The levels are channel, package, chip, plane, block, and page. Those different levels offer parallelism as follows:
 
