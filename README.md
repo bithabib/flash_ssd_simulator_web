@@ -91,7 +91,9 @@ Block Erase | 1.5 ms
 
 ## References
 - [1] Coding for SSDs – Part 1: Introduction and Table of Contents https://codecapsule.com/2014/02/12/coding-for-ssds-part-1-introduction-and-table-of-contents/
-- [2]  NEW MULTI-TIERED SOLID STATE DISK USING SLC/MLC COMBINED FLASH MEMORY https://arxiv.org/pdf/1405.2157.pdf
+- [2] NEW MULTI-TIERED SOLID STATE DISK USING SLC/MLC COMBINED FLASH MEMORY https://arxiv.org/pdf/1405.2157.pdf
+- [3] Experimental demonstration of Single-Level and Multi-Level-Cell RRAM-based In-Memory Computing with up to 16 parallel operationshttps://arxiv.org/pdf/2203.01680.pdf
+- [4] 3D Flash Memories. (2016). Netherlands: Springer Netherlands.
 
 ## License
 This simulation is provided under the [MIT License](LICENSE). You are free to use, modify, and distribute the simulation in accordance with the terms of the license.
