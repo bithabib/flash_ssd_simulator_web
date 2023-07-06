@@ -91,6 +91,7 @@ Block Erase | 1.5 ms
 
 ## References
 - [1] Coding for SSDs – Part 1: Introduction and Table of Contents https://codecapsule.com/2014/02/12/coding-for-ssds-part-1-introduction-and-table-of-contents/
+- [2]  NEW MULTI-TIERED SOLID STATE DISK USING SLC/MLC COMBINED FLASH MEMORY https://arxiv.org/pdf/1405.2157.pdf
 
 ## License
 This simulation is provided under the [MIT License](LICENSE). You are free to use, modify, and distribute the simulation in accordance with the terms of the license.
