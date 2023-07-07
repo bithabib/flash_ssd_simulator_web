@@ -1,102 +1,18 @@
-<!-- <!DOCTYPE html>
-<html>
-
-<head>
-    <title>Cell Simulator - Floating Transistor</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../src/css/cell_simulator.css">
-
-</head>
-
-<body>
-    <header class="bg-light py-4 text-center">
-        <div class="container">
-            <div style="display: inline-block; position: relative;">
-                <h1 class="display-4">Cell Simulator</h1>
-                <p class="lead">Floating Transistor</p>
-                <a href="flash_memory.html" class="btn btn-primary">Eyana: The SSD Simulator</a>
-            </div>
-        </div>
-    </header>
-
-    <div class="container">
-        <div class="vertical-line"></div>
-        <div class="blue-div"></div>
-        <div class="blue-line"></div>
-        <div class="black-div"></div>
-        <div class="blue-line"></div>
-        <div class="black-div"></div>
-        <div class="gray-div">
-            <div class="small-div"></div>
-            <div class="small-div"></div>
-        </div>
-    </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-</body>
-
-</html> -->
-
 <!DOCTYPE html>
 <html>
 
 <head>
+    <meta property="og:title" content="Eyana: The SSD Simulator">
+    <meta property="og:description"
+        content="Discover Eyana: The SSD Simulator, a groundbreaking web-based tool that simplifies the comprehension of Flash SSD technology. Explore crucial operations like pages, blocks, writes, reads, updates, deletes, and garbage collection, along with concepts such as Write Amplification, Wear Leveling, Parallelism, and Multi-Channel. Eyana offers visual demonstrations, interactive file uploads, and comprehensive documentation, empowering users to gain a deeper understanding of Flash SSDs. With a remarkable 99 percent effectiveness rating from users, Eyana stands as one of the finest simulators for comprehending Flash SSD technology. Dive into this research paper to explore its features, functionalities, and the underlying concepts it elucidates, contributing to educational resources in the field.">
+    <meta name="keywords"
+        content="SSDs, solid-state drives, structure, operations, optimization, Coding for SSDs, Eyana, SSD Simulator, programmers, performance">
+    <meta property="og:image" content="../src/images/flash_ssd_simulator.png">
+    <meta property="og:url" content="https://schoolofthought.tech">
     <title>Control Gate</title>
+    <link rel="icon" href="../readme_documentation_src/icon/icon.jpeg" type="image/jpeg">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <style>
-        .vertical-line {
-            background-color: blue;
-            width: 5px;
-            height: 100px;
-
-        }
-
-        .blue-div {
-            background-color: blue;
-            width: 40%;
-            height: 100px;
-            color: black;
-            /* Adjust height as needed */
-        }
-
-        .black-div {
-            background-color: black;
-            width: 40%;
-            height: 100px;
-            color: white;
-            /* Adjust height as needed */
-        }
-
-        .gray-div {
-            background-color: gray;
-            width: 80%;
-            height: 200px;
-            /* Adjust height as needed */
-            position: relative;
-        }
-
-        .smaller-div {
-            position: absolute;
-            width: 40%;
-            /* Adjust width as needed */
-            height: 50px;
-            /* Adjust height as needed */
-            background-color: blue;
-            color: white;
-            /* Placeholder color */
-        }
-
-        .top-left {
-            top: 0;
-            left: 0;
-        }
-
-        .top-right {
-            top: 0;
-            right: 0;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="../src/css/cell_simulator.css">
 </head>
 
 <body>
@@ -146,11 +62,89 @@
                 </div>
                 <div class="d-flex align-items-center justify-content-center" style="height: 200px;">
                     <div class="gray-div">
-                        <div class="smaller-div top-left d-flex align-items-center justify-content-center">
+                        <!-- <div class="smaller-div top-left d-flex align-items-center justify-content-center">
                             <h5>Source</h5>
+                        </div>
+                        <div class="smaller-div middle d-flex align-items-center justify-content-center">
+                            <h5>Intermediate</h5>
                         </div>
                         <div class="smaller-div top-right d-flex align-items-center justify-content-center">
                             <h5>Drain</h5>
+                        </div> -->
+                        <div class="row">
+                            <div class="col">
+                                <div class="smaller-div float-left">Write/Programmed</div>
+                            </div>
+
+                            <div class="col">
+                                <div class="row">
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        style="width: 20px; height: 20px; font-size: 20px;">
+                                        -
+                                    </div>
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        style="width: 20px; height: 20px; font-size: 20px;">
+                                        -
+                                    </div>
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        style="width: 20px; height: 20px; font-size: 20px;">
+                                        -
+                                    </div>
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        style="width: 20px; height: 20px; font-size: 20px;">
+                                        -
+                                    </div>
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        style="width: 20px; height: 20px; font-size: 20px;">
+                                        -
+                                    </div>
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        style="width: 20px; height: 20px; font-size: 20px;">
+                                        -
+                                    </div>
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        style="width: 20px; height: 20px; font-size: 20px;">
+                                        -
+                                    </div>
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        style="width: 20px; height: 20px; font-size: 20px;">
+                                        -
+                                    </div>
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        style="width: 20px; height: 20px; font-size: 20px;">
+                                        -
+                                    </div>
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        style="width: 20px; height: 20px; font-size: 20px;">
+                                        -
+                                    </div>
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        style="width: 20px; height: 20px; font-size: 20px;">
+                                        -
+                                    </div>
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        style="width: 20px; height: 20px; font-size: 20px;">
+                                        -
+                                    </div>
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        style="width: 20px; height: 20px; font-size: 20px;">
+                                        -
+                                    </div>
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        style="width: 20px; height: 20px; font-size: 20px;">
+                                        -
+                                    </div>
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        style="width: 20px; height: 20px; font-size: 20px;">
+                                        -
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col">
+                                <div class="smaller-div float-right">Erase</div>
+                            </div>
                         </div>
                     </div>
                 </div>
