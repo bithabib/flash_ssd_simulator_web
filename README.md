@@ -96,7 +96,7 @@ Block Erase | 1.5 ms
 - [4] 3D Flash Memories. (2016). Netherlands: Springer Netherlands.
 - [5] Mcnulty, P.J. & Rajaram, Navin & Poole, Kelvin & Freeman, Kurt & Dyar, J.P. & Scheick, Leif & Alkhafazi, Mazin & Randall, Mitchell. (2006). Simplified Readout of UVPROM Dosimeters for Spacecraft Applications. Nuclear Science, IEEE Transactions on. 53. 1859 - 1862. 10.1109/TNS.2006.877564.
 - [6] https://www.cactus-tech.com/resources/blog/details/solid-state-drive-primer-1-the-basic-nand-flash-cell/
-- [7] 
+- [7] https://www.embedded.com/flash-101-types-of-nand-flash/
 
 ## License
 This simulation is provided under the [MIT License](LICENSE). You are free to use, modify, and distribute the simulation in accordance with the terms of the license.
