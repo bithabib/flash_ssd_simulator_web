@@ -1,25 +1,25 @@
-const moveButton = document.getElementById("write_button");
-const circleDiv = document.getElementById("circle1");
+var floatingGate = document.getElementById("floating_gate");
+var electron = document.getElementById("electron1");
 
-let intervalId = null; // Store the interval ID
+var floatingGateX = floatingGate.getBoundingClientRect().left;
+var floatingGateY = floatingGate.getBoundingClientRect().top;
 
-moveButton.addEventListener("click", () => {
-  clearInterval(intervalId); // Clear the previous interval if any
+var electronX = electron.getBoundingClientRect().left;
+var electronY = electron.getBoundingClientRect().top;
+// get the difference between the floating gate and electron
+// var diffX = (electronX - floatingGateX) * 0.05; // Adjust the speed of motion by changing the multiplier
 
-  const targetTop = 0; // Target top position (adjust as needed)
-  const duration = 1000; // Animation duration in milliseconds (adjust as needed)
-  const fps = 60; // Frames per second (adjust as needed)
-  const increment = (targetTop - circleDiv.offsetTop) / (duration / 1000 * fps);
+// click write button to move electron to floating gate
+var animation = 0;
+var diffY = electronY - floatingGateY;
+function moveElectron() {
+  animation -= 1;
+  electron.style.top = animation + "px";
+  if (Math.abs(diffY) > Math.abs(animation)) {
+    requestAnimationFrame(moveElectron);
+  }
+}
 
-  intervalId = setInterval(() => {
-    const currentTop = circleDiv.offsetTop;
-    const newTop = currentTop + increment;
+const writeButton = document.getElementById("write_button");
+writeButton.addEventListener("click", moveElectron);
 
-    if (newTop <= targetTop) {
-      circleDiv.style.top = `${targetTop}px`;
-      clearInterval(intervalId); // Stop the interval once the div reaches the desired position
-    } else {
-      circleDiv.style.top = `${newTop}px`;
-    }
-  }, 1000 / fps);
-});
