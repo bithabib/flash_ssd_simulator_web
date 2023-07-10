@@ -40,21 +40,23 @@
 }
 
 .rounded-div {
-    position: relative;
-    border-radius: 50%;
-    background-color: black;
+    position: absolute;
+    /* border-radius: 50%; */
+    /* background-color: black; */
     display: flex;
     /* Use flexbox to center the content vertically */
-    justify-content: center;
+    /* justify-content: center; */
     /* Center the content horizontally */
-    align-items: center;
+    /* align-items: center; */
     /* Center the content vertically */
-    padding: 10px;
-    height: 10px;
+    padding: 5px;
+    /* height: 10px; */
     /* Adjust the height of the div as needed */
-    /* display: none; */
+    display: none;
 }
 
 .positive_electron {
-    color: white;
+    color: red;
+    text-align: center;
+    font-size: 20px;
 }

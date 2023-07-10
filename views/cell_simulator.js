@@ -49,6 +49,8 @@ function moveVoltage(voltageCircle, animation, diffY) {
   voltageCircle.style.top = animation + "px";
   if (diffY > Math.abs(animation)) {
     requestAnimationFrame(() => moveVoltage(voltageCircle, animation, diffY));
+  }else{
+    voltageCircle.style.display = "none";
   }
 }
 
@@ -60,15 +62,20 @@ function moveElectron(electron, animation, diffY) {
   }
 }
 
-
-function moveElectronButton() {
+async function moveElectronButton() {
   var selectRandomElectrons = electronList.selectRandomElectrons();
-  var voltageCircle = document.getElementById("voltage_circle");
-  var voltageCircleY = voltageCircle.getBoundingClientRect().top;
-  var controlGateY = controlGate.getBoundingClientRect().top;
-  // console.log("voltageCircleY: " + voltageCircleY);
-  var diffYVoltage = Math.abs(voltageCircleY - controlGateY);
-  moveVoltage(voltageCircle, 0, diffYVoltage);
+  // var voltageCircle = document.getElementById("voltage_circle");
+  var voltageCircles = document.getElementsByClassName("voltage_circle");
+  for (const voltageCircle of voltageCircles) {
+    voltageCircle.style.display = "block";
+    var voltageCircleY = voltageCircle.getBoundingClientRect().top;
+    var controlGateY = controlGate.getBoundingClientRect().top;
+    // console.log("voltageCircleY: " + voltageCircleY);
+    var diffYVoltage = Math.abs(voltageCircleY - controlGateY);
+    moveVoltage(voltageCircle, 50, diffYVoltage+60);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   for (const randomElectron of selectRandomElectrons) {
     // electrons[randomElectron].style.display = "none";
     var electron = electrons[randomElectron];
