@@ -30,7 +30,8 @@
             <div class="col">
                 <div class="row">
                     <div class="col">
-                        <button type="button" class="btn btn-primary float-left" id="write_button">Write/Programmed</button>
+                        <button type="button" class="btn btn-primary float-left"
+                            id="write_button">Write/Programmed</button>
                     </div>
                     <div class="col">
                         <button type="button" class="btn btn-primary float-right">Erase</button>
@@ -38,10 +39,14 @@
                 </div>
                 <p class="text-center">Control Gate</p>
                 <div class="d-flex align-items-center justify-content-center" style="height: 100px;">
-                    <div class="vertical-line"></div>
+                    <div class="vertical-line">
+                        <div class="rounded-div" id="voltage_circle">
+                            <span class="positive_electron">+</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="d-flex align-items-center justify-content-center" style="height: 100px;">
-                    <div class="blue-div d-flex align-items-center justify-content-center">
+                    <div class="blue-div d-flex align-items-center justify-content-center" id="control_gate">
                         <h5>Control Gate</h5>
                     </div>
                 </div>
@@ -72,55 +77,68 @@
 
                             <div class="col">
                                 <div class="row">
-                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white" id="electron1"
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        id="electron1"
                                         style="width: 20px; height: 20px; font-size: 20px; position: relative;">
                                         -
                                     </div>
-                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white" id="electron1"
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        id="electron1"
                                         style="width: 20px; height: 20px; font-size: 20px; position: relative;">
                                         -
                                     </div>
-                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white" id="electron1"
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        id="electron1"
                                         style="width: 20px; height: 20px; font-size: 20px; position: relative;">
                                         -
                                     </div>
-                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white" id="electron1"
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        id="electron1"
                                         style="width: 20px; height: 20px; font-size: 20px; position: relative;">
                                         -
                                     </div>
-                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white" id="electron1"
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        id="electron1"
                                         style="width: 20px; height: 20px; font-size: 20px; position: relative;">
                                         -
                                     </div>
-                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white" id="electron1"
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        id="electron1"
                                         style="width: 20px; height: 20px; font-size: 20px; position: relative;">
                                         -
                                     </div>
-                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white" id="electron1"
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        id="electron1"
                                         style="width: 20px; height: 20px; font-size: 20px; position: relative;">
                                         -
                                     </div>
-                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white" id="electron1"
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        id="electron1"
                                         style="width: 20px; height: 20px; font-size: 20px; position: relative;">
                                         -
                                     </div>
-                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white" id="electron1"
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        id="electron1"
                                         style="width: 20px; height: 20px; font-size: 20px; position: relative;">
                                         -
                                     </div>
-                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white" id="electron1"
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        id="electron1"
                                         style="width: 20px; height: 20px; font-size: 20px; position: relative;">
                                         -
                                     </div>
-                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white" id="electron1"
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        id="electron1"
                                         style="width: 20px; height: 20px; font-size: 20px; position: relative;">
                                         -
                                     </div>
-                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white" id="electron1"
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        id="electron1"
                                         style="width: 20px; height: 20px; font-size: 20px; position: relative;">
                                         -
                                     </div>
-                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white" id="electron1"
+                                    <div class="m-1 d-flex align-items-center justify-content-center rounded-circle bg-danger text-white"
+                                        id="electron1"
                                         style="width: 20px; height: 20px; font-size: 20px; position: relative;">
                                         -
                                     </div>

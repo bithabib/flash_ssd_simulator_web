@@ -35,38 +35,48 @@ class ElectronList {
 }
 const electronList = new ElectronList();
 var floatingGate = document.getElementById("floating_gate");
+var controlGate = document.getElementById("control_gate");
 var electrons = document.getElementsByClassName("rounded-circle");
 
 var floatingGateX = floatingGate.getBoundingClientRect().left;
 var floatingGateY = floatingGate.getBoundingClientRect().top;
 
-// function moveElectron(electron, animation, diffY) {
-//   console.log("moveElectron");
-//   animation -= 1;
-//   electron.style.top = animation + "px";
-//   if (diffY > Math.abs(animation)) {
-//     requestAnimationFrame(moveElectron(electron, animation, diffY));
-//   }
-// }
+function moveVoltage(voltageCircle, animation, diffY) {
+  console.log("moveVoltage");
+  console.log("animation: " + animation);
+  console.log("diffY: " + diffY);
+  animation += 1;
+  voltageCircle.style.top = animation + "px";
+  if (diffY > Math.abs(animation)) {
+    requestAnimationFrame(() => moveVoltage(voltageCircle, animation, diffY));
+  }
+}
 
 function moveElectron(electron, animation, diffY) {
-  console.log("moveElectron");
   animation -= 1;
   electron.style.top = animation + "px";
   if (diffY > Math.abs(animation)) {
     requestAnimationFrame(() => moveElectron(electron, animation, diffY));
   }
 }
+
+
 function moveElectronButton() {
   var selectRandomElectrons = electronList.selectRandomElectrons();
+  var voltageCircle = document.getElementById("voltage_circle");
+  var voltageCircleY = voltageCircle.getBoundingClientRect().top;
+  var controlGateY = controlGate.getBoundingClientRect().top;
+  // console.log("voltageCircleY: " + voltageCircleY);
+  var diffYVoltage = Math.abs(voltageCircleY - controlGateY);
+  moveVoltage(voltageCircle, 0, diffYVoltage);
   for (const randomElectron of selectRandomElectrons) {
     // electrons[randomElectron].style.display = "none";
-    console.log(electrons);
     var electron = electrons[randomElectron];
     var electronY = electron.getBoundingClientRect().top;
     var diffY = Math.abs(electronY - floatingGateY) - 10;
     moveElectron(electron, 0, diffY);
   }
 }
+
 const writeButton = document.getElementById("write_button");
 writeButton.addEventListener("click", moveElectronButton);
