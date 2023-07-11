@@ -572,7 +572,7 @@ class FileMapping {
   }
 }
 const fileMapping = new FileMapping();
-const globalFileSize = 512;
+var globalFileSize = 512;
 // Scroll the table to the selected row so that user don't have to scroll manually
 function scrollToSelectedRow(table) {
   parentElement = table.parentElement;
@@ -685,7 +685,7 @@ async function FileUpload(fileSize, fileName) {
           // update the block page
           block["written_page"][blockPageTracer - 1]["data"] = fileSizeInKB;
           block["written_page"][blockPageTracer - 1]["state"] = "valid";
-          globalFileSize = globalFileSize - fileSizeInKB;
+          globalFileSize = globalFileSize - 4;
         } else {
           readTableRow(block["block"], blockPageTracer, 4);
           // update the block page
@@ -1220,7 +1220,6 @@ function calculateFlashMemorySize() {
     "kb";
   
   globalFileSize = pageSize * pageCount * blockCount * planeCount * dieCount * packageCount;
-
   // create mapping table based on the number of block
   var mapping_table = document.getElementById("mapping_table");
   var rows = mapping_table.getElementsByTagName("tr");
