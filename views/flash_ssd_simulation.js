@@ -572,7 +572,7 @@ class FileMapping {
   }
 }
 const fileMapping = new FileMapping();
-
+const globalFileSize = 512;
 // Scroll the table to the selected row so that user don't have to scroll manually
 function scrollToSelectedRow(table) {
   parentElement = table.parentElement;
@@ -629,13 +629,6 @@ async function garbageUpdateMappingTable(garbageFileName, logicalAddressTracer, 
   logical_address = logical_address_with_page_info.substring(0, 10);
   page_info = logical_address_with_page_info.substring(10);
   page_number = page_info[logicalAddressTracer];
-  console.log(page_number);
-  console.log(page_number);
-  console.log(page_number);
-  console.log(logical_address);
-  console.log(logical_address);
-  console.log(logical_address);
-  console.log(logical_address);
 
   for (i = 0; i < rows.length; i++) {
     // if logical address is found in the mapping table
@@ -659,7 +652,7 @@ async function FileUpload(fileSize, fileName) {
   // console.log(fileName + "File Size: " + fileSize + " bytes");
   // Bytes to kb 2 decimal places
   var fileSizeInKB = (fileSize / 1024).toFixed(2);
-  if (fileSizeInKB >= 512) {
+  if (fileSizeInKB >= globalFileSize) {
     alert("File size is too large, please select a file less than 512kb");
     return;
   } else {
@@ -692,12 +685,14 @@ async function FileUpload(fileSize, fileName) {
           // update the block page
           block["written_page"][blockPageTracer - 1]["data"] = fileSizeInKB;
           block["written_page"][blockPageTracer - 1]["state"] = "valid";
+          globalFileSize = globalFileSize - fileSizeInKB;
         } else {
           readTableRow(block["block"], blockPageTracer, 4);
           // update the block page
           block["written_page"][blockPageTracer - 1]["data"] = 4;
           block["written_page"][blockPageTracer - 1]["state"] = "valid";
           // console.log(block);
+          globalFileSize = globalFileSize - 4;
         }
 
         if (garbage_file_cheker) {
@@ -1076,10 +1071,6 @@ blockSelect.addEventListener("change", function () {
   );
   if (blockValue === "1") {
     // get the block from blockList where block contain b1, b2, b3 through loop
-    // console.log(blockList.block_list.length);
-    // console.log(blockList.block_list.length);
-    // console.log(blockList.block_list.length);
-    // console.log(blockList.block_list.length);
     var removed_list = [];
     // Add two list
 
@@ -1227,6 +1218,8 @@ function calculateFlashMemorySize() {
   flashSSDSize.textContent =
     pageSize * pageCount * blockCount * planeCount * dieCount * packageCount +
     "kb";
+  
+  globalFileSize = pageSize * pageCount * blockCount * planeCount * dieCount * packageCount;
 
   // create mapping table based on the number of block
   var mapping_table = document.getElementById("mapping_table");
