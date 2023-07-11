@@ -101,3 +101,7 @@ Block Erase | 1.5 ms
 ## License
 This simulation is provided under the [MIT License](LICENSE). You are free to use, modify, and distribute the simulation in accordance with the terms of the license.
 
+
+## Journal List
+https://olj.onlinelearningconsortium.org/index.php/olj/about/submissions
+
