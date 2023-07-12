@@ -1288,3 +1288,10 @@ function calculateFlashMemorySize() {
   }
   document.getElementById("mapping_table_entries").textContent = n;
 }
+
+// make a div full screen
+var fullscreenBtn = document.getElementById("fullscreen");
+fullscreenBtn.addEventListener("click", function () {
+  var myDiv = document.getElementById("fullscreen_div");
+  myDiv.classList.toggle("fullscreen");
+});
