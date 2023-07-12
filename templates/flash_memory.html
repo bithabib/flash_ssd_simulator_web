@@ -3,8 +3,10 @@
 
 <head>
     <meta property="og:title" content="Eyana: The SSD Simulator">
-    <meta property="og:description" content="Discover Eyana: The SSD Simulator, a groundbreaking web-based tool that simplifies the comprehension of Flash SSD technology. Explore crucial operations like pages, blocks, writes, reads, updates, deletes, and garbage collection, along with concepts such as Write Amplification, Wear Leveling, Parallelism, and Multi-Channel. Eyana offers visual demonstrations, interactive file uploads, and comprehensive documentation, empowering users to gain a deeper understanding of Flash SSDs. With a remarkable 99 percent effectiveness rating from users, Eyana stands as one of the finest simulators for comprehending Flash SSD technology. Dive into this research paper to explore its features, functionalities, and the underlying concepts it elucidates, contributing to educational resources in the field.">
-    <meta name="keywords" content="SSDs, solid-state drives, structure, operations, optimization, Coding for SSDs, Eyana, SSD Simulator, programmers, performance">
+    <meta property="og:description"
+        content="Discover Eyana: The SSD Simulator, a groundbreaking web-based tool that simplifies the comprehension of Flash SSD technology. Explore crucial operations like pages, blocks, writes, reads, updates, deletes, and garbage collection, along with concepts such as Write Amplification, Wear Leveling, Parallelism, and Multi-Channel. Eyana offers visual demonstrations, interactive file uploads, and comprehensive documentation, empowering users to gain a deeper understanding of Flash SSDs. With a remarkable 99 percent effectiveness rating from users, Eyana stands as one of the finest simulators for comprehending Flash SSD technology. Dive into this research paper to explore its features, functionalities, and the underlying concepts it elucidates, contributing to educational resources in the field.">
+    <meta name="keywords"
+        content="SSDs, solid-state drives, structure, operations, optimization, Coding for SSDs, Eyana, SSD Simulator, programmers, performance">
     <meta property="og:image" content="../src/images/flash_ssd_simulator.png">
     <meta property="og:url" content="https://schoolofthought.tech">
 
@@ -142,1132 +144,1134 @@
                 </div>
             </div>
         </div>
-        <div class="container">
-            <div class="option-container">
-                <div class="row btn-group d-flex justify-content-center" role="group">
-                    <button type="button" class="btn btn-primary col-2">
-                        <input type="file" id="fileUpload" onchange="handleFileInputChange()">
-                    </button>
-                    <button type="button" class="btn btn-primary ms-1 col-2">
-                        <select id="update_file" class="form-select">
-                            <option value="update_file" selected>Update</option>
-                        </select>
-                        <input type="file" id="fileUpdate" onchange="handleFileUpdate()">
-                    </button>
-                    <button type="button" class="btn btn-primary ms-1 col-2">
-                        <select id="read_file" class="form-select">
-                            <option value="read_file" selected>Read</option>
-                        </select>
-                    </button>
-                    <button type="button" class="btn btn-danger ms-1 col-2">
-                        <select id="delete_file" class="form-select">
-                            <option value="delete_file" selected>Delete</option>
-                        </select>
-                    </button>
-                    <button type="button" class="btn btn-primary ms-1 col-2" onclick="garbageCollection()">
-                        Garbage Collection
-                    </button>
+        <div id="fullscreen_div">
+            <button id="fullscreen">Go Fullscreen</button>
+            <div class="container">
+                <div class="option-container">
+                    <div class="row btn-group d-flex justify-content-center" role="group">
+                        <button type="button" class="btn btn-primary col-2">
+                            <input type="file" id="fileUpload" onchange="handleFileInputChange()">
+                        </button>
+                        <button type="button" class="btn btn-primary ms-1 col-2">
+                            <select id="update_file" class="form-select">
+                                <option value="update_file" selected>Update</option>
+                            </select>
+                            <input type="file" id="fileUpdate" onchange="handleFileUpdate()">
+                        </button>
+                        <button type="button" class="btn btn-primary ms-1 col-2">
+                            <select id="read_file" class="form-select">
+                                <option value="read_file" selected>Read</option>
+                            </select>
+                        </button>
+                        <button type="button" class="btn btn-danger ms-1 col-2">
+                            <select id="delete_file" class="form-select">
+                                <option value="delete_file" selected>Delete</option>
+                            </select>
+                        </button>
+                        <button type="button" class="btn btn-primary ms-1 col-2" onclick="garbageCollection()">
+                            Garbage Collection
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <table class="container col-10">
-                <tr>
-                    <!-- p0ct means "package 0 container header" -->
-                    <th id="p0ch">Package 0</th>
-                    <th id="p1ch">Package 1</th>
-                </tr>
-                <tr>
-                    <td>
-                        <!-- p0ct means "package 0 container table" -->
-                        <table id="p0ct" class="container">
-                            <tr>
-                                <th id="p0d0">Die 0</th>
-                                <th id="p0d1">Die 1</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <table id="p0d0ct" class="container">
-                                        <tr>
-                                            <th id="p0d0p0">Plane 0</th>
-                                            <th id="p0d0p1">Plane 1</th>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <!-- p0d0p0ct means Package 0 die 0 plane 0 -->
-                                                <div style="overflow-y: auto; max-height: 600px;">
-                                                    <table id="p0d0p0ct" class="container">
-                                                        <tr>
-                                                            <th>Block 0</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <!-- p0d0p0b0ct means ackage 0 die 0 plane 0 and block 0 -->
-                                                                <table id="p0d0p0b0ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 1</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p0d0p0b1ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 2</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p0d0p0b2ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 3</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p0d0p0b3ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style="overflow-y: auto; max-height: 600px;">
-                                                    <table id="p0d0p1ct" class="container">
-                                                        <tr>
-                                                            <th>Block 0</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p0d0p1b0ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 1</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p0d0p1b1ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 2</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p0d0p1b2ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 3</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p0d0p1b3ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Register</td>
-                                            <td>Register</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td>
-                                    <table id="p0d1ct" class="container">
-                                        <tr>
-                                            <th>Plane 0</th>
-                                            <th>Plane 1</th>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div style="overflow-y: auto; max-height: 600px;">
-                                                    <table id="p0d1p0ct" class="container">
-                                                        <tr>
-                                                            <th>Block 0</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p0d1p0b0ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 1</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p0d1p0b1ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 2</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p0d1p0b2ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 3</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p0d1p0b3ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style="overflow-y: auto; max-height: 600px;">
-                                                    <table id="p0d1p1ct" class="container">
-                                                        <tr>
-                                                            <th>Block 0</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p0d1p1b0ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 1</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p0d1p1b1ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 2</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p0d1p1b2ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 3</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p0d1p1b3ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Register</td>
-                                            <td>Register</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-
-                        </table>
-                    </td>
-                    <td>
-                        <table id="p1ct" class="container">
-                            <tr>
-                                <th>Die 0</th>
-                                <th>Die 1</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <table id="p1d0ct" class="container">
-                                        <tr>
-                                            <th>Plane 0</th>
-                                            <th>Plane 1</th>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div style="overflow-y: auto; max-height: 600px;">
-                                                    <table id="p1d0p0ct" class="container">
-                                                        <tr>
-                                                            <th>Block 0</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p1d0p0b0ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 1</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p1d0p0b1ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 2</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p1d0p0b2ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 3</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p1d0p0b3ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style="overflow-y: auto; max-height: 600px;">
-                                                    <table id="p1d0p1ct" class="container">
-                                                        <tr>
-                                                            <th>Block 0</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p1d0p1b0ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 1</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p1d0p1b1ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 2</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p1d0p1b2ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 3</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p1d0p1b3ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Register</td>
-                                            <td>Register</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td>
-                                    <table id="p1d1ct" class="container">
-                                        <tr>
-                                            <th>Plane 0</th>
-                                            <th>Plane 1</th>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div style="overflow-y: auto; max-height: 600px;">
-                                                    <table id="p1d1p0ct" class="container">
-                                                        <tr>
-                                                            <th>Block 0</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p1d1p0b0ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 1</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p1d1p0b1ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 2</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p1d1p0b2ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 3</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p1d1p0b3ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div style="overflow-y: auto; max-height: 600px;">
-                                                    <table id="p1d1p1ct" class="container">
-                                                        <tr>
-                                                            <th>Block 0</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p1d1p1b0ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 1</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p1d1p1b1ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 2</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p1d1p1b2ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Block 3</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table id="p1d1p1b3ct" class="container">
-                                                                    <tr>
-                                                                        <th>PPN</th>
-                                                                        <th>Data</th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">0</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">1</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">2</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="ppn">3</td>
-                                                                        <td class="data"></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Register</td>
-                                            <td>Register</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-
-                        </table>
-                    </td>
-                </tr>
-            </table>
-            <table class="container col-2">
-                <tr>
-
-                    <th>
-                        <div class="definition-header">
-                            <span class="definition_ssd" id="mapping">?</span>
-                        </div>Page Level Address Mapping Table
-                    </th>
-                </tr>
-
-                <tr>
-                    <td>
-                        <div style="overflow-y: auto; max-height: 500px;">
-                            <table class="container" id="mapping_table">
+            <div class="row">
+                <table class="container col-10">
+                    <tr>
+                        <!-- p0ct means "package 0 container header" -->
+                        <th id="p0ch">Package 0</th>
+                        <th id="p1ch">Package 1</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <!-- p0ct means "package 0 container table" -->
+                            <table id="p0ct" class="container">
                                 <tr>
-                                    <th>LA</th>
-                                    <th>PA</th>
+                                    <th id="p0d0">Die 0</th>
+                                    <th id="p0d1">Die 1</th>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        <table id="p0d0ct" class="container">
+                                            <tr>
+                                                <th id="p0d0p0">Plane 0</th>
+                                                <th id="p0d0p1">Plane 1</th>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <!-- p0d0p0ct means Package 0 die 0 plane 0 -->
+                                                    <div style="overflow-y: auto; max-height: 600px;">
+                                                        <table id="p0d0p0ct" class="container">
+                                                            <tr>
+                                                                <th>Block 0</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <!-- p0d0p0b0ct means ackage 0 die 0 plane 0 and block 0 -->
+                                                                    <table id="p0d0p0b0ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p0d0p0b1ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 2</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p0d0p0b2ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 3</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p0d0p0b3ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="overflow-y: auto; max-height: 600px;">
+                                                        <table id="p0d0p1ct" class="container">
+                                                            <tr>
+                                                                <th>Block 0</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p0d0p1b0ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p0d0p1b1ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 2</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p0d0p1b2ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 3</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p0d0p1b3ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Register</td>
+                                                <td>Register</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table id="p0d1ct" class="container">
+                                            <tr>
+                                                <th>Plane 0</th>
+                                                <th>Plane 1</th>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div style="overflow-y: auto; max-height: 600px;">
+                                                        <table id="p0d1p0ct" class="container">
+                                                            <tr>
+                                                                <th>Block 0</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p0d1p0b0ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p0d1p0b1ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 2</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p0d1p0b2ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 3</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p0d1p0b3ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="overflow-y: auto; max-height: 600px;">
+                                                        <table id="p0d1p1ct" class="container">
+                                                            <tr>
+                                                                <th>Block 0</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p0d1p1b0ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p0d1p1b1ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 2</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p0d1p1b2ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 3</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p0d1p1b3ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Register</td>
+                                                <td>Register</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
                             </table>
-                        </div>
-                        <p>
-                            Number of Mapping Table Entries: <span id="mapping_table_entries">0</span>
-                        </p>
+                        </td>
+                        <td>
+                            <table id="p1ct" class="container">
+                                <tr>
+                                    <th>Die 0</th>
+                                    <th>Die 1</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table id="p1d0ct" class="container">
+                                            <tr>
+                                                <th>Plane 0</th>
+                                                <th>Plane 1</th>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div style="overflow-y: auto; max-height: 600px;">
+                                                        <table id="p1d0p0ct" class="container">
+                                                            <tr>
+                                                                <th>Block 0</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p1d0p0b0ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p1d0p0b1ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 2</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p1d0p0b2ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 3</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p1d0p0b3ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="overflow-y: auto; max-height: 600px;">
+                                                        <table id="p1d0p1ct" class="container">
+                                                            <tr>
+                                                                <th>Block 0</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p1d0p1b0ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p1d0p1b1ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 2</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p1d0p1b2ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 3</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p1d0p1b3ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Register</td>
+                                                <td>Register</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table id="p1d1ct" class="container">
+                                            <tr>
+                                                <th>Plane 0</th>
+                                                <th>Plane 1</th>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div style="overflow-y: auto; max-height: 600px;">
+                                                        <table id="p1d1p0ct" class="container">
+                                                            <tr>
+                                                                <th>Block 0</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p1d1p0b0ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p1d1p0b1ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 2</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p1d1p0b2ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 3</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p1d1p0b3ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="overflow-y: auto; max-height: 600px;">
+                                                        <table id="p1d1p1ct" class="container">
+                                                            <tr>
+                                                                <th>Block 0</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p1d1p1b0ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 1</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p1d1p1b1ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 2</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p1d1p1b2ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Block 3</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <table id="p1d1p1b3ct" class="container">
+                                                                        <tr>
+                                                                            <th>PPN</th>
+                                                                            <th>Data</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">0</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">1</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">2</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="ppn">3</td>
+                                                                            <td class="data"></td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Register</td>
+                                                <td>Register</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
 
-                    </td>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <table class="container col-2">
+                    <tr>
 
-                </tr>
+                        <th>
+                            <div class="definition-header">
+                                <span class="definition_ssd" id="mapping">?</span>
+                            </div>Page Level Address Mapping Table
+                        </th>
+                    </tr>
 
-            </table>
+                    <tr>
+                        <td>
+                            <div style="overflow-y: auto; max-height: 500px;">
+                                <table class="container" id="mapping_table">
+                                    <tr>
+                                        <th>LA</th>
+                                        <th>PA</th>
+                                    </tr>
+                                </table>
+                            </div>
+                            <p>
+                                Number of Mapping Table Entries: <span id="mapping_table_entries">0</span>
+                            </p>
+
+                        </td>
+
+                    </tr>
+
+                </table>
+            </div>
         </div>
-
         <div class="container mt-5" style="overflow-y: auto; max-height: 200px;">
             <h2>
                 Block Information Tracer
