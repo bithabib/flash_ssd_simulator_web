@@ -659,12 +659,6 @@ function getRandomBlockParallel(blocks, prefix) {
 // File tracer from logical address
 var file_tracer = 0;
 async function FileUpload(fileSize, fileName) {
-  // Get the size of the file in bytes
-  // var fileSize = file.size;
-
-  // Display the file size
-  // console.log(fileName + "File Size: " + fileSize + " bytes");
-  // console.log(fileName + "File Size: " + fileSize + " bytes");
   // Bytes to kb 2 decimal places
   var fileSizeInKB = (fileSize / 1024).toFixed(2);
   if (fileSizeInKB >= globalFileSize) {
@@ -681,78 +675,72 @@ async function FileUpload(fileSize, fileName) {
 
     while (fileSizeInKB > 0) {
       // taking a random number from the block list
-      // console.log("Length of the blockList: " + blockList.block_list.length);
-      console.log(ssdType.value);
-      if (ssdType.value == "single") {
-        var random = Math.floor(Math.random() * blockList.block_list.length);
-        // var random = Math.floor(Math.random() * blockList.length);
-        // Get the block number from the sequence
-        var block = blockList.block_list[random];
+      var random = Math.floor(Math.random() * blockList.block_list.length);
+      // var random = Math.floor(Math.random() * blockList.length);
+      // Get the block number from the sequence
+      var block = blockList.block_list[random];
 
-        // console.log(block);
-        // Get the block page tracer from the correct page
-        for (i = 0; i < block.written_page.length; i++) {
-          if (block.written_page[i].data == 0) {
-            blockPageTracer = i + 1;
-            break;
-          }
+      // console.log(block);
+      // Get the block page tracer from the correct page
+      var blockPageTracer = 0;
+      for (i = 0; i < block.written_page.length; i++) {
+        if (block.written_page[i].data == 0) {
+          blockPageTracer = i + 1;
+          break;
         }
-        // divide the file size by 4kb (page size) to get the number of pages
-        while (fileSizeInKB > 0 && blockPageTracer <= 4) {
-          if (fileSizeInKB < 4) {
-            readTableRow(block["block"], blockPageTracer, fileSizeInKB);
-            // update the block page
-            block["written_page"][blockPageTracer - 1]["data"] = fileSizeInKB;
-            block["written_page"][blockPageTracer - 1]["state"] = "valid";
-            globalFileSize = globalFileSize - 4;
-          } else {
-            readTableRow(block["block"], blockPageTracer, 4);
-            // update the block page
-            block["written_page"][blockPageTracer - 1]["data"] = 4;
-            block["written_page"][blockPageTracer - 1]["state"] = "valid";
-            // console.log(block);
-            globalFileSize = globalFileSize - 4;
-          }
-
-          if (garbage_file_cheker) {
-            garbageUpdateMappingTable(
-              fileName,
-              logicalAddressTracer,
-              block["block"],
-              blockPageTracer
-            );
-          } else {
-            // Select the row in the mapping table
-            selectRowMappingTable(
-              mapping_table_row,
-              "f" + file_tracer + logicalAddressTracer,
-              block["block"] + blockPageTracer
-            );
-          }
-
-          // Save the filename, logical address and mapping_table_row in the java class
-          // decrease the file size by 4kb
-          fileSizeInKB = (fileSizeInKB - 4).toFixed(2);
-          logicalAddressTracer++;
-          blockPageTracer++;
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-        }
-        // Remove the block from the sequence
-        if (blockPageTracer === 5) {
-          // remove the block from the block list
-          blockList.block_list.splice(random, 1);
-          // add the removed block to the removed_block list by updating the write count and erase count
-          block["write_count"]++;
-          blockList.removed_block_list.push(block);
+      }
+      // divide the file size by 4kb (page size) to get the number of pages
+      while (fileSizeInKB > 0 && blockPageTracer <= 4) {
+        if (fileSizeInKB < 4) {
+          readTableRow(block["block"], blockPageTracer, fileSizeInKB);
+          // update the block page
+          block["written_page"][blockPageTracer - 1]["data"] = fileSizeInKB;
+          block["written_page"][blockPageTracer - 1]["state"] = "valid";
+          globalFileSize = globalFileSize - 4;
         } else {
-          // blockList.block_list.splice(random, 1);
-          // add the removed block to the removed_block list by updating the write count and erase count
-          block["write_count"]++;
-          // blockList.removed_block_list.push(block);
+          readTableRow(block["block"], blockPageTracer, 4);
+          // update the block page
+          block["written_page"][blockPageTracer - 1]["data"] = 4;
+          block["written_page"][blockPageTracer - 1]["state"] = "valid";
+          // console.log(block);
+          globalFileSize = globalFileSize - 4;
         }
+
+        if (garbage_file_cheker) {
+          garbageUpdateMappingTable(
+            fileName,
+            logicalAddressTracer,
+            block["block"],
+            blockPageTracer
+          );
+        } else {
+          // Select the row in the mapping table
+          selectRowMappingTable(
+            mapping_table_row,
+            "f" + file_tracer + logicalAddressTracer,
+            block["block"] + blockPageTracer
+          );
+        }
+
+        // Save the filename, logical address and mapping_table_row in the java class
+        // decrease the file size by 4kb
+        fileSizeInKB = (fileSizeInKB - 4).toFixed(2);
+        logicalAddressTracer++;
+        blockPageTracer++;
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+      // Remove the block from the sequence
+      if (blockPageTracer === 5) {
+        // remove the block from the block list
+        blockList.block_list.splice(random, 1);
+        // add the removed block to the removed_block list by updating the write count and erase count
+        block["write_count"]++;
+        blockList.removed_block_list.push(block);
       } else {
-        var blockP0 = getRandomBlockParallel(blockList.block_list, "p0");
-        var blockP1 = getRandomBlockParallel(blockList.block_list, "p1");
+        // blockList.block_list.splice(random, 1);
+        // add the removed block to the removed_block list by updating the write count and erase count
+        block["write_count"]++;
+        // blockList.removed_block_list.push(block);
       }
     }
     if (!garbage_file_cheker) {
@@ -771,12 +759,20 @@ async function FileUpload(fileSize, fileName) {
   // divide the file size by 4kb (page size) to get the number of pages
 }
 // Read the uploaded file from input onchange
-function handleFileInputChange() {
+async function handleFileInputChange() {
   var fileInput = document.getElementById("fileUpload");
   var file = fileInput.files[0];
   if (file) {
     var fileSize = file.size;
-    FileUpload(fileSize, file.name);
+    if (ssdType.value == "single") {
+      FileUpload(fileSize, file.name);
+    }else{
+      const promises = [
+        FileUpload(fileSize/2, file.name),
+        FileUpload(fileSize/2, file.name),
+      ];
+      await Promise.all(promises);
+    }
   }
 }
 
@@ -833,7 +829,9 @@ function handleFileUpdate() {
   handleSelection(fileName);
   if (file) {
     var fileSize = file.size;
-    FileUpload(fileSize, file.name);
+    if (ssdType.value == "single") {
+      FileUpload(fileSize, file.name);
+    }
   }
 }
 
