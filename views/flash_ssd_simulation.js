@@ -658,7 +658,7 @@ function getRandomBlockParallel(blocks, prefix) {
 }
 // File tracer from logical address
 var file_tracer = 0;
-async function FileUpload(fileSize, fileName) {
+async function FileUpload(fileSize, fileName, fileIndex) {
   // Bytes to kb 2 decimal places
   var fileSizeInKB = (fileSize / 1024).toFixed(2);
   if (fileSizeInKB >= globalFileSize) {
@@ -674,11 +674,17 @@ async function FileUpload(fileSize, fileName) {
     // divide the file size by 16kb (block size) to get the number of blocks
 
     while (fileSizeInKB > 0) {
-      // taking a random number from the block list
-      var random = Math.floor(Math.random() * blockList.block_list.length);
-      // var random = Math.floor(Math.random() * blockList.length);
-      // Get the block number from the sequence
-      var block = blockList.block_list[random];
+      if (fileIndex == 2) {
+        // taking a random number from the block list
+        var random = Math.floor(Math.random() * blockList.block_list.length);
+        // var random = Math.floor(Math.random() * blockList.length);
+        // Get the block number from the sequence
+        var block = blockList.block_list[random];
+      } else if (fileIndex == 1) {
+        var block = getRandomBlockParallel(blockList.block_list, "p1");
+      } else if (fileIndex == 0) {
+        var block = getRandomBlockParallel(blockList.block_list, "p0");
+      }
 
       // console.log(block);
       // Get the block page tracer from the correct page
@@ -765,11 +771,11 @@ async function handleFileInputChange() {
   if (file) {
     var fileSize = file.size;
     if (ssdType.value == "single") {
-      FileUpload(fileSize, file.name);
-    }else{
+      FileUpload(fileSize, file.name, 2);
+    } else {
       const promises = [
-        FileUpload(fileSize/2, file.name),
-        FileUpload(fileSize/2, file.name),
+        FileUpload(fileSize / 2, file.name, 0),
+        FileUpload(fileSize / 2, file.name, 1),
       ];
       await Promise.all(promises);
     }
@@ -821,7 +827,7 @@ async function handleSelection(fileName) {
 }
 
 // Update change handler
-function handleFileUpdate() {
+async function handleFileUpdate() {
   var fileInput = document.getElementById("fileUpdate");
   var file = fileInput.files[0];
   var selectedFileName = document.getElementById("update_file");
@@ -830,7 +836,13 @@ function handleFileUpdate() {
   if (file) {
     var fileSize = file.size;
     if (ssdType.value == "single") {
-      FileUpload(fileSize, file.name);
+      FileUpload(fileSize, file.name, 2);
+    } else {
+      const promises = [
+        FileUpload(fileSize / 2, file.name, 0),
+        FileUpload(fileSize / 2, file.name, 1),
+      ];
+      await Promise.all(promises);
     }
   }
 }
@@ -974,7 +986,8 @@ async function garbageCollection() {
       var garbage_collection_tracer = "garbage" + removedBlock["block"] + "4";
       FileUpload(
         removedBlock.written_page[3].data * 1024,
-        garbage_collection_tracer
+        garbage_collection_tracer,
+        2
       );
       removedBlock.written_page[3].data = 0;
       blockList.removeBlockFromRemovedBlockList(blockAddress);
@@ -1012,7 +1025,8 @@ async function garbageCollection() {
         (removedBlock.written_page[2].data +
           removedBlock.written_page[3].data) *
           1024,
-        garbage_collection_tracer
+        garbage_collection_tracer,
+        2
       );
       removedBlock.written_page[2].data = 0;
       removedBlock.written_page[3].data = 0;
@@ -1046,7 +1060,8 @@ async function garbageCollection() {
           removedBlock.written_page[2].data +
           removedBlock.written_page[3].data) *
           1024,
-        garbage_collection_tracer
+        garbage_collection_tracer,
+        2
       );
       removedBlock.written_page[1].data = 0;
       removedBlock.written_page[2].data = 0;
