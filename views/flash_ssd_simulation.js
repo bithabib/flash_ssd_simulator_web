@@ -778,6 +778,39 @@ async function handleFileInputChange() {
         FileUpload(fileSize / 2, file.name, 1),
       ];
       await Promise.all(promises);
+      // if the file name is similar in update delete and read remove duplicate slection name 
+      var selectElement = document.getElementById("update_file");
+      var optionToRemove = file.name;
+      for (let i = 0; i < selectElement.options.length; i++) {
+        if (selectElement.options[i].text === optionToRemove) {
+          selectElement.remove(i);
+          break;
+        }
+      }
+      // remove the file name from the delete select element
+      // Get the select element
+      var selectElement = document.getElementById("delete_file");
+      // Create a new option element
+      var optionToRemove = file.name;
+      for (let i = 0; i < selectElement.options.length; i++) {
+        if (selectElement.options[i].text === optionToRemove) {
+          selectElement.remove(i);
+          break;
+        }
+      }
+
+      // remove the file name from the read select element
+      // Get the select element
+      var selectElement = document.getElementById("read_file");
+      // Create a new option element
+      var optionToRemove = file.name;
+      for (let i = 0; i < selectElement.options.length; i++) {
+        if (selectElement.options[i].text === optionToRemove) {
+          selectElement.remove(i);
+          break;
+        }
+      }
+
     }
   }
 }
