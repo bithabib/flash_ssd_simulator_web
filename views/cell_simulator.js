@@ -49,7 +49,7 @@ function moveVoltage(voltageCircle, animation, diffY) {
   voltageCircle.style.top = animation + "px";
   if (diffY > Math.abs(animation)) {
     requestAnimationFrame(() => moveVoltage(voltageCircle, animation, diffY));
-  }else{
+  } else {
     voltageCircle.style.display = "none";
   }
 }
@@ -72,7 +72,7 @@ async function moveElectronButton() {
     var controlGateY = controlGate.getBoundingClientRect().top;
     // console.log("voltageCircleY: " + voltageCircleY);
     var diffYVoltage = Math.abs(voltageCircleY - controlGateY);
-    moveVoltage(voltageCircle, 50, diffYVoltage+60);
+    moveVoltage(voltageCircle, 50, diffYVoltage + 60);
     await new Promise((resolve) => setTimeout(resolve, 500));
   }
   await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -87,3 +87,10 @@ async function moveElectronButton() {
 
 const writeButton = document.getElementById("write_button");
 writeButton.addEventListener("click", moveElectronButton);
+
+// make a div full screen
+var fullscreenBtn = document.getElementById("fullscreen");
+fullscreenBtn.addEventListener("click", function () {
+  var myDiv = document.getElementById("fullscreen_div");
+  myDiv.classList.toggle("fullscreen");
+});
