@@ -56,15 +56,9 @@ function moveVoltage(voltageCircle, animation, diffY) {
 }
 
 function applyingVoltageMessage(isApplying) {
-  var voltageWriteMessage = document.getElementById(
-    "applying_write_voltage"
-  );
-  var voltageEraseMessage = document.getElementById(
-    "applying_erase_voltage"
-  );
-  var voltageReadMessage = document.getElementById(
-    "applying_read_voltage"
-  );
+  var voltageWriteMessage = document.getElementById("applying_write_voltage");
+  var voltageEraseMessage = document.getElementById("applying_erase_voltage");
+  var voltageReadMessage = document.getElementById("applying_read_voltage");
   if (isApplying) {
     voltageWriteMessage.style.display = "block";
     voltageEraseMessage.style.display = "none";
@@ -135,6 +129,17 @@ var readButton = document.getElementById("read_button");
 readButton.addEventListener("click", async function () {
   document.getElementById("applying_read_voltage").style.display = "block";
   document.getElementById("applying_write_voltage").style.display = "none";
+  var voltageCircles = document.getElementsByClassName("voltage_circle");
+  for (const voltageCircle of voltageCircles) {
+    voltageCircle.style.display = "block";
+    var voltageCircleY = voltageCircle.getBoundingClientRect().top;
+    var controlGateY = controlGate.getBoundingClientRect().top;
+    // console.log("voltageCircleY: " + voltageCircleY);
+    var diffYVoltage = Math.abs(voltageCircleY - controlGateY);
+    // applyingVoltageMessage(true);
+    moveVoltage(voltageCircle, 50, diffYVoltage + 60);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
   var moveCurrents = document.getElementsByClassName("arrow");
   var drain = document.getElementById("drain_id");
   var drainX = drain.getBoundingClientRect().left;
