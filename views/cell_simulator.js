@@ -51,22 +51,27 @@ function moveVoltage(voltageCircle, animation, diffY) {
     requestAnimationFrame(() => moveVoltage(voltageCircle, animation, diffY));
   } else {
     voltageCircle.style.display = "none";
+    voltageCircle.style.top = "50px";
   }
 }
 
 function applyingVoltageMessage(isApplying) {
-  var voltagePositiveMessage = document.getElementById(
-    "applying_positive_voltage"
+  var voltageWriteMessage = document.getElementById(
+    "applying_write_voltage"
   );
-  var voltageNegativeMessage = document.getElementById(
-    "applying_negative_voltage"
+  var voltageEraseMessage = document.getElementById(
+    "applying_erase_voltage"
+  );
+  var voltageReadMessage = document.getElementById(
+    "applying_read_voltage"
   );
   if (isApplying) {
-    voltagePositiveMessage.style.display = "block";
-    voltageNegativeMessage.style.display = "none";
+    voltageWriteMessage.style.display = "block";
+    voltageEraseMessage.style.display = "none";
+    voltageReadMessage.style.display = "none";
   } else {
-    voltagePositiveMessage.style.display = "none";
-    voltageNegativeMessage.style.display = "block";
+    voltageWriteMessage.style.display = "none";
+    voltageEraseMessage.style.display = "block";
   }
 }
 
@@ -120,20 +125,33 @@ async function moveElectronRead(moveCurrent, animation, diffX) {
     requestAnimationFrame(() =>
       moveElectronRead(moveCurrent, animation, diffX)
     );
+  } else {
+    moveCurrent.style.left = "0px";
+    moveCurrent.style.display = "none";
   }
-  // moveCurrent.style.display = "none";
 }
 
 var readButton = document.getElementById("read_button");
 readButton.addEventListener("click", async function () {
+  document.getElementById("applying_read_voltage").style.display = "block";
+  document.getElementById("applying_write_voltage").style.display = "none";
   var moveCurrents = document.getElementsByClassName("arrow");
   var drain = document.getElementById("drain_id");
   var drainX = drain.getBoundingClientRect().left;
+  var removed_electrons = electronList.getRemovedElectrons();
   for (const moveCurrent of moveCurrents) {
-    moveCurrent.style.display = "block";
-    var moveCurrentX = moveCurrent.getBoundingClientRect().left;
-    var diffX = Math.abs(moveCurrentX - drainX) - 60;
-    moveElectronRead(moveCurrent, 0, diffX + 70);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    if (removed_electrons.length === 0) {
+      moveCurrent.style.display = "block";
+      var moveCurrentX = moveCurrent.getBoundingClientRect().left;
+      var diffX = Math.abs(moveCurrentX - drainX) - 60;
+      moveElectronRead(moveCurrent, 0, (diffX + 70) / 2);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    } else {
+      moveCurrent.style.display = "block";
+      var moveCurrentX = moveCurrent.getBoundingClientRect().left;
+      var diffX = Math.abs(moveCurrentX - drainX) - 60;
+      moveElectronRead(moveCurrent, 0, diffX + 70);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
   }
 });
