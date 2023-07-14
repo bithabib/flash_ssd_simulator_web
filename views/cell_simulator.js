@@ -54,6 +54,18 @@ function moveVoltage(voltageCircle, animation, diffY) {
   }
 }
 
+function applyingVoltageMessage(isApplying) {
+  var voltagePositiveMessage = document.getElementById("applying_positive_voltage");
+  var voltageNegativeMessage = document.getElementById("applying_negative_voltage");
+  if (isApplying) {
+    voltagePositiveMessage.style.display = "block";
+    voltageNegativeMessage.style.display = "none";
+  } else {
+    voltagePositiveMessage.style.display = "none";
+    voltageNegativeMessage.style.display = "block";
+  }
+}
+
 function moveElectron(electron, animation, diffY) {
   animation -= 1;
   electron.style.top = animation + "px";
@@ -72,6 +84,7 @@ async function moveElectronButton() {
     var controlGateY = controlGate.getBoundingClientRect().top;
     // console.log("voltageCircleY: " + voltageCircleY);
     var diffYVoltage = Math.abs(voltageCircleY - controlGateY);
+    applyingVoltageMessage(true);
     moveVoltage(voltageCircle, 50, diffYVoltage + 60);
     await new Promise((resolve) => setTimeout(resolve, 500));
   }
