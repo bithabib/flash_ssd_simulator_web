@@ -127,36 +127,54 @@ async function moveElectronRead(moveCurrent, animation, diffX) {
 
 var readButton = document.getElementById("read_button");
 readButton.addEventListener("click", async function () {
-  document.getElementById("applying_read_voltage").style.display = "block";
-  document.getElementById("applying_write_voltage").style.display = "none";
-  var voltageCircles = document.getElementsByClassName("voltage_circle");
-  for (const voltageCircle of voltageCircles) {
-    voltageCircle.style.display = "block";
-    var voltageCircleY = voltageCircle.getBoundingClientRect().top;
-    var controlGateY = controlGate.getBoundingClientRect().top;
-    // console.log("voltageCircleY: " + voltageCircleY);
-    var diffYVoltage = Math.abs(voltageCircleY - controlGateY);
-    // applyingVoltageMessage(true);
-    moveVoltage(voltageCircle, 50, diffYVoltage + 60);
-    await new Promise((resolve) => setTimeout(resolve, 500));
-  }
-  var moveCurrents = document.getElementsByClassName("arrow");
-  var drain = document.getElementById("drain_id");
-  var drainX = drain.getBoundingClientRect().left;
-  var removed_electrons = electronList.getRemovedElectrons();
-  for (const moveCurrent of moveCurrents) {
-    if (removed_electrons.length === 0) {
-      moveCurrent.style.display = "block";
-      var moveCurrentX = moveCurrent.getBoundingClientRect().left;
-      var diffX = Math.abs(moveCurrentX - drainX) - 60;
-      moveElectronRead(moveCurrent, 0, (diffX + 70) / 2);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    } else {
-      moveCurrent.style.display = "block";
-      var moveCurrentX = moveCurrent.getBoundingClientRect().left;
-      var diffX = Math.abs(moveCurrentX - drainX) - 60;
-      moveElectronRead(moveCurrent, 0, diffX + 70);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+  var removed_electrons_length = electronList.getRemovedElectrons().length + 3;
+  var circle_tracer = 1;
+  for (
+    var applying_voltage = 2.5;
+    applying_voltage <= removed_electrons_length;
+    applying_voltage += 2.5
+  ) {
+    var applying_read_voltage = document.getElementById(
+      "applying_read_voltage"
+    );
+    applying_read_voltage.textContent = "Applying " + applying_voltage + "V";
+    applying_read_voltage.style.display = "block";
+
+    document.getElementById("applying_write_voltage").style.display = "none";
+    var voltageCircles = document.getElementsByClassName("voltage_circle");
+    for (const voltageCircle of voltageCircles) {
+      voltageCircle.style.display = "block";
+      var voltageCircleY = voltageCircle.getBoundingClientRect().top;
+      var controlGateY = controlGate.getBoundingClientRect().top;
+      // console.log("voltageCircleY: " + voltageCircleY);
+      var diffYVoltage = Math.abs(voltageCircleY - controlGateY);
+      // applyingVoltageMessage(true);
+      moveVoltage(voltageCircle, 50, diffYVoltage + 60);
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
+    var moveCurrents = document.getElementsByClassName("arrow");
+    var drain = document.getElementById("drain_id");
+    var drainX = drain.getBoundingClientRect().left;
+    for (const moveCurrent of moveCurrents) {
+      if (applying_voltage + 2.5 > removed_electrons_length) {
+        moveCurrent.style.display = "block";
+        var moveCurrentX = moveCurrent.getBoundingClientRect().left;
+        var diffX = Math.abs(moveCurrentX - drainX) - 60;
+        moveElectronRead(moveCurrent, 0, diffX + 70);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        var circle_element = document.getElementsByClassName("circle"+circle_tracer)[0];
+        circle_element.style.backgroundColor = "red";
+
+      } else {
+        moveCurrent.style.display = "block";
+        var moveCurrentX = moveCurrent.getBoundingClientRect().left;
+        var diffX = Math.abs(moveCurrentX - drainX) - 60;
+        moveElectronRead(moveCurrent, 0, (diffX + 70) / 2);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        var circle_element = document.getElementsByClassName("circle"+circle_tracer)[0];
+        circle_element.style.backgroundColor = "black";
+      }
+    }
+    circle_tracer += 1;
   }
 });
