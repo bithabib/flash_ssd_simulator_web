@@ -33,16 +33,17 @@
                 <div class="col">
                     <div class="row">
                         <div class="col">
-                            <button type="button" class="btn btn-primary float-left"
-                                id="write_button">Write/Programmed</button>
+                            <button type="button" class="btn btn-primary float-left" id="write_button">Write/Programmed</button>
+                        </div>
+                        <div class="col text-center"> <!-- Added "text-center" class here -->
+                            <button type="button" class="btn btn-primary" id="erase_button">Read</button>
                         </div>
                         <div class="col">
                             <button type="button" class="btn btn-primary float-right">Erase</button>
                         </div>
                     </div>
-                    <p class="text-center" id="applying_positive_voltage" style="display: none;">Applying 25V</p>
-                    <p class="text-center" id="applying_negative_voltage" style="display: none;">Applying -25V</p>
-                    <div class="d-flex align-items-center justify-content-center" style="height: 100px;">
+                    <p class="p-2 text-center" id="applying_positive_voltage" style="display: none;">Applying 25V</p>
+                    <div class="d-flex align-items-center justify-content-center" style="height: 50px;">
                         <div class="vertical-line">
                             <div class="rounded-div voltage_circle">
                                 <span class="positive_electron" style="position: absolute;">+</span>
@@ -164,18 +165,22 @@
                                     </div>
                                     <p class="pt-5">Silicon Substrate</p>
                                 </div>
-                                
+
 
                                 <div class="col">
                                     <div class="smaller-div float-right">
                                         <h5 class="text-center mt-2">Drain</h5>
                                     </div>
                                 </div>
-
-                                
                             </div>
                         </div>
                     </div>
+                    <div class="d-flex align-items-center justify-content-center" style="height: 50px;">
+                        <div class="vertical-line">
+
+                        </div>
+                    </div>
+                    <p class="text-center" id="applying_negative_voltage" style="display: none;">Applying 25V</p>
                 </div>
             </div>
         </div>
