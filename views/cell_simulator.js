@@ -93,7 +93,7 @@ async function moveElectronButton() {
     // electrons[randomElectron].style.display = "none";
     var electron = electrons[randomElectron];
     var electronY = electron.getBoundingClientRect().top;
-    var diffY = Math.abs(electronY - floatingGateY) - 10;
+    var diffY = Math.abs(electronY - floatingGateY) - 60;
     moveElectron(electron, 0, diffY);
   }
 }
