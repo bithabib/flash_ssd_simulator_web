@@ -37,10 +37,10 @@
                                 id="write_button">Write/Programmed</button>
                         </div>
                         <div class="col text-center"> <!-- Added "text-center" class here -->
-                            <button type="button" class="btn btn-primary" id="erase_button">Read</button>
+                            <button type="button" class="btn btn-primary" id="read_button">Read</button>
                         </div>
                         <div class="col">
-                            <button type="button" class="btn btn-primary float-right">Erase</button>
+                            <button type="button" class="btn btn-primary float-right" id="erase_button">Erase</button>
                         </div>
                     </div>
                     <p class="p-2 text-center" id="applying_positive_voltage" style="display: none;">Applying 25V</p>
@@ -93,11 +93,11 @@
                                     <div class="smaller-div float-left">
                                         <h5 class="text-center mt-2">
                                             Source
-                                            <span class="arrow" style="display: none;">&#8594;</span>
-                                            <span class="arrow" style="display: none;">&#8594;</span>
-                                            <span class="arrow" style="display: none;">&#8594;</span>
-                                            <span class="arrow" style="display: none;">&#8594;</span>
-                                            <span class="arrow" style="display: none;">&#8594;</span>
+                                            <span class="arrow" style="display: none; position: absolute;">&#8592;</span>
+                                            <span class="arrow" style="display: none; position: absolute;">&#8592;</span>
+                                            <span class="arrow" style="display: none; position: absolute;">&#8592;</span>
+                                            <span class="arrow" style="display: none; position: absolute;">&#8592;</span>
+                                            <span class="arrow" style="display: none; position: absolute;">&#8592;</span>
                                         </h5>
                                     </div>
 
@@ -177,7 +177,7 @@
 
                                 <div class="col">
                                     <div class="smaller-div float-right">
-                                        <h5 class="text-center mt-2">Drain</h5>
+                                        <h5 class="text-center mt-2" id="drain_id">Drain</h5>
                                     </div>
                                 </div>
                             </div>

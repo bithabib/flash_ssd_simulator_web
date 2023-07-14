@@ -55,8 +55,12 @@ function moveVoltage(voltageCircle, animation, diffY) {
 }
 
 function applyingVoltageMessage(isApplying) {
-  var voltagePositiveMessage = document.getElementById("applying_positive_voltage");
-  var voltageNegativeMessage = document.getElementById("applying_negative_voltage");
+  var voltagePositiveMessage = document.getElementById(
+    "applying_positive_voltage"
+  );
+  var voltageNegativeMessage = document.getElementById(
+    "applying_negative_voltage"
+  );
   if (isApplying) {
     voltagePositiveMessage.style.display = "block";
     voltageNegativeMessage.style.display = "none";
@@ -102,8 +106,34 @@ const writeButton = document.getElementById("write_button");
 writeButton.addEventListener("click", moveElectronButton);
 
 // make a div full screen
-var fullscreenBtn = document.getElementById("fullscreen");
-fullscreenBtn.addEventListener("click", function () {
-  var myDiv = document.getElementById("fullscreen_div");
-  myDiv.classList.toggle("fullscreen");
+// var fullscreenBtn = document.getElementById("fullscreen");
+// fullscreenBtn.addEventListener("click", function () {
+//   var myDiv = document.getElementById("fullscreen_div");
+//   myDiv.classList.toggle("fullscreen");
+// });
+
+async function moveElectronRead(moveCurrent, animation, diffX) {
+  animation += 1;
+  console.log("animation: " + animation);
+  moveCurrent.style.left = animation + "px";
+  if (diffX > Math.abs(animation)) {
+    requestAnimationFrame(() =>
+      moveElectronRead(moveCurrent, animation, diffX)
+    );
+  }
+  // moveCurrent.style.display = "none";
+}
+
+var readButton = document.getElementById("read_button");
+readButton.addEventListener("click", async function () {
+  var moveCurrents = document.getElementsByClassName("arrow");
+  var drain = document.getElementById("drain_id");
+  var drainX = drain.getBoundingClientRect().left;
+  for (const moveCurrent of moveCurrents) {
+    moveCurrent.style.display = "block";
+    var moveCurrentX = moveCurrent.getBoundingClientRect().left;
+    var diffX = Math.abs(moveCurrentX - drainX) - 60;
+    moveElectronRead(moveCurrent, 0, diffX + 70);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
 });
