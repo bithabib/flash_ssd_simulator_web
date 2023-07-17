@@ -178,3 +178,16 @@ readButton.addEventListener("click", async function () {
     circle_tracer += 1;
   }
 });
+
+// erase button click event
+var eraseButton = document.getElementById("erase_button");
+eraseButton.addEventListener("click", async function () {
+  applying_erase_voltage = document.getElementById("applying_erase_voltage");
+  applying_erase_voltage.style.display = "block";
+
+});
+
+// Erase button 
+async function moveElectronErase(moveCurrent, animation, diffX) {
+
+}
