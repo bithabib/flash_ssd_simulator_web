@@ -1,3 +1,13 @@
+function getScrollPosition() {
+  const verticalScroll = window.pageYOffset || document.documentElement.scrollTop;
+  const horizontalScroll = window.pageXOffset || document.documentElement.scrollLeft;
+  console.log("verticalScroll: " + verticalScroll);
+  console.log("horizontalScroll: " + horizontalScroll);
+  return { verticalScroll, horizontalScroll };
+}
+
+window.addEventListener('scroll',getScrollPosition);
+
 class ElectronList {
   constructor() {
     this.electrons = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
@@ -162,7 +172,7 @@ readButton.addEventListener("click", async function () {
         var diffX = Math.abs(moveCurrentX - drainX) - 60;
         moveElectronRead(moveCurrent, 0, diffX + 70);
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        var circle_element = document.getElementsByClassName("circle"+circle_tracer)[0];
+        var circle_element = document.getElementsByClassName("circle" + circle_tracer)[0];
         circle_element.style.backgroundColor = "red";
 
       } else {
@@ -171,7 +181,7 @@ readButton.addEventListener("click", async function () {
         var diffX = Math.abs(moveCurrentX - drainX) - 60;
         moveElectronRead(moveCurrent, 0, (diffX + 70) / 2);
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        var circle_element = document.getElementsByClassName("circle"+circle_tracer)[0];
+        var circle_element = document.getElementsByClassName("circle" + circle_tracer)[0];
         circle_element.style.backgroundColor = "black";
       }
     }
@@ -191,3 +201,5 @@ eraseButton.addEventListener("click", async function () {
 async function moveElectronErase(moveCurrent, animation, diffX) {
 
 }
+
+
