@@ -26,6 +26,8 @@ The motivation behind our research and the development of Eyana is further reinf
 By presenting an in-depth overview of Eyana's features, functionalities, and the underlying concepts it aims to clarify, this paper seeks to contribute to the educational resources available for students and researchers interested in Flash SSD technology. Our motivation is rooted in the belief that a visually engaging and user-friendly simulator like Eyana can significantly enhance the learning experience, empowering individuals to grasp the complexities of Flash SSDs in a short span of time.
 
 In conclusion, Eyana: The SSD Simulator emerges as a promising solution to the challenges faced by students and researchers in comprehending Flash SSD technology. By providing an intuitive and visually immersive platform, Eyana fills the void in web-based simulators for Flash SSDs, allowing users to gain a comprehensive understanding of the technology. Through this research, we aim to provide a valuable educational resource and contribute to the advancement of knowledge in the field of Flash SSD technology.
+
+# Floating Gate Transistor 
 # Eyana: The SSD Simulator
 Welcome to the Flash SSD Simulator! This simulator allows you to experience the inner workings of a flash-based Solid-State Drive (SSD) right from your web browser. Whether you're a student studying computer architecture or a curious tech enthusiast, this simulator provides a hands-on understanding of the key operations and concepts related to flash SSDs.
 
