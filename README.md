@@ -59,6 +59,8 @@ To combat write wear-out and ensure uniform usage of cells, wear leveling is emp
 ## Organizing Transistors in SSDs
 
 In SSDs, multiple floating gate transistors are organized into pages, several pages form a block, and multiple blocks constitute the entire drive's storage. This hierarchical organization allows for efficient data management and access. By writing data in pages and blocks, SSDs can perform faster read and write operations, optimizing the overall performance of the storage device.
+# Organization of an SSD
+![Example Image](paper_writing/images/ssd-architecture.webp)
 # Eyana: The SSD Simulator
 Welcome to the Flash SSD Simulator! This simulator allows you to experience the inner workings of a flash-based Solid-State Drive (SSD) right from your web browser. Whether you're a student studying computer architecture or a curious tech enthusiast, this simulator provides a hands-on understanding of the key operations and concepts related to flash SSDs.
 
