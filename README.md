@@ -31,7 +31,8 @@ In conclusion, Eyana: The SSD Simulator emerges as a promising solution to the c
 A Solid State Drive (SSD) is a cutting-edge data storage device based on flash memory technology, utilizing floating gate transistors to store data as electrical charges. Unlike traditional hard drives with moving mechanical parts, SSDs offer a multitude of advantages, including higher speed, enhanced reliability, and lower power consumption, making them the preferred choice for modern computing needs.
 
 ## Floating Gate Transistors - The Heart of SSDs
-Each SSD's fundamental building block is the floating gate transistor, consisting of a source, drain, silicon insulator, a floating gate, and a control gate. The magic of data storage happens when a high voltage is applied to the control gate, allowing electrons from the silicon substrate to tunnel through the silicon insulator and become trapped in the floating gate. This trapped charge represents the data and remarkably remains intact even when the power is turned off, making SSDs non-volatile.
+Each SSD's fundamental building block is the floating gate transistor, consisting of a source, drain, silicon insulator, a floating gate, and a control gate(figure 1). The magic of data storage happens when a high voltage(25v example) is applied to the control gate, allowing electrons from the silicon substrate to tunnel through the silicon insulator and become trapped in the floating gate. This trapped charge represents the data and remarkably remains intact even when the power is turned off, making SSDs non-volatile.
+![Example Image](paper_writing/images/ssd_simulator_write.png)
 
 ## Single Level Cell (SLC):
 
@@ -39,8 +40,8 @@ Single Level Cell technology stores 1 bit of information per cell. When reading 
 
 ## Multi Level Cell (MLC)
 
-Multi Level Cell (MLC) technology stores 2 bits of information per cell. To represent data, the control gate receives voltage divided into four threshold voltage ranges: 0-3 volts, 3-6 volts, 6-9 volts, and 9-12 volts. When voltage in the range of 0-3 volts is applied and current flows from source to drain, the data is "11." If no current flows, the voltage in the range of 3-6 volts is applied, resulting in the data being stored as "10." Similarly, if the voltage in the range of 6-9 volts is applied and current flows, the data is "01." Finally, if no current flows in the 6-9 volts range, the voltage in the range of 9-12 volts is applied, and the data is "00." MLC offers higher storage density than SLC, but it may have slightly slower performance and lower endurance.
-
+Multi Level Cell (MLC) technology stores 2 bits of information per cell. To represent data, the control gate receives voltage divided into four threshold voltage ranges: 0-3 volts, 3-6 volts, 6-9 volts, and 9-12 volts. When voltage in the range of 0-3 volts is applied and current flows from source to drain, the data is "11."(figure 2) If no current flows, the voltage in the range of 3-6 volts is applied, resulting in the data being stored as "10." Similarly, if the voltage in the range of 6-9 volts is applied and current flows, the data is "01." Finally, if no current flows in the 6-9 volts range, the voltage in the range of 9-12 volts is applied, and the data is "00." MLC offers higher storage density than SLC, but it may have slightly slower performance and lower endurance.
+![Example Image](paper_writing/images/ssd_simulator_read.png)
 ## Triple Level Cell (TLC)
 
 Triple Level Cell (TLC) technology stores 3 bits of information per cell. The control gate receives voltage divided into eight threshold voltage ranges. With voltage ranges such as 0-1 volt, 1-2 volts, 2-3 volts, and more, TLC can represent eight different data states. For example, if a voltage in the range of 0-1 volt is applied and current flows, the data is "111." If no current flows, then the voltage in the range of 1-2 volts is applied, resulting in "110," and so on. TLC provides even higher storage density but may have lower endurance and slightly slower performance compared to SLC and MLC.
