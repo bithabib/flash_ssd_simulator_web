@@ -72,12 +72,12 @@ Here are the key specifications of our NAND Flash Device:
 - Page Read: Reading data from a single page takes approximately 25 microseconds (μs).
 - Page Program (Write): Writing data to a page requires about 200 microseconds (μs).
 - Block Erase: Erasing a block takes around 1.5 milliseconds (ms).
-![Example Image](paper_writing/images/architecture_od_ssd_simulation.png)
+![Example Image](paper_writing/images/architecture_of_ssd_simulation.png)
 
 The user initiates commands through the host interface, with Serial ATA (SATA) and PCI Express (PCIe) being the most common interfaces for newly released SSDs. The SSD controller's processor receives these commands and then transfers them to the flash controller. Additionally, SSDs are equipped with embedded RAM memory, primarily used for caching data and storing mapping information.
 
 Our SSD simulator's architecture, as illustrated in Figure 3, provides an efficient and reliable platform for evaluating the performance of NAND Flash devices in various scenarios. Figure 4 depicts the overall SSD architecture, illustrating how commands flow from the host interface to the flash controller, along with the presence of embedded RAM for caching and mapping data.
-![Example Image](paper_writing/images/ssd-architecture.webp)
+![Example Image](paper_writing/images/ssd-architecture.png)
 # Eyana: The SSD Simulator
 Welcome to the Flash SSD Simulator! This simulator allows you to experience the inner workings of a flash-based Solid-State Drive (SSD) right from your web browser. Whether you're a student studying computer architecture or a curious tech enthusiast, this simulator provides a hands-on understanding of the key operations and concepts related to flash SSDs.
 
