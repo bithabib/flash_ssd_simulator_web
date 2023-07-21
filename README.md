@@ -60,6 +60,23 @@ To combat write wear-out and ensure uniform usage of cells, wear leveling is emp
 
 In SSDs, multiple floating gate transistors are organized into pages, several pages form a block, and multiple blocks constitute the entire drive's storage. This hierarchical organization allows for efficient data management and access. By writing data in pages and blocks, SSDs can perform faster read and write operations, optimizing the overall performance of the storage device.
 # Organization of an SSD
+In our SSD simulator, we have utilized Single Level Cell (SLC) transistors to create pages. Each page in our simulator can store 4 KB of data, and to achieve this capacity, we have employed approximately 32,768 floating gate transistors for each page.
+
+The organization of our SSD simulator is structured as follows: Four pages are combined to form one block, and four blocks are further grouped to create one plane. Two planes are then integrated to form a die, and two dies are packaged together, resulting in one channel.
+
+Here are the key specifications of our NAND Flash Device:
+
+- Single Level Cell (SLC): Each transistor in our NAND Flash stores 1 bit of data.
+- Page Size: Each page has a storage capacity of 4 KB.
+- Block Size: A block comprises 16 KB of data, which is equivalent to 4 pages.
+- Page Read: Reading data from a single page takes approximately 25 microseconds (μs).
+- Page Program (Write): Writing data to a page requires about 200 microseconds (μs).
+- Block Erase: Erasing a block takes around 1.5 milliseconds (ms).
+![Example Image](paper_writing/images/architecture_od_ssd_simulation.png)
+
+The user initiates commands through the host interface, with Serial ATA (SATA) and PCI Express (PCIe) being the most common interfaces for newly released SSDs. The SSD controller's processor receives these commands and then transfers them to the flash controller. Additionally, SSDs are equipped with embedded RAM memory, primarily used for caching data and storing mapping information.
+
+Our SSD simulator's architecture, as illustrated in Figure 3, provides an efficient and reliable platform for evaluating the performance of NAND Flash devices in various scenarios. Figure 4 depicts the overall SSD architecture, illustrating how commands flow from the host interface to the flash controller, along with the presence of embedded RAM for caching and mapping data.
 ![Example Image](paper_writing/images/ssd-architecture.webp)
 # Eyana: The SSD Simulator
 Welcome to the Flash SSD Simulator! This simulator allows you to experience the inner workings of a flash-based Solid-State Drive (SSD) right from your web browser. Whether you're a student studying computer architecture or a curious tech enthusiast, this simulator provides a hands-on understanding of the key operations and concepts related to flash SSDs.
