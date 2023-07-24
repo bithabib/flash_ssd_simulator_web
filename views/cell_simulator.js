@@ -1,12 +1,17 @@
 function getScrollPosition() {
-  const verticalScroll = window.pageYOffset || document.documentElement.scrollTop;
-  const horizontalScroll = window.pageXOffset || document.documentElement.scrollLeft;
+  const verticalScroll =
+    window.pageYOffset || document.documentElement.scrollTop;
+  const horizontalScroll =
+    window.pageXOffset || document.documentElement.scrollLeft;
   console.log("verticalScroll: " + verticalScroll);
   console.log("horizontalScroll: " + horizontalScroll);
   return { verticalScroll, horizontalScroll };
 }
+window.addEventListener("scroll", getScrollPosition);
 
-window.addEventListener('scroll',getScrollPosition);
+function getCurrentScrollPositions() {
+  return getScrollPosition();
+}
 
 class ElectronList {
   constructor() {
@@ -52,9 +57,9 @@ var floatingGateX = floatingGate.getBoundingClientRect().left;
 var floatingGateY = floatingGate.getBoundingClientRect().top;
 
 function moveVoltage(voltageCircle, animation, diffY) {
-  console.log("moveVoltage");
-  console.log("animation: " + animation);
-  console.log("diffY: " + diffY);
+  // console.log("moveVoltage");
+  // console.log("animation: " + animation);
+  // console.log("diffY: " + diffY);
   animation += 1;
   voltageCircle.style.top = animation + "px";
   if (diffY > Math.abs(animation)) {
@@ -106,7 +111,12 @@ async function moveElectronButton() {
     // electrons[randomElectron].style.display = "none";
     var electron = electrons[randomElectron];
     var electronY = electron.getBoundingClientRect().top;
-    var diffY = Math.abs(electronY - floatingGateY) - 60;
+    const scrollPositions = getCurrentScrollPositions();
+    var diffY = Math.abs(electronY - floatingGateY) + scrollPositions.verticalScroll-60;
+    // const scrollPositions = getCurrentScrollPositions();
+    // Vertical scroll position
+    console.log("Vertical scroll position: " + scrollPositions.verticalScroll); // "Vertical scroll position: 0
+    // console.log(scrollPositions.horizontalScroll); // Horizontal scroll position
     moveElectron(electron, 0, diffY);
   }
 }
@@ -172,16 +182,19 @@ readButton.addEventListener("click", async function () {
         var diffX = Math.abs(moveCurrentX - drainX) - 60;
         moveElectronRead(moveCurrent, 0, diffX + 70);
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        var circle_element = document.getElementsByClassName("circle" + circle_tracer)[0];
+        var circle_element = document.getElementsByClassName(
+          "circle" + circle_tracer
+        )[0];
         circle_element.style.backgroundColor = "red";
-
       } else {
         moveCurrent.style.display = "block";
         var moveCurrentX = moveCurrent.getBoundingClientRect().left;
         var diffX = Math.abs(moveCurrentX - drainX) - 60;
         moveElectronRead(moveCurrent, 0, (diffX + 70) / 2);
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        var circle_element = document.getElementsByClassName("circle" + circle_tracer)[0];
+        var circle_element = document.getElementsByClassName(
+          "circle" + circle_tracer
+        )[0];
         circle_element.style.backgroundColor = "black";
       }
     }
@@ -194,12 +207,7 @@ var eraseButton = document.getElementById("erase_button");
 eraseButton.addEventListener("click", async function () {
   applying_erase_voltage = document.getElementById("applying_erase_voltage");
   applying_erase_voltage.style.display = "block";
-
 });
 
-// Erase button 
-async function moveElectronErase(moveCurrent, animation, diffX) {
-
-}
-
-
+// Erase button
+async function moveElectronErase(moveCurrent, animation, diffX) {}
