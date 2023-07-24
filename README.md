@@ -183,6 +183,10 @@ Block Erase | 1.5 ms
 - [5] Mcnulty, P.J. & Rajaram, Navin & Poole, Kelvin & Freeman, Kurt & Dyar, J.P. & Scheick, Leif & Alkhafazi, Mazin & Randall, Mitchell. (2006). Simplified Readout of UVPROM Dosimeters for Spacecraft Applications. Nuclear Science, IEEE Transactions on. 53. 1859 - 1862. 10.1109/TNS.2006.877564.
 - [6] https://www.cactus-tech.com/resources/blog/details/solid-state-drive-primer-1-the-basic-nand-flash-cell/
 - [7] https://www.embedded.com/flash-101-types-of-nand-flash/
+- [8] https://ieeexplore.ieee.org/ielaam/10208/8316264/8031080-aam.pdf?tag=1
+- [9] https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6558443
+- [10] https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9691807
+- [11] https://www.usenix.org/system/files/conference/fast18/fast18-li.pdf
 
 ## License
 This simulation is provided under the [MIT License](LICENSE). You are free to use, modify, and distribute the simulation in accordance with the terms of the license.
