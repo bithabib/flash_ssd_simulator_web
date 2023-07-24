@@ -70,6 +70,22 @@ function moveVoltage(voltageCircle, animation, diffY) {
   }
 }
 
+function moveNegativeVoltage(voltageCircle, animation, diffY) {
+  // console.log("moveVoltage");
+  // console.log("animation: " + animation);
+  // console.log("diffY: " + diffY);
+  animation -= 1;
+  voltageCircle.style.top = animation + "px";
+  if (diffY < Math.abs(animation)) {
+    requestAnimationFrame(() =>
+      moveNegativeVoltage(voltageCircle, animation, diffY)
+    );
+  } else {
+    voltageCircle.style.display = "none";
+    voltageCircle.style.top = diffY + "px";
+  }
+}
+
 function applyingVoltageMessage(isApplying) {
   var voltageWriteMessage = document.getElementById("applying_write_voltage");
   var voltageEraseMessage = document.getElementById("applying_erase_voltage");
@@ -200,6 +216,9 @@ readButton.addEventListener("click", async function () {
   }
 });
 
+// Erase button
+async function moveElectronErase(moveCurrent, animation, diffX) {}
+
 // erase button click event
 var eraseButton = document.getElementById("erase_button");
 eraseButton.addEventListener("click", async function () {
@@ -214,10 +233,19 @@ eraseButton.addEventListener("click", async function () {
     // console.log("voltageCircleY: " + voltageCircleY);
     var diffYVoltage = Math.abs(voltageCircleY - controlGateY);
     // applyingVoltageMessage(true);
-    moveVoltage(voltageCircle, 50, diffYVoltage + 60);
+    moveNegativeVoltage(voltageCircle, diffYVoltage + 200, diffYVoltage);
     await new Promise((resolve) => setTimeout(resolve, 500));
   }
+  // get removed electrons
+  var removedElectrons = electronList.getRemovedElectrons();
+  for (const randomElectron of removedElectrons) {
+    // electrons[randomElectron].style.display = "none";
+    var electron = electrons[randomElectron];
+    var electronY = electron.getBoundingClientRect().top;
+    const scrollPositions = getCurrentScrollPositions();
+    var diffY =
+      Math.abs(electronY - floatingGateY) + scrollPositions.verticalScroll - 60;
+    console.log("Vertical scroll position: " + scrollPositions.verticalScroll); // "Vertical scroll position: 0
+    moveElectron(electron, 0, diffY);
+  }
 });
-
-// Erase button
-async function moveElectronErase(moveCurrent, animation, diffX) {}
