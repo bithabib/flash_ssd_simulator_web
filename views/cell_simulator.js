@@ -3,8 +3,8 @@ function getScrollPosition() {
     window.pageYOffset || document.documentElement.scrollTop;
   const horizontalScroll =
     window.pageXOffset || document.documentElement.scrollLeft;
-  console.log("verticalScroll: " + verticalScroll);
-  console.log("horizontalScroll: " + horizontalScroll);
+  // console.log("verticalScroll: " + verticalScroll);
+  // console.log("horizontalScroll: " + horizontalScroll);
   return { verticalScroll, horizontalScroll };
 }
 window.addEventListener("scroll", getScrollPosition);
@@ -112,7 +112,8 @@ async function moveElectronButton() {
     var electron = electrons[randomElectron];
     var electronY = electron.getBoundingClientRect().top;
     const scrollPositions = getCurrentScrollPositions();
-    var diffY = Math.abs(electronY - floatingGateY) + scrollPositions.verticalScroll-60;
+    var diffY =
+      Math.abs(electronY - floatingGateY) + scrollPositions.verticalScroll - 60;
     console.log("Vertical scroll position: " + scrollPositions.verticalScroll); // "Vertical scroll position: 0
     moveElectron(electron, 0, diffY);
   }
@@ -204,6 +205,18 @@ var eraseButton = document.getElementById("erase_button");
 eraseButton.addEventListener("click", async function () {
   applying_erase_voltage = document.getElementById("applying_erase_voltage");
   applying_erase_voltage.style.display = "block";
+  document.getElementById("applying_write_voltage").style.display = "none";
+  var voltageCircles = document.getElementsByClassName("neg_voltage_circle");
+  for (const voltageCircle of voltageCircles) {
+    voltageCircle.style.display = "block";
+    var voltageCircleY = voltageCircle.getBoundingClientRect().top;
+    var controlGateY = controlGate.getBoundingClientRect().top;
+    // console.log("voltageCircleY: " + voltageCircleY);
+    var diffYVoltage = Math.abs(voltageCircleY - controlGateY);
+    // applyingVoltageMessage(true);
+    moveVoltage(voltageCircle, 50, diffYVoltage + 60);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
 });
 
 // Erase button
