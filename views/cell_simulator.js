@@ -113,10 +113,7 @@ async function moveElectronButton() {
     var electronY = electron.getBoundingClientRect().top;
     const scrollPositions = getCurrentScrollPositions();
     var diffY = Math.abs(electronY - floatingGateY) + scrollPositions.verticalScroll-60;
-    // const scrollPositions = getCurrentScrollPositions();
-    // Vertical scroll position
     console.log("Vertical scroll position: " + scrollPositions.verticalScroll); // "Vertical scroll position: 0
-    // console.log(scrollPositions.horizontalScroll); // Horizontal scroll position
     moveElectron(electron, 0, diffY);
   }
 }
