@@ -1,3 +1,6 @@
+<h1 align="center">
+  <strong><a href="https://schoolofthought.tech/templates/flash_memory.html">Eyana: The SSD Simulator</a></strong>
+</h1>
 # Abstract 
 Understanding the intricacies of Flash SSD technology can be challenging for students without a solid foundation. To address this issue, we developed Eyana: The SSD Simulator, a web-based tool aimed at simplifying the comprehension of Flash SSD operations. Eyana provides a visual representation of Write, Read, Update, Delete, garbage collection, and flash translation layer processes, along with supporting documentation on concepts like Write Amplification, Wear Leveling, Parallelism, and Multi-Channel. By allowing users to upload files and observe real-time operations, Eyana enables students to understand the complete procedure within a short timeframe. In a survey conducted to evaluate its effectiveness, 99 percent of users regarded Eyana as an exceptionally valuable and one of the best simulators available. In this paper, we present an in-depth overview of Eyana, highlighting its features, functionalities, and its impact on enhancing the understanding of Flash SSD technology. Additionally, we discuss the results of the survey, affirming the simulator's efficacy in facilitating the comprehension of Flash SSDs.
 
@@ -85,7 +88,7 @@ The user initiates commands through the host interface, with Serial ATA (SATA) a
 Our SSD simulator's architecture, as illustrated in Figure 3, provides an efficient and reliable platform for evaluating the performance of NAND Flash devices in various scenarios. Figure 4 depicts the overall SSD architecture, illustrating how commands flow from the host interface to the flash controller, along with the presence of embedded RAM for caching and mapping data.
 ![Example Image](paper_writing/images/ssd-architecture.png)
 # Eyana: The SSD Simulator
-Welcome to the Flash SSD Simulator! This simulator allows you to experience the inner workings of a flash-based Solid-State Drive (SSD) right from your web browser. Whether you're a student studying computer architecture or a curious tech enthusiast, this simulator provides a hands-on understanding of the key operations and concepts related to flash SSDs.
+Eyana: The SSd Simulator describe internal architecture of an SSD and visualize the process of Write, Read, Update, Garbage Collection and Parallel writing. As this is an web based simulator anyone can access and use it to understand the core concept of an ssd. 
 
 ## Enjoy the Simulation
 Click [here](https://schoolofthought.tech/templates/flash_memory.html) to dive into the Flash SSD Simulation and explore its interactive features. Gain insights into the intricate processes and components involved in the operation of a Flash SSD.
