@@ -223,6 +223,36 @@ Furthermore, no participants selected "Not sure," suggesting that the majority o
 
 In conclusion, the pie chart illustrates the positive impact of the SSD and Floating Gate Transistor Simulators on time-saving in understanding the respective concepts. The majority of participants experienced significant time savings, indicating the effectiveness and efficiency of the simulators in enhancing the learning experience. These results affirm the value of using simulators as a powerful educational tool to streamline the understanding of complex concepts like SSD and Floating Gate Transistors.
 
+## Rating of the Simulator
+In this section, we present the participants' ratings of the simulator on a scale of 1 to 10. The ratings were obtained to assess the overall effectiveness and satisfaction level of the simulator.
+
+Participants were asked to rate the simulator using the following scale:
+
+1 to 10: (Percentage of participants)
+The ratings received from the participants are summarized in the bar chart below:
+![Example Image](paper_writing/servey_graph/rate_simulator.jpeg)
+The bar chart displays the distribution of ratings as follows:
+\begin{itemize}
+    \item 1 to 4: 0\%
+    \item 5: 0.4\%
+    \item 6: 1.7\%
+    \item 7: 7.6\%
+    \item 8: 21.2\%
+    \item 9: 31.4\%
+    \item 10: 37.7\%
+\end{itemize}
+The bar chart reveals that the simulator received predominantly positive ratings. A significant number of participants, approximately 37.7\%, rated the simulator a perfect score of 10, indicating a high level of satisfaction with its performance.
+
+Additionally, approximately 31.4\% of participants gave a rating of 9, showing further positive feedback and strong satisfaction with the simulator.
+
+The ratings from 8 (21.2\%) and 7 (7.6\%) suggest that a considerable portion of users found the simulator above average and satisfactory in meeting their expectations.
+
+Few participants provided ratings of 5 (0.4\%) and 6 (1.7\%), indicating minor room for improvement or a relatively neutral stance towards the simulator.
+
+Notably, no participants provided ratings below 5 (1 to 4), indicating overall satisfaction and a lack of significant dissatisfaction with the simulator.
+
+In conclusion, the bar chart visually represents the participants' ratings of the simulator on a scale of 1 to 10. The majority of users expressed high levels of satisfaction, with a significant portion giving the simulator a perfect rating of 10. These positive ratings reflect the simulator's effectiveness in meeting its objectives and the overall satisfaction of the users with its performance and usability.
+
 ## Cache 
 1. Least Recently Used (LRU): LRU is one of the most widely used cache replacement algorithms. It evicts the cache line that has not been accessed for the longest period of time. It assumes that the cache line that has been accessed least recently is the least likely to be accessed again in the near future.
 
