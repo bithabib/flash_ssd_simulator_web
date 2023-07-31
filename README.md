@@ -253,6 +253,20 @@ Notably, no participants provided ratings below 5 (1 to 4), indicating overall s
 
 In conclusion, the bar chart visually represents the participants' ratings of the simulator on a scale of 1 to 10. The majority of users expressed high levels of satisfaction, with a significant portion giving the simulator a perfect rating of 10. These positive ratings reflect the simulator's effectiveness in meeting its objectives and the overall satisfaction of the users with its performance and usability.
 
+# Discussion 
+The development of Eyana: The SSD Simulator stemmed from the recognition of the challenges students face when trying to understand the complex concepts of Flash SSD technology. As outlined in the introduction, the lack of easily accessible and comprehensive web-based simulators prompted us to create an innovative and user-friendly tool that would facilitate the comprehension of Flash SSDs.
+
+Eyana was designed with the primary objective of simplifying the understanding of Flash SSD technology. Through visual demonstrations of critical operations such as Page, Block, Write, Read, Update, Delete, garbage collection, and the flash translation layer, Eyana provides a clear representation of how transistors come together to form pages, and how pages combine to create blocks, ultimately composing an SSD. The visual representation, accompanied by comprehensive documentation, clarifies concepts like Write Amplification, Wear Leveling, Parallelism, and Multi-Channel, shedding light on the complexities of Flash SSD technology.
+
+One of the key strengths of Eyana is its ability to offer valuable insights into the functioning of Flash SSDs. By illustrating the selection of pages and blocks during various operations, students gain a deeper understanding of the intricate processes involved in writing, reading, updating, and deleting data. The simulator also presents the workings of the garbage collection process, an essential aspect of Flash SSD technology that contributes to overall comprehension.
+
+The real-time simulation feature of Eyana, allowing users to upload files and observe operations as they occur, plays a pivotal role in enhancing the learning experience. By providing students with the opportunity to interact with the simulator and witness the entire procedure in action, Eyana accelerates the learning process, enabling users to grasp the concepts efficiently within a short timeframe.
+
+To assess the effectiveness of Eyana in enhancing the understanding of Flash SSDs, a survey was conducted among users. The results of the survey were overwhelmingly positive, with an impressive 99\% of the users finding the simulator highly effective and rating it among the best available resources for comprehending Flash SSD technology. These findings further validate the impact and value of Eyana as an educational tool for students and researchers interested in Flash SSD technology.
+
+In conclusion, Eyana: The SSD Simulator is an innovative and user-friendly web-based tool that successfully simplifies the comprehension of Flash SSD technology. Through visual demonstrations, real-time simulations, and comprehensive documentation, Eyana empowers users to gain valuable insights into the intricate workings of Flash SSDs. The overwhelmingly positive response from users in the survey highlights the simulator's efficacy in facilitating the understanding of Flash SSD concepts. By contributing to the pool of educational resources, Eyana proves to be a valuable asset for students and researchers seeking to explore the world of Flash SSD technology. Moving forward, continuous improvements and updates to Eyana will further enhance its educational value and ensure that it remains a cutting-edge resource for learners and enthusiasts alike.
+
+
 ## Cache 
 1. Least Recently Used (LRU): LRU is one of the most widely used cache replacement algorithms. It evicts the cache line that has not been accessed for the longest period of time. It assumes that the cache line that has been accessed least recently is the least likely to be accessed again in the near future.
 
