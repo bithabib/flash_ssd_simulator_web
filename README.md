@@ -140,7 +140,36 @@ These are some of the commonly used garbage collection algorithms, but there are
 
 By providing this comprehensive range of functionalities, the Flash SSD Simulator offers an interactive and educational environment for users to explore the inner workings of flash-based SSDs. It enables users to develop a deeper understanding of the technology behind SSDs and the factors that influence their performance and longevity. So go ahead, dive in, and experience the fascinating world of flash SSDs firsthand!
 
+# Survey Results
+## Overall Satisfaction with the SSD Simulator
+In this section, we present the results of the evaluation of user satisfaction with the SSD (Solid State Drive) simulator based on two graphical representations: a pie chart depicting the participants' satisfaction levels and a bar chart showcasing their likelihood of recommending the SSD and Floating Gate Transistor Simulators to others.
 
+![Example Image](paper_writing/servey_graph/rate_setisfation.jpeg)
+
+The pie chart illustrates the responses of 238 participants regarding their satisfaction with the SSD simulator. The participants were asked to rate their satisfaction on a five-point scale, ranging from "Very Satisfied" to "Very Dissatisfied." The distribution of responses is as follows:
+ - Very Satisfied: 77.7\%
+ - Satisfied: 20.6\%
+ - Neutral: 1.3\%
+ - Dissatisfied: 0\%
+ - Very Dissatisfied: 0.4
+The pie chart clearly indicates that the majority of participants, approximately 77.7\%, expressed being "Very Satisfied" with the SSD simulator. This substantial percentage signifies that a significant proportion of users found the simulator to be highly effective, exceeding their expectations and leading to a positive overall user experience.
+
+Moreover, around 20.6\% of participants rated their satisfaction as "Satisfied," indicating a generally positive perception of the simulator's performance and usability. The minimal percentage of respondents in the "Neutral," "Dissatisfied," and "Very Dissatisfied" categories further reinforces the simulator's success in achieving high user satisfaction, as these categories received very low or no responses.
+
+![Example Image](paper_writing/servey_graph/recommend_to_user.jpeg)
+
+The bar chart presents the responses of participants to the question of how likely they are to recommend the SSD and Floating Gate Transistor Simulators to others. The respondents were provided with a five-point scale, ranging from "Not likely to recommend" (1) to "Very likely to recommend" (5). The distribution of responses is as follows:
+ - 1: (Not likely to recommend): 0\%
+ - 2: 0\%
+ - 3: 3.4\%
+ - 4: 35.4\%
+ - 5 (Very likely to recommend): 61.2\%
+
+The bar chart clearly shows an overwhelmingly positive response, with approximately 61.2\% of participants expressing being "Very likely to recommend" the SSD and Floating Gate Transistor Simulators to others. Furthermore, a significant 35.4\% indicated a likelihood of recommending, resulting in an overall high percentage of participants who would endorse the simulators to their peers and colleagues.
+
+These graphical representations of user satisfaction and the likelihood of recommending the simulators corroborate that the SSD simulator has achieved excellent user satisfaction levels. The substantial majority of "Very Satisfied" responses in the pie chart and the high percentages of participants likely to recommend the simulators in the bar chart provide strong evidence of the simulator's effectiveness and positive impact on the user experience.
+
+As we continue to improve and refine the simulator based on valuable user feedback, these results serve as a testament to its success and value as an essential tool for SSD exploration and learning.
 
 ## Figure 01: Internal Architecture of a Typical NAND Flash Device
 ![Example Image](readme_documentation_src/figure/flash_ssd_simulator.png)
@@ -153,7 +182,7 @@ By providing this comprehensive range of functionalities, the Flash SSD Simulato
 
 3. Chip-level parallelism: A package contains two or more chips, which can be accessed independently in parallel. Note: chips are also called “dies”.
 
-4. Plane-level parallelism: A chip contains two or more planes. The same operation (read, write or erase) can be run simultaneously on multiple planes inside a chip. Planes contain blocks, which themselves contains pages. The plane also contains registers (small RAM buffers), which are used for plane-level operations.
+4. Plane-level parallelism: A chip contains two or more planes. The same operation (read, write or erase) can be run simultaneously on multiple planes inside a chip. Planes contain blocks, which themselves contain pages. The plane also contains registers (small RAM buffers), which are used for plane-level operations.
 
 ## Cache 
 1. Least Recently Used (LRU): LRU is one of the most widely used cache replacement algorithms. It evicts the cache line that has not been accessed for the longest period of time. It assumes that the cache line that has been accessed least recently is the least likely to be accessed again in the near future.
