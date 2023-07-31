@@ -171,18 +171,32 @@ These graphical representations of user satisfaction and the likelihood of recom
 
 As we continue to improve and refine the simulator based on valuable user feedback, these results serve as a testament to its success and value as an essential tool for SSD exploration and learning.
 
-## Figure 01: Internal Architecture of a Typical NAND Flash Device
-![Example Image](readme_documentation_src/figure/flash_ssd_simulator.png)
+## Understandability of Flash SSD Concept
+In this section, we present the evaluation of the understandability of the Flash SSD (Solid State Drive) concept among users while using the simulator. The primary objective of the simulator was to facilitate users' exploration of the functionalities and performance aspects of Flash SSDs.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Figure 01 above shows the internals of a NAND-flash package, which is organized as a hierarchical structure. The levels are channel, package, chip, plane, block, and page. Those different levels offer parallelism as follows:
+A total of participants took part in the evaluation, and they were asked to rate how easy it was for them to comprehend the concept of Flash SSD while using the simulator. The responses were categorized into five levels of understanding: "Very Easy," "Somewhat Easy," "Neutral," "Somewhat Difficult," and "Very Difficult."
 
-1. Channel-level parallelism:  The flash controller communicates with the flash packages through multiple channels. Those channels can be accessed independently and simultaneously. Each individual channel is shared by multiple packages.
+The evaluation resulted in the following distribution of responses, depicted in the pie chart:
+![Example Image](paper_writing/servey_graph/how_easy.jpeg)
+The pie chart reveals a highly positive perception among the participants regarding the understandability of the Flash SSD concept:
 
-2. Package-level parallelism: The packages on a channel can be accessed independently. Interleaving can be used to run commands simultaneously on the packages shared by the same channel.
+ - Very Easy: 80.3\%
+ - Somewhat Easy: 17.6\%
+ - Neutral: 2.1\%
+ - Somewhat Difficult: 0\%
+ - Very Difficult: 0\%
 
-3. Chip-level parallelism: A package contains two or more chips, which can be accessed independently in parallel. Note: chips are also called “dies”.
+The significant majority of respondents, approximately 80.3\%, found it "Very Easy" to grasp the concept of Flash SSD while utilizing the simulator. This substantial percentage suggests that the simulator effectively conveyed the essential aspects of Flash SSD technology in a clear and understandable manner.
 
-4. Plane-level parallelism: A chip contains two or more planes. The same operation (read, write or erase) can be run simultaneously on multiple planes inside a chip. Planes contain blocks, which themselves contain pages. The plane also contains registers (small RAM buffers), which are used for plane-level operations.
+Additionally, around 17.6\% of participants rated their understanding as "Somewhat Easy," indicating that they encountered minor difficulties but still found the concept comprehensible overall.
+
+A very small percentage of respondents, approximately 2.1\%, indicated a "Neutral" stance, suggesting that they neither found the concept easy nor difficult to understand. This finding may indicate that these participants might benefit from supplementary resources or additional explanations to enhance their comprehension of the Flash SSD concept.
+
+Notably, no participants expressed that the concept was "Somewhat Difficult" or "Very Difficult" to understand. This outcome is encouraging, signifying that the simulator effectively conveyed the information without causing significant confusion or challenges.
+
+In conclusion, the evaluation of the understandability of the Flash SSD concept using the simulator yielded positive outcomes, with the majority of users finding the concept easy to comprehend. The pie chart visually illustrates the distribution of responses, highlighting the effectiveness of the simulator in conveying the complexities of Flash SSD technology. It is essential to consider the feedback from participants who rated their understanding as "Somewhat Easy" or "Neutral" to further enhance the clarity and educational value of the simulator. By addressing any potential areas of confusion, we can ensure that the simulator continues to serve as an accessible and informative tool for users seeking to enhance their understanding of Flash SSD technology.
+
+
 
 ## Cache 
 1. Least Recently Used (LRU): LRU is one of the most widely used cache replacement algorithms. It evicts the cache line that has not been accessed for the longest period of time. It assumes that the cache line that has been accessed least recently is the least likely to be accessed again in the near future.
