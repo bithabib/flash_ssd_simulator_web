@@ -94,14 +94,23 @@ Eyana: The SSd Simulator describe internal architecture of an SSD and visualize 
 Click [here](https://schoolofthought.tech/templates/flash_memory.html) to dive into the Flash SSD Simulation and explore its interactive features. Gain insights into the intricate processes and components involved in the operation of a Flash SSD.
 
 
-## Read:
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Upload a file to the simulator and observe the read operation in action. Gain insights into how the SSD retrieves data from the flash memory cells and transfers it to the system.
-
 ## Write:
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Experience the write operation by uploading a file to the simulator. Understand how the SSD stores data in its flash memory cells and organizes it efficiently for quick retrieval.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When data is written to an SSD, the process involves creating a logical address that contains information about the uploaded files or programs requiring storage. This logical address is then mapped to a corresponding physical address, which specifies the specific physical page and block where the data is stored. The mapping table holds the information that facilitates this logical-to-physical address translation.
+Throughout the write process, data is written in increments of the page size. As a result, even if a write operation only modifies a single byte, an entire page is written. This phenomenon, where more data is written than actually required, is known as write amplification.
+
+## Read:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The SSD read process involves receiving a logical address request, mapping it to a corresponding physical address using a mapping table, retrieving the data from the specified physical page and block in the NAND flash memory, and transferring the data to the requesting application or operating system.
+
+## Update
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NAND-flash memory operates with a specific constraint: a page can be written to only if it is in the "free" state. When data needs to be changed or updated, the process involves a series of steps known as "read-modify-write." First, the content of the target page is copied into an internal register. Then, the required modifications are made to the data, and the updated version is stored in a different "free" page.
+This "read-modify-write" operation occurs because the data cannot be updated in-place within the original page. Consequently, the "free" page, which is a separate and available page, is used to store the updated data. Once the new data has been successfully persisted to the drive, the original page is marked as "stale," indicating that it contains outdated information. The stale page remains in this state until it is eventually erased, and its space becomes available to be used for future write operations.
+The "read-modify-write" process and the write amplification phenomenon described earlier are factors that affect the performance and lifespan of SSDs. Careful management of write operations and garbage collection techniques are employed to optimize SSD performance and ensure its long-term reliability.
 
 ## Garbage Collection:
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Witness the intelligent garbage collection process in action. Learn how the SSD manages free space by reclaiming invalid or deleted data, ensuring optimal utilization of the flash memory.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Garbage collection erases outdated data in SSDs, ensuring efficient write processing. Our simulator traces stale data, which can be deleted manually or after a set time. This optimizes SSD performance and maximizes usable capacity.
+
+
+Witness the intelligent garbage collection process in action. Learn how the SSD manages free space by reclaiming invalid or deleted data, ensuring optimal utilization of the flash memory.
 1. Mark-and-Sweep: This is one of the simplest and most basic garbage collection algorithms. It works by traversing the object graph, starting from a set of root objects, and marking all reachable objects. Then, it sweeps through the memory, deallocating any objects that were not marked.
 
 2. Stop-and-Copy: This algorithm divides the memory into two halves: the "from" space and the "to" space. It starts by marking all reachable objects, and then it copies the live objects from the "from" space to the "to" space, updating all references accordingly. After the copying is complete, the roles of the two spaces are swapped, and the process repeats.
@@ -119,17 +128,6 @@ These are some of the commonly used garbage collection algorithms, but there are
 ## Mapping (Logical Address to Physical Address):
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Explore the mapping process that converts virtual addresses (VAs) to physical addresses (PAs) within the SSD. Understand how the controller maps logical blocks to specific physical locations, enabling efficient read and write operations.
 
-## Wear Leveling:
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Discover the crucial wear leveling mechanism employed by flash SSDs. Observe how the simulator distributes write operations evenly across the memory cells, extending the lifespan and endurance of the SSD.
-1. Static Wear Leveling: This algorithm evenly distributes writes across all blocks in the SSD. It ensures that each block receives an equal number of write operations, preventing certain blocks from wearing out faster than others. However, static wear leveling does not take into account the varying usage patterns of different blocks.
-
-2. Dynamic Wear Leveling: This algorithm takes into consideration the usage patterns of blocks. It monitors the number of erase and program cycles for each block and dynamically redistributes data to less-used blocks. This helps to achieve a more balanced wear across the entire SSD, improving longevity.
-
-3. Hybrid Wear Leveling: This algorithm combines the benefits of both static and dynamic wear leveling. It initially uses static wear leveling to evenly distribute writes. Over time, it switches to dynamic wear leveling to adapt to changing usage patterns and maintain wear balance.
-
-4. Block-based Wear Leveling: This algorithm operates at the block level rather than the page level. It redistributes data among entire blocks rather than individual pages. This approach reduces write amplification and ensures that all cells within a block wear out uniformly.
-
-5. Over-Provisioning: This technique reserves a certain percentage of the SSD's capacity as spare area that is not accessible to the user. The over-provisioned space is used by the wear-leveling algorithms to perform data relocation and wear balancing operations. It helps to mitigate the impact of uneven wear on the usable capacity of the SSD.
 
 ## Write Amplification:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delve into the concept of write amplification, a critical metric for flash SSD performance. Gain insights into how the simulator minimizes write amplification by optimizing the write operations and reducing unnecessary data movements.
@@ -142,14 +140,6 @@ These are some of the commonly used garbage collection algorithms, but there are
 
 By providing this comprehensive range of functionalities, the Flash SSD Simulator offers an interactive and educational environment for users to explore the inner workings of flash-based SSDs. It enables users to develop a deeper understanding of the technology behind SSDs and the factors that influence their performance and longevity. So go ahead, dive in, and experience the fascinating world of flash SSDs firsthand!
 
-## Table 01: Specifications of a NAND Flash Device
-| Parameter | Value |
-|----------|----------|
-Page Size | 4 KB
-Block Size | 256 KB (64 pages)
-Page Read | 25 μs
-Page Program (Write) | 200 μs
-Block Erase | 1.5 ms
 
 
 ## Figure 01: Internal Architecture of a Typical NAND Flash Device
