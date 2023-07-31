@@ -196,7 +196,32 @@ Notably, no participants expressed that the concept was "Somewhat Difficult" or 
 
 In conclusion, the evaluation of the understandability of the Flash SSD concept using the simulator yielded positive outcomes, with the majority of users finding the concept easy to comprehend. The pie chart visually illustrates the distribution of responses, highlighting the effectiveness of the simulator in conveying the complexities of Flash SSD technology. It is essential to consider the feedback from participants who rated their understanding as "Somewhat Easy" or "Neutral" to further enhance the clarity and educational value of the simulator. By addressing any potential areas of confusion, we can ensure that the simulator continues to serve as an accessible and informative tool for users seeking to enhance their understanding of Flash SSD technology.
 
+## Time Saved in Understanding SSD and Floating Gate Transistors
+In this section, we analyze the amount of time saved by participants in understanding SSD and Floating Gate Transistors concepts compared to traditional learning methods. The primary objective of the SSD and Floating Gate Transistor Simulators was to provide a more efficient and effective learning experience for users.
 
+A total of participants took part in the evaluation, and they were asked to estimate the time saved using the simulators in four categories: "Significantly saved time (more than 50\%)," "Moderately saved time (around 25\%-50\%)," "Slightly saved time (less than 25\%)," and "No significant time saved." Additionally, there was an option for participants to choose "Not sure" if they were uncertain about the time saved.
+
+The results are summarized in the pie chart below:
+![Example Image](paper_writing/servey_graph/save_time.jpeg)
+The pie chart illustrates the distribution of responses regarding the time saved by using the simulators compared to traditional learning methods:
+
+ - Significantly saved time (more than 50%): 72.5%
+ - Moderately saved time (around 25%-50%): 24.2%
+ - Slightly saved time (less than 25%): 3.3%
+ - No significant time saved: 0%
+ - Not sure: 0%
+
+The majority of respondents, approximately 72.5\%, reported that the simulators significantly saved them more than 50\% of the time in understanding SSD and Floating Gate Transistors concepts. This high percentage indicates that the simulators proved to be a highly efficient and time-saving tool, accelerating the learning process for most participants.
+
+Around 24.2\% of participants reported a moderate time-saving effect of approximately 25\%-50\%. This suggests that these users experienced notable benefits from using the simulators, although the time saved might not have been as substantial as in the previous category.
+
+A smaller percentage of respondents, approximately 3.3\%, indicated a slight time-saving effect, less than 25\%. Although the proportion is relatively small, it still indicates that the simulators provided some time-saving benefits for a portion of the participants.
+
+Notably, no participants reported "No significant time saved," indicating that the simulators had a positive impact on understanding the concepts compared to traditional learning methods.
+
+Furthermore, no participants selected "Not sure," suggesting that the majority of users were confident in their estimation of the time saved.
+
+In conclusion, the pie chart illustrates the positive impact of the SSD and Floating Gate Transistor Simulators on time-saving in understanding the respective concepts. The majority of participants experienced significant time savings, indicating the effectiveness and efficiency of the simulators in enhancing the learning experience. These results affirm the value of using simulators as a powerful educational tool to streamline the understanding of complex concepts like SSD and Floating Gate Transistors.
 
 ## Cache 
 1. Least Recently Used (LRU): LRU is one of the most widely used cache replacement algorithms. It evicts the cache line that has not been accessed for the longest period of time. It assumes that the cache line that has been accessed least recently is the least likely to be accessed again in the near future.
