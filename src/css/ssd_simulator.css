@@ -123,12 +123,45 @@ select {
     background-color: #555;
 }
 
-#fullscreen_div.fullscreen{
-    z-index: 9999; 
-    width: 100%; 
-    height: 100%; 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
+#fullscreen_div.fullscreen {
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
     background-color: #f1f1f1;
- }
+}
+
+.progress-container {
+    position: relative;
+    width: 100px;
+    /* Set the width of the progress container */
+    /* margin: 10px; */
+    /* Add margin for spacing */
+}
+
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.filled-progress {
+    height: 100%;
+    background-color: #4caf50;
+    border-radius: 5px;
+}
+
+.register-text {
+    position: absolute;
+    top: 50%;
+    /* Position the text at the center vertically */
+    left: 50%;
+    /* Position the text at the center horizontally */
+    transform: translate(-50%, -50%);
+    /* Center the text precisely */
+    font-size: 14px;
+    /* Adjust font size as needed */
+}
