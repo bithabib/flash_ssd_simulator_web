@@ -764,12 +764,105 @@ async function FileUpload(fileSize, fileName, fileIndex) {
 
   // divide the file size by 4kb (page size) to get the number of pages
 }
+
+class cacheStorage {
+  constructor() {
+    this.cacheStorage = [];
+    this.cacheStorageSize = 0;
+  }
+  addCacheStorage(cacheFile) {
+    this.cacheStorage.push(cacheFile);
+  }
+  getCacheStorage() {
+    return this.cacheStorage;
+  }
+  setCacheStorageSize(cacheStorageSize) {
+    this.cacheStorageSize = this.cacheStorageSize + cacheStorageSize;
+    console.log(this.cacheStorageSize);
+  }
+  getCacheStorageSize() {
+    return this.cacheStorageSize;
+  }
+}
+const cacheStorager = new cacheStorage();
 // Read the uploaded file from input onchange
-async function handleFileInputChange() {
+async function handleFileInputChangeChache() {
   var fileInput = document.getElementById("fileUpload");
   var file = fileInput.files[0];
   if (file) {
     var fileSize = file.size;
+    cacheStorager.setCacheStorageSize(fileSize);
+    cacheStorager.addCacheStorage(file);
+    // check if the file size is devided by 4kb and 16kb
+    console.log(cacheStorager.getCacheStorageSize());
+    console.log(cacheStorager.getCacheStorageSize() % 4096);
+    if (
+      cacheStorager.getCacheStorageSize() % 4096 != 0 &&
+      cacheStorager.getCacheStorageSize() < 16384
+    ) {
+      // store in cacheStorage
+      // 128 register in each plane
+      var element_id_tracer = 1;
+      for (let i = 0; (i*8) < cacheStorager.getCacheStorageSize(); i += 1) {
+        if (i % (512 * element_id_tracer) === 0 && i != 0) {
+          element_id_tracer++;
+        } else {
+          if (element_id_tracer == 1) {
+            // read this div by id=progress_p0d0p0 and change the width
+            document.getElementById("progress_p0d0p0").style.width =
+              (i / (512 * element_id_tracer)) * 100 + "%";
+          } else if (element_id_tracer == 2) {
+            // read this div by id=progress_p0d0p0 and change the width
+            document.getElementById("progress_p0d0p1").style.width =
+              ((i - 512) / 512) * 100 + "%";
+          }else if (element_id_tracer == 3) {
+            // read this div by id=progress_p0d0p0 and change the width
+            document.getElementById("progress_p0d1p0").style.width =
+              ((i - 1024) / 512) * 100 + "%";
+          }else if (element_id_tracer == 4) {
+            // read this div by id=progress_p0d0p0 and change the width
+            document.getElementById("progress_p0d1p1").style.width =
+              ((i - 1536) / 512) * 100 + "%";
+          }else if (element_id_tracer == 5) {
+            // read this div by id=progress_p0d0p0 and change the width
+            document.getElementById("progress_p1d0p0").style.width =
+              ((i - 2048) / 512) * 100 + "%";
+          }else if (element_id_tracer == 6) {
+            // read this div by id=progress_p0d0p0 and change the width
+            document.getElementById("progress_p1d0p1").style.width =
+              ((i - 2560) / 512) * 100 + "%";
+          }else if (element_id_tracer == 7) {
+            // read this div by id=progress_p0d0p0 and change the width
+            document.getElementById("progress_p1d1p0").style.width =
+              ((i - 3072) / 512) * 100 + "%";
+          }else if (element_id_tracer == 8) {
+            // read this div by id=progress_p0d0p0 and change the width
+            document.getElementById("progress_p1d1p1").style.width =
+              ((i - 3584) / 512) * 100 + "%";
+          }
+          // add delay
+          await new Promise((resolve) => setTimeout(resolve, 5));
+        }
+      }
+    } else {
+      // get cacheStorage
+      var cacheStorageList = cacheStorager.getCacheStorage();
+      // for each file in cacheStorage
+      for (let i = 0; i < cacheStorageList.length; i++) {
+        handleFileInputChange(cacheStorageList[i]);
+      }
+      // clear cacheStorage
+      cacheStorager.cacheStorage = [];
+      cacheStorager.cacheStorageSize = 0;
+    }
+  }
+}
+async function handleFileInputChange(file) {
+  // var fileInput = document.getElementById("fileUpload");
+  // var file = fileInput.files[0];
+  if (file) {
+    var fileSize = file.size;
+
     if (ssdType.value == "single") {
       FileUpload(fileSize, file.name, 2);
     } else {
@@ -778,7 +871,7 @@ async function handleFileInputChange() {
         FileUpload(fileSize / 2, file.name, 1),
       ];
       await Promise.all(promises);
-      // if the file name is similar in update delete and read remove duplicate slection name 
+      // if the file name is similar in update delete and read remove duplicate slection name
       var selectElement = document.getElementById("update_file");
       var optionToRemove = file.name;
       for (let i = 0; i < selectElement.options.length; i++) {
@@ -810,7 +903,6 @@ async function handleFileInputChange() {
           break;
         }
       }
-
     }
   }
 }
@@ -869,6 +961,18 @@ async function handleFileUpdate() {
   if (file) {
     var fileSize = file.size;
     if (ssdType.value == "single") {
+      // check the file is devideable by 4kb
+      // alert("File size should be devided by 4kb");
+      console.log(fileSize % 4096);
+      console.log(fileSize % 4096);
+      console.log(fileSize % 4096);
+      console.log(fileSize % 4096);
+      console.log(fileSize % 4096);
+      console.log(fileSize % 4096);
+      if (fileSize % 4096 != 0) {
+        // alert("File size should be devided by 4kb");
+        return;
+      }
       FileUpload(fileSize, file.name, 2);
     } else {
       const promises = [
