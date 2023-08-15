@@ -81,6 +81,10 @@ Here are the key specifications of our NAND Flash Device:
 - Page Read: Reading data from a single page takes approximately 25 microseconds (μs).
 - Page Program (Write): Writing data to a page requires about 200 microseconds (μs).
 - Block Erase: Erasing a block takes around 1.5 milliseconds (ms).
+- Each Register Can Hold 64 bit information or 8 byte 
+
+
+
 ![Example Image](paper_writing/images/architecture_of_ssd_simulation.png)
 
 The user initiates commands through the host interface, with Serial ATA (SATA) and PCI Express (PCIe) being the most common interfaces for newly released SSDs. The SSD controller's processor receives these commands and then transfers them to the flash controller. Additionally, SSDs are equipped with embedded RAM memory, primarily used for caching data and storing mapping information.
