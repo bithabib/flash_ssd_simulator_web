@@ -102,6 +102,28 @@ Click [here](https://schoolofthought.tech/templates/flash_memory.html) to dive i
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When data is written to an SSD, the process involves creating a logical address that contains information about the uploaded files or programs requiring storage. This logical address is then mapped to a corresponding physical address, which specifies the specific physical page and block where the data is stored. The mapping table holds the information that facilitates this logical-to-physical address translation.
 Throughout the write process, data is written in increments of the page size. As a result, even if a write operation only modifies a single byte, an entire page is written. This phenomenon, where more data is written than actually required, is known as write amplification.
 
+## Making Data Storage Smarter: Insights from the Eyana SSD Simulator
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When we save stuff on a computer, we have to be smart about how we do it. Imagine the computer's storage as a big grid where we put our things. If we don't put things in the right places, we might use up more space than we actually need. This is what we call "write amplification."
+
+Even if we're just putting a tiny bit of information, it can sometimes take up way more space than it should. Think about writing a short message on a huge sheet of paper – that's like using a lot of paper for a tiny message. In certain situations, even if you're just writing a single letter, it could end up using a whole big page, which is like using 16 pieces of paper. That's not very smart!
+
+But there's more to the story. When we don't put our information in the right spots, the computer has to do extra work. It has to read the place where we want to add something, make changes, and then put it back. This extra work slows things down. Imagine you want to fix a sentence in a book, but instead of fixing only that sentence, you have to read the entire page, fix the sentence, and then put the page back. This extra step takes more time.
+
+To work better, we have some simple rules to remember when putting our information:
+
+### Write Enough
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Avoid putting really tiny bits of information. It's better to write a bit more, like a whole sentence, so the computer can do its job faster. Usually, it's a good idea to write at least as much as you could fit on a book page, which is like 16 pieces of paper.
+
+### Put Things in the Right Spots
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When you write, make sure to put your stuff in the right places. It's like solving a puzzle – things fit better and work faster when they're in the correct spots.
+
+### Group Small Stuff Together
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Instead of writing lots of small things one after the other, it's smarter to gather them up first and then write them all together. It's a bit like putting all your small notes in one envelope before sending them, instead of sending each note separately.
+
+By following these easy rules, the computer can work faster and use space more efficiently. It's like organizing your things neatly so everything runs smoothly.
+
+And here's the cool part: we've put all these ideas into action in our online simulator, Eyana. You can see how it all works visually. This way, we're showing how these simple rules can make a big difference in how we use computers.
+
 ## Read:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The SSD read process involves receiving a logical address request, mapping it to a corresponding physical address using a mapping table, retrieving the data from the specified physical page and block in the NAND flash memory, and transferring the data to the requesting application or operating system.
 
