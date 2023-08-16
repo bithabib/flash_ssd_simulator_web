@@ -767,21 +767,63 @@ async function FileUpload(fileSize, fileName, fileIndex) {
 
 class cacheStorage {
   constructor() {
-    this.cacheStorage = [];
-    this.cacheStorageSize = 0;
+    this.cacheStorage = [
+      {
+        cacheRegisterId: "progress_p0d0p0",
+        cacheRegisterValue: 0, // max value 4kb = 4096
+      },
+      {
+        cacheRegisterId: "progress_p0d0p1",
+        cacheRegisterValue: 0, // max value 4kb = 4096
+      },
+      {
+        cacheRegisterId: "progress_p0d1p0",
+        cacheRegisterValue: 0, // max value 4kb = 4096
+      },
+      {
+        cacheRegisterId: "progress_p0d1p1",
+        cacheRegisterValue: 0, // max value 4kb = 4096
+      },
+      {
+        cacheRegisterId: "progress_p1d0p0",
+        cacheRegisterValue: 0, // max value 4kb = 4096
+      },
+      {
+        cacheRegisterId: "progress_p1d0p1",
+        cacheRegisterValue: 0, // max value 4kb = 4096
+      },
+      {
+        cacheRegisterId: "progress_p1d1p0",
+        cacheRegisterValue: 0, // max value 4kb = 4096
+      },
+      {
+        cacheRegisterId: "progress_p1d1p1",
+        cacheRegisterValue: 0, // max value 4kb = 4096
+      },
+    ];
   }
-  addCacheStorage(cacheFile) {
-    this.cacheStorage.push(cacheFile);
+  updateCacheRegister(cacheRegisterId, cacheRegisterValue) {
+    this.cacheStorage.forEach((element) => {
+      if (element.cacheRegisterId === cacheRegisterId) {
+        cacheStorager.cacheStorage[i].cacheRegisterValue = cacheRegisterValue;
+      }
+    });
   }
-  getCacheStorage() {
-    return this.cacheStorage;
+  getCacheRegisterValue(cacheRegisterId) {
+    var cacheRegisterValue = 0;
+    this.cacheStorage.forEach((element) => {
+      if (element.cacheRegisterId === cacheRegisterId) {
+        cacheRegisterValue = cacheStorager.cacheStorage[i].cacheRegisterValue;
+      }
+    });
+    return cacheRegisterValue;
   }
-  setCacheStorageSize(cacheStorageSize) {
-    this.cacheStorageSize = this.cacheStorageSize + cacheStorageSize;
-    console.log(this.cacheStorageSize);
-  }
-  getCacheStorageSize() {
-    return this.cacheStorageSize;
+  // clear cacheStorage
+  clearCacheStorage() {
+    this.cacheStorage.forEach((element) => {
+      element.cacheRegisterValue = 0;
+      document.getElementById(element.cacheRegisterId).style.width = "0%";
+    });
   }
 }
 const cacheStorager = new cacheStorage();
@@ -791,69 +833,56 @@ async function handleFileInputChangeChache() {
   var file = fileInput.files[0];
   if (file) {
     var fileSize = file.size;
-    cacheStorager.setCacheStorageSize(fileSize);
-    cacheStorager.addCacheStorage(file);
-    // check if the file size is devided by 4kb and 16kb
-    console.log(cacheStorager.getCacheStorageSize());
-    console.log(cacheStorager.getCacheStorageSize() % 4096);
-    if (
-      cacheStorager.getCacheStorageSize() % 4096 != 0 &&
-      cacheStorager.getCacheStorageSize() < 16384
-    ) {
-      // store in cacheStorage
-      // 128 register in each plane
-      var element_id_tracer = 1;
-      for (let i = 0; (i*8) < cacheStorager.getCacheStorageSize(); i += 1) {
-        if (i % (512 * element_id_tracer) === 0 && i != 0) {
-          element_id_tracer++;
-        } else {
-          if (element_id_tracer == 1) {
-            // read this div by id=progress_p0d0p0 and change the width
-            document.getElementById("progress_p0d0p0").style.width =
-              (i / (512 * element_id_tracer)) * 100 + "%";
-          } else if (element_id_tracer == 2) {
-            // read this div by id=progress_p0d0p0 and change the width
-            document.getElementById("progress_p0d0p1").style.width =
-              ((i - 512) / 512) * 100 + "%";
-          }else if (element_id_tracer == 3) {
-            // read this div by id=progress_p0d0p0 and change the width
-            document.getElementById("progress_p0d1p0").style.width =
-              ((i - 1024) / 512) * 100 + "%";
-          }else if (element_id_tracer == 4) {
-            // read this div by id=progress_p0d0p0 and change the width
-            document.getElementById("progress_p0d1p1").style.width =
-              ((i - 1536) / 512) * 100 + "%";
-          }else if (element_id_tracer == 5) {
-            // read this div by id=progress_p0d0p0 and change the width
-            document.getElementById("progress_p1d0p0").style.width =
-              ((i - 2048) / 512) * 100 + "%";
-          }else if (element_id_tracer == 6) {
-            // read this div by id=progress_p0d0p0 and change the width
-            document.getElementById("progress_p1d0p1").style.width =
-              ((i - 2560) / 512) * 100 + "%";
-          }else if (element_id_tracer == 7) {
-            // read this div by id=progress_p0d0p0 and change the width
-            document.getElementById("progress_p1d1p0").style.width =
-              ((i - 3072) / 512) * 100 + "%";
-          }else if (element_id_tracer == 8) {
-            // read this div by id=progress_p0d0p0 and change the width
-            document.getElementById("progress_p1d1p1").style.width =
-              ((i - 3584) / 512) * 100 + "%";
+    if (fileSize > 32768) {
+      handleFileInputChange(file);
+    } else if (fileSize % 4096 == 0) {
+      handleFileInputChange(file);
+    } else {
+      var totalFileSizeTracer = 0;
+      for (let i = 0; i < 8; i++) {
+        if (cacheStorager.cacheStorage[i].cacheRegisterValue < 4096) {
+          while (fileSize > 0) {
+            fileSize = fileSize - 4;
+            // console.log(fileSize);
+            cacheStorager.cacheStorage[i].cacheRegisterValue =
+              cacheStorager.cacheStorage[i].cacheRegisterValue + 4;
+            // console.log(cacheStorager.cacheStorage[i].cacheRegisterValue);
+            document.getElementById(
+              cacheStorager.cacheStorage[i].cacheRegisterId
+            ).style.width =
+              cacheStorager.cacheStorage[i].cacheRegisterValue / 40.96 + "%";
+
+            if (cacheStorager.cacheStorage[i].cacheRegisterValue == 4096) {
+              break;
+            }
+            await new Promise((resolve) => setTimeout(resolve, 1));
           }
-          // add delay
-          await new Promise((resolve) => setTimeout(resolve, 5));
+          totalFileSizeTracer =
+            totalFileSizeTracer +
+            cacheStorager.cacheStorage[i].cacheRegisterValue;
+          console.log(totalFileSizeTracer);
+          if (fileSize == 0) {
+            break;
+          }
+        } else {
+          totalFileSizeTracer = totalFileSizeTracer + 4096;
         }
       }
-    } else {
-      // get cacheStorage
-      var cacheStorageList = cacheStorager.getCacheStorage();
-      // for each file in cacheStorage
-      for (let i = 0; i < cacheStorageList.length; i++) {
-        handleFileInputChange(cacheStorageList[i]);
+      if (fileSize > 0) {
+        handleFileInputChange({
+          size: totalFileSizeTracer + fileSize,
+          name: "combiner_file_buffer",
+        });
+        cacheStorager.clearCacheStorage();
       }
-      // clear cacheStorage
-      cacheStorager.cacheStorage = [];
-      cacheStorager.cacheStorageSize = 0;
+
+      if (totalFileSizeTracer % 4096 > 3000) {
+        handleFileInputChange({
+          size: totalFileSizeTracer,
+          name: "combiner_file_buffer",
+        });
+        cacheStorager.clearCacheStorage();
+      }
     }
   }
 }
