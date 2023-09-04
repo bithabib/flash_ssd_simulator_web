@@ -680,10 +680,8 @@ async function FileUpload(fileSize, fileName, fileIndex) {
         // var random = Math.floor(Math.random() * blockList.length);
         // Get the block number from the sequence
         var block = blockList.block_list[random];
-      } else if (fileIndex == 1) {
-        var block = getRandomBlockParallel(blockList.block_list, "p1");
-      } else if (fileIndex == 0) {
-        var block = getRandomBlockParallel(blockList.block_list, "p0");
+      } else {
+        var block = getRandomBlockParallel(blockList.block_list, fileIndex);
       }
 
       // console.log(block);
@@ -833,7 +831,7 @@ async function handleFileInputChangeChache() {
   var file = fileInput.files[0];
   if (file) {
     var fileSize = file.size;
-    if (fileSize > 32768) {
+    if (fileSize > 1) {
       handleFileInputChange(file);
     } else if (fileSize % 4096 == 0) {
       handleFileInputChange(file);
@@ -895,11 +893,39 @@ async function handleFileInputChange(file) {
     if (ssdType.value == "single") {
       FileUpload(fileSize, file.name, 2);
     } else {
-      const promises = [
-        FileUpload(fileSize / 2, file.name, 0),
-        FileUpload(fileSize / 2, file.name, 1),
-      ];
-      await Promise.all(promises);
+      if (ssdType.value == "pdpmulti") {
+        // Number of planes selection get the uppoer value
+        var numberOfPlanes = Math.ceil(fileSize / (4096 * 4));
+        // select the plane
+        var packag_selector = 0;
+        var die_selector = 0;
+        var plane_selector = 0;
+        const promises = [];
+        for (let i = 0; i < numberOfPlanes; i++) {
+          // if i dived by 4 is integer then change the package
+          if (i % 4 == 0) {
+            packag_selector = (i / 4) % 2;
+          }
+          if (i % 2 == 0) {
+            die_selector = (i / 2) % 2;
+          }
+          plane_selector = i % 2;
+          promises.push(
+            FileUpload(
+              fileSize / numberOfPlanes,
+              file.name,
+              "p" + packag_selector + "d" + die_selector + "p" + plane_selector
+            )
+          );
+        }
+
+        // const promises = [
+        //   FileUpload(fileSize / 2, file.name, 0),
+        //   FileUpload(fileSize / 2, file.name, 1),
+        // ];
+        await Promise.all(promises);
+      }
+
       // if the file name is similar in update delete and read remove duplicate slection name
       var selectElement = document.getElementById("update_file");
       var optionToRemove = file.name;
