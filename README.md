@@ -298,6 +298,9 @@ In conclusion, Eyana: The SSD Simulator is an innovative and user-friendly web-b
 - [9] https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6558443
 - [10] https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9691807
 - [11] https://www.usenix.org/system/files/conference/fast18/fast18-li.pdf
+- [12] https://storageconference.us/2017/Papers/VisualizingFlashWithSSDPlayer.pdf
+- [13] https://assaf.net.technion.ac.il/files/2013/01/SSDPlayer.pdf
+<!-- - [14] https://www.usenix.org/system/files/conference/fast18/fast18-li.pdf -->
 
 ## License
 This simulation is provided under the [MIT License](LICENSE). You are free to use, modify, and distribute the simulation in accordance with the terms of the license.
