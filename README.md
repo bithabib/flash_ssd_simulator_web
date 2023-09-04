@@ -1,5 +1,3 @@
-<head><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9851772843061782"
-     crossorigin="anonymous"></script></head>
 <h1 align="center">
   <strong><a href="https://schoolofthought.tech/templates/flash_memory.html">Eyana: The SSD Simulator</a></strong>
 </h1>
