@@ -931,7 +931,7 @@ async function handleFileInputChange(file) {
             FileUpload(
               fileSize / numberOfPlanes,
               file.name,
-              "p" + packag_selector
+              "p" + i % 2
             )
           );
         }
