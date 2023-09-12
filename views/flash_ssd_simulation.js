@@ -1500,3 +1500,21 @@ fullscreenBtn.addEventListener("click", function () {
   var myDiv = document.getElementById("fullscreen_div");
   myDiv.classList.toggle("fullscreen");
 });
+
+
+// Trim function
+function checkActiveTrim() {
+  const activeTrimCheckbox = document.getElementById('active_trim');
+  
+  if (activeTrimCheckbox.checked) {
+    garbageCollection();
+  } else {
+    console.log('Active Trim is OFF');
+  }
+}
+
+// Call the checkActiveTrim function initially
+checkActiveTrim();
+
+// Set up an interval to check the state every 10 seconds (10000 milliseconds)
+setInterval(checkActiveTrim, 10000);
