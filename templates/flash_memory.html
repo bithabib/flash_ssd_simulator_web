@@ -34,14 +34,14 @@
 
     <div class="container">
         <div class="bg-light border row" id="defination_hover2">
-            <div class="col">
+            <div class="col-md-2">
                 <label for="pageCount" class="form-label">Page per Block</label>
                 <select id="pageCount" class="form-select">
                     <option value="4" selected>4</option>
                 </select>
             </div>
 
-            <div class="col">
+            <div class="col-md-2">
                 <label for="blockCount" class="form-label">Block per Plane</label>
                 <select id="blockCount" class="form-select">
                     <option value="1">1</option>
@@ -50,7 +50,7 @@
                 </select>
             </div>
 
-            <div class="col">
+            <div class="col-md-2">
                 <label for="planeCount" class="form-label">Plane per Die</label>
                 <select id="planeCount" class="form-select">
                     <option value="1">1</option>
@@ -58,7 +58,7 @@
                 </select>
             </div>
 
-            <div class="col">
+            <div class="col-md-2">
                 <label for="dieCount" class="form-label">Die per Package</label>
                 <select id="dieCount" class="form-select">
                     <option value="1">1</option>
@@ -66,14 +66,14 @@
                 </select>
             </div>
 
-            <div class="col">
+            <div class="col-md-2">
                 <label for="packageCount" class="form-label">Number of Packages</label>
                 <select id="packageCount" class="form-select">
                     <option value="1">1</option>
                     <option value="2" selected>2</option>
                 </select>
             </div>
-            <div class="col">
+            <div class="col-md-1">
                 <label for="ssd_type" class="form-label">SSD Type</label>
                 <select id="ssd_type" class="form-select">
                     <option value="single" selected>Normal SSD</option>
@@ -82,6 +82,14 @@
                     <option value="pdpmulti">Plane Label Parallelism</option>
                 </select>
             </div>
+            <div class="col-md-1">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="active_trim">
+                    <label class="form-check-label" for="active_trim">Active Trim</label>
+                </div>
+            </div>
+
+
         </div>
         <div class="container center">
             <div class="row">
