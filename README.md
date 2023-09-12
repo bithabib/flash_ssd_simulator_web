@@ -325,6 +325,7 @@ In conclusion, Eyana: The SSD Simulator is an innovative and user-friendly web-b
 - [14] https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9691807
 - [15] https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6165265
 - [16] http://bit.csc.lsu.edu/~fchen/publications/papers/hpca11.pdf
+- [17] http://camelab.org/uploads/Main/MJ-HOTSTORAGE12.pdf
 
 ## License
 This simulation is provided under the [MIT License](LICENSE). You are free to use, modify, and distribute the simulation in accordance with the terms of the license.
