@@ -323,7 +323,7 @@ In conclusion, Eyana: The SSD Simulator is an innovative and user-friendly web-b
 - [12] https://storageconference.us/2017/Papers/VisualizingFlashWithSSDPlayer.pdf
 - [13] https://assaf.net.technion.ac.il/files/2013/01/SSDPlayer.pdf
 - [14] https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9691807
-- [15] https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6165265
+- [15]Y. Hu, H. Jiang, D. Feng, L. Tian, H. Luo and C. Ren, "Exploring and Exploiting the Multilevel Parallelism Inside SSDs for Improved Performance and Endurance," in IEEE Transactions on Computers, vol. 62, no. 6, pp. 1141-1155, June 2013, doi: 10.1109/TC.2012.60.
 - [16] http://bit.csc.lsu.edu/~fchen/publications/papers/hpca11.pdf
 - [17] http://camelab.org/uploads/Main/MJ-HOTSTORAGE12.pdf
 
