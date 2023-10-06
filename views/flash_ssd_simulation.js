@@ -892,7 +892,7 @@ async function handleFileInputChange(file) {
 
     if (ssdType.value == "single") {
       FileUpload(fileSize, file.name, 2);
-    } else {
+    } else if (ssdType.value == "dynamic_parallel") {
       const promises = [];
       // Number of planes selection get the uppoer value
       var numberOfPlanes = Math.ceil(fileSize / (4096 * 4));
@@ -971,6 +971,8 @@ async function handleFileInputChange(file) {
           break;
         }
       }
+    }else{
+
     }
   }
 }
