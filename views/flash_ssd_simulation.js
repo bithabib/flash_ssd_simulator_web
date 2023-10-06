@@ -650,6 +650,7 @@ async function garbageUpdateMappingTable(
 // Selected ssd type normal/ parallel
 var ssdType = document.getElementById("ssd_type");
 function getRandomBlockParallel(blocks, prefix) {
+  console.log(blocks);
   const filteredBlocks = blocks.filter((block) =>
     block.block.startsWith(prefix)
   );
@@ -672,7 +673,7 @@ async function FileUpload(fileSize, fileName, fileIndex) {
 
     var logicalAddressTracer = 0;
     // divide the file size by 16kb (block size) to get the number of blocks
-
+    var while_loop_tracer = 0;
     while (fileSizeInKB > 0) {
       if (fileIndex == 2) {
         // taking a random number from the block list
@@ -680,6 +681,40 @@ async function FileUpload(fileSize, fileName, fileIndex) {
         // var random = Math.floor(Math.random() * blockList.length);
         // Get the block number from the sequence
         var block = blockList.block_list[random];
+      } else if (fileIndex == "s1") {
+        // take down value of the division
+        var n_channel = 2;
+        var n_chip = 1;
+        var n_die = 2;
+        var n_plane = 2;
+
+        var channel =
+          Math.floor(while_loop_tracer / (n_plane * n_die * n_chip)) %
+          n_channel;
+        var chip = while_loop_tracer % n_chip;
+        var die = Math.floor(while_loop_tracer / n_chip) % n_die;
+        var plane = Math.floor(while_loop_tracer / (n_die * n_chip)) % n_plane;
+        var block_ = Math.floor(while_loop_tracer / (n_plane * n_die * n_chip * n_channel)) % 4;
+        // var channel = (logicalAddressTracer/(1*2*2))%2;
+        console.log(
+          "channel: " +
+            channel +
+            " chip: " +
+            chip +
+            " die: " +
+            die +
+            " plane: " +
+            plane +
+            " block: " +
+            block_
+        );
+        // var random = Math.floor(Math.random() * blockList.block_list.length);
+        // var random = Math.floor(Math.random() * blockList.length);
+        // Get the block number from the sequence
+        var block = getRandomBlockParallel(
+          blockList.block_list,
+          "p" + channel + "d" + die + "p" + plane + "b" + block_
+        );
       } else {
         var block = getRandomBlockParallel(blockList.block_list, fileIndex);
       }
@@ -687,6 +722,7 @@ async function FileUpload(fileSize, fileName, fileIndex) {
       // console.log(block);
       // Get the block page tracer from the correct page
       var blockPageTracer = 0;
+      console.log(block);
       for (i = 0; i < block.written_page.length; i++) {
         if (block.written_page[i].data == 0) {
           blockPageTracer = i + 1;
@@ -736,7 +772,8 @@ async function FileUpload(fileSize, fileName, fileIndex) {
       // Remove the block from the sequence
       if (blockPageTracer === 5) {
         // remove the block from the block list
-        blockList.block_list.splice(random, 1);
+        // blockList.block_list.splice(random, 1);
+
         // add the removed block to the removed_block list by updating the write count and erase count
         block["write_count"]++;
         blockList.removed_block_list.push(block);
@@ -746,6 +783,7 @@ async function FileUpload(fileSize, fileName, fileIndex) {
         block["write_count"]++;
         // blockList.removed_block_list.push(block);
       }
+      while_loop_tracer++;
     }
     if (!garbage_file_cheker) {
       file_tracer++;
@@ -892,7 +930,9 @@ async function handleFileInputChange(file) {
 
     if (ssdType.value == "single") {
       FileUpload(fileSize, file.name, 2);
-    } else if (ssdType.value == "dynamic_parallel") {
+    }
+    // ssdType.value contain multi then it is multi plane
+    else if (ssdType.value.includes("multi")) {
       const promises = [];
       // Number of planes selection get the uppoer value
       var numberOfPlanes = Math.ceil(fileSize / (4096 * 4));
@@ -928,11 +968,7 @@ async function handleFileInputChange(file) {
           );
         } else if (ssdType.value == "pmulti") {
           promises.push(
-            FileUpload(
-              fileSize / numberOfPlanes,
-              file.name,
-              "p" + i % 2
-            )
+            FileUpload(fileSize / numberOfPlanes, file.name, "p" + (i % 2))
           );
         }
       }
@@ -971,8 +1007,8 @@ async function handleFileInputChange(file) {
           break;
         }
       }
-    }else{
-
+    } else {
+      FileUpload(fileSize, file.name, ssdType.value);
     }
   }
 }
@@ -1335,6 +1371,7 @@ blockSelect.addEventListener("change", function () {
     // remove the block from blockList
     for (var i = 0; i < removed_list.length; i++) {
       blockList.removeBlock(removed_list[i]);
+      console.log(blockList);
       // console.log(blockList.block_list.length);
       // console.log(blockList.removed_block_list.length);
     }
@@ -1503,15 +1540,14 @@ fullscreenBtn.addEventListener("click", function () {
   myDiv.classList.toggle("fullscreen");
 });
 
-
 // Trim function
 function checkActiveTrim() {
-  const activeTrimCheckbox = document.getElementById('active_trim');
-  
+  const activeTrimCheckbox = document.getElementById("active_trim");
+
   if (activeTrimCheckbox.checked) {
     garbageCollection();
   } else {
-    console.log('Active Trim is OFF');
+    console.log("Active Trim is OFF");
   }
 }
 
