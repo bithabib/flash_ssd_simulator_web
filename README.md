@@ -326,6 +326,7 @@ In conclusion, Eyana: The SSD Simulator is an innovative and user-friendly web-b
 - [15]Y. Hu, H. Jiang, D. Feng, L. Tian, H. Luo and C. Ren, "Exploring and Exploiting the Multilevel Parallelism Inside SSDs for Improved Performance and Endurance," in IEEE Transactions on Computers, vol. 62, no. 6, pp. 1141-1155, June 2013, doi: 10.1109/TC.2012.60.
 - [16] http://bit.csc.lsu.edu/~fchen/publications/papers/hpca11.pdf
 - [17] http://camelab.org/uploads/Main/MJ-HOTSTORAGE12.pdf
+- [18] https://dl.acm.org/doi/pdf/10.1145/2829974
 
 ## License
 This simulation is provided under the [MIT License](LICENSE). You are free to use, modify, and distribute the simulation in accordance with the terms of the license.
