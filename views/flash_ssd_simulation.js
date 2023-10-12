@@ -694,7 +694,45 @@ async function FileUpload(fileSize, fileName, fileIndex) {
         var chip = while_loop_tracer % n_chip;
         var die = Math.floor(while_loop_tracer / n_chip) % n_die;
         var plane = Math.floor(while_loop_tracer / (n_die * n_chip)) % n_plane;
-        var block_ = Math.floor(while_loop_tracer / (n_plane * n_die * n_chip * n_channel)) % 4;
+        var block_ =
+          Math.floor(
+            while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
+          ) % 4;
+        // var channel = (logicalAddressTracer/(1*2*2))%2;
+        console.log(
+          "channel: " +
+            channel +
+            " chip: " +
+            chip +
+            " die: " +
+            die +
+            " plane: " +
+            plane +
+            " block: " +
+            block_
+        );
+        // var random = Math.floor(Math.random() * blockList.block_list.length);
+        // var random = Math.floor(Math.random() * blockList.length);
+        // Get the block number from the sequence
+        var block = getRandomBlockParallel(
+          blockList.block_list,
+          "p" + channel + "d" + die + "p" + plane + "b" + block_
+        );
+      } else if (fileIndex == "s2") {
+        // take down value of the division
+        var n_channel = 2;
+        var n_chip = 1;
+        var n_die = 2;
+        var n_plane = 2;
+
+        var channel = while_loop_tracer % n_channel;
+        var chip = Math.floor(while_loop_tracer / n_channel) % n_chip;
+        var die = Math.floor(while_loop_tracer / (n_chip * n_channel)) % n_die;
+        var plane = Math.floor(while_loop_tracer / (n_die * n_chip * n_channel)) % n_plane;
+        var block_ =
+          Math.floor(
+            while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
+          ) % 4;
         // var channel = (logicalAddressTracer/(1*2*2))%2;
         console.log(
           "channel: " +
