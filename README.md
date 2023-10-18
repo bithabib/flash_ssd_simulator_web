@@ -328,6 +328,7 @@ In conclusion, Eyana: The SSD Simulator is an innovative and user-friendly web-b
 - [17] http://camelab.org/uploads/Main/MJ-HOTSTORAGE12.pdf
 - [18] https://dl.acm.org/doi/pdf/10.1145/2829974
 - [19] Write Amplification Factor: https://en.wikipedia.org/wiki/Write_amplification
+- [20] Write Amplification and Garbage Collection : https://citeseerx.ist.psu.edu/doc/10.1.1.154.8668
 
 ## License
 This simulation is provided under the [MIT License](LICENSE). You are free to use, modify, and distribute the simulation in accordance with the terms of the license.
