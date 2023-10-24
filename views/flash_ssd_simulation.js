@@ -597,7 +597,7 @@ function readTableRow(tableName, rowNumber, fileSizeInKB) {
   if (rowNumber >= 0 && rowNumber < rows.length) {
     var row = rows[rowNumber];
     row.style.backgroundColor = "green";
-    row.cells[1].innerHTML = fileSizeInKB + "kb";
+    row.cells[0].innerHTML = fileSizeInKB + "kb";
   } else {
     console.log("Invalid row number.");
   }
@@ -1362,25 +1362,25 @@ async function garbageCollection() {
     ) {
       var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
       row1.style.backgroundColor = "red";
-      row1.cells[1].innerHTML = "";
+      row1.cells[0].innerHTML = "";
       removedBlock.written_page[0].data = 0;
       await new Promise((resolve) => setTimeout(resolve, 1000));
       row1.style.backgroundColor = "white";
       var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
       row2.style.backgroundColor = "red";
-      row2.cells[1].innerHTML = "";
+      row2.cells[0].innerHTML = "";
       removedBlock.written_page[1].data = 0;
       await new Promise((resolve) => setTimeout(resolve, 1000));
       row2.style.backgroundColor = "white";
       var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
       row3.style.backgroundColor = "red";
-      row3.cells[1].innerHTML = "";
+      row3.cells[0].innerHTML = "";
       removedBlock.written_page[2].data = 0;
       await new Promise((resolve) => setTimeout(resolve, 1000));
       row3.style.backgroundColor = "white";
       var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
       row4.style.backgroundColor = "red";
-      row4.cells[1].innerHTML = "";
+      row4.cells[0].innerHTML = "";
       removedBlock.written_page[3].data = 0;
       await new Promise((resolve) => setTimeout(resolve, 1000));
       row4.style.backgroundColor = "white";
@@ -1394,25 +1394,25 @@ async function garbageCollection() {
     ) {
       var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
       row1.style.backgroundColor = "red";
-      row1.cells[1].innerHTML = "";
+      row1.cells[0].innerHTML = "";
       removedBlock.written_page[0].data = 0;
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row1.style.backgroundColor = "white";
       var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
       row2.style.backgroundColor = "red";
-      row2.cells[1].innerHTML = "";
+      row2.cells[0].innerHTML = "";
       removedBlock.written_page[1].data = 0;
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row2.style.backgroundColor = "white";
       var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
       row3.style.backgroundColor = "red";
-      row3.cells[1].innerHTML = "";
+      row3.cells[0].innerHTML = "";
       removedBlock.written_page[2].data = 0;
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row3.style.backgroundColor = "white";
       var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
       row4.style.backgroundColor = "red";
-      row4.cells[1].innerHTML = "";
+      row4.cells[0].innerHTML = "";
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row4.style.backgroundColor = "white";
       removedBlock.erase_count++;
@@ -1430,25 +1430,25 @@ async function garbageCollection() {
     ) {
       var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
       row1.style.backgroundColor = "red";
-      row1.cells[1].innerHTML = "";
+      row1.cells[0].innerHTML = "";
       removedBlock.written_page[0].data = 0;
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row1.style.backgroundColor = "white";
       var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
       row2.style.backgroundColor = "red";
-      row2.cells[1].innerHTML = "";
+      row2.cells[0].innerHTML = "";
       removedBlock.written_page[1].data = 0;
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row2.style.backgroundColor = "white";
       var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
       row3.style.backgroundColor = "red";
-      row3.cells[1].innerHTML = "";
+      row3.cells[0].innerHTML = "";
 
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row3.style.backgroundColor = "white";
       var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
       row4.style.backgroundColor = "red";
-      row4.cells[1].innerHTML = "";
+      row4.cells[0].innerHTML = "";
 
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row4.style.backgroundColor = "white";
@@ -1467,23 +1467,23 @@ async function garbageCollection() {
     } else if (removedBlock.written_page[0].state == "invalid") {
       var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
       row1.style.backgroundColor = "red";
-      row1.cells[1].innerHTML = "";
+      row1.cells[0].innerHTML = "";
       removedBlock.written_page[0].data = 0;
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row1.style.backgroundColor = "white";
       var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
       row2.style.backgroundColor = "red";
-      row2.cells[1].innerHTML = "";
+      row2.cells[0].innerHTML = "";
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row2.style.backgroundColor = "white";
       var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
       row3.style.backgroundColor = "red";
-      row3.cells[1].innerHTML = "";
+      row3.cells[0].innerHTML = "";
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row3.style.backgroundColor = "white";
       var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
       row4.style.backgroundColor = "red";
-      row4.cells[1].innerHTML = "";
+      row4.cells[0].innerHTML = "";
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       row4.style.backgroundColor = "white";
       removedBlock.erase_count++;
