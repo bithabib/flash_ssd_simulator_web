@@ -1716,6 +1716,9 @@ function calculateFlashMemorySize() {
     cell1.setAttribute("id", "la" + i);
     cell2.setAttribute("id", "pa" + i);
 
+    cell1.setAttribute("style", "font-size: 10px");
+    cell2.setAttribute("style", "font-size: 10px");
+
     row.appendChild(cell1);
     row.appendChild(cell2);
     mapping_table.appendChild(row);
