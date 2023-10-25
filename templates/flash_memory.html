@@ -18,6 +18,7 @@
     <link rel="stylesheet" type="text/css" href="../src/css/description_keypoints.css">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9851772843061782"
         crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 </head>
 
 <body>
@@ -527,7 +528,7 @@
                                                                         <div class="filled-progress" style="width: 0%;"
                                                                             id="progress_p0d0p0"></div>
                                                                     </div>
-                                                                    <div class="register-text">Register</div>
+                                                                    <div class="register-text">R</div>
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -536,7 +537,7 @@
                                                                         <div class="filled-progress" style="width: 0%;"
                                                                             id="progress_p0d0p1"></div>
                                                                     </div>
-                                                                    <div class="register-text">Register</div>
+                                                                    <div class="register-text">R</div>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -849,7 +850,7 @@
                                                                         <div class="filled-progress" style="width: 0%;"
                                                                             id="progress_p0d1p0"></div>
                                                                     </div>
-                                                                    <div class="register-text">Register</div>
+                                                                    <div class="register-text">R</div>
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -858,7 +859,7 @@
                                                                         <div class="filled-progress" style="width: 0%;"
                                                                             id="progress_p0d1p1"></div>
                                                                     </div>
-                                                                    <div class="register-text">Register</div>
+                                                                    <div class="register-text">R</div>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -1191,7 +1192,7 @@
                                                                         <div class="filled-progress" style="width: 0%;"
                                                                             id="progress_p1d0p0"></div>
                                                                     </div>
-                                                                    <div class="register-text">Register</div>
+                                                                    <div class="register-text">R</div>
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -1200,7 +1201,7 @@
                                                                         <div class="filled-progress" style="width: 0%;"
                                                                             id="progress_p1d0p1"></div>
                                                                     </div>
-                                                                    <div class="register-text">Register</div>
+                                                                    <div class="register-text">R</div>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -1513,7 +1514,7 @@
                                                                         <div class="filled-progress" style="width: 0%;"
                                                                             id="progress_p1d1p0"></div>
                                                                     </div>
-                                                                    <div class="register-text">Register</div>
+                                                                    <div class="register-text">R</div>
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -1522,7 +1523,7 @@
                                                                         <div class="filled-progress" style="width: 0%;"
                                                                             id="progress_p1d1p1"></div>
                                                                     </div>
-                                                                    <div class="register-text">Register</div>
+                                                                    <div class="register-text">R</div>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -1551,7 +1552,7 @@
 
                     <tr>
                         <td>
-                            <div style="overflow-y: auto; max-height: 500px;">
+                            <div style="overflow-y: auto; max-height: 300px;">
                                 <table class="container" id="mapping_table">
                                     <tr>
                                         <th>LA</th>
@@ -1559,9 +1560,11 @@
                                     </tr>
                                 </table>
                             </div>
-                            <p>
+                            <p style="font-size: 10px;">
                                 Number of Mapping Table Entries: <span id="mapping_table_entries">0</span>
                             </p>
+
+                            <canvas id="waf_graph" width="100" height="100"></canvas>
 
                         </td>
 
