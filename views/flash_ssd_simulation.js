@@ -1749,3 +1749,65 @@ checkActiveTrim();
 
 // Set up an interval to check the state every 10 seconds (10000 milliseconds)
 setInterval(checkActiveTrim, 10000);
+
+// ------------------------------------------Write Amplification Factor------------------------------------------------------//
+var xyValues = [
+  { x: 50, y: 2 },
+  { x: 60, y: 2.5 },
+  { x: 70, y: 2.6 },
+  { x: 80, y: 2.8 },
+  { x: 90, y: 3 },
+  { x: 100, y: 3.2 },
+  { x: 110, y: 3.5 },
+  { x: 120, y: 3.7 },
+  { x: 130, y: 3.4 },
+  { x: 140, y: 3.2 },
+  { x: 150, y: 3.1 },
+  { x: 160, y: 3.0 },
+  { x: 170, y: 3.2 },
+  { x: 180, y: 3.1 },
+  { x: 190, y: 3.0 },
+  { x: 200, y: 3.1 },
+  { x: 210, y: 3.2 },
+  { x: 220, y: 3.0 },
+];
+
+new Chart("waf_graph", {
+  type: "scatter",
+  data: {
+    datasets: [
+      {
+        pointRadius: 4,
+        pointBackgroundColor: "rgb(0,0,255)",
+        data: xyValues,
+      },
+    ],
+  },
+  options: {
+    legend: { display: false },
+    scales: {
+      xAxes: [
+        {
+          scaleLabel: {
+            display: true,
+            labelString: "Write Amplification", // Add your X axis title here
+            fontSize: 8,
+          },
+        },
+      ],
+      yAxes: [
+        {
+          scaleLabel: {
+            display: true,
+            labelString: "Block Writes Over Time", // Add your Y axis title here
+            fontSize: 8,
+          },
+        },
+      ],
+    },
+    title: {
+      display: true,
+      text: "WAF Graph", // Add your graph title here
+    },
+  },
+});
