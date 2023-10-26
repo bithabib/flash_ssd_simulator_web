@@ -1788,6 +1788,7 @@ new Chart("waf_graph", {
     scales: {
       xAxes: [
         {
+          ticks: { min: 50, max: 250, stepSize: 25 },
           scaleLabel: {
             display: true,
             labelString: "Write Amplification", // Add your X axis title here
