@@ -13,22 +13,17 @@
     <title>Eyana: The SSD Simulator</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="icon" href="../readme_documentation_src/icon/icon.jpeg" type="image/jpeg">
-    <link rel="stylesheet" type="text/css" href="../src/css/ssd_simulator.css">
-    <link rel="stylesheet" type="text/css" href="../src/css/comments_section.css">
-    <link rel="stylesheet" type="text/css" href="../src/css/description_keypoints.css">
+    <link rel="stylesheet" type="text/css" href="static/src/css/ssd_simulator.css">
+    <link rel="stylesheet" type="text/css" href="static/src/css/comments_section.css">
+    <link rel="stylesheet" type="text/css" href="static/src/css/description_keypoints.css">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9851772843061782"
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        $(function () {
-            $("#includedContent").load("includes/header.html");
-        });
-    </script>
 </head>
 
 <body>
-    <div id="includedContent"></div>
+    {% include 'includes/header.html' %}
     <header class="bg-light py-4 text-center">
         <div class="container">
             <div style="display: inline-block; position: relative;">
@@ -1684,8 +1679,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="../views/flash_ssd_simulation.js"></script>
-    <script src="../views/description_keypoints.js"></script>
+    <script src="static/src/js/flash_ssd_simulation.js"></script>
+    <script src="static/src/js/description_keypoints.js"></script>
     <!-- <script src="../views/update_data_flash_ssd.js"></script> -->
 </body>
 
