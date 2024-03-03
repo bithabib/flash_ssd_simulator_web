@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSD Simulator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // $('.nav-link').click(function () {
+            //     $('.nav-link').removeClass('active');
+            //     $(this).addClass('active');
+            // });
+
+            // Add the following code to set the active link based on the current page
+            var currentPath = window.location.pathname;
+            $('.nav-link').each(function () {
+                var href = $(this).attr('href');
+                if (href === currentPath) {
+                    $(this).addClass('active');
+                }
+            });
+        });
+    </script>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">
+            <img src="../static/src/icon/icon.png" width="30" height="30" alt="" loading="lazy">
+            Eyana: SSD Simulator
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="flash_memory.html">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="cell_simulator.html">Cell Simulator</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="flash_memory.html">The SSD Simulator</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="paper.html">Research Paper</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://forms.gle/J1WJCxWN2cMfhZ4u7">Feedback</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</body>
+
+</html>
