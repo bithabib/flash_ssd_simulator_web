@@ -7,7 +7,7 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
-\usepackage{../latex_file/pythonhighlight}
+\usepackage{paper_writing/latex_file/pythonhighlight}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
@@ -86,7 +86,7 @@ With the aid of our Floating Gate Transistor simulator, users can not only grasp
 Each SSD's fundamental building block is the floating gate transistor, consisting of a source, drain, silicon insulator, a floating gate, and a control gate. The magic of data storage happens when a high voltage is applied to the control gate, allowing electrons from the silicon substrate to tunnel through the silicon insulator and become trapped in the floating gate. This trapped charge represents the data and remarkably remains intact even when the power is turned off, making SSDs non-volatile.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth, height=5cm]{ssd_simulator_write.png}
+    \includegraphics[width=\linewidth, height=5cm]{paper_writing/latex_file/ssd_simulator_write.png}
     \caption{Writing in A Floating Gate Transistor}
     \label{fig:ssd_simulator_write}
 \end{figure}
@@ -97,7 +97,7 @@ Single Level Cell technology stores 1 bit of information per cell. When reading 
 Multi Level Cell (MLC) technology stores 2 bits of information per cell. To represent data, the control gate receives voltage divided into four threshold voltage ranges: 0-3 volts, 3-6 volts, 6-9 volts, and 9-12 volts. When voltage in the range of 0-3 volts is applied and current flows from source to drain, the data is "11." If no current flows, the voltage in the range of 3-6 volts is applied, resulting in the data being stored as "10." Similarly, if the voltage in the range of 6-9 volts is applied and current flows, the data is "01." Finally, if no current flows in the 6-9 volts range, the voltage in the range of 9-12 volts is applied, and the data is "00." MLC offers higher storage density than SLC, but it may have slightly slower performance and lower endurance.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth, height=5cm]{ssd_simulator_read.png}
+    \includegraphics[width=\linewidth, height=5cm]{paper_writing/latex_file/ssd_simulator_read.png}
     \caption{Multi Level Cell Floating Gate Transistor}
     \label{fig:ssd_simulator_read}
 \end{figure}
@@ -135,7 +135,7 @@ The organization of our SSD simulator is structured as follows: Four pages are c
 \end{table}
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth, height=5cm]{architecture_of_ssd_simulation.png}
+    \includegraphics[width=\linewidth, height=5cm]{paper_writing/latex_file/architecture_of_ssd_simulation.png}
     \caption{Internal Structure of Flash Memory}
     \label{fig:architecture_of_ssd_simulation}
 \end{figure}
@@ -146,7 +146,7 @@ Our SSD simulator's architecture, as illustrated in Figure 3, provides an effici
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth, height=5cm]{ssd_architecture.png}
+    \includegraphics[width=\linewidth, height=5cm]{paper_writing/latex_file/ssd_architecture.png}
     \caption{Architecture of a Solid State Drive}
     \label{fig:ssd_architecture}
 \end{figure}
@@ -327,7 +327,7 @@ plane = Math.floor(while_loop_tracer /
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth, height=10.5cm]{static_allocation.jpg}
+    \includegraphics[width=\linewidth, height=10.5cm]{paper_writing/latex_file/static_allocation.jpg}
     \caption{The six typical static allocation schemes}
     \label{fig:static_allocation}
 \end{figure}
@@ -350,7 +350,7 @@ A survey was conducted to gather feedback from students and professionals in the
 In this section, we present the results of the evaluation of user satisfaction with the SSD (Solid State Drive) simulator based on two graphical representations: a pie chart depicting the participants' satisfaction levels and a bar chart showcasing their likelihood of recommending the SSD and Floating Gate Transistor Simulators to others.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth, height=3.5cm]{rate_setisfation.jpeg}
+    \includegraphics[width=\linewidth, height=3.5cm]{paper_writing/latex_file/rate_setisfation.jpeg}
     \caption{User Satisfaction with the SSD Simulator}
     \label{fig:enter-label}
 \end{figure}
@@ -367,7 +367,7 @@ The pie chart clearly indicates that the majority of participants, approximately
 Moreover, around 20.6\% of participants rated their satisfaction as "Satisfied," indicating a generally positive perception of the simulator's performance and usability. The minimal percentage of respondents in the "Neutral," "Dissatisfied," and "Very Dissatisfied" categories further reinforces the simulator's success in achieving high user satisfaction, as these categories received very low or no responses.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth, height=3.6cm]{recommend_to_user.jpeg}
+    \includegraphics[width=\linewidth, height=3.6cm]{paper_writing/latex_file/recommend_to_user.jpeg}
     \caption{Likelihood of Recommending the Simulators}
     \label{fig:enter-label}
 \end{figure}
@@ -393,7 +393,7 @@ A total of participants took part in the evaluation, and they were asked to rate
 The evaluation resulted in the following distribution of responses, depicted in the pie chart:
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth, height=3.6cm]{how_easy.jpeg}
+    \includegraphics[width=\linewidth, height=3.6cm]{paper_writing/latex_file/how_easy.jpeg}
     \caption{Understandability of Flash SSD Concept}
     \label{fig:enter-label}
 \end{figure}
@@ -422,7 +422,7 @@ A total of participants took part in the evaluation, and they were asked to esti
 The results are summarized in the pie chart below:
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth, height=3.6cm]{save_time.jpeg}
+    \includegraphics[width=\linewidth, height=3.6cm]{paper_writing/latex_file/save_time.jpeg}
     \caption{Time Saved in Understanding SSD and Floating Gate Transistors}
     \label{fig:enter-label}
 \end{figure}
@@ -454,7 +454,7 @@ Participants were asked to rate the simulator using the following scale:
 The ratings received from the participants are summarized in the bar chart below:
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth, height=3.6cm]{rate_simulator.jpeg}
+    \includegraphics[width=\linewidth, height=3.6cm]{paper_writing/latex_file/rate_simulator.jpeg}
     \caption{Rating of the Simulator}
     \label{fig:enter-label}
 \end{figure}
