@@ -12,20 +12,26 @@
     <title>Control Gate</title>
     <link rel="icon" href="../readme_documentation_src/icon/icon.jpeg" type="image/jpeg">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="static/src/css/cell_simulator.css">
+    <link rel="stylesheet" type="text/css" href="../src/css/cell_simulator.css">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9851772843061782"
         crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(function () {
+            $("#includedContent").load("includes/header.html");
+        });
+    </script>
 </head>
 
 <body>
-    {% include 'includes/header.html' %}
+    <div id="includedContent"></div>
+
     <header class="bg-light py-4 text-center">
         <div class="container">
             <div style="display: inline-block; position: relative;">
                 <h1 class="display-4">Cell Simulator</h1>
                 <p class="lead">Floating Gate Transistor</p>
-                <a href="\flash_memory" class="btn btn-primary">Eyana: The SSD Simulator</a>
+                <a href="flash_memory.html" class="btn btn-primary">Eyana: The SSD Simulator</a>
             </div>
         </div>
     </header>
@@ -225,7 +231,26 @@
                     </div>
                     <p class="text-center" id="applying_erase_voltage" style="display: none;">Applying 25V</p>
                 </div>
-                <div class="col-3">
+                <div class="col-3" id="single_level_cell" style="display: none;">
+
+                    <div class="half-circle circle3">
+                        <div class="vertical_text_threshold">
+                            00-06V
+                        </div>
+                        <p style="position: absolute; color: red; margin-top: 40%; margin-left: 30%; z-index: 9999;">
+                            1</p>
+
+                    </div>
+                    <div class="half-circle circle4">
+                        <div class="vertical_text_threshold">
+                            06-12V
+                        </div>
+                        <p style="position: absolute; color: red; margin-top: 40%; margin-left: 30%; z-index: 9999;">
+                            0</p>
+                    </div>
+
+                </div>
+                <div class="col-3" id="multi_level_cell">
                     <div class="half-circle circle1">
                         <div class="vertical_text_threshold">
                             00-03V
@@ -272,7 +297,7 @@
             </div>
         </div>
     </div>
-    <script src="static/src/js/cell_simulator.js"></script>
+    <script src="../views/cell_simulator.js"></script>
 
 </body>
 
