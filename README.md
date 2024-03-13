@@ -340,3 +340,10 @@ This simulation is provided under the [MIT License](LICENSE). You are free to us
 - https://www.iirw.org/home
 - https://asplos24fall.hotcrp.com/
 - Conference : https://conferences.ieee.org/conferences_events/conferences/conferencedetails/60433
+
+
+## Targetted Conference 
+- https://nvmsa2024.github.io/?page=committees.html
+
+## Paper Link:
+https://docs.google.com/document/d/16M9of-9VjIa_zDAZ1sRR-YKbr04irw9cU2WUP7wmyI8/edit?usp=sharing
