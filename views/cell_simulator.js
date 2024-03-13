@@ -38,14 +38,27 @@ class ElectronList {
   }
 
   selectRandomElectrons() {
-    const selectedElectrons = [];
-    for (let i = 0; i < 3; i++) {
-      const randomIndex = Math.floor(Math.random() * this.electrons.length);
-      const selectedElectron = this.electrons.splice(randomIndex, 1)[0];
-      this.removedElectrons.push(selectedElectron);
-      selectedElectrons.push(selectedElectron);
+    var cell_type_id = document.getElementById("cell_type");
+    var cell_type = cell_type_id.value;
+    if (cell_type === "single_level_cell") {
+      const selectedElectrons = [];
+      for (let i = 0; i < 7; i++) {
+        const randomIndex = Math.floor(Math.random() * this.electrons.length);
+        const selectedElectron = this.electrons.splice(randomIndex, 1)[0];
+        this.removedElectrons.push(selectedElectron);
+        selectedElectrons.push(selectedElectron);
+      }
+      return selectedElectrons;
+    } else {
+      const selectedElectrons = [];
+      for (let i = 0; i < 3; i++) {
+        const randomIndex = Math.floor(Math.random() * this.electrons.length);
+        const selectedElectron = this.electrons.splice(randomIndex, 1)[0];
+        this.removedElectrons.push(selectedElectron);
+        selectedElectrons.push(selectedElectron);
+      }
+      return selectedElectrons;
     }
-    return selectedElectrons;
   }
 }
 const electronList = new ElectronList();
@@ -161,13 +174,25 @@ async function moveElectronRead(moveCurrent, animation, diffX) {
 
 var readButton = document.getElementById("read_button");
 readButton.addEventListener("click", async function () {
-  var removed_electrons_length = electronList.getRemovedElectrons().length + 3;
-  var circle_tracer = 1;
+  var cell_type_id = document.getElementById("cell_type");
+  var cell_type = cell_type_id.value;
+  console.log("cell_type_value: " + cell_type);
+  var cell_type_value = 0;
+  if (cell_type === "single_level_cell") {
+    cell_type_value = 4;
+  } else {
+    cell_type_value = 0;
+  }
+  var removed_electrons_length =
+    electronList.getRemovedElectrons().length + 3 + cell_type_value;
+
+  var circle_tracer = 1 + cell_type_value;
   for (
-    var applying_voltage = 2.5;
+    var applying_voltage = 2.5 + cell_type_value;
     applying_voltage <= removed_electrons_length;
-    applying_voltage += 2.5
+    applying_voltage += 2.5 + cell_type_value
   ) {
+    console.log("applying_voltage: " + applying_voltage);
     var applying_read_voltage = document.getElementById(
       "applying_read_voltage"
     );
