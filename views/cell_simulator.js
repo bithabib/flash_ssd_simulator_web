@@ -249,3 +249,19 @@ eraseButton.addEventListener("click", async function () {
     moveElectron(electron, 0, diffY);
   }
 });
+
+// selection of single level cell and multi level cell from dropdown menu
+
+document.addEventListener("DOMContentLoaded", function () {
+  var cell_type = document.getElementById("cell_type");
+  cell_type.addEventListener("change", function () {
+    var cell_type_value = cell_type.value;
+    if (cell_type_value === "single_level_cell") {
+      document.getElementById("single_level_cell").style.display = "block";
+      document.getElementById("multi_level_cell").style.display = "none";
+    } else {
+      document.getElementById("single_level_cell").style.display = "none";
+      document.getElementById("multi_level_cell").style.display = "block";
+    }
+  });
+});

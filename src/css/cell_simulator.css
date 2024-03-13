@@ -133,6 +133,14 @@
     left: 3%;
 }
 
+.single_cell_half_circle_line {
+    width: 50%;
+    height: 3%;
+    background-color: black;
+    position: absolute;
+    top: 52%;
+    left: 52%;
+}
 .threshold_voltage {
     position: absolute;
     top: 58%;
