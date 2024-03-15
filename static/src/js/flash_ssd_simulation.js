@@ -1809,6 +1809,7 @@ new Chart("waf_graph", {
     title: {
       display: true,
       text: "WAF Graph", // Add your graph title here
+      fontSize: 20,
     },
   },
 });
