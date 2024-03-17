@@ -1209,11 +1209,11 @@ async function handleSelection(fileName) {
   // const fileMapping = new FileMapping();
   var getFileInformation = fileMapping.getMapping(fileName);
 
-  // console.log(getFileInformation);
+  console.log(getFileInformation);
   var table = document.getElementById("mapping_table");
   var rows = table.getElementsByTagName("tr");
-  // console.log(getFileInformation.firstRowOfMappingFile);
-  // console.log(getFileInformation.lastRowOfMappingFile);
+  console.log(getFileInformation.firstRowOfMappingFile);
+  console.log(getFileInformation.lastRowOfMappingFile);
   for (
     firstRow = getFileInformation.firstRowOfMappingFile;
     firstRow < getFileInformation.lastRowOfMappingFile;
@@ -1341,6 +1341,7 @@ selectedFileName.addEventListener("change", function () {
 async function garbageCollection() {
   // console.log("Garbage Collection");
   // get removed block elements from the garbage collection
+  console.log(blockList.removed_block_list);
   var removedBlockElements = blockList.removed_block_list;
   // console.log(removedBlockElements);
   // get the removed block elements
@@ -1502,6 +1503,21 @@ async function garbageCollection() {
       blockList.removeBlockFromRemovedBlockList(blockAddress);
     }
   }
+  // get the block from the block list
+  blockList.block_list.map((block) => {
+    var blockTable = document.getElementById(block.block);
+    block.written_page.map((page) => {
+      if (page.state == "invalid") {
+        page.data = 0;
+        page.state = "free";
+        var row = blockTable.rows[page.page + 1];
+        row.style.backgroundColor = "red";
+        row.cells[0].innerHTML = "";
+        // await new Promise((resolve) => setTimeout(resolve, 1000));
+        row.style.backgroundColor = "white";
+      }
+    });
+  });
 }
 
 //-------------------------------------  Flash Memory Design ------------------------------------//
