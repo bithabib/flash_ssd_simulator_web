@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <!-- Meta tags for Open Graph (Facebook) -->
     <meta property="og:title" content="Eyana: The SSD Simulator - Experience Flash SSD Technology">
-    <meta property="og:description" content="Discover Eyana: The SSD Simulator, a groundbreaking web-based tool simplifying Flash SSD technology comprehension. Explore essential operations like pages, blocks, writes, reads, updates, deletes, and garbage collection. Eyana offers visual demonstrations, interactive file uploads, and comprehensive documentation, empowering users to understand Flash SSDs deeply. With a remarkable 99% effectiveness rating, Eyana stands as one of the finest simulators.">
+    <meta property="og:description"
+        content="Discover Eyana: The SSD Simulator, a groundbreaking web-based tool simplifying Flash SSD technology comprehension. Explore essential operations like pages, blocks, writes, reads, updates, deletes, and garbage collection. Eyana offers visual demonstrations, interactive file uploads, and comprehensive documentation, empowering users to understand Flash SSDs deeply. With a remarkable 99% effectiveness rating, Eyana stands as one of the finest simulators.">
     <meta property="og:image" content="../src/images/flash_ssd_simulator.png">
     <meta property="og:url" content="https://qbithabib.com">
 
     <!-- Meta tags for general SEO -->
-    <meta name="description" content="Eyana: The SSD Simulator - Experience Flash SSD Technology. Explore essential SSD operations and concepts. Visual demonstrations, interactive features, and comprehensive documentation.">
-    <meta name="keywords" content="SSDs, solid-state drives, Flash SSD, Flash SSD simulator, SSD operations, SSD technology, storage optimization">
+    <meta name="description"
+        content="Eyana: The SSD Simulator - Experience Flash SSD Technology. Explore essential SSD operations and concepts. Visual demonstrations, interactive features, and comprehensive documentation.">
+    <meta name="keywords"
+        content="SSDs, solid-state drives, Flash SSD, Flash SSD simulator, SSD operations, SSD technology, storage optimization">
 
     <!-- Title -->
     <title>Eyana: The SSD Simulator - Experience Flash SSD Technology</title>
@@ -22,7 +26,8 @@
     <link rel="stylesheet" type="text/css" href="static/src/css/description_keypoints.css">
 
     <!-- External Scripts -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9851772843061782" crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9851772843061782"
+        crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
@@ -85,20 +90,19 @@
             <div class="col-md-1">
                 <label for="ssd_type" class="form-label">Allocation Schemes</label>
                 <select id="ssd_type" class="form-select">
-                    <optgroup label="Dynamic">
-                        <option value="single" selected>D1: Dynamic Schemes</option>
-                        <option value="pmulti">D2: Channel Level Dynamic Schemes</option>
-                        <option value="pdmulti">D3: Die Level Dynamic Schemes</option>
-                        <option value="pdpmulti">D4: Plane Level Dynamic Schemes</option>
-                    </optgroup>
-
                     <optgroup label="Static">
-                        <option value="s1">S1: Chip ➔ Die ➔ Plane ➔ Channel</option>
+                        <option value="s1" selected>S1: Chip ➔ Die ➔ Plane ➔ Channel</option>
                         <option value="s2">S2: Channel ➔ Chip ➔ Die ➔ Plane</option>
                         <option value="s3">S3: Channel ➔ Plane ➔ Chip ➔ Die</option>
                         <option value="s4">S4: Channel ➔ Die ➔ Chip ➔ Plane</option>
                         <option value="s5">S5: Channel ➔ Plane ➔ Die ➔ Chip</option>
                         <option value="s6">S6: Channel ➔ Die ➔ Plane ➔ Chip</option>
+                    </optgroup>
+                    <optgroup label="Dynamic">
+                        <option value="single">D1: Dynamic Schemes</option>
+                        <option value="pmulti">D2: Channel Level Dynamic Schemes</option>
+                        <option value="pdmulti">D3: Die Level Dynamic Schemes</option>
+                        <option value="pdpmulti">D4: Plane Level Dynamic Schemes</option>
                     </optgroup>
                 </select>
             </div>

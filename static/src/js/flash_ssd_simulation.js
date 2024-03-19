@@ -1407,12 +1407,14 @@ selectedFileName.addEventListener("change", function () {
 // ----------------------------------------- Garbage Collection -----------------------------------------//
 
 async function garbageCollection() {
-  // check trim is active or not 
+  // check trim is active or not
   var trimActive = document.getElementById("active_trim").checked;
   if (!trimActive) {
-    alert("Please active the trim before garbage collection");
+    alert(
+      "Please active the trim and wait for 10 second before garbage collection"
+    );
     return;
-  }else {
+  } else {
     // console.log("Garbage Collection");
     // get removed block elements from the garbage collection
     console.log(blockList.removed_block_list);
