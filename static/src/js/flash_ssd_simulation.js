@@ -1407,195 +1407,169 @@ selectedFileName.addEventListener("change", function () {
 // ----------------------------------------- Garbage Collection -----------------------------------------//
 
 async function garbageCollection() {
-  // check trim is active or not
-  var trimActive = document.getElementById("active_trim").checked;
-  if (!trimActive) {
-    alert(
-      "Please active the trim and wait for 10 second before garbage collection"
-    );
-    return;
-  } else {
-    // console.log("Garbage Collection");
-    // get removed block elements from the garbage collection
-    console.log(blockList.removed_block_list);
-    var removedBlockElements = blockList.removed_block_list;
-    // console.log(removedBlockElements);
-    // get the removed block elements
-    for (var i = 0; i < removedBlockElements.length; i++) {
-      var removedBlock = removedBlockElements[i];
-      // console.log(removedBlock);
-      // get the block table id and page number from block address
-      var blockAddress = removedBlock["block"];
-      // console.log(blockAddress);
-      // console.log(blockAddress);
-      // get the table using the block address
-      var blockTable = document.getElementById(blockAddress);
+  // console.log("Garbage Collection");
+  // get removed block elements from the garbage collection
+  console.log(blockList.removed_block_list);
+  var removedBlockElements = blockList.removed_block_list;
+  // console.log(removedBlockElements);
+  // get the removed block elements
+  for (var i = 0; i < removedBlockElements.length; i++) {
+    var removedBlock = removedBlockElements[i];
+    // console.log(removedBlock);
+    // get the block table id and page number from block address
+    var blockAddress = removedBlock["block"];
+    // console.log(blockAddress);
+    // console.log(blockAddress);
+    // get the table using the block address
+    var blockTable = document.getElementById(blockAddress);
 
-      if (
-        removedBlock.written_page[0].state == "invalid" &&
-        removedBlock.written_page[1].state == "invalid" &&
-        removedBlock.written_page[2].state == "invalid" &&
-        removedBlock.written_page[3].state == "invalid"
-      ) {
-        var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
-        row1.style.backgroundColor = "red";
-        row1.cells[0].innerHTML = "";
-        removedBlock.written_page[0].data = 0;
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        row1.style.backgroundColor = "white";
-        var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
-        row2.style.backgroundColor = "red";
-        row2.cells[0].innerHTML = "";
-        removedBlock.written_page[1].data = 0;
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        row2.style.backgroundColor = "white";
-        var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
-        row3.style.backgroundColor = "red";
-        row3.cells[0].innerHTML = "";
-        removedBlock.written_page[2].data = 0;
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        row3.style.backgroundColor = "white";
-        var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
-        row4.style.backgroundColor = "red";
-        row4.cells[0].innerHTML = "";
-        removedBlock.written_page[3].data = 0;
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        row4.style.backgroundColor = "white";
-        removedBlock.erase_count++;
-        // remove the block from the removed block list and add it to the block list
-        blockList.removeBlockFromRemovedBlockList(blockAddress);
-      } else if (
-        removedBlock.written_page[0].state == "invalid" &&
-        removedBlock.written_page[1].state == "invalid" &&
-        removedBlock.written_page[2].state == "invalid"
-      ) {
-        var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
-        row1.style.backgroundColor = "red";
-        row1.cells[0].innerHTML = "";
-        removedBlock.written_page[0].data = 0;
-        // await new Promise((resolve) => setTimeout(resolve, 1000));
-        row1.style.backgroundColor = "white";
-        var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
-        row2.style.backgroundColor = "red";
-        row2.cells[0].innerHTML = "";
-        removedBlock.written_page[1].data = 0;
-        // await new Promise((resolve) => setTimeout(resolve, 1000));
-        row2.style.backgroundColor = "white";
-        var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
-        row3.style.backgroundColor = "red";
-        row3.cells[0].innerHTML = "";
-        removedBlock.written_page[2].data = 0;
-        // await new Promise((resolve) => setTimeout(resolve, 1000));
-        row3.style.backgroundColor = "white";
-        var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
-        row4.style.backgroundColor = "red";
-        row4.cells[0].innerHTML = "";
-        // await new Promise((resolve) => setTimeout(resolve, 1000));
-        row4.style.backgroundColor = "white";
-        removedBlock.erase_count++;
-        var garbage_collection_tracer = "garbage" + removedBlock["block"] + "4";
-        FileUpload(
-          removedBlock.written_page[3].data * 1024,
-          garbage_collection_tracer,
-          2
-        );
-        removedBlock.written_page[3].data = 0;
-        blockList.removeBlockFromRemovedBlockList(blockAddress);
-      } else if (
-        removedBlock.written_page[0].state == "invalid" &&
-        removedBlock.written_page[1].state == "invalid"
-      ) {
-        var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
-        row1.style.backgroundColor = "red";
-        row1.cells[0].innerHTML = "";
-        removedBlock.written_page[0].data = 0;
-        // await new Promise((resolve) => setTimeout(resolve, 1000));
-        row1.style.backgroundColor = "white";
-        var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
-        row2.style.backgroundColor = "red";
-        row2.cells[0].innerHTML = "";
-        removedBlock.written_page[1].data = 0;
-        // await new Promise((resolve) => setTimeout(resolve, 1000));
-        row2.style.backgroundColor = "white";
-        var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
-        row3.style.backgroundColor = "red";
-        row3.cells[0].innerHTML = "";
+    if (
+      removedBlock.written_page[0].state == "invalid" &&
+      removedBlock.written_page[1].state == "invalid" &&
+      removedBlock.written_page[2].state == "invalid" &&
+      removedBlock.written_page[3].state == "invalid"
+    ) {
+      var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
+      row1.style.backgroundColor = "red";
+      row1.cells[0].innerHTML = "";
+      removedBlock.written_page[0].data = 0;
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      row1.style.backgroundColor = "white";
+      var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
+      row2.style.backgroundColor = "red";
+      row2.cells[0].innerHTML = "";
+      removedBlock.written_page[1].data = 0;
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      row2.style.backgroundColor = "white";
+      var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
+      row3.style.backgroundColor = "red";
+      row3.cells[0].innerHTML = "";
+      removedBlock.written_page[2].data = 0;
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      row3.style.backgroundColor = "white";
+      var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
+      row4.style.backgroundColor = "red";
+      row4.cells[0].innerHTML = "";
+      removedBlock.written_page[3].data = 0;
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      row4.style.backgroundColor = "white";
+      removedBlock.erase_count++;
+      // remove the block from the removed block list and add it to the block list
+      blockList.removeBlockFromRemovedBlockList(blockAddress);
+    } else if (
+      removedBlock.written_page[0].state == "invalid" &&
+      removedBlock.written_page[1].state == "invalid" &&
+      removedBlock.written_page[2].state == "invalid"
+    ) {
+      var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
+      row1.style.backgroundColor = "red";
+      row1.cells[0].innerHTML = "";
+      removedBlock.written_page[0].data = 0;
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row1.style.backgroundColor = "white";
+      var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
+      row2.style.backgroundColor = "red";
+      row2.cells[0].innerHTML = "";
+      removedBlock.written_page[1].data = 0;
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row2.style.backgroundColor = "white";
+      var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
+      row3.style.backgroundColor = "red";
+      row3.cells[0].innerHTML = "";
+      removedBlock.written_page[2].data = 0;
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row3.style.backgroundColor = "white";
+      var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
+      row4.style.backgroundColor = "red";
+      row4.cells[0].innerHTML = "";
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row4.style.backgroundColor = "white";
+      removedBlock.erase_count++;
+      var garbage_collection_tracer = "garbage" + removedBlock["block"] + "4";
+      FileUpload(
+        removedBlock.written_page[3].data * 1024,
+        garbage_collection_tracer,
+        2
+      );
+      removedBlock.written_page[3].data = 0;
+      blockList.removeBlockFromRemovedBlockList(blockAddress);
+    } else if (
+      removedBlock.written_page[0].state == "invalid" &&
+      removedBlock.written_page[1].state == "invalid"
+    ) {
+      var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
+      row1.style.backgroundColor = "red";
+      row1.cells[0].innerHTML = "";
+      removedBlock.written_page[0].data = 0;
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row1.style.backgroundColor = "white";
+      var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
+      row2.style.backgroundColor = "red";
+      row2.cells[0].innerHTML = "";
+      removedBlock.written_page[1].data = 0;
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row2.style.backgroundColor = "white";
+      var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
+      row3.style.backgroundColor = "red";
+      row3.cells[0].innerHTML = "";
 
-        // await new Promise((resolve) => setTimeout(resolve, 1000));
-        row3.style.backgroundColor = "white";
-        var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
-        row4.style.backgroundColor = "red";
-        row4.cells[0].innerHTML = "";
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row3.style.backgroundColor = "white";
+      var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
+      row4.style.backgroundColor = "red";
+      row4.cells[0].innerHTML = "";
 
-        // await new Promise((resolve) => setTimeout(resolve, 1000));
-        row4.style.backgroundColor = "white";
-        removedBlock.erase_count++;
-        var garbage_collection_tracer =
-          "garbage" + removedBlock["block"] + "34";
-        FileUpload(
-          (removedBlock.written_page[2].data +
-            removedBlock.written_page[3].data) *
-            1024,
-          garbage_collection_tracer,
-          2
-        );
-        removedBlock.written_page[2].data = 0;
-        removedBlock.written_page[3].data = 0;
-        blockList.removeBlockFromRemovedBlockList(blockAddress);
-      } else if (removedBlock.written_page[0].state == "invalid") {
-        var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
-        row1.style.backgroundColor = "red";
-        row1.cells[0].innerHTML = "";
-        removedBlock.written_page[0].data = 0;
-        // await new Promise((resolve) => setTimeout(resolve, 1000));
-        row1.style.backgroundColor = "white";
-        var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
-        row2.style.backgroundColor = "red";
-        row2.cells[0].innerHTML = "";
-        // await new Promise((resolve) => setTimeout(resolve, 1000));
-        row2.style.backgroundColor = "white";
-        var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
-        row3.style.backgroundColor = "red";
-        row3.cells[0].innerHTML = "";
-        // await new Promise((resolve) => setTimeout(resolve, 1000));
-        row3.style.backgroundColor = "white";
-        var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
-        row4.style.backgroundColor = "red";
-        row4.cells[0].innerHTML = "";
-        // await new Promise((resolve) => setTimeout(resolve, 1000));
-        row4.style.backgroundColor = "white";
-        removedBlock.erase_count++;
-        var garbage_collection_tracer =
-          "garbage" + removedBlock["block"] + "234";
-        FileUpload(
-          (removedBlock.written_page[1].data +
-            removedBlock.written_page[2].data +
-            removedBlock.written_page[3].data) *
-            1024,
-          garbage_collection_tracer,
-          2
-        );
-        removedBlock.written_page[1].data = 0;
-        removedBlock.written_page[2].data = 0;
-        removedBlock.written_page[3].data = 0;
-        blockList.removeBlockFromRemovedBlockList(blockAddress);
-      }
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row4.style.backgroundColor = "white";
+      removedBlock.erase_count++;
+      var garbage_collection_tracer = "garbage" + removedBlock["block"] + "34";
+      FileUpload(
+        (removedBlock.written_page[2].data +
+          removedBlock.written_page[3].data) *
+          1024,
+        garbage_collection_tracer,
+        2
+      );
+      removedBlock.written_page[2].data = 0;
+      removedBlock.written_page[3].data = 0;
+      blockList.removeBlockFromRemovedBlockList(blockAddress);
+    } else if (removedBlock.written_page[0].state == "invalid") {
+      var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
+      row1.style.backgroundColor = "red";
+      row1.cells[0].innerHTML = "";
+      removedBlock.written_page[0].data = 0;
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row1.style.backgroundColor = "white";
+      var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
+      row2.style.backgroundColor = "red";
+      row2.cells[0].innerHTML = "";
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row2.style.backgroundColor = "white";
+      var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
+      row3.style.backgroundColor = "red";
+      row3.cells[0].innerHTML = "";
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row3.style.backgroundColor = "white";
+      var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
+      row4.style.backgroundColor = "red";
+      row4.cells[0].innerHTML = "";
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      row4.style.backgroundColor = "white";
+      removedBlock.erase_count++;
+      var garbage_collection_tracer = "garbage" + removedBlock["block"] + "234";
+      FileUpload(
+        (removedBlock.written_page[1].data +
+          removedBlock.written_page[2].data +
+          removedBlock.written_page[3].data) *
+          1024,
+        garbage_collection_tracer,
+        2
+      );
+      removedBlock.written_page[1].data = 0;
+      removedBlock.written_page[2].data = 0;
+      removedBlock.written_page[3].data = 0;
+      blockList.removeBlockFromRemovedBlockList(blockAddress);
     }
-    // get the block from the block list
-    // blockList.block_list.map((block) => {
-    //   var blockTable = document.getElementById(block.block);
-    //   block.written_page.map((page) => {
-    //     if (page.state == "invalid") {
-    //       page.data = 0;
-    //       page.state = "free";
-    //       var row = blockTable.rows[page.page + 1];
-    //       row.style.backgroundColor = "red";
-    //       row.cells[0].innerHTML = "";
-    //       // await new Promise((resolve) => setTimeout(resolve, 1000));
-    //       row.style.backgroundColor = "white";
-    //     }
-    //   });
-    // });
   }
 }
 
