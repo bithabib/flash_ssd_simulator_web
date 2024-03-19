@@ -1571,20 +1571,20 @@ async function garbageCollection() {
     }
   }
   // get the block from the block list
-  blockList.block_list.map((block) => {
-    var blockTable = document.getElementById(block.block);
-    block.written_page.map((page) => {
-      if (page.state == "invalid") {
-        page.data = 0;
-        page.state = "free";
-        var row = blockTable.rows[page.page + 1];
-        row.style.backgroundColor = "red";
-        row.cells[0].innerHTML = "";
-        // await new Promise((resolve) => setTimeout(resolve, 1000));
-        row.style.backgroundColor = "white";
-      }
-    });
-  });
+  // blockList.block_list.map((block) => {
+  //   var blockTable = document.getElementById(block.block);
+  //   block.written_page.map((page) => {
+  //     if (page.state == "invalid") {
+  //       page.data = 0;
+  //       page.state = "free";
+  //       var row = blockTable.rows[page.page + 1];
+  //       row.style.backgroundColor = "red";
+  //       row.cells[0].innerHTML = "";
+  //       // await new Promise((resolve) => setTimeout(resolve, 1000));
+  //       row.style.backgroundColor = "white";
+  //     }
+  //   });
+  // });
 }
 
 //-------------------------------------  Flash Memory Design ------------------------------------//
