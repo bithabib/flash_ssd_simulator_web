@@ -748,224 +748,300 @@ async function FileUpload(fileSize, fileName, fileIndex) {
         var n_chip = 1;
         var n_die = 2;
         var n_plane = 2;
-
-        var channel =
-          Math.floor(while_loop_tracer / (n_plane * n_die * n_chip)) %
-          n_channel;
-        var chip = while_loop_tracer % n_chip;
-        var die = Math.floor(while_loop_tracer / n_chip) % n_die;
-        var plane = Math.floor(while_loop_tracer / (n_die * n_chip)) % n_plane;
-        var block_ =
-          Math.floor(
-            while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
-          ) % 4;
-        // var channel = (logicalAddressTracer/(1*2*2))%2;
-        console.log(
-          "channel: " +
-            channel +
-            " chip: " +
-            chip +
-            " die: " +
-            die +
-            " plane: " +
-            plane +
-            " block: " +
-            block_
-        );
-        // var random = Math.floor(Math.random() * blockList.block_list.length);
-        // var random = Math.floor(Math.random() * blockList.length);
-        // Get the block number from the sequence
-        var block = getRandomBlockParallel(
-          blockList.block_list,
-          "p" + channel + "d" + die + "p" + plane + "b" + block_
-        );
+        while (true) {
+          var channel =
+            Math.floor(while_loop_tracer / (n_plane * n_die * n_chip)) %
+            n_channel;
+          var chip = while_loop_tracer % n_chip;
+          var die = Math.floor(while_loop_tracer / n_chip) % n_die;
+          var plane =
+            Math.floor(while_loop_tracer / (n_die * n_chip)) % n_plane;
+          var block_ =
+            Math.floor(
+              while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
+            ) % 4;
+          // var channel = (logicalAddressTracer/(1*2*2))%2;
+          console.log(
+            "channel: " +
+              channel +
+              " chip: " +
+              chip +
+              " die: " +
+              die +
+              " plane: " +
+              plane +
+              " block: " +
+              block_
+          );
+          // var random = Math.floor(Math.random() * blockList.block_list.length);
+          // var random = Math.floor(Math.random() * blockList.length);
+          // Get the block number from the sequence
+          var block = getRandomBlockParallel(
+            blockList.block_list,
+            "p" + channel + "d" + die + "p" + plane + "b" + block_
+          );
+          var search_free_page = false;
+          block.written_page.forEach(function (pageData) {
+            if (pageData.state == "free") {
+              search_free_page = true;
+            }
+          });
+          if (search_free_page == false) {
+            while_loop_tracer++;
+          } else {
+            break;
+          }
+        }
       } else if (fileIndex == "s2") {
         // take down value of the division
         var n_channel = 2;
         var n_chip = 1;
         var n_die = 2;
         var n_plane = 2;
-
-        var channel = while_loop_tracer % n_channel;
-        var chip = Math.floor(while_loop_tracer / n_channel) % n_chip;
-        var die = Math.floor(while_loop_tracer / (n_chip * n_channel)) % n_die;
-        var plane =
-          Math.floor(while_loop_tracer / (n_die * n_chip * n_channel)) %
-          n_plane;
-        var block_ =
-          Math.floor(
-            while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
-          ) % 4;
-        // var channel = (logicalAddressTracer/(1*2*2))%2;
-        console.log(
-          "channel: " +
-            channel +
-            " chip: " +
-            chip +
-            " die: " +
-            die +
-            " plane: " +
-            plane +
-            " block: " +
-            block_
-        );
-        // var random = Math.floor(Math.random() * blockList.block_list.length);
-        // var random = Math.floor(Math.random() * blockList.length);
-        // Get the block number from the sequence
-        var block = getRandomBlockParallel(
-          blockList.block_list,
-          "p" + channel + "d" + die + "p" + plane + "b" + block_
-        );
+        while (true) {
+          var channel = while_loop_tracer % n_channel;
+          var chip = Math.floor(while_loop_tracer / n_channel) % n_chip;
+          var die =
+            Math.floor(while_loop_tracer / (n_chip * n_channel)) % n_die;
+          var plane =
+            Math.floor(while_loop_tracer / (n_die * n_chip * n_channel)) %
+            n_plane;
+          var block_ =
+            Math.floor(
+              while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
+            ) % 4;
+          // var channel = (logicalAddressTracer/(1*2*2))%2;
+          console.log(
+            "channel: " +
+              channel +
+              " chip: " +
+              chip +
+              " die: " +
+              die +
+              " plane: " +
+              plane +
+              " block: " +
+              block_
+          );
+          // var random = Math.floor(Math.random() * blockList.block_list.length);
+          // var random = Math.floor(Math.random() * blockList.length);
+          // Get the block number from the sequence
+          var block = getRandomBlockParallel(
+            blockList.block_list,
+            "p" + channel + "d" + die + "p" + plane + "b" + block_
+          );
+          var search_free_page = false;
+          block.written_page.forEach(function (pageData) {
+            if (pageData.state == "free") {
+              search_free_page = true;
+            }
+          });
+          if (search_free_page == false) {
+            while_loop_tracer++;
+          } else {
+            break;
+          }
+        }
       } else if (fileIndex == "s3") {
         // take down value of the division
         var n_channel = 2;
         var n_chip = 1;
         var n_die = 2;
         var n_plane = 2;
-
-        var channel = while_loop_tracer % n_channel;
-        var chip =
-          Math.floor(while_loop_tracer / (n_plane * n_channel)) % n_chip;
-        var die =
-          Math.floor(while_loop_tracer / (n_plane * n_chip * n_channel)) %
-          n_die;
-        var plane = Math.floor(while_loop_tracer / n_channel) % n_plane;
-        var block_ =
-          Math.floor(
-            while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
-          ) % 4;
-        // var channel = (logicalAddressTracer/(1*2*2))%2;
-        console.log(
-          "channel: " +
-            channel +
-            " chip: " +
-            chip +
-            " die: " +
-            die +
-            " plane: " +
-            plane +
-            " block: " +
-            block_
-        );
-        // var random = Math.floor(Math.random() * blockList.block_list.length);
-        // var random = Math.floor(Math.random() * blockList.length);
-        // Get the block number from the sequence
-        var block = getRandomBlockParallel(
-          blockList.block_list,
-          "p" + channel + "d" + die + "p" + plane + "b" + block_
-        );
+        while (true) {
+          var channel = while_loop_tracer % n_channel;
+          var chip =
+            Math.floor(while_loop_tracer / (n_plane * n_channel)) % n_chip;
+          var die =
+            Math.floor(while_loop_tracer / (n_plane * n_chip * n_channel)) %
+            n_die;
+          var plane = Math.floor(while_loop_tracer / n_channel) % n_plane;
+          var block_ =
+            Math.floor(
+              while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
+            ) % 4;
+          // var channel = (logicalAddressTracer/(1*2*2))%2;
+          console.log(
+            "channel: " +
+              channel +
+              " chip: " +
+              chip +
+              " die: " +
+              die +
+              " plane: " +
+              plane +
+              " block: " +
+              block_
+          );
+          // var random = Math.floor(Math.random() * blockList.block_list.length);
+          // var random = Math.floor(Math.random() * blockList.length);
+          // Get the block number from the sequence
+          var block = getRandomBlockParallel(
+            blockList.block_list,
+            "p" + channel + "d" + die + "p" + plane + "b" + block_
+          );
+          var search_free_page = false;
+          block.written_page.forEach(function (pageData) {
+            if (pageData.state == "free") {
+              search_free_page = true;
+            }
+          });
+          if (search_free_page == false) {
+            while_loop_tracer++;
+          } else {
+            break;
+          }
+        }
       } else if (fileIndex == "s4") {
         // take down value of the division
         var n_channel = 2;
         var n_chip = 1;
         var n_die = 2;
         var n_plane = 2;
-
-        var channel = while_loop_tracer % n_channel;
-        var chip = Math.floor(while_loop_tracer / (n_die * n_channel)) % n_chip;
-        var die = Math.floor(while_loop_tracer / n_channel) % n_die;
-        var plane =
-          Math.floor(while_loop_tracer / (n_die * n_chip * n_channel)) %
-          n_plane;
-        var block_ =
-          Math.floor(
-            while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
-          ) % 4;
-        // var channel = (logicalAddressTracer/(1*2*2))%2;
-        console.log(
-          "channel: " +
-            channel +
-            " chip: " +
-            chip +
-            " die: " +
-            die +
-            " plane: " +
-            plane +
-            " block: " +
-            block_
-        );
-        // var random = Math.floor(Math.random() * blockList.block_list.length);
-        // var random = Math.floor(Math.random() * blockList.length);
-        // Get the block number from the sequence
-        var block = getRandomBlockParallel(
-          blockList.block_list,
-          "p" + channel + "d" + die + "p" + plane + "b" + block_
-        );
+        while (true) {
+          var channel = while_loop_tracer % n_channel;
+          var chip =
+            Math.floor(while_loop_tracer / (n_die * n_channel)) % n_chip;
+          var die = Math.floor(while_loop_tracer / n_channel) % n_die;
+          var plane =
+            Math.floor(while_loop_tracer / (n_die * n_chip * n_channel)) %
+            n_plane;
+          var block_ =
+            Math.floor(
+              while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
+            ) % 4;
+          // var channel = (logicalAddressTracer/(1*2*2))%2;
+          console.log(
+            "channel: " +
+              channel +
+              " chip: " +
+              chip +
+              " die: " +
+              die +
+              " plane: " +
+              plane +
+              " block: " +
+              block_
+          );
+          // var random = Math.floor(Math.random() * blockList.block_list.length);
+          // var random = Math.floor(Math.random() * blockList.length);
+          // Get the block number from the sequence
+          var block = getRandomBlockParallel(
+            blockList.block_list,
+            "p" + channel + "d" + die + "p" + plane + "b" + block_
+          );
+          var search_free_page = false;
+          block.written_page.forEach(function (pageData) {
+            if (pageData.state == "free") {
+              search_free_page = true;
+            }
+          });
+          if (search_free_page == false) {
+            while_loop_tracer++;
+          } else {
+            break;
+          }
+        }
       } else if (fileIndex == "s5") {
         // take down value of the division
         var n_channel = 2;
         var n_chip = 1;
         var n_die = 2;
         var n_plane = 2;
-
-        var channel = while_loop_tracer % n_channel;
-        var chip =
-          Math.floor(while_loop_tracer / (n_plane * n_die * n_channel)) %
-          n_chip;
-        var die = Math.floor(while_loop_tracer / (n_plane * n_channel)) % n_die;
-        var plane = Math.floor(while_loop_tracer / n_channel) % n_plane;
-        var block_ =
-          Math.floor(
-            while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
-          ) % 4;
-        // var channel = (logicalAddressTracer/(1*2*2))%2;
-        console.log(
-          "channel: " +
-            channel +
-            " chip: " +
-            chip +
-            " die: " +
-            die +
-            " plane: " +
-            plane +
-            " block: " +
-            block_
-        );
-        // var random = Math.floor(Math.random() * blockList.block_list.length);
-        // var random = Math.floor(Math.random() * blockList.length);
-        // Get the block number from the sequence
-        var block = getRandomBlockParallel(
-          blockList.block_list,
-          "p" + channel + "d" + die + "p" + plane + "b" + block_
-        );
+        while (true) {
+          var channel = while_loop_tracer % n_channel;
+          var chip =
+            Math.floor(while_loop_tracer / (n_plane * n_die * n_channel)) %
+            n_chip;
+          var die =
+            Math.floor(while_loop_tracer / (n_plane * n_channel)) % n_die;
+          var plane = Math.floor(while_loop_tracer / n_channel) % n_plane;
+          var block_ =
+            Math.floor(
+              while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
+            ) % 4;
+          // var channel = (logicalAddressTracer/(1*2*2))%2;
+          console.log(
+            "channel: " +
+              channel +
+              " chip: " +
+              chip +
+              " die: " +
+              die +
+              " plane: " +
+              plane +
+              " block: " +
+              block_
+          );
+          // var random = Math.floor(Math.random() * blockList.block_list.length);
+          // var random = Math.floor(Math.random() * blockList.length);
+          // Get the block number from the sequence
+          var block = getRandomBlockParallel(
+            blockList.block_list,
+            "p" + channel + "d" + die + "p" + plane + "b" + block_
+          );
+          var search_free_page = false;
+          block.written_page.forEach(function (pageData) {
+            if (pageData.state == "free") {
+              search_free_page = true;
+            }
+          });
+          if (search_free_page == false) {
+            while_loop_tracer++;
+          } else {
+            break;
+          }
+        }
       } else if (fileIndex == "s6") {
         // take down value of the division
         var n_channel = 2;
         var n_chip = 1;
         var n_die = 2;
         var n_plane = 2;
-
-        var channel = while_loop_tracer % n_channel;
-        var chip =
-          Math.floor(while_loop_tracer / (n_plane * n_die * n_channel)) %
-          n_chip;
-        var die = Math.floor(while_loop_tracer / n_channel) % n_die;
-        var plane =
-          Math.floor(while_loop_tracer / (n_die * n_channel)) % n_plane;
-        var block_ =
-          Math.floor(
-            while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
-          ) % 4;
-        // var channel = (logicalAddressTracer/(1*2*2))%2;
-        console.log(
-          "channel: " +
-            channel +
-            " chip: " +
-            chip +
-            " die: " +
-            die +
-            " plane: " +
-            plane +
-            " block: " +
-            block_
-        );
-        // var random = Math.floor(Math.random() * blockList.block_list.length);
-        // var random = Math.floor(Math.random() * blockList.length);
-        // Get the block number from the sequence
-        var block = getRandomBlockParallel(
-          blockList.block_list,
-          "p" + channel + "d" + die + "p" + plane + "b" + block_
-        );
+        while (true) {
+          var channel = while_loop_tracer % n_channel;
+          var chip =
+            Math.floor(while_loop_tracer / (n_plane * n_die * n_channel)) %
+            n_chip;
+          var die = Math.floor(while_loop_tracer / n_channel) % n_die;
+          var plane =
+            Math.floor(while_loop_tracer / (n_die * n_channel)) % n_plane;
+          var block_ =
+            Math.floor(
+              while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
+            ) % 4;
+          // var channel = (logicalAddressTracer/(1*2*2))%2;
+          console.log(
+            "channel: " +
+              channel +
+              " chip: " +
+              chip +
+              " die: " +
+              die +
+              " plane: " +
+              plane +
+              " block: " +
+              block_
+          );
+          // var random = Math.floor(Math.random() * blockList.block_list.length);
+          // var random = Math.floor(Math.random() * blockList.length);
+          // Get the block number from the sequence
+          var block = getRandomBlockParallel(
+            blockList.block_list,
+            "p" + channel + "d" + die + "p" + plane + "b" + block_
+          );
+          var search_free_page = false;
+          block.written_page.forEach(function (pageData) {
+            if (pageData.state == "free") {
+              search_free_page = true;
+            }
+          });
+          if (search_free_page == false) {
+            while_loop_tracer++;
+          } else {
+            break;
+          }
+        }
       } else {
         var block = getRandomBlockParallel(blockList.block_list, fileIndex);
       }
@@ -1411,15 +1487,16 @@ async function garbageCollection() {
   // get removed block elements from the garbage collection
   console.log(blockList.removed_block_list);
   var removedBlockElements = blockList.removed_block_list;
+  var selected_ssd_type = document.getElementById("ssd_type").value;
+  if (selected_ssd_type == "single") {
+    selected_ssd_type = 2;
+  }
   // console.log(removedBlockElements);
   // get the removed block elements
   for (var i = 0; i < removedBlockElements.length; i++) {
     var removedBlock = removedBlockElements[i];
-    // console.log(removedBlock);
     // get the block table id and page number from block address
     var blockAddress = removedBlock["block"];
-    // console.log(blockAddress);
-    // console.log(blockAddress);
     // get the table using the block address
     var blockTable = document.getElementById(blockAddress);
 
@@ -1486,10 +1563,11 @@ async function garbageCollection() {
       row4.style.backgroundColor = "white";
       removedBlock.erase_count++;
       var garbage_collection_tracer = "garbage" + removedBlock["block"] + "4";
+      // get the selected allocation schemes and update the mapping table
       FileUpload(
         removedBlock.written_page[3].data * 1024,
         garbage_collection_tracer,
-        2
+        selected_ssd_type
       );
       removedBlock.written_page[3].data = 0;
       blockList.removeBlockFromRemovedBlockList(blockAddress);
@@ -1528,7 +1606,7 @@ async function garbageCollection() {
           removedBlock.written_page[3].data) *
           1024,
         garbage_collection_tracer,
-        2
+        selected_ssd_type
       );
       removedBlock.written_page[2].data = 0;
       removedBlock.written_page[3].data = 0;
@@ -1563,7 +1641,7 @@ async function garbageCollection() {
           removedBlock.written_page[3].data) *
           1024,
         garbage_collection_tracer,
-        2
+        selected_ssd_type
       );
       removedBlock.written_page[1].data = 0;
       removedBlock.written_page[2].data = 0;
@@ -1645,7 +1723,6 @@ async function trimFunction() {
       row3.style.backgroundColor = "red";
       row3.cells[0].innerHTML = "invalid";
       removedBlock.erase_count++;
-
     } else if (
       removedBlock.written_page[0].state == "invalid" &&
       removedBlock.written_page[1].state == "invalid"
@@ -1659,7 +1736,6 @@ async function trimFunction() {
       row2.style.backgroundColor = "red";
       row2.cells[0].innerHTML = "invalid";
       removedBlock.erase_count++;
-
     } else if (removedBlock.written_page[0].state == "invalid") {
       var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
       row1.style.backgroundColor = "red";
