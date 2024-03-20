@@ -1,5 +1,6 @@
 // ------------------------------------------Write Amplification Factor------------------------------------------------------//
-
+var totalUploadedWritesForWaf = 0;
+var totalActualWritesForWaf = 0;
 // Initialize the chart
 var chart = new Chart("waf_graph", {
   type: "scatter",
@@ -44,17 +45,26 @@ var chart = new Chart("waf_graph", {
 });
 
 // Function to update data
+var x_axis_update = 0;
 function updateWaf(newData) {
+  console.log("totalActualWritesForWaf");
+  console.log(totalActualWritesForWaf);
+  console.log("totalUploadedWritesForWaf");
+  console.log(totalUploadedWritesForWaf);
   // Update the data array
-  chart.data.datasets[0].data.push(newData);
+  chart.data.datasets[0].data.push({x: x_axis_update, y: (totalActualWritesForWaf/totalUploadedWritesForWaf)});
 
   // Update the chart
   chart.update();
+  x_axis_update++;
+  document.getElementById("waf_value").innerHTML = (totalActualWritesForWaf/totalUploadedWritesForWaf).toFixed(2);
 }
+
+
 
 // Example usage:
 // Define new data
-var newData = { x: 0, y: 0.5 };
+var newData = { x: 0, y: 0 };
 
 // Call the function to update data
 updateWaf(newData);
@@ -722,6 +732,7 @@ function getRandomBlockParallel(blocks, prefix) {
 var file_tracer = 0;
 async function FileUpload(fileSize, fileName, fileIndex) {
   // Bytes to kb 2 decimal places
+  totalActualWritesForWaf += fileSize;
   var fileSizeInKB = (fileSize / 1024).toFixed(2);
   if (fileSizeInKB >= globalFileSize) {
     alert("File size is too large, please select a file less than 512kb");
@@ -1201,6 +1212,7 @@ async function handleFileInputChangeChache() {
   var file = fileInput.files[0];
   if (file) {
     var fileSize = file.size;
+    totalUploadedWritesForWaf += fileSize;
     if (fileSize > 1) {
       handleFileInputChange(file);
     } else if (fileSize % 4096 == 0) {
