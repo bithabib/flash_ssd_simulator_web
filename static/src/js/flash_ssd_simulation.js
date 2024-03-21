@@ -1954,28 +1954,3 @@ function calculateFlashMemorySize() {
   }
   document.getElementById("mapping_table_entries").textContent = n;
 }
-
-// // make a div full screen
-// var fullscreenBtn = document.getElementById("fullscreen");
-// fullscreenBtn.addEventListener("click", function () {
-//   var myDiv = document.getElementById("fullscreen_div");
-//   myDiv.classList.toggle("fullscreen");
-// });
-
-// // Trim function
-// function checkActiveTrim() {
-//   const activeTrimCheckbox = document.getElementById("active_trim");
-
-//   if (activeTrimCheckbox.checked) {
-//     console.log("Active Trim is ON");
-//     trimFunction();
-//   } else {
-//     console.log("Active Trim is OFF");
-//   }
-// }
-
-// // Call the checkActiveTrim function initially
-// checkActiveTrim();
-
-// // Set up an interval to check the state every 10 seconds (10000 milliseconds)
-// setInterval(checkActiveTrim, 10000);
