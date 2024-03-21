@@ -1209,7 +1209,15 @@ const cacheStorager = new cacheStorage();
 // Read the uploaded file from input onchange
 async function handleFileInputChangeChache() {
   var fileInput = document.getElementById("fileUpload");
-  var file = fileInput.files[0];
+  var write_file_kb = document.getElementById("write_file_kb").value;
+  // parse in float 
+  write_file_kb = parseFloat(write_file_kb);
+  var write_file_name = "file_" + write_file_kb + "kb";
+  // var file = fileInput.files[0];
+  var file = {
+    size: write_file_kb * 1024,
+    name: write_file_name,
+  };
   if (file) {
     var fileSize = file.size;
     totalUploadedWritesForWaf += fileSize;
