@@ -546,13 +546,13 @@ class FileMapping {
   }
 
   updateSelectionAdd(fileName) {
-    var selectElement = document.getElementById("update_file");
-    // Create a new option element
-    var newOption = document.createElement("option");
-    newOption.value = fileName;
-    newOption.textContent = fileName;
-    // Append the new option to the select element
-    selectElement.appendChild(newOption);
+    // var selectElement = document.getElementById("update_file");
+    // // Create a new option element
+    // var newOption = document.createElement("option");
+    // newOption.value = fileName;
+    // newOption.textContent = fileName;
+    // // Append the new option to the select element
+    // selectElement.appendChild(newOption);
 
     // add the file name to the delete select element
     // Get the select element
@@ -576,15 +576,15 @@ class FileMapping {
   }
 
   updateSelectionRemove(fileName) {
-    var selectElement = document.getElementById("update_file");
-    var optionToRemove = fileName;
+    // var selectElement = document.getElementById("update_file");
+    // var optionToRemove = fileName;
 
-    for (let i = 0; i < selectElement.options.length; i++) {
-      if (selectElement.options[i].text === optionToRemove) {
-        selectElement.remove(i);
-        break;
-      }
-    }
+    // for (let i = 0; i < selectElement.options.length; i++) {
+    //   if (selectElement.options[i].text === optionToRemove) {
+    //     selectElement.remove(i);
+    //     break;
+    //   }
+    // }
 
     // remove the file name from the delete select element
     // Get the select element
@@ -1330,14 +1330,14 @@ async function handleFileInputChange(file) {
       await Promise.all(promises);
 
       // if the file name is similar in update delete and read remove duplicate slection name
-      var selectElement = document.getElementById("update_file");
-      var optionToRemove = file.name;
-      for (let i = 0; i < selectElement.options.length; i++) {
-        if (selectElement.options[i].text === optionToRemove) {
-          selectElement.remove(i);
-          break;
-        }
-      }
+      // var selectElement = document.getElementById("update_file");
+      // var optionToRemove = file.name;
+      // for (let i = 0; i < selectElement.options.length; i++) {
+      //   if (selectElement.options[i].text === optionToRemove) {
+      //     selectElement.remove(i);
+      //     break;
+      //   }
+      // }
       // remove the file name from the delete select element
       // Get the select element
       var selectElement = document.getElementById("delete_file");
@@ -1411,38 +1411,6 @@ async function handleSelection(fileName) {
   fileMapping.removeMapping(fileName);
 }
 
-// Update change handler
-async function handleFileUpdate() {
-  var fileInput = document.getElementById("fileUpdate");
-  var file = fileInput.files[0];
-  var selectedFileName = document.getElementById("update_file");
-  var fileName = selectedFileName.value;
-  handleSelection(fileName);
-  if (file) {
-    var fileSize = file.size;
-    if (ssdType.value == "single") {
-      // check the file is devideable by 4kb
-      // alert("File size should be devided by 4kb");
-      console.log(fileSize % 4096);
-      console.log(fileSize % 4096);
-      console.log(fileSize % 4096);
-      console.log(fileSize % 4096);
-      console.log(fileSize % 4096);
-      console.log(fileSize % 4096);
-      if (fileSize % 4096 != 0) {
-        // alert("File size should be devided by 4kb");
-        return;
-      }
-      FileUpload(fileSize, file.name, 2);
-    } else {
-      const promises = [
-        FileUpload(fileSize / 2, file.name, 0),
-        FileUpload(fileSize / 2, file.name, 1),
-      ];
-      await Promise.all(promises);
-    }
-  }
-}
 
 // ----------------------------------------- Read File -------------------------------------------//
 
