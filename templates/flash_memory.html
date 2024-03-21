@@ -182,24 +182,11 @@
             <div class="container">
                 <div class="option-container">
                     <div class="row btn-group d-flex justify-content-center" role="group">
-                        <button type="button" class="btn btn-primary col-2">
-                            <input type="file" id="fileUpload" onchange="handleFileInputChangeChache()">
-                        </button>
                         <button type="button" class="btn btn-primary ms-1 col-2">
                             <select id="update_file" class="form-select">
                                 <option value="update_file" selected>Update</option>
                             </select>
                             <input type="file" id="fileUpdate" onchange="handleFileUpdate()">
-                        </button>
-                        <button type="button" class="btn btn-primary ms-1 col-2">
-                            <select id="read_file" class="form-select">
-                                <option value="read_file" selected>Read</option>
-                            </select>
-                        </button>
-                        <button type="button" class="btn btn-danger ms-1 col-2">
-                            <select id="delete_file" class="form-select">
-                                <option value="delete_file" selected>Delete</option>
-                            </select>
                         </button>
                         <button type="button" class="btn btn-primary ms-1 col-2" onclick="garbageCollection()">
                             Garbage Collection
@@ -215,16 +202,29 @@
                                 <tr>
                                     <td>
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col-4">
                                                 <div class="input-group mb-3">
-                                                    <input type="number" id="write_file_kb" class="form-control" placeholder="File Size"
-                                                        aria-label="measurement" aria-describedby="basic-addon2">
+                                                    <input type="number" id="write_file_kb" class="form-control"
+                                                        placeholder="File Size" aria-label="measurement"
+                                                        aria-describedby="basic-addon2">
                                                     <div class="input-group-append">
                                                         <span class="input-group-text" id="basic-addon2">kb</span>
                                                     </div>
                                                     <button type="button" class="btn btn-primary ms-1"
                                                         onclick="handleFileInputChangeChache()">Upload</button>
                                                 </div>
+                                            </div>
+                                            <div class="col-4">
+
+                                                <select id="read_file" class="form-select">
+                                                    <option value="read_file" selected>Read</option>
+                                                </select>
+
+                                            </div>
+                                            <div class="col-4">
+                                                <select id="delete_file" class="form-select">
+                                                    <option value="delete_file1" selected>Delete</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </td>
