@@ -33,7 +33,11 @@ def insert_data():
         return jsonify({'message': 'No value provided.'}), 400
     sum_value = db.session.query(func.sum(Data.value)).scalar()
     num_rows = db.session.query(func.count(Data.id)).scalar()
-    average_waf = (sum_value + value)/(num_rows + 1)
+    print(sum_value, num_rows)
+    if num_rows == 0:
+        average_waf = value
+    else:
+        average_waf = (sum_value + value)/(num_rows + 1)
     new_data = Data(value=average_waf)
     db.session.add(new_data)
     db.session.commit()
