@@ -1,73 +1,63 @@
 // ------------------------------------------Write Amplification Factor------------------------------------------------------//
+function updateWAFGraph() {
+  var chart = new CanvasJS.Chart("chartContainer", {
+    animationEnabled: true,
+    theme: "light2",
+    title: {
+      text: "Write Amplification Factor Over Time",
+    },
+    data: [
+      {
+        type: "line",
+        indexLabelFontSize: 16,
+        dataPoints: [],
+      },
+    ],
+  });
+
+  // get data from the server
+  fetch("/get_data")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      document.getElementById("waf_value").innerHTML = (
+        data[data.length - 1].y
+      ).toFixed(2);
+      chart.options.data[0].dataPoints = data;
+      chart.render();
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+
+  chart.render();
+}
+
 var totalUploadedWritesForWaf = 0;
 var totalActualWritesForWaf = 0;
 // Initialize the chart
-var chart = new Chart("waf_graph", {
-  type: "scatter",
-  data: {
-    datasets: [
-      {
-        pointRadius: 4,
-        pointBackgroundColor: "rgb(0,0,255)",
-        data: [{ x: 0, y: 0 }],
-      },
-    ],
-  },
-  options: {
-    legend: { display: false },
-    scales: {
-      xAxes: [
-        {
-          ticks: { min: 0, max: 100, stepSize: 1 },
-          scaleLabel: {
-            display: true,
-            labelString: "Write Amplification", // Add your X axis title here
-            fontSize: 8,
-          },
-        },
-      ],
-      yAxes: [
-        {
-          scaleLabel: {
-            display: true,
-            labelString: "Block Writes Over Time", // Add your Y axis title here
-            fontSize: 8,
-          },
-        },
-      ],
-    },
-    title: {
-      display: true,
-      text: "WAF Graph", // Add your graph title here
-      fontSize: 20,
-    },
-  },
-});
 
-// Function to update data
-var x_axis_update = 0;
-function updateWaf(newData) {
-  console.log("totalActualWritesForWaf");
-  console.log(totalActualWritesForWaf);
-  console.log("totalUploadedWritesForWaf");
-  console.log(totalUploadedWritesForWaf);
-  // Update the data array
-  chart.data.datasets[0].data.push({x: x_axis_update, y: (totalActualWritesForWaf/totalUploadedWritesForWaf)});
-
-  // Update the chart
-  chart.update();
-  x_axis_update++;
-  document.getElementById("waf_value").innerHTML = (totalActualWritesForWaf/totalUploadedWritesForWaf).toFixed(2);
+function updateWaf() {
+  
+  // call api to update the graph
+  fetch("/insert_data", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      value: totalActualWritesForWaf / totalUploadedWritesForWaf,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      // console.log("Success:", data);
+      updateWAFGraph();
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 }
-
-
-
-// Example usage:
-// Define new data
-var newData = { x: 0, y: 0 };
-
-// Call the function to update data
-updateWaf(newData);
 
 // -----------------------------  Flash SSD Simulation  -----------------------------//
 // -----------------------------  Flash SSD Simulation  -----------------------------//
@@ -733,6 +723,7 @@ var file_tracer = 0;
 async function FileUpload(fileSize, fileName, fileIndex) {
   // Bytes to kb 2 decimal places
   totalActualWritesForWaf += fileSize;
+  updateWaf();
   var fileSizeInKB = (fileSize / 1024).toFixed(2);
   if (fileSizeInKB >= globalFileSize) {
     alert("File size is too large, please select a file less than 512kb");
@@ -1107,10 +1098,6 @@ async function FileUpload(fileSize, fileName, fileIndex) {
         logicalAddressTracer++;
         blockPageTracer++;
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        updateWaf({
-          x: logicalAddressTracer,
-          y: 3 - (1 / logicalAddressTracer) * 3,
-        });
       }
       // Remove the block from the sequence
       if (blockPageTracer === 5) {
@@ -1210,7 +1197,7 @@ const cacheStorager = new cacheStorage();
 async function handleFileInputChangeChache() {
   // var fileInput = document.getElementById("fileUpload");
   var write_file_kb = document.getElementById("write_file_kb").value;
-  // parse in float 
+  // parse in float
   write_file_kb = parseFloat(write_file_kb);
   var write_file_name = "file_" + write_file_kb + "kb";
   // var file = fileInput.files[0];
@@ -1410,7 +1397,6 @@ async function handleSelection(fileName) {
   }
   fileMapping.removeMapping(fileName);
 }
-
 
 // ----------------------------------------- Read File -------------------------------------------//
 
@@ -1737,6 +1723,7 @@ async function trimFunction() {
 //-------------------------------------  Flash Memory Design ------------------------------------//
 window.onload = function () {
   calculateFlashMemorySize();
+  updateWAFGraph();
 };
 
 // Objective: Flash memory page
