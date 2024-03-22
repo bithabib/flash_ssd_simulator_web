@@ -19,7 +19,6 @@ function updateWAFGraph() {
   fetch("/get_data")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       document.getElementById("waf_value").innerHTML = (
         data[data.length - 1].y
       ).toFixed(2);
@@ -51,7 +50,6 @@ function updateWaf() {
   })
     .then((response) => response.json())
     .then((data) => {
-      // console.log("Success:", data);
       updateWAFGraph();
     })
     .catch((error) => {
@@ -427,15 +425,11 @@ class BlockList {
 
   // Get a block object from the block_list based on blockName
   getBlockRemoveBlockList(blockName) {
-    // console.log(blockName);
-    // console.log(blockName);
     return this.removed_block_list.find((block) => block.block === blockName);
   }
 
   // Get a block object from the block_list based on blockName
   getBlock(blockName) {
-    // console.log(blockName);
-    // console.log(blockName);
     return this.block_list.find((block) => block.block === blockName);
   }
 
@@ -484,7 +478,6 @@ const blockList = new BlockList();
 // Block information tracer function --------------------------------------------------//
 function TraceBlockInformation() {
   dataset = blockList.block_list.concat(blockList.removed_block_list);
-  // console.log(dataset);
   var table = document.getElementById("block_information_tracer");
   var tbody = table.getElementsByTagName("tbody")[0];
   while (tbody.firstChild) {
@@ -495,7 +488,6 @@ function TraceBlockInformation() {
     var block = entry.block;
     var writeCount = entry.write_count;
     var eraseCount = entry.erase_count;
-    // console.log(entry);
 
     entry.written_page.forEach(function (pageData) {
       var row = document.createElement("tr");
@@ -639,19 +631,15 @@ function scrollToSelectedRow(table) {
   parentElement = table.parentElement;
   while (parentElement.tagName != "DIV") {
     parentElement = parentElement.parentElement;
-    // console.log(parentElement.tagName);
   }
   parentElementTop = parentElement.getBoundingClientRect().top;
   tableTop = table.getBoundingClientRect().top;
   // Scroll the table to the selected row so that user don't have to scroll manually
   parentElement.scrollTop = tableTop - parentElementTop;
-
-  // console.log(table.getBoundingClientRect());
 }
 
 // reading the table row
 function readTableRow(tableName, rowNumber, fileSizeInKB) {
-  // console.log(tableName);
   var table = document.getElementById(tableName);
   var rows = table.getElementsByTagName("tr");
   scrollToSelectedRow(table);
@@ -711,7 +699,6 @@ async function garbageUpdateMappingTable(
 // Selected ssd type normal/ parallel
 var ssdType = document.getElementById("ssd_type");
 function getRandomBlockParallel(blocks, prefix) {
-  console.log(blocks);
   const filteredBlocks = blocks.filter((block) =>
     block.block.startsWith(prefix)
   );
@@ -762,22 +749,6 @@ async function FileUpload(fileSize, fileName, fileIndex) {
             Math.floor(
               while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
             ) % 4;
-          // var channel = (logicalAddressTracer/(1*2*2))%2;
-          console.log(
-            "channel: " +
-              channel +
-              " chip: " +
-              chip +
-              " die: " +
-              die +
-              " plane: " +
-              plane +
-              " block: " +
-              block_
-          );
-          // var random = Math.floor(Math.random() * blockList.block_list.length);
-          // var random = Math.floor(Math.random() * blockList.length);
-          // Get the block number from the sequence
           var block = getRandomBlockParallel(
             blockList.block_list,
             "p" + channel + "d" + die + "p" + plane + "b" + block_
@@ -812,22 +783,6 @@ async function FileUpload(fileSize, fileName, fileIndex) {
             Math.floor(
               while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
             ) % 4;
-          // var channel = (logicalAddressTracer/(1*2*2))%2;
-          console.log(
-            "channel: " +
-              channel +
-              " chip: " +
-              chip +
-              " die: " +
-              die +
-              " plane: " +
-              plane +
-              " block: " +
-              block_
-          );
-          // var random = Math.floor(Math.random() * blockList.block_list.length);
-          // var random = Math.floor(Math.random() * blockList.length);
-          // Get the block number from the sequence
           var block = getRandomBlockParallel(
             blockList.block_list,
             "p" + channel + "d" + die + "p" + plane + "b" + block_
@@ -862,22 +817,6 @@ async function FileUpload(fileSize, fileName, fileIndex) {
             Math.floor(
               while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
             ) % 4;
-          // var channel = (logicalAddressTracer/(1*2*2))%2;
-          console.log(
-            "channel: " +
-              channel +
-              " chip: " +
-              chip +
-              " die: " +
-              die +
-              " plane: " +
-              plane +
-              " block: " +
-              block_
-          );
-          // var random = Math.floor(Math.random() * blockList.block_list.length);
-          // var random = Math.floor(Math.random() * blockList.length);
-          // Get the block number from the sequence
           var block = getRandomBlockParallel(
             blockList.block_list,
             "p" + channel + "d" + die + "p" + plane + "b" + block_
@@ -912,22 +851,6 @@ async function FileUpload(fileSize, fileName, fileIndex) {
             Math.floor(
               while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
             ) % 4;
-          // var channel = (logicalAddressTracer/(1*2*2))%2;
-          console.log(
-            "channel: " +
-              channel +
-              " chip: " +
-              chip +
-              " die: " +
-              die +
-              " plane: " +
-              plane +
-              " block: " +
-              block_
-          );
-          // var random = Math.floor(Math.random() * blockList.block_list.length);
-          // var random = Math.floor(Math.random() * blockList.length);
-          // Get the block number from the sequence
           var block = getRandomBlockParallel(
             blockList.block_list,
             "p" + channel + "d" + die + "p" + plane + "b" + block_
@@ -962,22 +885,6 @@ async function FileUpload(fileSize, fileName, fileIndex) {
             Math.floor(
               while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
             ) % 4;
-          // var channel = (logicalAddressTracer/(1*2*2))%2;
-          console.log(
-            "channel: " +
-              channel +
-              " chip: " +
-              chip +
-              " die: " +
-              die +
-              " plane: " +
-              plane +
-              " block: " +
-              block_
-          );
-          // var random = Math.floor(Math.random() * blockList.block_list.length);
-          // var random = Math.floor(Math.random() * blockList.length);
-          // Get the block number from the sequence
           var block = getRandomBlockParallel(
             blockList.block_list,
             "p" + channel + "d" + die + "p" + plane + "b" + block_
@@ -1012,22 +919,6 @@ async function FileUpload(fileSize, fileName, fileIndex) {
             Math.floor(
               while_loop_tracer / (n_plane * n_die * n_chip * n_channel)
             ) % 4;
-          // var channel = (logicalAddressTracer/(1*2*2))%2;
-          console.log(
-            "channel: " +
-              channel +
-              " chip: " +
-              chip +
-              " die: " +
-              die +
-              " plane: " +
-              plane +
-              " block: " +
-              block_
-          );
-          // var random = Math.floor(Math.random() * blockList.block_list.length);
-          // var random = Math.floor(Math.random() * blockList.length);
-          // Get the block number from the sequence
           var block = getRandomBlockParallel(
             blockList.block_list,
             "p" + channel + "d" + die + "p" + plane + "b" + block_
@@ -1048,10 +939,8 @@ async function FileUpload(fileSize, fileName, fileIndex) {
         var block = getRandomBlockParallel(blockList.block_list, fileIndex);
       }
 
-      // console.log(block);
       // Get the block page tracer from the correct page
       var blockPageTracer = 0;
-      console.log(block);
       for (i = 0; i < block.written_page.length; i++) {
         if (block.written_page[i].data == 0) {
           blockPageTracer = i + 1;
@@ -1071,7 +960,6 @@ async function FileUpload(fileSize, fileName, fileIndex) {
           // update the block page
           block["written_page"][blockPageTracer - 1]["data"] = 4;
           block["written_page"][blockPageTracer - 1]["state"] = "valid";
-          // console.log(block);
           globalFileSize = globalFileSize - 4;
         }
 
@@ -1124,7 +1012,6 @@ async function FileUpload(fileSize, fileName, fileIndex) {
         mapping_table_row
       );
     }
-    // console.log(fileMapping.getMapping(file.name));
     TraceBlockInformation();
   }
 
@@ -1218,10 +1105,8 @@ async function handleFileInputChangeChache() {
         if (cacheStorager.cacheStorage[i].cacheRegisterValue < 4096) {
           while (fileSize > 0) {
             fileSize = fileSize - 4;
-            // console.log(fileSize);
             cacheStorager.cacheStorage[i].cacheRegisterValue =
               cacheStorager.cacheStorage[i].cacheRegisterValue + 4;
-            // console.log(cacheStorager.cacheStorage[i].cacheRegisterValue);
             document.getElementById(
               cacheStorager.cacheStorage[i].cacheRegisterId
             ).style.width =
@@ -1235,7 +1120,6 @@ async function handleFileInputChangeChache() {
           totalFileSizeTracer =
             totalFileSizeTracer +
             cacheStorager.cacheStorage[i].cacheRegisterValue;
-          console.log(totalFileSizeTracer);
           if (fileSize == 0) {
             break;
           }
@@ -1360,11 +1244,8 @@ async function handleSelection(fileName) {
   // const fileMapping = new FileMapping();
   var getFileInformation = fileMapping.getMapping(fileName);
 
-  console.log(getFileInformation);
   var table = document.getElementById("mapping_table");
   var rows = table.getElementsByTagName("tr");
-  console.log(getFileInformation.firstRowOfMappingFile);
-  console.log(getFileInformation.lastRowOfMappingFile);
   for (
     firstRow = getFileInformation.firstRowOfMappingFile;
     firstRow < getFileInformation.lastRowOfMappingFile;
@@ -1402,11 +1283,8 @@ async function handleSelection(fileName) {
 
 async function readSelectedFile(fileName) {
   var getFileInformation = fileMapping.getMapping(fileName);
-  // console.log(getFileInformation);
   var table = document.getElementById("mapping_table");
   var rows = table.getElementsByTagName("tr");
-  // console.log(getFileInformation.firstRowOfMappingFile);
-  // console.log(getFileInformation.lastRowOfMappingFile);
   for (
     firstRow = getFileInformation.firstRowOfMappingFile;
     firstRow < getFileInformation.lastRowOfMappingFile;
@@ -1419,9 +1297,6 @@ async function readSelectedFile(fileName) {
       physicalAddressWithRow.length - 1
     );
     physicalAddress = physicalAddressWithRow.slice(0, -1);
-    // console.log(logicalAddress);
-    // console.log(physicalAddress);
-    // console.log(physicalAddressBlockRow);
     // Update the table row
     row.style.backgroundColor = "blue";
     blockTable = document.getElementById(physicalAddress);
@@ -1439,7 +1314,6 @@ readSelectedFileName.addEventListener("change", function () {
   // Get the selected value
   var fileName = readSelectedFileName.value;
   // Display the selected value
-  // console.log("Selected file name: " + fileName);
   readSelectedFile(fileName);
 });
 
@@ -1450,22 +1324,18 @@ selectedFileName.addEventListener("change", function () {
   // Get the selected value
   var fileName = selectedFileName.value;
   // Display the selected value
-  // console.log("Selected file name: " + fileName);
   handleSelection(fileName);
 });
 
 // ----------------------------------------- Garbage Collection -----------------------------------------//
 
 async function garbageCollection() {
-  // console.log("Garbage Collection");
   // get removed block elements from the garbage collection
-  console.log(blockList.removed_block_list);
   var removedBlockElements = blockList.removed_block_list;
   var selected_ssd_type = document.getElementById("ssd_type").value;
   if (selected_ssd_type == "single") {
     selected_ssd_type = 2;
   }
-  // console.log(removedBlockElements);
   // get the removed block elements
   for (var i = 0; i < removedBlockElements.length; i++) {
     var removedBlock = removedBlockElements[i];
@@ -1627,19 +1497,14 @@ async function garbageCollection() {
 
 // ----------------------------------------- Trim Function -----------------------------------------//
 async function trimFunction() {
-  // console.log("Garbage Collection");
   // get removed block elements from the garbage collection
   console.log(blockList.removed_block_list);
   var removedBlockElements = blockList.removed_block_list;
-  // console.log(removedBlockElements);
   // get the removed block elements
   for (var i = 0; i < removedBlockElements.length; i++) {
     var removedBlock = removedBlockElements[i];
-    // console.log(removedBlock);
     // get the block table id and page number from block address
     var blockAddress = removedBlock["block"];
-    // console.log(blockAddress);
-    // console.log(blockAddress);
     // get the table using the block address
     var blockTable = document.getElementById(blockAddress);
 
@@ -1777,7 +1642,6 @@ blockSelect.addEventListener("change", function () {
     // remove the block from blockList
     for (var i = 0; i < removed_list.length; i++) {
       blockList.removeBlock(removed_list[i]);
-      console.log(blockList);
       // console.log(blockList.block_list.length);
       // console.log(blockList.removed_block_list.length);
     }
