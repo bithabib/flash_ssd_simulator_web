@@ -189,6 +189,26 @@
                                                 </select>
                                             </div>
                                             <div class="col">
+                                                <button type="button" class="btn btn-primary"
+                                                    onclick="trimFunction();">
+                                                    Execute Trim
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col">
+                                                <button type="button" class="btn btn-primary"
+                                                    onclick="garbageCollection()">
+                                                    Execute Garbage Collection
+                                                </button>
+                                            </div>
+
+                                            <div class="col">
                                                 <label for="ssd_type" class="form-label">Allocation Schemes</label>
                                                 <select id="ssd_type" class="form-select">
                                                     <optgroup label="Static">
@@ -209,25 +229,6 @@
                                                         </option>
                                                     </optgroup>
                                                 </select>
-                                            </div>
-                                            
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="row">
-                                            <div class="col">
-                                                <button type="button" class="btn btn-primary"
-                                                    onclick="garbageCollection()">
-                                                    Execute Garbage Collection
-                                                </button>
-                                            </div>
-                                            <div class="col">
-                                                <button type="button" class="btn btn-primary pl-5 pr-5"
-                                                    onclick="trimFunction();">
-                                                    Execute Trim
-                                                </button>
                                             </div>
                                         </div>
                                     </td>
