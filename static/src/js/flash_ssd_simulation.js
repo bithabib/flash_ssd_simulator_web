@@ -1441,7 +1441,7 @@ async function trimFunction() {
 window.onload = function () {
   calculateFlashMemorySize();
   updateWAFGraph();
-  stopProcessingGif("Please startwriting");
+  stopProcessingGif("Please start writing");
   // div.style.backgroundImage = "none";
 };
 
