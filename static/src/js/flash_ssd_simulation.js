@@ -19,9 +19,8 @@ function updateWAFGraph() {
   fetch("/get_data")
     .then((response) => response.json())
     .then((data) => {
-      document.getElementById("waf_value").innerHTML = (
-        data[data.length - 1].y
-      ).toFixed(2);
+      document.getElementById("waf_value").innerHTML =
+        data[data.length - 1].y.toFixed(2);
       chart.options.data[0].dataPoints = data;
       chart.render();
     })
@@ -37,7 +36,6 @@ var totalActualWritesForWaf = 0;
 // Initialize the chart
 
 function updateWaf() {
-  
   // call api to update the graph
   fetch("/insert_data", {
     method: "POST",
@@ -1332,6 +1330,7 @@ selectedFileName.addEventListener("change", function () {
 async function garbageCollection() {
   // get removed block elements from the garbage collection
   var removedBlockElements = blockList.removed_block_list;
+
   var selected_ssd_type = document.getElementById("ssd_type").value;
   if (selected_ssd_type == "single") {
     selected_ssd_type = 2;
@@ -1344,152 +1343,51 @@ async function garbageCollection() {
     // get the table using the block address
     var blockTable = document.getElementById(blockAddress);
 
+    // find what are the pages that are invalid
+    var isPageInvalid = [
+      removedBlock.written_page[0].state == "invalid",
+      removedBlock.written_page[1].state == "invalid",
+      removedBlock.written_page[2].state == "invalid",
+      removedBlock.written_page[3].state == "invalid",
+    ];
+    console.log(isPageInvalid);
+    console.log(isPageInvalid);
+    // check if at least one page is invalid
     if (
-      removedBlock.written_page[0].state == "invalid" &&
-      removedBlock.written_page[1].state == "invalid" &&
-      removedBlock.written_page[2].state == "invalid" &&
-      removedBlock.written_page[3].state == "invalid"
+      isPageInvalid[0] ||
+      isPageInvalid[1] ||
+      isPageInvalid[2] ||
+      isPageInvalid[3]
     ) {
-      var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
-      row1.style.backgroundColor = "red";
-      row1.cells[0].innerText = "\u00A0";
-      removedBlock.written_page[0].data = 0;
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      row1.style.backgroundColor = "white";
-      var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
-      row2.style.backgroundColor = "red";
-      row2.cells[0].innerText = "\u00A0";
-      removedBlock.written_page[1].data = 0;
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      row2.style.backgroundColor = "white";
-      var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
-      row3.style.backgroundColor = "red";
-      row3.cells[0].innerText = "\u00A0";
-      removedBlock.written_page[2].data = 0;
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      row3.style.backgroundColor = "white";
-      var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
-      row4.style.backgroundColor = "red";
-      row4.cells[0].innerText = "\u00A0";
-      removedBlock.written_page[3].data = 0;
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      row4.style.backgroundColor = "white";
-      removedBlock.erase_count++;
-      // remove the block from the removed block list and add it to the block list
-      blockList.removeBlockFromRemovedBlockList(blockAddress);
-    } else if (
-      removedBlock.written_page[0].state == "invalid" &&
-      removedBlock.written_page[1].state == "invalid" &&
-      removedBlock.written_page[2].state == "invalid"
-    ) {
-      var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
-      row1.style.backgroundColor = "red";
-      row1.cells[0].innerText = "\u00A0";
-      removedBlock.written_page[0].data = 0;
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      row1.style.backgroundColor = "white";
-      var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
-      row2.style.backgroundColor = "red";
-      row2.cells[0].innerText = "\u00A0";
-      removedBlock.written_page[1].data = 0;
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      row2.style.backgroundColor = "white";
-      var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
-      row3.style.backgroundColor = "red";
-      row3.cells[0].innerText = "\u00A0";
-      removedBlock.written_page[2].data = 0;
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      row3.style.backgroundColor = "white";
-      var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
-      row4.style.backgroundColor = "red";
-      row4.cells[0].innerText = "\u00A0";
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      row4.style.backgroundColor = "white";
-      removedBlock.erase_count++;
-      var garbage_collection_tracer = "garbage" + removedBlock["block"] + "4";
-      // get the selected allocation schemes and update the mapping table
+      total_valid_page_size = 0;
+      valid_page_tracer = ""
+      for (var j = 0; j < 4; j++) {
+        if (isPageInvalid[j]) {
+          var row = blockTable.rows[removedBlock.written_page[j].page + 1];
+          row.style.backgroundColor = "red";
+          row.cells[0].innerText = "\u00A0";
+          removedBlock.written_page[j].data = 0;
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          row.style.backgroundColor = "white";
+        } else {
+          var row = blockTable.rows[removedBlock.written_page[j].page + 1];
+          row.style.backgroundColor = "red";
+          row.cells[0].innerText = "\u00A0";
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          row.style.backgroundColor = "white";
+          total_valid_page_size += removedBlock.written_page[j].data;
+          // covert j to string
+          valid_page_tracer += j+1;
+          console.log(valid_page_tracer);
+          removedBlock.written_page[j].data = 0;
+        }
+      }
       FileUpload(
-        removedBlock.written_page[3].data * 1024,
-        garbage_collection_tracer,
+        total_valid_page_size * 1024,
+        "garbage" + removedBlock["block"] + valid_page_tracer,
         selected_ssd_type
       );
-      removedBlock.written_page[3].data = 0;
-      blockList.removeBlockFromRemovedBlockList(blockAddress);
-    } else if (
-      removedBlock.written_page[0].state == "invalid" &&
-      removedBlock.written_page[1].state == "invalid"
-    ) {
-      var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
-      row1.style.backgroundColor = "red";
-      row1.cells[0].innerText = "\u00A0";
-      removedBlock.written_page[0].data = 0;
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      row1.style.backgroundColor = "white";
-      var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
-      row2.style.backgroundColor = "red";
-      row2.cells[0].innerText = "\u00A0";
-      removedBlock.written_page[1].data = 0;
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      row2.style.backgroundColor = "white";
-      var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
-      row3.style.backgroundColor = "red";
-      row3.cells[0].innerText = "\u00A0";
-
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      row3.style.backgroundColor = "white";
-      var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
-      row4.style.backgroundColor = "red";
-      row4.cells[0].innerText = "\u00A0";
-
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      row4.style.backgroundColor = "white";
       removedBlock.erase_count++;
-      var garbage_collection_tracer = "garbage" + removedBlock["block"] + "34";
-      FileUpload(
-        (removedBlock.written_page[2].data +
-          removedBlock.written_page[3].data) *
-          1024,
-        garbage_collection_tracer,
-        selected_ssd_type
-      );
-      removedBlock.written_page[2].data = 0;
-      removedBlock.written_page[3].data = 0;
-      blockList.removeBlockFromRemovedBlockList(blockAddress);
-    } else if (removedBlock.written_page[0].state == "invalid") {
-      var row1 = blockTable.rows[removedBlock.written_page[0].page + 1];
-      row1.style.backgroundColor = "red";
-      row1.cells[0].innerText = "\u00A0";
-      removedBlock.written_page[0].data = 0;
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      row1.style.backgroundColor = "white";
-      var row2 = blockTable.rows[removedBlock.written_page[1].page + 1];
-      row2.style.backgroundColor = "red";
-      row2.cells[0].innerText = "\u00A0";
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      row2.style.backgroundColor = "white";
-      var row3 = blockTable.rows[removedBlock.written_page[2].page + 1];
-      row3.style.backgroundColor = "red";
-      row3.cells[0].innerText = "\u00A0";
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      row3.style.backgroundColor = "white";
-      var row4 = blockTable.rows[removedBlock.written_page[3].page + 1];
-      row4.style.backgroundColor = "red";
-      row4.cells[0].innerText = "\u00A0";
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      row4.style.backgroundColor = "white";
-      removedBlock.erase_count++;
-      var garbage_collection_tracer = "garbage" + removedBlock["block"] + "234";
-      FileUpload(
-        (removedBlock.written_page[1].data +
-          removedBlock.written_page[2].data +
-          removedBlock.written_page[3].data) *
-          1024,
-        garbage_collection_tracer,
-        selected_ssd_type
-      );
-      removedBlock.written_page[1].data = 0;
-      removedBlock.written_page[2].data = 0;
-      removedBlock.written_page[3].data = 0;
       blockList.removeBlockFromRemovedBlockList(blockAddress);
     }
   }
