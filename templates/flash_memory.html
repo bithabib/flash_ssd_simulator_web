@@ -51,14 +51,14 @@
             <div class="col-md-1"></div>
             <div class="col-md-2">
                 <label for="pageCount" class="form-label">Page per Block</label>
-                <select id="pageCount" class="form-select btn-outline-dark">
+                <select id="pageCount" class="form-select btn-light border">
                     <option value="4" selected>4</option>
                 </select>
             </div>
 
             <div class="col-md-2">
                 <label for="blockCount" class="form-label">Block per Plane</label>
-                <select id="blockCount" class="form-select btn-outline-dark">
+                <select id="blockCount" class="form-select btn-light border">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="4" selected>4</option>
@@ -67,7 +67,7 @@
 
             <div class="col-md-2">
                 <label for="planeCount" class="form-label">Plane per Die</label>
-                <select id="planeCount" class="form-select btn-outline-dark">
+                <select id="planeCount" class="form-select btn-light border">
                     <option value="1">1</option>
                     <option value="2" selected>2</option>
                 </select>
@@ -75,7 +75,7 @@
 
             <div class="col-md-2">
                 <label for="dieCount" class="form-label">Die per Package</label>
-                <select id="dieCount" class="form-select btn-outline-dark">
+                <select id="dieCount" class="form-select btn-light border">
                     <option value="1">1</option>
                     <option value="2" selected>2</option>
                 </select>
@@ -83,7 +83,7 @@
 
             <div class="col-md-2">
                 <label for="packageCount" class="form-label">Number of Packages</label>
-                <select id="packageCount" class="form-select btn-outline-dark">
+                <select id="packageCount" class="form-select btn-light border">
                     <option value="1">1</option>
                     <option value="2" selected>2</option>
                 </select>
@@ -172,24 +172,24 @@
                                                     <div class="input-group-append">
                                                         <span class="input-group-text" id="basic-addon2">kb</span>
                                                     </div>
-                                                    <button type="button" class="btn btn-outline-dark ms-1"
+                                                    <button type="button" class="btn btn-light border ms-1"
                                                         onclick="handleFileInputChangeChache()">Write</button>
                                                 </div>
                                             </div>
                                             <div class="col">
 
-                                                <select id="read_file" class="form-select btn-outline-dark">
+                                                <select id="read_file" class="form-select btn-light border">
                                                     <option value="read_file" selected>Read</option>
                                                 </select>
 
                                             </div>
                                             <div class="col">
-                                                <select id="delete_file" class="form-select btn-outline-dark">
+                                                <select id="delete_file" class="form-select btn-light border">
                                                     <option value="delete_file1" selected>Delete</option>
                                                 </select>
                                             </div>
                                             <div class="col">
-                                                <button type="button" class="btn btn-outline-dark" onclick="trimFunction();">
+                                                <button type="button" class="btn btn-light border" onclick="trimFunction();">
                                                     Execute Trim
                                                 </button>
                                             </div>
@@ -201,7 +201,7 @@
                                     <td>
                                         <div class="row">
                                             <div class="col">
-                                                <button type="button" class="btn btn-outline-dark"
+                                                <button type="button" class="btn btn-light border"
                                                     onclick="garbageCollection()">
                                                     Execute Garbage Collection
                                                 </button>
@@ -209,7 +209,7 @@
 
                                             <div class="col">
                                                 <label for="ssd_type" class="form-label">Allocation Schemes</label>
-                                                <select id="ssd_type" class="form-select btn-outline-dark">
+                                                <select id="ssd_type" class="form-select btn-light border">
                                                     <optgroup label="Static">
                                                         <option value="s1" selected>S1: Chip ➔ Die ➔ Plane ➔ Channel
                                                         </option>
