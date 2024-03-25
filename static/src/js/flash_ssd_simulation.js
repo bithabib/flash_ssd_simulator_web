@@ -55,6 +55,24 @@ function updateWaf() {
     });
 }
 
+// ----------------------------- Processing Status -----------------------------//
+// ----------------------------- Processing Status -----------------------------//
+function stopProcessingGif(message) {
+  var div = document.getElementById("processing_status_container");
+  div.style.backgroundImage = "none";
+  var processingStatus = document.getElementById("processing_status");
+  processingStatus.innerHTML = message;
+}
+function startProcessingGif(message) {
+  console.log("start processing gif");
+  console.log("start processing gif");
+  console.log("start processing gif");
+  var div = document.getElementById("processing_status_container");
+  div.style.backgroundImage = 'url("static/src/logo/1amw.gif")';
+  var processingStatus = document.getElementById("processing_status");
+  processingStatus.innerHTML = message;
+}
+
 // -----------------------------  Flash SSD Simulation  -----------------------------//
 // -----------------------------  Flash SSD Simulation  -----------------------------//
 class BlockList {
@@ -1081,6 +1099,7 @@ const cacheStorager = new cacheStorage();
 // Read the uploaded file from input onchange
 async function handleFileInputChangeChache() {
   // var fileInput = document.getElementById("fileUpload");
+  startProcessingGif("Writing");
   var write_file_kb = document.getElementById("write_file_kb").value;
   // parse in float
   write_file_kb = parseFloat(write_file_kb);
@@ -1094,9 +1113,9 @@ async function handleFileInputChangeChache() {
     var fileSize = file.size;
     totalUploadedWritesForWaf += fileSize;
     if (fileSize > 1) {
-      handleFileInputChange(file);
+      await handleFileInputChange(file);
     } else if (fileSize % 4096 == 0) {
-      handleFileInputChange(file);
+      await handleFileInputChange(file);
     } else {
       var totalFileSizeTracer = 0;
       for (let i = 0; i < 8; i++) {
@@ -1126,7 +1145,7 @@ async function handleFileInputChangeChache() {
         }
       }
       if (fileSize > 0) {
-        handleFileInputChange({
+        await handleFileInputChange({
           size: totalFileSizeTracer + fileSize,
           name: "combiner_file_buffer",
         });
@@ -1134,7 +1153,7 @@ async function handleFileInputChangeChache() {
       }
 
       if (totalFileSizeTracer % 4096 > 3000) {
-        handleFileInputChange({
+        await handleFileInputChange({
           size: totalFileSizeTracer,
           name: "combiner_file_buffer",
         });
@@ -1142,6 +1161,7 @@ async function handleFileInputChangeChache() {
       }
     }
   }
+  stopProcessingGif("Writing Completed");
 }
 async function handleFileInputChange(file) {
   // var fileInput = document.getElementById("fileUpload");
@@ -1152,7 +1172,7 @@ async function handleFileInputChange(file) {
     // update graph
 
     if (ssdType.value == "single") {
-      FileUpload(fileSize, file.name, 2);
+      await FileUpload(fileSize, file.name, 2);
     }
     // ssdType.value contain multi then it is multi plane
     else if (ssdType.value.includes("multi")) {
@@ -1175,7 +1195,7 @@ async function handleFileInputChange(file) {
         plane_selector = i % 2;
         if (ssdType.value == "pdpmulti") {
           promises.push(
-            FileUpload(
+            await FileUpload(
               fileSize / numberOfPlanes,
               file.name,
               "p" + packag_selector + "d" + die_selector + "p" + plane_selector
@@ -1183,7 +1203,7 @@ async function handleFileInputChange(file) {
           );
         } else if (ssdType.value == "pdmulti") {
           promises.push(
-            FileUpload(
+            await FileUpload(
               fileSize / numberOfPlanes,
               file.name,
               "p" + packag_selector + "d" + die_selector
@@ -1191,24 +1211,17 @@ async function handleFileInputChange(file) {
           );
         } else if (ssdType.value == "pmulti") {
           promises.push(
-            FileUpload(fileSize / numberOfPlanes, file.name, "p" + (i % 2))
+            await FileUpload(
+              fileSize / numberOfPlanes,
+              file.name,
+              "p" + (i % 2)
+            )
           );
         }
       }
 
       await Promise.all(promises);
 
-      // if the file name is similar in update delete and read remove duplicate slection name
-      // var selectElement = document.getElementById("update_file");
-      // var optionToRemove = file.name;
-      // for (let i = 0; i < selectElement.options.length; i++) {
-      //   if (selectElement.options[i].text === optionToRemove) {
-      //     selectElement.remove(i);
-      //     break;
-      //   }
-      // }
-      // remove the file name from the delete select element
-      // Get the select element
       var selectElement = document.getElementById("delete_file");
       // Create a new option element
       var optionToRemove = file.name;
@@ -1231,7 +1244,7 @@ async function handleFileInputChange(file) {
         }
       }
     } else {
-      FileUpload(fileSize, file.name, ssdType.value);
+      await FileUpload(fileSize, file.name, ssdType.value);
     }
   }
 }
@@ -1275,6 +1288,7 @@ async function handleSelection(fileName) {
     row.style.backgroundColor = "white";
   }
   fileMapping.removeMapping(fileName);
+  stopProcessingGif("Deleting Completed");
 }
 
 // ----------------------------------------- Read File -------------------------------------------//
@@ -1304,6 +1318,7 @@ async function readSelectedFile(fileName) {
     row.style.backgroundColor = "green";
     blockTable.rows[physicalAddressBlockRow].style.backgroundColor = "green";
   }
+  stopProcessingGif("Reading Completed");
 }
 
 var readSelectedFileName = document.getElementById("read_file");
@@ -1312,6 +1327,7 @@ readSelectedFileName.addEventListener("change", function () {
   // Get the selected value
   var fileName = readSelectedFileName.value;
   // Display the selected value
+  startProcessingGif("Reading");
   readSelectedFile(fileName);
 });
 
@@ -1322,6 +1338,7 @@ selectedFileName.addEventListener("change", function () {
   // Get the selected value
   var fileName = selectedFileName.value;
   // Display the selected value
+  startProcessingGif("Deleting");
   handleSelection(fileName);
 });
 
@@ -1382,7 +1399,9 @@ async function garbageCollectionAndTrim(isTrim) {
             await new Promise((resolve) => setTimeout(resolve, 1000));
             row.style.backgroundColor = "white";
             // parse the data to float
-            total_valid_page_size += parseFloat(removedBlock.written_page[j].data);
+            total_valid_page_size += parseFloat(
+              removedBlock.written_page[j].data
+            );
             console.log("total_valid_page_size");
             console.log(total_valid_page_size);
             // covert j to string
@@ -1393,7 +1412,7 @@ async function garbageCollectionAndTrim(isTrim) {
         }
       }
       if (!isTrim) {
-        FileUpload(
+        await FileUpload(
           total_valid_page_size * 1024,
           "garbage" + removedBlock["block"] + valid_page_tracer,
           selected_ssd_type
@@ -1406,11 +1425,15 @@ async function garbageCollectionAndTrim(isTrim) {
 }
 
 async function garbageCollection() {
-  garbageCollectionAndTrim(false);
+  startProcessingGif("Garbage Collection");
+  await garbageCollectionAndTrim(false);
+  stopProcessingGif("Garbage Collection Completed");
 }
 
 async function trimFunction() {
-  garbageCollectionAndTrim(true);
+  startProcessingGif("Trimming");
+  await garbageCollectionAndTrim(true);
+  stopProcessingGif("Trim Completed");
 }
 
 //-------------------------------------  Flash Memory Design ------------------------------------//
@@ -1418,6 +1441,8 @@ async function trimFunction() {
 window.onload = function () {
   calculateFlashMemorySize();
   updateWAFGraph();
+  stopProcessingGif();
+  // div.style.backgroundImage = "none";
 };
 
 // Objective: Flash memory page
@@ -1625,8 +1650,14 @@ function calculateFlashMemorySize() {
     cell1.setAttribute("id", "la" + i);
     cell2.setAttribute("id", "pa" + i);
 
-    cell1.setAttribute("style", "font-size: 5px; height: 3px; line-height: 3px; overflow: hidden;");
-    cell2.setAttribute("style", "font-size: 5px; height: 3px; line-height: 3px; overflow: hidden;");
+    cell1.setAttribute(
+      "style",
+      "font-size: 5px; height: 3px; line-height: 3px; overflow: hidden;"
+    );
+    cell2.setAttribute(
+      "style",
+      "font-size: 5px; height: 3px; line-height: 3px; overflow: hidden;"
+    );
 
     row.appendChild(cell1);
     row.appendChild(cell2);

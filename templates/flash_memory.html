@@ -159,7 +159,7 @@
             <div class="row">
                 <table>
                     <tr>
-                        <th colspan="2" style="margin: auto;">
+                        <th style="margin: auto;">
                             <table style="margin: auto;">
                                 <tr>
                                     <td>
@@ -189,8 +189,7 @@
                                                 </select>
                                             </div>
                                             <div class="col">
-                                                <button type="button" class="btn btn-primary"
-                                                    onclick="trimFunction();">
+                                                <button type="button" class="btn btn-primary" onclick="trimFunction();">
                                                     Execute Trim
                                                 </button>
                                             </div>
@@ -234,6 +233,15 @@
                                     </td>
                                 </tr>
                             </table>
+
+                        </th>
+                        <th>
+                            <div class="rounded-circle d-flex justify-content-center align-items-center text-white" id="processing_status_container"
+                                style="width: 130px; height: 130px; background-color: #e4eef1; background-size: cover; background-image: url(/static/src/logo/1amw.gif);">
+
+                                <p class="mt-2 text-center" id="processing_status"></p>
+
+                            </div>
                         </th>
                     </tr>
                     <tr>
@@ -1869,7 +1877,7 @@
 
                                 <tr>
                                     <td>
-                                        <div style="overflow-y: auto; max-height: 250px;">
+                                        <div style="overflow-y: auto; max-height: 300px;">
                                             <table class="container" id="mapping_table">
                                                 <tr>
                                                     <th>LA</th>
@@ -1897,7 +1905,7 @@
                         <p id="waf_value" class="text-center">0.00</p>
                     </div>
                 </div>
-                
+
 
             </div>
         </div>
