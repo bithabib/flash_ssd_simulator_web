@@ -55,6 +55,7 @@ function updateWaf() {
     });
 }
 
+var uploaded_write_counter = 0;
 // ----------------------------- Processing Status -----------------------------//
 // ----------------------------- Processing Status -----------------------------//
 function stopProcessingGif(message) {
@@ -1103,7 +1104,9 @@ async function handleFileInputChangeChache() {
   var write_file_kb = document.getElementById("write_file_kb").value;
   // parse in float
   write_file_kb = parseFloat(write_file_kb);
-  var write_file_name = "file_" + write_file_kb + "kb";
+  var write_file_name =
+    "file_" + uploaded_write_counter + "_" + write_file_kb + "kb";
+  uploaded_write_counter++;
   // var file = fileInput.files[0];
   var file = {
     size: write_file_kb * 1024,
