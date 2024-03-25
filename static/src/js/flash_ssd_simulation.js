@@ -1381,7 +1381,10 @@ async function garbageCollectionAndTrim(isTrim) {
             row.cells[0].innerText = "\u00A0";
             await new Promise((resolve) => setTimeout(resolve, 1000));
             row.style.backgroundColor = "white";
-            total_valid_page_size += removedBlock.written_page[j].data;
+            // parse the data to float
+            total_valid_page_size += parseFloat(removedBlock.written_page[j].data);
+            console.log("total_valid_page_size");
+            console.log(total_valid_page_size);
             // covert j to string
             valid_page_tracer += j + 1;
             console.log(valid_page_tracer);
@@ -1613,8 +1616,8 @@ function calculateFlashMemorySize() {
     var cell1 = document.createElement("td");
     var cell2 = document.createElement("td");
 
-    cell1.textContent = "";
-    cell2.textContent = "";
+    cell1.textContent = "\u00A0";
+    cell2.textContent = "\u00A0";
 
     cell1.setAttribute("class", "la");
     cell2.setAttribute("class", "pa");
@@ -1622,8 +1625,8 @@ function calculateFlashMemorySize() {
     cell1.setAttribute("id", "la" + i);
     cell2.setAttribute("id", "pa" + i);
 
-    cell1.setAttribute("style", "font-size: 10px");
-    cell2.setAttribute("style", "font-size: 10px");
+    cell1.setAttribute("style", "font-size: 5px; height: 3px; line-height: 3px; overflow: hidden;");
+    cell2.setAttribute("style", "font-size: 5px; height: 3px; line-height: 3px; overflow: hidden;");
 
     row.appendChild(cell1);
     row.appendChild(cell2);
