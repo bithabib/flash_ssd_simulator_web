@@ -1,7 +1,7 @@
 from app import app
 from flask import render_template
 import subprocess
-@app.route('/paper')
+@app.route('/about')
 def paper():
     bash_script_path = 'paper_writing/bash_file/latex_to_pdf.sh'
     try:
@@ -9,4 +9,4 @@ def paper():
         pass
     except subprocess.CalledProcessError as e:
         print(e)
-    return render_template('paper.html')
+    return render_template('about.html')
