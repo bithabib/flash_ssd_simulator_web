@@ -12,3 +12,7 @@
  - Performance (figure our how to?)
    - Throughput
    - Latency
+ - Garbage collection policy
+   - Greedy
+   - FTL
+   
