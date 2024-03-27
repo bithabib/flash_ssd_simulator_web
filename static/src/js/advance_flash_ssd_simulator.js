@@ -42,6 +42,8 @@ function create_block_for_each_plane() {
             var block_table_trtd = document.createElement("tr");
             for (var n = 0; n < 5; n++) {
               var block_table_trtdv = document.createElement("td");
+              // create block with id for each td
+              block_table_trtdv.setAttribute("id", "block_" + i + "_" + j + "_" + k + "_" + l + "_" + m + "_" + n);
               block_table_trtd.appendChild(block_table_trtdv);
             }
             block_table.appendChild(block_table_trtd);
