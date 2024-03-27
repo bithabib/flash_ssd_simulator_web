@@ -47,60 +47,9 @@
     </header>
 
     <div class="container">
-        <div class="bg-light border row" id="defination_hover2">
-            <div class="col-md-1"></div>
-            <div class="col-md-2">
-                <label for="pageCount" class="form-label">Page per Block</label>
-                <select id="pageCount" class="form-select btn-light border">
-                    <option value="4" selected>4</option>
-                </select>
-            </div>
-
-            <div class="col-md-2">
-                <label for="blockCount" class="form-label">Block per Plane</label>
-                <select id="blockCount" class="form-select btn-light border">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="4" selected>4</option>
-                </select>
-            </div>
-
-            <div class="col-md-2">
-                <label for="planeCount" class="form-label">Plane per Die</label>
-                <select id="planeCount" class="form-select btn-light border">
-                    <option value="1">1</option>
-                    <option value="2" selected>2</option>
-                </select>
-            </div>
-
-            <div class="col-md-2">
-                <label for="dieCount" class="form-label">Die per Package</label>
-                <select id="dieCount" class="form-select btn-light border">
-                    <option value="1">1</option>
-                    <option value="2" selected>2</option>
-                </select>
-            </div>
-
-            <div class="col-md-2">
-                <label for="packageCount" class="form-label">Number of Packages</label>
-                <select id="packageCount" class="form-select btn-light border">
-                    <option value="1">1</option>
-                    <option value="2" selected>2</option>
-                </select>
-            </div>
-            <div class="col-md-1"></div>
-        </div>
         <div class="container center">
             <div class="row">
                 <div class="col">
-                    <!-- 
-                        Page Size = 4kb
-                        Block Size = page size * number of page = ...kb
-                        Plane Size = Block Size * number of block = ....kb
-                        Die Size = Plane Size * number of Plane  = ...kb
-                        Package Size = Die Size * number of page = ...kb
-                        Size of Flash SSD = Package Size * number of Package = ...kb 
-                    -->
                     <table class="table table-bordered">
                         <tr>
                             <th>
@@ -112,45 +61,43 @@
                             <th>
                                 <div class="definition-header">
                                     <span class="definition_ssd" id="block">?</span>
-                                    Block Size
+                                    Page per block
                                 </div>
                             </th>
                             <th>
                                 <div class="definition-header">
                                     <span class="definition_ssd" id="plane">?</span>
-                                    Plane Size
+                                    Block per plane
                                 </div>
                             </th>
                             <th>
                                 <div class="definition-header">
                                     <span class="definition_ssd" id="die">?</span>
-                                    Die Size
+                                    Plane per die
                                 </div>
                             </th>
                             <th>
                                 <div class="definition-header">
                                     <span class="definition_ssd" id="package">?</span>
-                                    Package Size
+                                    Die per chip
                                 </div>
                             </th>
                             <th>
                                 <div class="definition-header">
                                     <span class="definition_ssd" id="ssd_size">?</span>
-                                    Flash SSD Size
+                                    Chip per package
                                 </div>
                             </th>
                         </tr>
                         <tr>
                             <td id="pageSize">4kb</td>
-                            <td id="blockSize">16kb</td>
-                            <td id="planeSize">64kb</td>
-                            <td id="dieSize">128kb</td>
-                            <td id="packageSize">256kb</td>
-                            <td id="flashSSDSize">512kb</td>
+                            <td id="blockSize">128</td>
+                            <td id="planeSize">250</td>
+                            <td id="dieSize">4</td>
+                            <td id="packageSize">2</td>
+                            <td id="flashSSDSize">1</td>
                         </tr>
                     </table>
-
-
                 </div>
             </div>
         </div>
