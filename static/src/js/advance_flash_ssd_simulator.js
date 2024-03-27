@@ -7,6 +7,7 @@ function create_block_for_each_plane() {
   for (var i = 0; i < 2; i++) {
     var ssd_container_trhv = document.createElement("th");
     ssd_container_trhv.innerHTML = "Package " + i;
+    ssd_container_trhv.setAttribute("style", "font-size: 10px;");
     ssd_container_trh.appendChild(ssd_container_trhv);
     var ssd_container_trtdv = document.createElement("td");
     var chip_table = document.createElement("table");
@@ -15,6 +16,7 @@ function create_block_for_each_plane() {
     for (var j = 0; j < 1; j++) {
       var chip_table_trhv = document.createElement("th");
       chip_table_trhv.innerHTML = "Chip " + j;
+      chip_table_trhv.setAttribute("style", "font-size: 10px;");
       chip_table_trh.appendChild(chip_table_trhv);
       var chip_table_trtdv = document.createElement("td");
       var die_table = document.createElement("table");
@@ -23,6 +25,7 @@ function create_block_for_each_plane() {
       for (var k = 0; k < 2; k++) {
         var die_table_trhv = document.createElement("th");
         die_table_trhv.innerHTML = "Die " + k;
+        die_table_trhv.setAttribute("style", "font-size: 10px;");
         die_table_trh.appendChild(die_table_trhv);
         var die_table_trtdv = document.createElement("td");
         var plane_table = document.createElement("table");
@@ -31,10 +34,11 @@ function create_block_for_each_plane() {
         for (var l = 0; l < 4; l++) {
           var plane_table_trhv = document.createElement("th");
           plane_table_trhv.innerHTML = "P" + l;
+          plane_table_trhv.setAttribute("style", "font-size: 10px;");
           plane_table_trh.appendChild(plane_table_trhv);
           var plane_table_trtdv = document.createElement("td");
           var block_table = document.createElement("table");
-          for (var m = 0; m < 50; m++) {
+          for (var m = 0; m < 60; m++) {
             var block_table_trtd = document.createElement("tr");
             for (var n = 0; n < 5; n++) {
               var block_table_trtdv = document.createElement("td");
@@ -81,5 +85,18 @@ function upload_trace_file(event) {
 }
 const fileInput = document.getElementById("upload_trace_file");
 fileInput.addEventListener("change", upload_trace_file);
+
+
+// Overprovisioning ratio setup 
+function handleOverprovisioning(event) {
+  var overprovisioningRatio = event.target.value;
+  // find the total ss size after overprovision ratio removed from total size
+  var totalSize = 1.2288;
+  // four decimal points 
+  var totalSizeAfterOverprovision = (totalSize - (totalSize * overprovisioningRatio) / 100).toFixed(4);
+  ssd_size_holder = document.getElementById("totalSize");
+  ssd_size_holder.innerHTML = totalSizeAfterOverprovision + "gb";
+}
+
 
 document.onload = create_block_for_each_plane();
