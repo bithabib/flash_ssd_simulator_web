@@ -165,7 +165,7 @@
                                     <td>
                                         <div class="row">
                                             <div class="col-4">
-                                                <div class="input-group mb-3">
+                                                <div class="input-group mb-1">
                                                     <input type="number" id="write_file_kb" class="form-control"
                                                         placeholder="File Size" aria-label="measurement"
                                                         aria-describedby="basic-addon2">
@@ -189,7 +189,8 @@
                                                 </select>
                                             </div>
                                             <div class="col">
-                                                <button type="button" class="btn btn-light border" onclick="trimFunction();">
+                                                <button type="button" class="btn btn-light border"
+                                                    onclick="trimFunction();">
                                                     Execute Trim
                                                 </button>
                                             </div>
@@ -207,8 +208,12 @@
                                                 </button>
                                             </div>
 
-                                            <div class="col">
-                                                <label for="ssd_type" class="form-label">Allocation Schemes</label>
+                                            <div class="col input-group">
+
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text" id="basic-addon2">Select allocation
+                                                        scheme</span>
+                                                </div>
                                                 <select id="ssd_type" class="form-select btn-light border">
                                                     <optgroup label="Static">
                                                         <option value="s1" selected>S1: Chip ➔ Die ➔ Plane ➔ Channel
@@ -236,7 +241,8 @@
 
                         </th>
                         <th>
-                            <div class="rounded-circle d-flex justify-content-center align-items-center text-white" id="processing_status_container"
+                            <div class="rounded-circle d-flex justify-content-center align-items-center text-white"
+                                id="processing_status_container"
                                 style="width: 130px; height: 130px; background-color: #e4eef1; background-size: cover; background-image: url(/static/src/logo/1amw.gif);">
 
                                 <p class="mt-2 text-center" id="processing_status"></p>
