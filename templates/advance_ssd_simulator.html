@@ -103,7 +103,7 @@
                             <td id="dieSize">4</td>
                             <td id="packageSize">2</td>
                             <td id="flashSSDSize">1</td>
-                            <td id="totalSize">1.24gb</td>
+                            <td id="totalSize">1.024gb</td>
                         </tr>
                     </table>
                 </div>
@@ -119,16 +119,26 @@
                                 <tr>
                                     <td>
                                         <div class="row">
-                                            <div class="col-4">
-                                                <div class="input-group mb-3">
-                                                    <input type="number" id="write_file_kb" class="form-control"
+                                            <div class="col-5">
+                                                <div class="input-group mb-1">
+
+                                                    <input type="file" id="write_file" class="form-control"
+                                                        placeholder="Upload Trace File" aria-label="measurement"
+                                                        aria-describedby="basic-addon2">
+                                                    <div class="input-group-append">
+
+                                                        <input type="submit" class="btn btn-light border ms-1"
+                                                            value="Upload Trace File" id="upload_file">
+                                                    </div>
+
+                                                    <!-- <input type="number" id="write_file_kb" class="form-control"
                                                         placeholder="File Size" aria-label="measurement"
                                                         aria-describedby="basic-addon2">
                                                     <div class="input-group-append">
                                                         <span class="input-group-text" id="basic-addon2">kb</span>
                                                     </div>
                                                     <button type="button" class="btn btn-light border ms-1"
-                                                        onclick="handleFileInputChangeChache()">Write</button>
+                                                        onclick="handleFileInputChangeChache()">Upload </button> -->
                                                 </div>
                                             </div>
                                             <div class="col">
@@ -163,8 +173,11 @@
                                                 </button>
                                             </div>
 
-                                            <div class="col">
-                                                <label for="ssd_type" class="form-label">Allocation Schemes</label>
+                                            <div class="col input-group">
+                                                
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text" id="basic-addon2">Select allocation scheme</span>
+                                                </div>
                                                 <select id="ssd_type" class="form-select btn-light border">
                                                     <optgroup label="Static">
                                                         <option value="s1" selected>S1: Chip ➔ Die ➔ Plane ➔ Channel
