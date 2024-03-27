@@ -2,6 +2,7 @@ from flask import request, jsonify
 from app import app
 import re
 # Device Major Number,Device Minor Number,CPU Core ID, Record ID, Timestamp (in nanoseconds), ProcessID, Trace Action, OperationType, SectorNumber + I/O Size, ProcessName
+
 def parse_trace_line(line):
     # remove extra spaces 
     return_line = {}
@@ -48,6 +49,11 @@ def read_trace_file(file):
         trace = parse_trace_line(line.decode('utf-8'))
         traces.append(trace)
     return traces
+
+
+
+
+
 
 
 @app.route('/upload_trace_file' , methods=['POST'])
