@@ -1,3 +1,4 @@
+// Function to create block for each plane
 function create_block_for_each_plane() {
   // read table by id and create block for each plane
   var ssd_container = document.getElementById("ssd_container");
@@ -62,4 +63,23 @@ function create_block_for_each_plane() {
   ssd_container.appendChild(ssd_container_trh);
   ssd_container.appendChild(ssd_container_trtd);
 }
+
+// Call function to upload trace file
+function upload_trace_file(event) {
+  var file = event.target.files[0];
+  // call flask api to upload trace file
+  var formData = new FormData();
+  formData.append("file", file);
+  fetch("/upload_trace_file", {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    });
+}
+const fileInput = document.getElementById("upload_trace_file");
+fileInput.addEventListener("change", upload_trace_file);
+
 document.onload = create_block_for_each_plane();
