@@ -6,6 +6,7 @@ app = Flask(__name__)
 from views import flash_ssd_simulation
 from views import cell_simulator
 from views import about
+from views import advance_ssd_simulator
 
 # from views import sitemap_xml
 

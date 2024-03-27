@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Meta tags for Open Graph (Facebook) -->
+    <meta property="og:title" content="Eyana: The SSD Simulator - Experience Flash SSD Technology">
+    <meta property="og:description"
+        content="Discover Eyana: The SSD Simulator, a groundbreaking web-based tool simplifying Flash SSD technology comprehension. Explore essential operations like pages, blocks, writes, reads, updates, deletes, and garbage collection. Eyana offers visual demonstrations, interactive file uploads, and comprehensive documentation, empowering users to understand Flash SSDs deeply. With a remarkable 99% effectiveness rating, Eyana stands as one of the finest simulators.">
+    <meta property="og:image" content="../src/images/flash_ssd_simulator.png">
+    <meta property="og:url" content="https://qbithabib.com">
+
+    <!-- Meta tags for general SEO -->
+    <meta name="description"
+        content="Eyana: The SSD Simulator - Experience Flash SSD Technology. Explore essential SSD operations and concepts. Visual demonstrations, interactive features, and comprehensive documentation.">
+    <meta name="keywords"
+        content="SSDs, solid-state drives, Flash SSD, Flash SSD simulator, SSD operations, SSD technology, storage optimization">
+
+    <!-- Title -->
+    <title>Eyana: The Advance SSD Simulator - Experience Flash SSD Technology</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="icon" href="../readme_documentation_src/icon/icon.jpeg" type="image/jpeg">
+    <link rel="stylesheet" type="text/css" href="static/src/css/ssd_simulator.css">
+    <link rel="stylesheet" type="text/css" href="static/src/css/comments_section.css">
+    <link rel="stylesheet" type="text/css" href="static/src/css/description_keypoints.css">
+
+    <!-- External Scripts -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9851772843061782"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+
+<body>
+    {% include 'includes/header.html' %}
+    <header class="bg-light py-4 text-center">
+        <div class="container">
+            <div style="display: inline-block; position: relative;">
+                <span class="definition_ssd" id="definition_ssd">?</span>
+                <h1 class="display-4">Eyana: The Advance SSD Simulator</h1>
+                <p class="lead">Explore the inner workings of Solid-State Drives</p>
+                <a href="\cell_simulator" class="btn btn-primary">Cell Simulator - Floating Gate Transistor</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="bg-light border row" id="defination_hover2">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">
+                <label for="pageCount" class="form-label">Page per Block</label>
+                <select id="pageCount" class="form-select btn-light border">
+                    <option value="4" selected>4</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="blockCount" class="form-label">Block per Plane</label>
+                <select id="blockCount" class="form-select btn-light border">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="4" selected>4</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="planeCount" class="form-label">Plane per Die</label>
+                <select id="planeCount" class="form-select btn-light border">
+                    <option value="1">1</option>
+                    <option value="2" selected>2</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="dieCount" class="form-label">Die per Package</label>
+                <select id="dieCount" class="form-select btn-light border">
+                    <option value="1">1</option>
+                    <option value="2" selected>2</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="packageCount" class="form-label">Number of Packages</label>
+                <select id="packageCount" class="form-select btn-light border">
+                    <option value="1">1</option>
+                    <option value="2" selected>2</option>
+                </select>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <div class="container center">
+            <div class="row">
+                <div class="col">
+                    <!-- 
+                        Page Size = 4kb
+                        Block Size = page size * number of page = ...kb
+                        Plane Size = Block Size * number of block = ....kb
+                        Die Size = Plane Size * number of Plane  = ...kb
+                        Package Size = Die Size * number of page = ...kb
+                        Size of Flash SSD = Package Size * number of Package = ...kb 
+                    -->
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>
+                                <div class="definition-header">
+                                    <span class="definition_ssd" id="page">?</span>
+                                    Page Size
+                                </div>
+                            </th>
+                            <th>
+                                <div class="definition-header">
+                                    <span class="definition_ssd" id="block">?</span>
+                                    Block Size
+                                </div>
+                            </th>
+                            <th>
+                                <div class="definition-header">
+                                    <span class="definition_ssd" id="plane">?</span>
+                                    Plane Size
+                                </div>
+                            </th>
+                            <th>
+                                <div class="definition-header">
+                                    <span class="definition_ssd" id="die">?</span>
+                                    Die Size
+                                </div>
+                            </th>
+                            <th>
+                                <div class="definition-header">
+                                    <span class="definition_ssd" id="package">?</span>
+                                    Package Size
+                                </div>
+                            </th>
+                            <th>
+                                <div class="definition-header">
+                                    <span class="definition_ssd" id="ssd_size">?</span>
+                                    Flash SSD Size
+                                </div>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td id="pageSize">4kb</td>
+                            <td id="blockSize">16kb</td>
+                            <td id="planeSize">64kb</td>
+                            <td id="dieSize">128kb</td>
+                            <td id="packageSize">256kb</td>
+                            <td id="flashSSDSize">512kb</td>
+                        </tr>
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+        <div id="fullscreen_div">
+            <!-- <button id="fullscreen">Go Fullscreen</button> -->
+            <div class="row">
+                <table>
+                    <tr>
+                        <th style="margin: auto;">
+                            <table style="margin: auto;">
+                                <tr>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <div class="input-group mb-3">
+                                                    <input type="number" id="write_file_kb" class="form-control"
+                                                        placeholder="File Size" aria-label="measurement"
+                                                        aria-describedby="basic-addon2">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text" id="basic-addon2">kb</span>
+                                                    </div>
+                                                    <button type="button" class="btn btn-light border ms-1"
+                                                        onclick="handleFileInputChangeChache()">Write</button>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+
+                                                <select id="read_file" class="form-select btn-light border">
+                                                    <option value="read_file" selected>Read</option>
+                                                </select>
+
+                                            </div>
+                                            <div class="col">
+                                                <select id="delete_file" class="form-select btn-light border">
+                                                    <option value="delete_file1" selected>Delete</option>
+                                                </select>
+                                            </div>
+                                            <div class="col">
+                                                <button type="button" class="btn btn-light border"
+                                                    onclick="trimFunction();">
+                                                    Execute Trim
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col">
+                                                <button type="button" class="btn btn-light border"
+                                                    onclick="garbageCollection()">
+                                                    Execute Garbage Collection
+                                                </button>
+                                            </div>
+
+                                            <div class="col">
+                                                <label for="ssd_type" class="form-label">Allocation Schemes</label>
+                                                <select id="ssd_type" class="form-select btn-light border">
+                                                    <optgroup label="Static">
+                                                        <option value="s1" selected>S1: Chip ➔ Die ➔ Plane ➔ Channel
+                                                        </option>
+                                                        <option value="s2">S2: Channel ➔ Chip ➔ Die ➔ Plane</option>
+                                                        <option value="s3">S3: Channel ➔ Plane ➔ Chip ➔ Die</option>
+                                                        <option value="s4">S4: Channel ➔ Die ➔ Chip ➔ Plane</option>
+                                                        <option value="s5">S5: Channel ➔ Plane ➔ Die ➔ Chip</option>
+                                                        <option value="s6">S6: Channel ➔ Die ➔ Plane ➔ Chip</option>
+                                                    </optgroup>
+                                                    <optgroup label="Dynamic">
+                                                        <option value="single">D1: Dynamic Schemes</option>
+                                                        <option value="pmulti">D2: Channel Level Dynamic Schemes
+                                                        </option>
+                                                        <option value="pdmulti">D3: Die Level Dynamic Schemes</option>
+                                                        <option value="pdpmulti">D4: Plane Level Dynamic Schemes
+                                                        </option>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </th>
+                        <th>
+                            <div class="rounded-circle d-flex justify-content-center align-items-center text-white"
+                                id="processing_status_container"
+                                style="width: 130px; height: 130px; background-color: #e4eef1; background-size: cover; background-image: url(/static/src/logo/1amw.gif);">
+
+                                <p class="mt-2 text-center" id="processing_status"></p>
+
+                            </div>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+
+                            <table id="ssd_container">
+
+                            </table>
+                        </td>
+                        <td>
+                            <table>
+                                <tr>
+
+                                    <th>
+                                        <div class="definition-header">
+                                            <span class="definition_ssd" id="mapping">?</span>
+                                        </div>Page Level Address Mapping Table
+                                    </th>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div style="overflow-y: auto; max-height: 300px;">
+                                            <table class="container" id="mapping_table">
+                                                <tr>
+                                                    <th>LA</th>
+                                                    <th>PA</th>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <p style="font-size: 10px;">
+                                            Number of Mapping Table Entries: <span id="mapping_table_entries">0</span>
+                                        </p>
+                                    </td>
+
+                                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <div class="row">
+                    <div class="col-md-8 mt-5">
+                        <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+                    </div>
+                    <div class="col-md-4 mt-5">
+                        <p class="h5 mt-5 text-center">Write Amplification Factor (WAF)</p>
+                        <p id="waf_value" class="text-center">0.00</p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="container mt-5" style="overflow-y: auto; max-height: 200px;">
+            <h2>
+                Block Information Tracer
+            </h2>
+            <table id="block_information_tracer">
+                <thead>
+                    <tr>
+                        <th>Block</th>
+                        <th>Write Count</th>
+                        <th>Erase Count</th>
+                        <th>Page</th>
+                        <!-- <th>Data</th> -->
+                        <th>Page State</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table rows will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center">
+                <p class="h4 mt-5">We value your feedback!</p>
+                <p>Please take a moment to provide us with your valuable feedback:</p>
+                <a href="https://forms.gle/J1WJCxWN2cMfhZ4u7" class="btn btn-primary btn-lg mt-3">Give Feedback</a>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="popup_description" style="overflow-y: auto; width: 50%; max-height: 400px;">
+        <!-- Content will be dynamically inserted here -->
+        <h3 id="defination_title" style="text-align: center;">
+            </h1>
+            <p id="defination_description"></p>
+            <button id="closePopupButton">Close</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+    <script src="static/src/js/advance_flash_ssd_simulator.js"></script>
+    <script src="static/src/js/description_keypoints.js"></script>
+    <!-- <script src="../views/update_data_flash_ssd.js"></script> -->
+</body>
+
+</html>
