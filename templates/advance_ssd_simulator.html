@@ -91,6 +91,12 @@
                             <th>
                                 <div class="definition-header">
                                     <span class="definition_ssd" id="ssd_size">?</span>
+                                    Overprovisioning Ratio
+                                </div>
+                            </th>
+                            <th>
+                                <div class="definition-header">
+                                    <span class="definition_ssd" id="ssd_size">?</span>
                                     Total SSD Size
                                 </div>
                             </th>
@@ -99,11 +105,20 @@
                         <tr>
                             <td id="pageSize">4kb</td>
                             <td id="blockSize">128</td>
-                            <td id="planeSize">250</td>
+                            <td id="planeSize">300</td>
                             <td id="dieSize">4</td>
                             <td id="packageSize">2</td>
                             <td id="flashSSDSize">1</td>
-                            <td id="totalSize">1.024gb</td>
+                            <td>
+                                <div class="input-group">
+                                    <input type="number" id="overprovisioning_ratio" class="form-control" max="15"
+                                        onchange="handleOverprovisioning(event)">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" id="basic-addon2">%</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td id="totalSize">1.2288gb</td>
                         </tr>
                     </table>
                 </div>
@@ -122,9 +137,9 @@
                                             <div class="col-5">
                                                 <div class="input-group mb-1">
 
-                                                    <input type="file" id="upload_trace_file" accept=".txt, .csv" class="form-control"
-                                                        placeholder="Upload Trace File" aria-label="measurement"
-                                                        aria-describedby="basic-addon2">
+                                                    <input type="file" id="upload_trace_file" accept=".txt, .csv"
+                                                        class="form-control" placeholder="Upload Trace File"
+                                                        aria-label="measurement" aria-describedby="basic-addon2">
                                                     <div class="input-group-append">
                                                         <span class="input-group-text" id="basic-addon2">Upload Trace
                                                             File</span>
