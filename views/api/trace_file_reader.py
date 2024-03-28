@@ -1,6 +1,7 @@
 from flask import request, jsonify
 from app import app
 import re
+import math
 # Device Major Number,Device Minor Number,CPU Core ID, Record ID, Timestamp (in nanoseconds), ProcessID, Trace Action, OperationType, SectorNumber + I/O Size, ProcessName
 
 def parse_trace_line(line):
@@ -51,7 +52,33 @@ def read_trace_file(file):
     return traces
 
 
-
+def write_block(ssd_structure, allocation_scheme, traces):
+    print(allocation_scheme)
+    print(ssd_structure)
+    # print(traces)
+    written_block_list = []
+    if allocation_scheme == 's1':
+        for block_tracer in range(0, 1000):
+            channel = math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'])) % ssd_structure['channel']
+            chip = block_tracer % ssd_structure['chip']
+            die = math.floor(block_tracer / ssd_structure['chip']) % ssd_structure['die']
+            plane = math.floor(block_tracer / (ssd_structure['die'] * ssd_structure['chip'])) % ssd_structure['plane']
+            block_container = math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'])) % ssd_structure['block_container']
+            block = math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'] * ssd_structure['block_container'])) % ssd_structure['block']
+            # print(channel, chip, die, plane, block)
+            written_block_list.append(
+                {
+                    'block_id': "block" + "_" + str(channel) + "_" + str(chip) + "_" + str(die) + "_" + str(plane) + "_" + str(block_container) + "_" + str(block),
+                    'written_size_kb': 0,
+                    'free_size': 0,
+                    'status': 0,
+                    'test': 0
+                }
+            )
+    print(written_block_list)
+            
+    return written_block_list
+    
 
 
 
@@ -62,12 +89,24 @@ def trace_file_reader():
         return jsonify({'error': 'No file part'}), 400
     
     file = request.files['file']
+    allocation_scheme = request.form['allocation_scheme']
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
     
     if file.filename.split('.')[-1] == 'txt':
         traces = read_trace_file(file)
-        return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': traces}), 200
+        ssd_structure = {
+            "channel": 2,
+            "chip": 1,
+            "die": 2,
+            "plane": 4,
+            "block_container": 60,
+            "block": 5,
+        }
+        block_trace_info = write_block(ssd_structure, allocation_scheme, traces)
+        
+            
+        return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200
     elif file.filename.split('.')[-1] != 'csv':
         return jsonify({'message': 'File uploaded successfully', 'filename': file.filename}), 200
     else:
