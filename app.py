@@ -8,6 +8,7 @@ from views import cell_simulator
 from views import about
 from views import advance_ssd_simulator
 from views.api import trace_file_reader
+from views.api import trace_file_converter
 from views import trace_file_converter
 
 # from views import sitemap_xml
