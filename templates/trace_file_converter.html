@@ -54,8 +54,8 @@
     <div class="container mt-5">
         <h2 class="text-center">File Converter</h2>
         <div class="form-group mx-auto text-center">
-            <label for="filePicker">Choose a file:</label>
-            <input type="file" id="filePicker">
+            <label for="upload_trace_file">Choose a file:</label>
+            <input type="file" id="upload_trace_file">
         </div>
         <div class="form-group mx-auto text-center">
             <label for="conversionFormat">Choose conversion format:</label>
@@ -64,7 +64,7 @@
                 <option value="json">JSON</option>
             </select>
         </div>
-        <button type="button" class="btn btn-info mx-auto d-block" onclick="downloadFile()">Download</button>
+        <button type="button" class="btn btn-info mx-auto d-block" onclick="upload_trace_file()">Download</button>
 
         <table class="mx-auto mt-5">
             <tr>
@@ -164,6 +164,7 @@
         </table>
 
     </div>
+    <script src="static/src/js/trace_converter.js"></script>
 </body>
 
 </html>
