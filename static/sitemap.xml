@@ -13,6 +13,18 @@
         <priority>0.8</priority>
     </url>
     <url>
+        <loc>https://ssd.qbithabib.com/converter</loc>
+        <lastmod>2024-03-21</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://ssd.qbithabib.com/advance_ssd</loc>
+        <lastmod>2024-03-21</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://ssd.qbithabib.com/about</loc>
         <lastmod>2024-03-21</lastmod>
         <changefreq>weekly</changefreq>
