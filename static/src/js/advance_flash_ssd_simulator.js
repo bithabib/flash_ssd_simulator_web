@@ -71,18 +71,34 @@ function create_block_for_each_plane() {
 }
 
 // Call function to upload trace file
-function upload_trace_file(event) {
+async function upload_trace_file(event) {
   var file = event.target.files[0];
+  var allocation_scheme = document.getElementById("ssd_allocation_scheme").value;
   // call flask api to upload trace file
   var formData = new FormData();
   formData.append("file", file);
+  formData.append("allocation_scheme", allocation_scheme);
   fetch("/upload_trace_file", {
     method: "POST",
     body: formData,
   })
     .then((response) => response.json())
-    .then((data) => {
+    .then(async (data) => {
       console.log(data);
+      // loop through each trace and change color of block
+      for (var i = 0; i < data.traces.length; i++) {
+        var block = document.getElementById(data.traces[i].block_id);
+        block.style.backgroundColor = "green";
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        // add wait sleep time for each trace
+
+        // change color of block based on trace type
+        // if (trace.type == "READ") {
+        //   block.style.backgroundColor = "green";
+        // } else {
+        //   block.style.backgroundColor = "red";
+        // }
+      }
     });
 }
 const fileInput = document.getElementById("upload_trace_file");
