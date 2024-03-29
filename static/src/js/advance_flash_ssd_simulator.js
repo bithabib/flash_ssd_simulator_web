@@ -93,6 +93,8 @@ async function upload_trace_file(event) {
   var formData = new FormData();
   formData.append("file", file);
   formData.append("allocation_scheme", allocation_scheme);
+  startProcessingGif("processing trace file")
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   fetch("/upload_trace_file", {
     method: "POST",
     body: formData,
@@ -101,9 +103,13 @@ async function upload_trace_file(event) {
     .then(async (data) => {
       console.log(data);
       // loop through each trace and change color of block
+      startProcessingGif("start writing trace to ssd")
       for (var i = 0; i < data.traces.length; i++) {
         var block = document.getElementById(data.traces[i].block_id);
-        block.style.backgroundColor = color_brighness(data.traces[i].number_of_hit_in_block, 7);
+        block.style.backgroundColor = color_brighness(
+          data.traces[i].number_of_hit_in_block,
+          7
+        );
         // block.setAttribute("style", "background-color: green;" );
         // block.setAttribute("style", "margin: 0; padding: 0;");
         // var background = document.createElement("div");
@@ -122,6 +128,7 @@ async function upload_trace_file(event) {
         // }
       }
     });
+    stopProcessingGif("Trace written to ssd")
 }
 const fileInput = document.getElementById("upload_trace_file");
 fileInput.addEventListener("change", upload_trace_file);
@@ -140,4 +147,24 @@ function handleOverprovisioning(event) {
   ssd_size_holder.innerHTML = totalSizeAfterOverprovision + "gb";
 }
 
-document.onload = create_block_for_each_plane();
+
+
+// ----------------------------- Processing Status -----------------------------//
+// ----------------------------- Processing Status -----------------------------//
+function stopProcessingGif(message) {
+  var div = document.getElementById("processing_status_container");
+  div.style.backgroundImage = "none";
+  var processingStatus = document.getElementById("processing_status");
+  processingStatus.innerHTML = message;
+}
+function startProcessingGif(message) {
+  var div = document.getElementById("processing_status_container");
+  div.style.backgroundImage = 'url("static/src/logo/1amw.gif")';
+  var processingStatus = document.getElementById("processing_status");
+  processingStatus.innerHTML = message;
+}
+
+window.onload = function () {
+  create_block_for_each_plane();
+  stopProcessingGif("Please start writing");
+};
