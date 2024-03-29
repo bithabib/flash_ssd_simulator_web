@@ -137,7 +137,6 @@ def write_block(ssd_structure, allocation_scheme, traces):
                         )
                 trace_list_tracer += 1
                 io_size -= 512
-    print(written_block_list)
     return written_block_list
     
 
@@ -173,7 +172,7 @@ def trace_file_reader():
     
     elif file_format == 'csv':
         print("This is csv file")
-        df = pd.read_csv(file)
+        df = pd.read_csv(file, nrows=10000)
         # print(df)
         block_trace_info = write_block(ssd_structure, allocation_scheme, df.to_dict(orient='records'))
         return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200

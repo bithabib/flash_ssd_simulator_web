@@ -117,7 +117,7 @@ async function upload_trace_file(event) {
         // block.appendChild(background);
         // // block.setAttribute("style", "background-color: green; background-size:50% 100%;" );
 
-        await new Promise((resolve) => setTimeout(resolve, 10));
+        await new Promise((resolve) => setTimeout(resolve, 5));
         // add wait sleep time for each trace
 
         // change color of block based on trace type
