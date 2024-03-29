@@ -127,8 +127,9 @@ async function upload_trace_file(event) {
         //   block.style.backgroundColor = "red";
         // }
       }
+      stopProcessingGif("Trace written to ssd")
     });
-    stopProcessingGif("Trace written to ssd")
+    
 }
 const fileInput = document.getElementById("upload_trace_file");
 fileInput.addEventListener("change", upload_trace_file);
