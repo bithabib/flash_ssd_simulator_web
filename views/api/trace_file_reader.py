@@ -2,6 +2,7 @@ from flask import request, jsonify
 from app import app
 import re
 import math
+import pandas as pd
 # Device Major Number,Device Minor Number,CPU Core ID, Record ID, Timestamp (in nanoseconds), ProcessID, Trace Action, OperationType, SectorNumber + I/O Size, ProcessName
 
 def parse_trace_line(line):
@@ -44,7 +45,7 @@ def read_trace_file(file):
     count = 0
     # read the first lines of the file its a header 
     header = file.readline().decode('utf-8')
-    print(header)
+    # print(header)
     for line in file:
         count += 1
         trace = parse_trace_line(line.decode('utf-8'))
@@ -53,8 +54,8 @@ def read_trace_file(file):
 
 
 def write_block(ssd_structure, allocation_scheme, traces):
-    print(allocation_scheme)
-    print(ssd_structure)
+    # print(allocation_scheme)
+    # print(ssd_structure)
     # print(traces)
     written_block_list = []
     if allocation_scheme == 's1':
@@ -63,9 +64,10 @@ def write_block(ssd_structure, allocation_scheme, traces):
             chip = block_tracer % ssd_structure['chip']
             die = math.floor(block_tracer / ssd_structure['chip']) % ssd_structure['die']
             plane = math.floor(block_tracer / (ssd_structure['die'] * ssd_structure['chip'])) % ssd_structure['plane']
-            block_container = math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'])) % ssd_structure['block_container']
+            block_container = (math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'] * ssd_structure['channel'])) % ssd_structure['block_container'])
             block = math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'] * ssd_structure['block_container'])) % ssd_structure['block']
-            # print(channel, chip, die, plane, block)
+            if chip == 1:
+                print(channel, chip, die, plane, block_container, block)
             written_block_list.append(
                 {
                     'block_id': "block" + "_" + str(channel) + "_" + str(chip) + "_" + str(die) + "_" + str(plane) + "_" + str(block_container) + "_" + str(block),
@@ -75,7 +77,7 @@ def write_block(ssd_structure, allocation_scheme, traces):
                     'test': 0
                 }
             )
-    print(written_block_list)
+    # print(written_block_list)
             
     return written_block_list
     
@@ -89,11 +91,12 @@ def trace_file_reader():
         return jsonify({'error': 'No file part'}), 400
     
     file = request.files['file']
+    file_format = file.filename.split('.')[-1]
     allocation_scheme = request.form['allocation_scheme']
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
     
-    if file.filename.split('.')[-1] == 'txt':
+    if file_format == 'txt':
         traces = read_trace_file(file)
         ssd_structure = {
             "channel": 2,
@@ -104,10 +107,12 @@ def trace_file_reader():
             "block": 5,
         }
         block_trace_info = write_block(ssd_structure, allocation_scheme, traces)
-        
-            
         return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200
-    elif file.filename.split('.')[-1] != 'csv':
+    
+    elif file_format == 'csv':
+        print("This is csv file")
+        df = pd.read_csv(file)
+        print(df)
         return jsonify({'message': 'File uploaded successfully', 'filename': file.filename}), 200
     else:
         return jsonify({'error': 'Invalid file type'}), 400

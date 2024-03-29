@@ -53,10 +53,12 @@ def read_trace_file(file):
 
 @app.route('/trace_file_converter' , methods=['POST'])
 def file_converter():
+    
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'}), 400
     
     file = request.files['file']
+  
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
     
@@ -64,6 +66,7 @@ def file_converter():
         traces = read_trace_file(file)
         return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': traces}), 200
     elif file.filename.split('.')[-1] != 'csv':
+        print("This is csv file")
         return jsonify({'message': 'File uploaded successfully', 'filename': file.filename}), 200
     else:
         return jsonify({'error': 'Invalid file type'}), 400
