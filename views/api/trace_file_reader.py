@@ -65,9 +65,7 @@ def write_block(ssd_structure, allocation_scheme, traces):
             die = math.floor(block_tracer / ssd_structure['chip']) % ssd_structure['die']
             plane = math.floor(block_tracer / (ssd_structure['die'] * ssd_structure['chip'])) % ssd_structure['plane']
             block_container = (math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'] * ssd_structure['channel'])) % ssd_structure['block_container'])
-            block = math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'] * ssd_structure['block_container'])) % ssd_structure['block']
-            if chip == 1:
-                print(channel, chip, die, plane, block_container, block)
+            block = math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'] * ssd_structure['channel'] * ssd_structure['block_container'])) % ssd_structure['block']
             written_block_list.append(
                 {
                     'block_id': "block" + "_" + str(channel) + "_" + str(chip) + "_" + str(die) + "_" + str(plane) + "_" + str(block_container) + "_" + str(block),
