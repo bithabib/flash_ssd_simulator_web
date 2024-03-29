@@ -43,7 +43,10 @@ function create_block_for_each_plane() {
             for (var n = 0; n < 5; n++) {
               var block_table_trtdv = document.createElement("td");
               // create block with id for each td
-              block_table_trtdv.setAttribute("id", "block_" + i + "_" + j + "_" + k + "_" + l + "_" + m + "_" + n);
+              block_table_trtdv.setAttribute(
+                "id",
+                "block_" + i + "_" + j + "_" + k + "_" + l + "_" + m + "_" + n
+              );
               block_table_trtd.appendChild(block_table_trtdv);
             }
             block_table.appendChild(block_table_trtd);
@@ -70,10 +73,20 @@ function create_block_for_each_plane() {
   ssd_container.appendChild(ssd_container_trtd);
 }
 
+function color_brighness(part, whole) {
+  var percentage = (part / whole) * 100;
+  var brightness = Math.floor(255 * (percentage / 100));
+  // Construct the CSS color string
+  var color = "rgb(0," + brightness + ",0)";
+  return color;
+}
+
 // Call function to upload trace file
 async function upload_trace_file(event) {
   var file = event.target.files[0];
-  var allocation_scheme = document.getElementById("ssd_allocation_scheme").value;
+  var allocation_scheme = document.getElementById(
+    "ssd_allocation_scheme"
+  ).value;
   // call flask api to upload trace file
   var formData = new FormData();
   formData.append("file", file);
@@ -88,7 +101,14 @@ async function upload_trace_file(event) {
       // loop through each trace and change color of block
       for (var i = 0; i < data.traces.length; i++) {
         var block = document.getElementById(data.traces[i].block_id);
-        block.style.backgroundColor = "green";
+        block.style.backgroundColor = color_brighness(data.traces[i].number_of_hit_in_block, 10);
+        // block.setAttribute("style", "background-color: green;" );
+        // block.setAttribute("style", "margin: 0; padding: 0;");
+        // var background = document.createElement("div");
+        // background.setAttribute("style", "background-color: green; height:100%; width:100%; margin: 0; padding: 0;" );
+        // block.appendChild(background);
+        // // block.setAttribute("style", "background-color: green; background-size:50% 100%;" );
+
         await new Promise((resolve) => setTimeout(resolve, 10));
         // add wait sleep time for each trace
 
@@ -104,17 +124,18 @@ async function upload_trace_file(event) {
 const fileInput = document.getElementById("upload_trace_file");
 fileInput.addEventListener("change", upload_trace_file);
 
-
-// Overprovisioning ratio setup 
+// Overprovisioning ratio setup
 function handleOverprovisioning(event) {
   var overprovisioningRatio = event.target.value;
   // find the total ss size after overprovision ratio removed from total size
   var totalSize = 1.2288;
-  // four decimal points 
-  var totalSizeAfterOverprovision = (totalSize - (totalSize * overprovisioningRatio) / 100).toFixed(4);
+  // four decimal points
+  var totalSizeAfterOverprovision = (
+    totalSize -
+    (totalSize * overprovisioningRatio) / 100
+  ).toFixed(4);
   ssd_size_holder = document.getElementById("totalSize");
   ssd_size_holder.innerHTML = totalSizeAfterOverprovision + "gb";
 }
-
 
 document.onload = create_block_for_each_plane();

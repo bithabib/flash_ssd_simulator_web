@@ -53,30 +53,91 @@ def read_trace_file(file):
     return traces
 
 
+
+# Allocation Scheme Algorithms ------- S1 Allocation Scheme ----------------------- 
+def allocation_scheme_algorithm(ssd_structure, allocation_scheme, block_tracer):
+    if allocation_scheme == 's1':
+        channel = math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'])) % ssd_structure['channel']
+        chip = block_tracer % ssd_structure['chip']
+        die = math.floor(block_tracer / ssd_structure['chip']) % ssd_structure['die']
+        plane = math.floor(block_tracer / (ssd_structure['die'] * ssd_structure['chip'])) % ssd_structure['plane']
+        block_container = (math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'] * ssd_structure['channel'])) % ssd_structure['block_container'])
+        block = math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'] * ssd_structure['channel'] * ssd_structure['block_container'])) % ssd_structure['block']
+        block_id = "block" + "_" + str(channel) + "_" + str(chip) + "_" + str(die) + "_" + str(plane) + "_" + str(block_container) + "_" + str(block)
+        return block_id
+    else:
+        return None
+    
 def write_block(ssd_structure, allocation_scheme, traces):
     # print(allocation_scheme)
     # print(ssd_structure)
     # print(traces)
     written_block_list = []
     if allocation_scheme == 's1':
-        for block_tracer in range(0, 1000):
-            channel = math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'])) % ssd_structure['channel']
-            chip = block_tracer % ssd_structure['chip']
-            die = math.floor(block_tracer / ssd_structure['chip']) % ssd_structure['die']
-            plane = math.floor(block_tracer / (ssd_structure['die'] * ssd_structure['chip'])) % ssd_structure['plane']
-            block_container = (math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'] * ssd_structure['channel'])) % ssd_structure['block_container'])
-            block = math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'] * ssd_structure['channel'] * ssd_structure['block_container'])) % ssd_structure['block']
-            written_block_list.append(
-                {
-                    'block_id': "block" + "_" + str(channel) + "_" + str(chip) + "_" + str(die) + "_" + str(plane) + "_" + str(block_container) + "_" + str(block),
-                    'written_size_kb': 0,
-                    'free_size': 0,
-                    'status': 0,
-                    'test': 0
-                }
-            )
-    # print(written_block_list)
-            
+        
+        ssd_block_trace_dict = {}
+        block_tracer = 0
+        trace_list_tracer = 0
+        while trace_list_tracer < len(traces):
+
+            block_id = allocation_scheme_algorithm(ssd_structure, allocation_scheme, block_tracer)
+            io_size = int(traces[trace_list_tracer]['IO_Size'])/2
+            if block_id in ssd_block_trace_dict:
+                io_size += ssd_block_trace_dict[block_id]['written_size_kb']
+                # ssd_block_trace_dict[block_id]['number_of_hit_in_block'] += 1
+                
+            while io_size > 0:
+                if io_size > 512:
+                    ssd_block_trace_dict[block_id] = {
+                        'written_size_kb': 512,
+                        'number_of_hit_in_block': ssd_block_trace_dict[block_id]['number_of_hit_in_block'] + 1 if block_id in ssd_block_trace_dict else 1
+                    }
+                    # delete ssd_block_trace_dict[block_id] 
+                    written_block_list.append(
+                        {
+                            'block_id': block_id,
+                            'written_size_kb': 512,
+                            'number_of_hit_in_block': ssd_block_trace_dict[block_id]['number_of_hit_in_block'],
+                            'status': 0,
+                            'test': 0
+                        }
+                    )
+                    ssd_block_trace_dict.pop(block_id)
+                    block_tracer += 1
+                    block_id = allocation_scheme_algorithm(ssd_structure, allocation_scheme, block_tracer)
+                                        
+                else:
+                    if block_id in ssd_block_trace_dict:
+                        ssd_block_trace_dict[block_id] = {
+                            'written_size_kb': io_size,
+                            'number_of_hit_in_block': ssd_block_trace_dict[block_id]['number_of_hit_in_block'] + 1 if block_id in ssd_block_trace_dict else 1
+                        }
+                        written_block_list.append(
+                            {
+                                'block_id': block_id,
+                                'written_size_kb': ssd_block_trace_dict[block_id]['written_size_kb'],
+                                'number_of_hit_in_block': ssd_block_trace_dict[block_id]['number_of_hit_in_block'],
+                                'status': 0,
+                                'test': 0
+                            }
+                        )
+                    else:
+                        ssd_block_trace_dict[block_id] = {
+                            'written_size_kb': io_size,
+                            'number_of_hit_in_block': 1
+                        }
+                        written_block_list.append(
+                            {
+                                'block_id': block_id,
+                                'written_size_kb': io_size,
+                                'number_of_hit_in_block': 1,
+                                'status': 0,
+                                'test': 0
+                            }
+                        )
+                trace_list_tracer += 1
+                io_size -= 512
+    print(written_block_list)
     return written_block_list
     
 
@@ -85,32 +146,36 @@ def write_block(ssd_structure, allocation_scheme, traces):
 
 @app.route('/upload_trace_file' , methods=['POST'])
 def trace_file_reader():
+    ssd_structure = {
+        "channel": 2,
+        "chip": 1,
+        "die": 2,
+        "plane": 4,
+        "block_container": 60,
+        "block": 5,
+    }
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'}), 400
     
-    file = request.files['file']
-    file_format = file.filename.split('.')[-1]
     allocation_scheme = request.form['allocation_scheme']
+    
+    file = request.files['file']    
+    file_format = file.filename.split('.')[-1]
+    
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
     
     if file_format == 'txt':
         traces = read_trace_file(file)
-        ssd_structure = {
-            "channel": 2,
-            "chip": 1,
-            "die": 2,
-            "plane": 4,
-            "block_container": 60,
-            "block": 5,
-        }
+        
         block_trace_info = write_block(ssd_structure, allocation_scheme, traces)
         return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200
     
     elif file_format == 'csv':
         print("This is csv file")
         df = pd.read_csv(file)
-        print(df)
-        return jsonify({'message': 'File uploaded successfully', 'filename': file.filename}), 200
+        # print(df)
+        block_trace_info = write_block(ssd_structure, allocation_scheme, df.to_dict(orient='records'))
+        return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200
     else:
         return jsonify({'error': 'Invalid file type'}), 400
