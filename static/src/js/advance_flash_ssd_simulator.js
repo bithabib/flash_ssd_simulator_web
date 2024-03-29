@@ -76,6 +76,8 @@ function create_block_for_each_plane() {
 function color_brighness(part, whole) {
   var percentage = (part / whole) * 100;
   var brightness = Math.floor(255 * (percentage / 100));
+  if (brightness < 0) brightness = 0;
+  if (brightness > 255) brightness = 255;
   // Construct the CSS color string
   var color = "rgb(0," + brightness + ",0)";
   return color;
@@ -101,7 +103,7 @@ async function upload_trace_file(event) {
       // loop through each trace and change color of block
       for (var i = 0; i < data.traces.length; i++) {
         var block = document.getElementById(data.traces[i].block_id);
-        block.style.backgroundColor = color_brighness(data.traces[i].number_of_hit_in_block, 10);
+        block.style.backgroundColor = color_brighness(data.traces[i].number_of_hit_in_block, 7);
         // block.setAttribute("style", "background-color: green;" );
         // block.setAttribute("style", "margin: 0; padding: 0;");
         // var background = document.createElement("div");
