@@ -89,7 +89,7 @@ async function upload_trace_file(event) {
       for (var i = 0; i < data.traces.length; i++) {
         var block = document.getElementById(data.traces[i].block_id);
         block.style.backgroundColor = "green";
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 10));
         // add wait sleep time for each trace
 
         // change color of block based on trace type
