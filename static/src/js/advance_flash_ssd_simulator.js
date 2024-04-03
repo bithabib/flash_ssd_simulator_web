@@ -73,13 +73,17 @@ function create_block_for_each_plane() {
   ssd_container.appendChild(ssd_container_trtd);
 }
 
-function color_brighness(part, whole) {
+function color_brighness(part, whole, garbage = false) {
   var percentage = (part / whole) * 100;
   var brightness = Math.floor(255 * (percentage / 100));
   if (brightness < 0) brightness = 0;
   if (brightness > 255) brightness = 255;
   // Construct the CSS color string
   var color = "rgb(0," + brightness + ",0)";
+  if (garbage && brightness == 0) {
+    // set color as white
+    color = "rgb(255,255,255)";
+  }
   return color;
 }
 
@@ -96,9 +100,9 @@ async function upload_trace_file(event) {
     reader.onload = async function (e) {
       const lines = e.target.result.split("\n");
       var file_lenght = lines.length;
-      for (let i = 0; i < file_lenght; i += 5000) {
+      for (let i = 0; i < file_lenght; i += 10000) {
         let traceList = [];
-        for (let j = i; j < i + 5000 && j < file_lenght; j++) {
+        for (let j = i; j < i + 10000 && j < file_lenght; j++) {
           const trace = {};
           const values = lines[j].split(",");
           for (let k = 0; k < fields_name.length; k++) {
@@ -133,7 +137,7 @@ async function upload_trace_file(event) {
                 ssd_block_trace_dict[ssd_block_trace_list[i]].wpc,
                 150
               );
-              await new Promise((resolve) => setTimeout(resolve, 200));
+              await new Promise((resolve) => setTimeout(resolve, 5));
             }
             stopProcessingGif("Trace written to ssd");
 
@@ -149,15 +153,39 @@ async function upload_trace_file(event) {
               .then((response) => response.json())
               .then(async (data) => {
                 console.log(data);
+                ssd_block_trace_list = data.traces.ssd_block_trace_list;
+                ssd_block_trace_dict = data.traces.ssd_block_trace_dict;
+                let ssd_block_trace_list_length = ssd_block_trace_list.length;
+                for (var i = 0; i < ssd_block_trace_list_length; i++) {
+                  var block = document.getElementById(ssd_block_trace_list[i]);
+                  block.style.backgroundColor = color_brighness(
+                    ssd_block_trace_dict[ssd_block_trace_list[i]].wpc,
+                    150,
+                    true
+                  );
+                  await new Promise((resolve) => setTimeout(resolve, 5));
+                }
                 stopProcessingGif("Garbage Collection Done");
               });
           });
-        if (i >= 5000) {
-          console.log(i);
-          console.log("break");
-          break;
-        }
+        // if (i >= 5000) {
+        //   console.log(i);
+        //   console.log("break");
+        //   break;
+        // }
       }
+      await fetch("/write/complete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+      })
+        .then((response) => response.json())
+        .then(async (data) => {
+          console.log(data);
+          stopProcessingGif("Write Complete");
+        });
     };
     reader.readAsText(file);
   }

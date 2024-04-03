@@ -9,6 +9,14 @@ import pandas as pd
 lba_block_trace_dict_global = {}
 ssd_block_trace_dict_global = {}
 ssd_block_trace_list_global = []
+ssd_structure = {
+        "channel": 2,
+        "chip": 1,
+        "die": 2,
+        "plane": 4,
+        "block_container": 60,
+        "block": 5,
+    }
 
 def parse_trace_line(line):
     # remove extra spaces 
@@ -60,7 +68,8 @@ def read_trace_file(file):
 
 
 # Allocation Scheme Algorithms ------- S1 Allocation Scheme ----------------------- 
-def allocation_scheme_algorithm(ssd_structure, allocation_scheme, block_tracer):
+def allocation_scheme_algorithm(allocation_scheme, block_tracer):
+    global ssd_structure
     if allocation_scheme == 's1':
         channel = math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'])) % ssd_structure['channel']
         chip = block_tracer % ssd_structure['chip']
@@ -73,11 +82,7 @@ def allocation_scheme_algorithm(ssd_structure, allocation_scheme, block_tracer):
     else:
         return None
     
-def write_block(ssd_structure, allocation_scheme, traces):
-    # print(allocation_scheme)
-    # print(ssd_structure)
-    # print(traces)
-    # written_block_list = []
+def write_block(allocation_scheme, traces):
     global ssd_block_trace_dict_global
     ssd_block_trace_dict = ssd_block_trace_dict_global
     global ssd_block_trace_list_global
@@ -89,14 +94,14 @@ def write_block(ssd_structure, allocation_scheme, traces):
     def delete_lba(block_trace):
         ssd_block_trace_dict[block_trace['bid']]['dpc'] += block_trace['wpc']
         ssd_block_trace_dict[block_trace['bid']]['ds'] += block_trace['aw']
-        # ssd_block_trace_dict[block_trace['bid']]['iol'].remove(block_trace['aw'])
+        ssd_block_trace_dict[block_trace['bid']]['lba'].remove(block_trace['lba'])
         
-    def add_lba(block_id, io_size, devisable_by_4):
+    def add_lba(block_id, io_size, devisable_by_4, lba):
         if block_id in ssd_block_trace_dict:
             ssd_block_trace_dict[block_id]['aw'] += io_size
             ssd_block_trace_dict[block_id]['wpc'] += devisable_by_4
             ssd_block_trace_dict[block_id]['wc'] += 1
-            # ssd_block_trace_dict[block_id]['iol'].append(io_size)
+            ssd_block_trace_dict[block_id]['lba'].append(lba)
         else:
             ssd_block_trace_dict[block_id] = {
                 'aw': io_size,
@@ -106,12 +111,12 @@ def write_block(ssd_structure, allocation_scheme, traces):
                 'wc': 1,
                 'bs': 0,
                 'ds': 0,
-                # 'iol': [io_size],
+                'lba': [lba],
             }
             ssd_block_trace_list.append(block_id)
     if allocation_scheme == 's1':
         while trace_list_tracer < len(traces):
-            block_id = allocation_scheme_algorithm(ssd_structure, allocation_scheme, block_tracer)
+            block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer)
  
             io_size = int(traces[trace_list_tracer]['io_s'])/1000
             # find how many times io_size is devisable by 4 and what is remainder 
@@ -126,32 +131,36 @@ def write_block(ssd_structure, allocation_scheme, traces):
                     else:
                         ssd_block_trace_dict[block_id]['bs'] = 1
                     block_tracer += 1
-                    block_id = allocation_scheme_algorithm(ssd_structure, allocation_scheme, block_tracer)
+                    block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer)
             if traces[trace_list_tracer]['lba'] in lba_block_trace_dict:
                 delete_lba(lba_block_trace_dict[traces[trace_list_tracer]['lba']])
                 lba_block_trace_dict[traces[trace_list_tracer]['lba']] = {
                     'bid': block_id,
                     'aw': io_size,
                     'wpc': devisable_by_4,
+                    'lba': traces[trace_list_tracer]['lba']
                 }
-                add_lba(block_id, io_size, devisable_by_4)
+                add_lba(block_id, io_size, devisable_by_4, traces[trace_list_tracer]['lba'])
             else:
                 lba_block_trace_dict[traces[trace_list_tracer]['lba']] = {
                     'bid': block_id,
                     'aw': io_size,
                     'wpc': devisable_by_4,
+                    'lba': traces[trace_list_tracer]['lba']
                 }
-                add_lba(block_id, io_size, devisable_by_4)
+                add_lba(block_id, io_size, devisable_by_4, traces[trace_list_tracer]['lba'])
                 
             trace_list_tracer += 1
     
     session['block_tracer'] = block_tracer
     lba_block_trace_dict_global = lba_block_trace_dict
+    ssd_block_trace_dict_global = ssd_block_trace_dict
+    ssd_block_trace_list_global = ssd_block_trace_list
     # print(lba_block_trace_dict_global)
     
     return {
-        'ssd_block_trace_dict': ssd_block_trace_dict,
-        'ssd_block_trace_list': ssd_block_trace_list
+        'ssd_block_trace_dict': ssd_block_trace_dict_global,
+        'ssd_block_trace_list': ssd_block_trace_list_global,
     }
                 
 
@@ -161,18 +170,12 @@ def write_block(ssd_structure, allocation_scheme, traces):
 
 @app.route('/upload_trace_file' , methods=['POST'])
 def trace_file_reader():
-    ssd_structure = {
-        "channel": 2,
-        "chip": 1,
-        "die": 2,
-        "plane": 4,
-        "block_container": 60,
-        "block": 5,
-    }
+    
+    
     if 'file' not in request.files:
         data = request.json
         # print(data)
-        block_trace_info = write_block(ssd_structure, data['allocation_scheme'], data['traceList'])
+        block_trace_info = write_block(data['allocation_scheme'], data['traceList'])
         # print(block_trace_info[2])
         return jsonify({'message': 'File uploaded successfully', 'traces': block_trace_info}), 200
         # return jsonify({'error': 'No file part'}), 400
@@ -188,7 +191,7 @@ def trace_file_reader():
     if file_format == 'txt':
         traces = read_trace_file(file)
         
-        block_trace_info = write_block(ssd_structure, allocation_scheme, traces)
+        block_trace_info = write_block(allocation_scheme, traces)
         print(block_trace_info)
         return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200
     
@@ -196,7 +199,7 @@ def trace_file_reader():
         print("This is csv file")
         df = pd.read_csv(file, nrows=10000)
         # print(df)
-        block_trace_info = write_block(ssd_structure, allocation_scheme, df.to_dict(orient='records'))
+        block_trace_info = write_block(allocation_scheme, df.to_dict(orient='records'))
         return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200
     else:
         return jsonify({'error': 'Invalid file type'}), 400
@@ -210,16 +213,37 @@ def garbage_collection():
     ssd_block_trace_dict = ssd_block_trace_dict_global
     ssd_block_trace_list = ssd_block_trace_list_global
     block_tracer = session['block_tracer']
-    block_trace_info = {
-        'ssd_block_trace_dict': ssd_block_trace_dict,
-        'ssd_block_trace_list': ssd_block_trace_list
-    }
+   
+    trace_list = []
     for block in ssd_block_trace_list:
         if ssd_block_trace_dict[block]['bs'] == 2:
+            for lba in ssd_block_trace_dict[block]['lba']:
+                trace_list.append({
+                    'lba': lba,
+                    'io_s': (ssd_block_trace_dict[block]['aw']-ssd_block_trace_dict[block]['ds'])/len(ssd_block_trace_dict[block]['lba'])*1000,
+                })
+                print(len(lba_block_trace_dict_global))
+                del lba_block_trace_dict_global[lba]
+                print(len(lba_block_trace_dict_global))
+                
+            ssd_block_trace_dict[block]['aw'] = 0
+            ssd_block_trace_dict[block]['wpc'] = 0
             ssd_block_trace_dict[block]['bs'] = 0
             ssd_block_trace_dict[block]['dpc'] = 0
             ssd_block_trace_dict[block]['ds'] = 0
             ssd_block_trace_dict[block]['ec'] += 1
-    # print(ssd_block_trace_dict)
-    # print(block_tracer)
+            ssd_block_trace_dict[block]['lba'] = []
+    block_trace_info = write_block('s1', trace_list)
+    session['block_tracer'] = 0
     return jsonify({'message': 'Garbage Collection Done', 'traces': block_trace_info}), 200
+
+@app.route('/write/complete' , methods=['POST'])
+def complete_write():
+    global ssd_block_trace_dict_global
+    global ssd_block_trace_list_global
+    global lba_block_trace_dict_global
+    ssd_block_trace_dict_global = {}
+    ssd_block_trace_list_global = []
+    lba_block_trace_dict_global = {}
+    session['block_tracer'] = 0
+    return jsonify({'message': 'Write Completed'}), 200
