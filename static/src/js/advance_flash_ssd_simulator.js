@@ -102,7 +102,7 @@ async function upload_trace_file(event) {
     reader.onload = function (e) {
       const lines = e.target.result.split("\n");
       var file_lenght = lines.length;
-      for (let i = 0; i < file_lenght; i += 1000000) {
+      for (let i = 0; i < file_lenght; i += 100000) {
         let traceList = [];
         for (let j = i; j < i + 1000000 && j < file_lenght; j++) {
           const trace = {};
