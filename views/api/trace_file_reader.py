@@ -82,7 +82,7 @@ def write_block(ssd_structure, allocation_scheme, traces):
         while trace_list_tracer < len(traces):
 
             block_id = allocation_scheme_algorithm(ssd_structure, allocation_scheme, block_tracer)
-            io_size = int(traces[trace_list_tracer]['IO_Size'])/1024
+            io_size = int(traces[trace_list_tracer]['IO_Size'])/2
             if block_id in ssd_block_trace_dict:
                 io_size += ssd_block_trace_dict[block_id]['written_size_kb']
                 # ssd_block_trace_dict[block_id]['number_of_hit_in_block'] += 1
