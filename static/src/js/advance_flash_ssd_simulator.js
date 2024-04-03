@@ -1,4 +1,5 @@
 // Function to create block for each plane
+var forceStop = false;
 function create_block_for_each_plane() {
   // read table by id and create block for each plane
   var ssd_container = document.getElementById("ssd_container");
@@ -73,14 +74,18 @@ function create_block_for_each_plane() {
   ssd_container.appendChild(ssd_container_trtd);
 }
 
-function color_brighness(part, whole, garbage = false) {
+function color_brighness(part, whole, aw, garbage = false) {
   var percentage = (part / whole) * 100;
   var brightness = Math.floor(255 * (percentage / 100));
   if (brightness < 0) brightness = 0;
   if (brightness > 255) brightness = 255;
   // Construct the CSS color string
   var color = "rgb(0," + brightness + ",0)";
-  if (garbage && brightness == 0) {
+  if (garbage && aw == 0) {
+    // set color as white
+    color = "rgb(255,255,255)";
+  }
+  if (part == 0 && whole == 0) {
     // set color as white
     color = "rgb(255,255,255)";
   }
@@ -130,12 +135,14 @@ async function upload_trace_file(event) {
             startProcessingGif("start writing trace to ssd");
             ssd_block_trace_list = data.traces.ssd_block_trace_list;
             ssd_block_trace_dict = data.traces.ssd_block_trace_dict;
+            max_erase_count = data.traces.max_erase_count;
+            max_write_count = data.traces.max_write_count;
             let ssd_block_trace_list_length = ssd_block_trace_list.length;
             for (var i = 0; i < ssd_block_trace_list_length; i++) {
               var block = document.getElementById(ssd_block_trace_list[i]);
               block.style.backgroundColor = color_brighness(
-                ssd_block_trace_dict[ssd_block_trace_list[i]].wpc,
-                150
+                ssd_block_trace_dict[ssd_block_trace_list[i]].wc,
+                max_write_count
               );
               await new Promise((resolve) => setTimeout(resolve, 5));
             }
@@ -159,8 +166,9 @@ async function upload_trace_file(event) {
                 for (var i = 0; i < ssd_block_trace_list_length; i++) {
                   var block = document.getElementById(ssd_block_trace_list[i]);
                   block.style.backgroundColor = color_brighness(
-                    ssd_block_trace_dict[ssd_block_trace_list[i]].wpc,
-                    150,
+                    ssd_block_trace_dict[ssd_block_trace_list[i]].wc,
+                    max_write_count,
+                    ssd_block_trace_dict[ssd_block_trace_list[i]].aw,
                     true
                   );
                   await new Promise((resolve) => setTimeout(resolve, 5));
@@ -168,11 +176,22 @@ async function upload_trace_file(event) {
                 stopProcessingGif("Garbage Collection Done");
               });
           });
-        // if (i >= 5000) {
-        //   console.log(i);
-        //   console.log("break");
-        //   break;
-        // }
+
+        if (forceStop) {
+          await fetch("/write/complete", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+          })
+            .then((response) => response.json())
+            .then(async (data) => {
+              console.log(data);
+              stopProcessingGif("Write Complete");
+            });
+          break;
+        }
       }
       await fetch("/write/complete", {
         method: "POST",
@@ -255,3 +274,8 @@ window.onload = function () {
   create_block_for_each_plane();
   stopProcessingGif("Please start writing");
 };
+
+function stopWritingForce() {
+  forceStop = true;
+  stopProcessingGif("Write Stopped");
+}
