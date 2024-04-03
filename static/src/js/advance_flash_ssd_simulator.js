@@ -118,6 +118,7 @@ async function upload_trace_file(event) {
           traceList: traceList,
           allocation_scheme: allocation_scheme,
         };
+        startProcessingGif("processing trace file");
         fetch("/upload_trace_file", {
           method: "POST",
           headers: {
