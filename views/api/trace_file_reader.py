@@ -17,6 +17,7 @@ ssd_structure = {
         "block_container": 60,
         "block": 5,
     }
+block_tracer_global = 0
 
 def parse_trace_line(line):
     # remove extra spaces 
@@ -89,7 +90,8 @@ def write_block(allocation_scheme, traces):
     ssd_block_trace_list = ssd_block_trace_list_global
     global lba_block_trace_dict_global
     lba_block_trace_dict = lba_block_trace_dict_global
-    block_tracer = session['block_tracer']
+    global block_tracer_global
+    block_tracer = block_tracer_global
     trace_list_tracer = 0
     def delete_lba(block_trace):
         ssd_block_trace_dict[block_trace['bid']]['dpc'] += block_trace['wpc']
@@ -152,7 +154,7 @@ def write_block(allocation_scheme, traces):
                 
             trace_list_tracer += 1
     
-    session['block_tracer'] = block_tracer
+    block_tracer_global = block_tracer
     lba_block_trace_dict_global = lba_block_trace_dict
     ssd_block_trace_dict_global = ssd_block_trace_dict
     ssd_block_trace_list_global = ssd_block_trace_list
@@ -212,10 +214,10 @@ def garbage_collection():
     global ssd_block_trace_dict_global
     global ssd_block_trace_list_global
     global lba_block_trace_dict_global
+    global block_tracer_global
     ssd_block_trace_dict = ssd_block_trace_dict_global
     ssd_block_trace_list = ssd_block_trace_list_global
-    block_tracer = session['block_tracer']
-   
+
     trace_list = []
     for block in ssd_block_trace_list:
         if ssd_block_trace_dict[block]['bs'] == 2:
@@ -236,7 +238,7 @@ def garbage_collection():
             ssd_block_trace_dict[block]['ec'] += 1
             ssd_block_trace_dict[block]['lba'] = []
     block_trace_info = write_block('s1', trace_list)
-    session['block_tracer'] = 0
+    block_tracer_global = 0
     return jsonify({'message': 'Garbage Collection Done', 'traces': block_trace_info}), 200
 
 @app.route('/write/complete' , methods=['POST'])
@@ -244,8 +246,9 @@ def complete_write():
     global ssd_block_trace_dict_global
     global ssd_block_trace_list_global
     global lba_block_trace_dict_global
+    global block_tracer_global
     ssd_block_trace_dict_global = {}
     ssd_block_trace_list_global = []
     lba_block_trace_dict_global = {}
-    session['block_tracer'] = 0
+    block_tracer_global = 0
     return jsonify({'message': 'Write Completed'}), 200
