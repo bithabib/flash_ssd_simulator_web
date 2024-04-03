@@ -76,12 +76,13 @@ def write_block(ssd_structure, allocation_scheme, traces):
     if allocation_scheme == 's1':
         
         ssd_block_trace_dict = {}
+        ssd_block_trace_list = []
         block_tracer = 0
         trace_list_tracer = 0
         while trace_list_tracer < len(traces):
 
             block_id = allocation_scheme_algorithm(ssd_structure, allocation_scheme, block_tracer)
-            io_size = int(traces[trace_list_tracer]['IO_Size'])/2
+            io_size = int(traces[trace_list_tracer]['IO_Size'])/1024
             if block_id in ssd_block_trace_dict:
                 io_size += ssd_block_trace_dict[block_id]['written_size_kb']
                 # ssd_block_trace_dict[block_id]['number_of_hit_in_block'] += 1
@@ -154,7 +155,13 @@ def trace_file_reader():
         "block": 5,
     }
     if 'file' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
+        data = request.json
+        # print(data)
+        print(data['allocation_scheme'])
+        block_trace_info = write_block(ssd_structure, data['allocation_scheme'], data['traceList'])
+        print(block_trace_info[2])
+        return jsonify({'message': 'File uploaded successfully', 'traces': block_trace_info}), 200
+        # return jsonify({'error': 'No file part'}), 400
     
     allocation_scheme = request.form['allocation_scheme']
     

@@ -86,50 +86,93 @@ function color_brighness(part, whole) {
 // Call function to upload trace file
 async function upload_trace_file(event) {
   var file = event.target.files[0];
+  const fields_name = [
+    "ASU",
+    "SectorNumber",
+    "IO_Size",
+    "OperationType",
+    "Timestamp_nanoseconds",
+  ];
   var allocation_scheme = document.getElementById(
     "ssd_allocation_scheme"
   ).value;
-  // call flask api to upload trace file
-  var formData = new FormData();
-  formData.append("file", file);
-  formData.append("allocation_scheme", allocation_scheme);
-  startProcessingGif("processing trace file")
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  fetch("/upload_trace_file", {
-    method: "POST",
-    body: formData,
-  })
-    .then((response) => response.json())
-    .then(async (data) => {
-      console.log(data);
-      // loop through each trace and change color of block
-      startProcessingGif("start writing trace to ssd")
-      for (var i = 0; i < data.traces.length; i++) {
-        var block = document.getElementById(data.traces[i].block_id);
-        block.style.backgroundColor = color_brighness(
-          data.traces[i].number_of_hit_in_block,
-          7
-        );
-        // block.setAttribute("style", "background-color: green;" );
-        // block.setAttribute("style", "margin: 0; padding: 0;");
-        // var background = document.createElement("div");
-        // background.setAttribute("style", "background-color: green; height:100%; width:100%; margin: 0; padding: 0;" );
-        // block.appendChild(background);
-        // // block.setAttribute("style", "background-color: green; background-size:50% 100%;" );
 
-        await new Promise((resolve) => setTimeout(resolve, 5));
-        // add wait sleep time for each trace
-
-        // change color of block based on trace type
-        // if (trace.type == "READ") {
-        //   block.style.backgroundColor = "green";
-        // } else {
-        //   block.style.backgroundColor = "red";
-        // }
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const lines = e.target.result.split("\n");
+      var file_lenght = lines.length;
+      for (let i = 0; i < file_lenght; i += 1000000) {
+        let traceList = [];
+        for (let j = i; j < i + 1000000 && j < file_lenght; j++) {
+          const trace = {};
+          const values = lines[j].split(",");
+          for (let k = 0; k < fields_name.length; k++) {
+            trace[fields_name[k]] = values[k];
+          }
+          traceList.push(trace);
+        }
+        console.log("traceList");
+        console.log(traceList);
+        var body = {
+          traceList: traceList,
+          allocation_scheme: allocation_scheme,
+        };
+        fetch("/upload_trace_file", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        })
+          .then((response) => response.json())
+          .then(async (data) => {
+            console.log(data);
+            startProcessingGif("start writing trace to ssd");
+            for (var i = 0; i < data.traces.length; i++) {
+              var block = document.getElementById(data.traces[i].block_id);
+              block.style.backgroundColor = color_brighness(
+                data.traces[i].number_of_hit_in_block,
+                7
+              );
+              await new Promise((resolve) => setTimeout(resolve, 5));
+            }
+            stopProcessingGif("Trace written to ssd");
+          });
+        break;
       }
-      stopProcessingGif("Trace written to ssd")
-    });
-    
+    };
+    reader.readAsText(file);
+  }
+
+  // var allocation_scheme = document.getElementById(
+  //   "ssd_allocation_scheme"
+  // ).value;
+  // // call flask api to upload trace file
+  // var formData = new FormData();
+  // formData.append("file", file);
+  // formData.append("allocation_scheme", allocation_scheme);
+  // startProcessingGif("processing trace file");
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
+  // fetch("/upload_trace_file", {
+  //   method: "POST",
+  //   body: formData,
+  // })
+  //   .then((response) => response.json())
+  //   .then(async (data) => {
+  //     console.log(data);
+  //     // loop through each trace and change color of block
+  //     startProcessingGif("start writing trace to ssd");
+  //     for (var i = 0; i < data.traces.length; i++) {
+  //       var block = document.getElementById(data.traces[i].block_id);
+  //       block.style.backgroundColor = color_brighness(
+  //         data.traces[i].number_of_hit_in_block,
+  //         7
+  //       );
+  //       await new Promise((resolve) => setTimeout(resolve, 5));
+  //     }
+  //     stopProcessingGif("Trace written to ssd");
+  //   });
 }
 const fileInput = document.getElementById("upload_trace_file");
 fileInput.addEventListener("change", upload_trace_file);
@@ -147,8 +190,6 @@ function handleOverprovisioning(event) {
   ssd_size_holder = document.getElementById("totalSize");
   ssd_size_holder.innerHTML = totalSizeAfterOverprovision + "gb";
 }
-
-
 
 // ----------------------------- Processing Status -----------------------------//
 // ----------------------------- Processing Status -----------------------------//
