@@ -9,6 +9,8 @@ import pandas as pd
 lba_block_trace_dict_global = {}
 ssd_block_trace_dict_global = {}
 ssd_block_trace_list_global = []
+max_write_count_global = 0
+max_erase_count_global = 0
 ssd_structure = {
         "channel": 2,
         "chip": 1,
@@ -92,6 +94,7 @@ def write_block(allocation_scheme, traces):
     lba_block_trace_dict = lba_block_trace_dict_global
     global block_tracer_global
     block_tracer = block_tracer_global
+    
     trace_list_tracer = 0
     def delete_lba(block_trace):
         ssd_block_trace_dict[block_trace['bid']]['dpc'] += block_trace['wpc']
@@ -99,17 +102,19 @@ def write_block(allocation_scheme, traces):
         ssd_block_trace_dict[block_trace['bid']]['lba'].remove(block_trace['lba'])
         
     def add_lba(block_id, io_size, devisable_by_4, lba):
+        global max_write_count_global
         if block_id in ssd_block_trace_dict:
             ssd_block_trace_dict[block_id]['aw'] += io_size
             ssd_block_trace_dict[block_id]['wpc'] += devisable_by_4
             ssd_block_trace_dict[block_id]['wc'] += 1
             ssd_block_trace_dict[block_id]['lba'].append(lba)
+            if ssd_block_trace_dict[block_id]['wc'] > max_write_count_global:
+                max_write_count_global = ssd_block_trace_dict[block_id]['wc']
         else:
             ssd_block_trace_dict[block_id] = {
                 'aw': io_size,
                 'dpc': 0,
                 'wpc': devisable_by_4,
-                'ec': 0,
                 'wc': 1,
                 'bs': 0,
                 'ds': 0,
@@ -172,13 +177,16 @@ def write_block(allocation_scheme, traces):
 
 @app.route('/upload_trace_file' , methods=['POST'])
 def trace_file_reader():
-    
+    global max_write_count_global
+    global max_erase_count_global
     try:
         if 'file' not in request.files:
             data = request.json
             # print(data)
             block_trace_info = write_block(data['allocation_scheme'], data['traceList'])
             # print(block_trace_info[2])
+            block_trace_info['max_write_count'] = max_write_count_global
+            block_trace_info['max_erase_count'] = max_erase_count_global
             return jsonify({'message': 'File uploaded successfully', 'traces': block_trace_info}), 200
             # return jsonify({'error': 'No file part'}), 400
         
@@ -194,7 +202,8 @@ def trace_file_reader():
             traces = read_trace_file(file)
             
             block_trace_info = write_block(allocation_scheme, traces)
-            print(block_trace_info)
+            block_trace_info['max_write_count'] = max_write_count_global
+            block_trace_info['max_erase_count'] = max_erase_count_global
             return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200
         
         elif file_format == 'csv':
@@ -215,6 +224,8 @@ def garbage_collection():
     global ssd_block_trace_list_global
     global lba_block_trace_dict_global
     global block_tracer_global
+    global max_erase_count_global
+    global max_write_count_global
     ssd_block_trace_dict = ssd_block_trace_dict_global
     ssd_block_trace_list = ssd_block_trace_list_global
 
@@ -235,9 +246,17 @@ def garbage_collection():
             ssd_block_trace_dict[block]['bs'] = 0
             ssd_block_trace_dict[block]['dpc'] = 0
             ssd_block_trace_dict[block]['ds'] = 0
-            ssd_block_trace_dict[block]['ec'] += 1
+            if 'ec' in ssd_block_trace_dict[block]:
+                ssd_block_trace_dict[block]['ec'] += 1
+                
+            else:
+                ssd_block_trace_dict[block]['ec'] = 1
+            if ssd_block_trace_dict[block]['ec'] > max_erase_count_global:
+                max_erase_count_global = ssd_block_trace_dict[block]['ec']
             ssd_block_trace_dict[block]['lba'] = []
     block_trace_info = write_block('s1', trace_list)
+    block_trace_info['max_erase_count'] = max_erase_count_global
+    block_trace_info['max_write_count'] = max_write_count_global
     block_tracer_global = 0
     return jsonify({'message': 'Garbage Collection Done', 'traces': block_trace_info}), 200
 
@@ -247,6 +266,10 @@ def complete_write():
     global ssd_block_trace_list_global
     global lba_block_trace_dict_global
     global block_tracer_global
+    global max_write_count_global
+    global max_erase_count_global
+    max_write_count_global = 0
+    max_erase_count_global = 0
     ssd_block_trace_dict_global = {}
     ssd_block_trace_list_global = []
     lba_block_trace_dict_global = {}
