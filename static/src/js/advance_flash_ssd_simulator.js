@@ -86,29 +86,23 @@ function color_brighness(part, whole) {
 // Call function to upload trace file
 async function upload_trace_file(event) {
   var file = event.target.files[0];
-  const fields_name = [
-    "ASU",
-    "SectorNumber",
-    "IO_Size",
-    "OperationType",
-    "Timestamp_nanoseconds",
-  ];
+  const fields_name = ["lba", "io_s"];
   var allocation_scheme = document.getElementById(
     "ssd_allocation_scheme"
   ).value;
 
   if (file) {
     const reader = new FileReader();
-    reader.onload = function (e) {
+    reader.onload = async function (e) {
       const lines = e.target.result.split("\n");
       var file_lenght = lines.length;
-      for (let i = 0; i < file_lenght; i += 100000) {
+      for (let i = 0; i < file_lenght; i += 5000) {
         let traceList = [];
-        for (let j = i; j < i + 100000 && j < file_lenght; j++) {
+        for (let j = i; j < i + 5000 && j < file_lenght; j++) {
           const trace = {};
           const values = lines[j].split(",");
           for (let k = 0; k < fields_name.length; k++) {
-            trace[fields_name[k]] = values[k];
+            trace[fields_name[k]] = values[k + 1];
           }
           traceList.push(trace);
         }
@@ -119,7 +113,7 @@ async function upload_trace_file(event) {
           allocation_scheme: allocation_scheme,
         };
         startProcessingGif("processing trace file");
-        fetch("/upload_trace_file", {
+        await fetch("/upload_trace_file", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -130,17 +124,39 @@ async function upload_trace_file(event) {
           .then(async (data) => {
             console.log(data);
             startProcessingGif("start writing trace to ssd");
-            for (var i = 0; i < data.traces.length; i++) {
-              var block = document.getElementById(data.traces[i].block_id);
+            ssd_block_trace_list = data.traces.ssd_block_trace_list;
+            ssd_block_trace_dict = data.traces.ssd_block_trace_dict;
+            let ssd_block_trace_list_length = ssd_block_trace_list.length;
+            for (var i = 0; i < ssd_block_trace_list_length; i++) {
+              var block = document.getElementById(ssd_block_trace_list[i]);
               block.style.backgroundColor = color_brighness(
-                data.traces[i].number_of_hit_in_block,
-                7
+                ssd_block_trace_dict[ssd_block_trace_list[i]].wpc,
+                150
               );
-              await new Promise((resolve) => setTimeout(resolve, 5));
+              await new Promise((resolve) => setTimeout(resolve, 200));
             }
             stopProcessingGif("Trace written to ssd");
+
+            startProcessingGif("Garbage Collection");
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            await fetch("/garbage_collection", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({}),
+            })
+              .then((response) => response.json())
+              .then(async (data) => {
+                console.log(data);
+                stopProcessingGif("Garbage Collection Done");
+              });
           });
-        break;
+        if (i >= 5000) {
+          console.log(i);
+          console.log("break");
+          break;
+        }
       }
     };
     reader.readAsText(file);
