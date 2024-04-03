@@ -171,38 +171,40 @@ def write_block(allocation_scheme, traces):
 @app.route('/upload_trace_file' , methods=['POST'])
 def trace_file_reader():
     
-    
-    if 'file' not in request.files:
-        data = request.json
-        # print(data)
-        block_trace_info = write_block(data['allocation_scheme'], data['traceList'])
-        # print(block_trace_info[2])
-        return jsonify({'message': 'File uploaded successfully', 'traces': block_trace_info}), 200
-        # return jsonify({'error': 'No file part'}), 400
-    
-    allocation_scheme = request.form['allocation_scheme']
-    
-    file = request.files['file']    
-    file_format = file.filename.split('.')[-1]
-    
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
-    
-    if file_format == 'txt':
-        traces = read_trace_file(file)
+    try:
+        if 'file' not in request.files:
+            data = request.json
+            # print(data)
+            block_trace_info = write_block(data['allocation_scheme'], data['traceList'])
+            # print(block_trace_info[2])
+            return jsonify({'message': 'File uploaded successfully', 'traces': block_trace_info}), 200
+            # return jsonify({'error': 'No file part'}), 400
         
-        block_trace_info = write_block(allocation_scheme, traces)
-        print(block_trace_info)
-        return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200
-    
-    elif file_format == 'csv':
-        print("This is csv file")
-        df = pd.read_csv(file, nrows=10000)
-        # print(df)
-        block_trace_info = write_block(allocation_scheme, df.to_dict(orient='records'))
-        return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200
-    else:
-        return jsonify({'error': 'Invalid file type'}), 400
+        allocation_scheme = request.form['allocation_scheme']
+        
+        file = request.files['file']    
+        file_format = file.filename.split('.')[-1]
+        
+        if file.filename == '':
+            return jsonify({'error': 'No selected file'}), 400
+        
+        if file_format == 'txt':
+            traces = read_trace_file(file)
+            
+            block_trace_info = write_block(allocation_scheme, traces)
+            print(block_trace_info)
+            return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200
+        
+        elif file_format == 'csv':
+            print("This is csv file")
+            df = pd.read_csv(file, nrows=10000)
+            # print(df)
+            block_trace_info = write_block(allocation_scheme, df.to_dict(orient='records'))
+            return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200
+        else:
+            return jsonify({'error': 'Invalid file type'}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
     
     
 @app.route('/garbage_collection' , methods=['POST'])
