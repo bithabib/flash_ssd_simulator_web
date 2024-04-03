@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect, send_from_directory, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
+import os
 
 app = Flask(__name__)
 from views import flash_ssd_simulation
@@ -16,9 +17,13 @@ from views import documentation
 
 # Configure the SQLite database URI
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
-
 # # Initialize SQLAlchemy instance
 db = SQLAlchemy(app)
+
+# create a random secret_key
+secret_key = os.urandom(24)
+app.secret_key = secret_key
+
 
 # # Define a model for the database table
 class Data(db.Model):
