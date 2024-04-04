@@ -61,7 +61,6 @@ def read_trace_file(file):
     count = 0
     # read the first lines of the file its a header 
     header = file.readline().decode('utf-8')
-    # print(header)
     for line in file:
         count += 1
         trace = parse_trace_line(line.decode('utf-8'))
@@ -163,7 +162,6 @@ def write_block(allocation_scheme, traces):
     lba_block_trace_dict_global = lba_block_trace_dict
     ssd_block_trace_dict_global = ssd_block_trace_dict
     ssd_block_trace_list_global = ssd_block_trace_list
-    # print(lba_block_trace_dict_global)
     
     return {
         'ssd_block_trace_dict': ssd_block_trace_dict_global,
@@ -182,9 +180,7 @@ def trace_file_reader():
     try:
         if 'file' not in request.files:
             data = request.json
-            # print(data)
             block_trace_info = write_block(data['allocation_scheme'], data['traceList'])
-            # print(block_trace_info[2])
             block_trace_info['max_write_count'] = max_write_count_global
             block_trace_info['max_erase_count'] = max_erase_count_global
             return jsonify({'message': 'File uploaded successfully', 'traces': block_trace_info}), 200
@@ -207,9 +203,7 @@ def trace_file_reader():
             return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200
         
         elif file_format == 'csv':
-            print("This is csv file")
             df = pd.read_csv(file, nrows=10000)
-            # print(df)
             block_trace_info = write_block(allocation_scheme, df.to_dict(orient='records'))
             return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200
         else:
@@ -237,9 +231,7 @@ def garbage_collection():
                     'lba': lba,
                     'io_s': (ssd_block_trace_dict[block]['aw']-ssd_block_trace_dict[block]['ds'])/len(ssd_block_trace_dict[block]['lba'])*1000,
                 })
-                print(len(lba_block_trace_dict_global))
                 del lba_block_trace_dict_global[lba]
-                print(len(lba_block_trace_dict_global))
                 
             ssd_block_trace_dict[block]['aw'] = 0
             ssd_block_trace_dict[block]['wpc'] = 0

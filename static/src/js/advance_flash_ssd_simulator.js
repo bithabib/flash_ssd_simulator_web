@@ -279,31 +279,42 @@ window.onload = function () {
   stopProcessingGif("Please start writing");
 };
 
-function stopWritingForce() {
+async function stopWritingForce() {
   forceStop = true;
   stopProcessingGif("Write Stopped");
+  await fetch("/write/complete", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({}),
+  })
+    .then((response) => response.json())
+    .then(async (data) => {
+      console.log(data);
+      stopProcessingGif("Write Complete");
+    });
 }
-
 
 var select_hitmap_type = document.getElementById("select_hitmap_type");
 // Add event listener for the "change" event
 select_hitmap_type.addEventListener("change", async function () {
   // Get the selected value
   var hitmap_type = select_hitmap_type.value;
+  console.log(hitmap_type);
   let ssd_block_trace_list_length = ssd_block_trace_list.length;
   if (hitmap_type == "wc") {
-      var max_value = max_write_count;
-  }else if (hitmap_type == "ec") {
-      var max_value = max_erase_count;
+    var max_value = max_write_count;
+  } else if (hitmap_type == "ec") {
+    var max_value = max_erase_count;
   }
   for (var i = 0; i < ssd_block_trace_list_length; i++) {
     var block = document.getElementById(ssd_block_trace_list[i]);
-    
+
     block.style.backgroundColor = color_brighness(
       ssd_block_trace_dict[ssd_block_trace_list[i]][hitmap_type],
       max_value
     );
     await new Promise((resolve) => setTimeout(resolve, 5));
   }
-  
 });
