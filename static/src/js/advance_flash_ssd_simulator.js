@@ -1,5 +1,9 @@
 // Function to create block for each plane
 var forceStop = false;
+var ssd_block_trace_list = [];
+var ssd_block_trace_dict = {};
+var max_erase_count = 0;
+var max_write_count = 0;
 function create_block_for_each_plane() {
   // read table by id and create block for each plane
   var ssd_container = document.getElementById("ssd_container");
@@ -279,3 +283,27 @@ function stopWritingForce() {
   forceStop = true;
   stopProcessingGif("Write Stopped");
 }
+
+
+var select_hitmap_type = document.getElementById("select_hitmap_type");
+// Add event listener for the "change" event
+select_hitmap_type.addEventListener("change", async function () {
+  // Get the selected value
+  var hitmap_type = select_hitmap_type.value;
+  let ssd_block_trace_list_length = ssd_block_trace_list.length;
+  if (hitmap_type == "wc") {
+      var max_value = max_write_count;
+  }else if (hitmap_type == "ec") {
+      var max_value = max_erase_count;
+  }
+  for (var i = 0; i < ssd_block_trace_list_length; i++) {
+    var block = document.getElementById(ssd_block_trace_list[i]);
+    
+    block.style.backgroundColor = color_brighness(
+      ssd_block_trace_dict[ssd_block_trace_list[i]][hitmap_type],
+      max_value
+    );
+    await new Promise((resolve) => setTimeout(resolve, 5));
+  }
+  
+});
