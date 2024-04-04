@@ -93,6 +93,7 @@ function color_brighness(part, whole, aw, garbage = false) {
     // set color as white
     color = "rgb(255,255,255)";
   }
+  // console.log(color);
   return color;
 }
 
@@ -119,8 +120,8 @@ async function upload_trace_file(event) {
           }
           traceList.push(trace);
         }
-        console.log("traceList");
-        console.log(traceList);
+        // console.log("traceList");
+        // console.log(traceList);
         var body = {
           traceList: traceList,
           allocation_scheme: allocation_scheme,
@@ -135,7 +136,7 @@ async function upload_trace_file(event) {
         })
           .then((response) => response.json())
           .then(async (data) => {
-            console.log(data);
+            // console.log(data);
             startProcessingGif("start writing trace to ssd");
             ssd_block_trace_list = data.traces.ssd_block_trace_list;
             ssd_block_trace_dict = data.traces.ssd_block_trace_dict;
@@ -163,7 +164,7 @@ async function upload_trace_file(event) {
             })
               .then((response) => response.json())
               .then(async (data) => {
-                console.log(data);
+                // console.log(data);
                 ssd_block_trace_list = data.traces.ssd_block_trace_list;
                 ssd_block_trace_dict = data.traces.ssd_block_trace_dict;
                 let ssd_block_trace_list_length = ssd_block_trace_list.length;
@@ -191,7 +192,7 @@ async function upload_trace_file(event) {
           })
             .then((response) => response.json())
             .then(async (data) => {
-              console.log(data);
+              // console.log(data);
               stopProcessingGif("Write Complete");
             });
           break;
@@ -206,7 +207,7 @@ async function upload_trace_file(event) {
       })
         .then((response) => response.json())
         .then(async (data) => {
-          console.log(data);
+          // console.log(data);
           stopProcessingGif("Write Complete");
         });
     };
@@ -282,18 +283,18 @@ window.onload = function () {
 async function stopWritingForce() {
   forceStop = true;
   stopProcessingGif("Write Stopped");
-  await fetch("/write/complete", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({}),
-  })
-    .then((response) => response.json())
-    .then(async (data) => {
-      console.log(data);
-      stopProcessingGif("Write Complete");
-    });
+  // await fetch("/write/complete", {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({}),
+  // })
+  //   .then((response) => response.json())
+  //   .then(async (data) => {
+  //     console.log(data);
+  //     stopProcessingGif("Write Complete");
+  //   });
 }
 
 var select_hitmap_type = document.getElementById("select_hitmap_type");
@@ -301,19 +302,22 @@ var select_hitmap_type = document.getElementById("select_hitmap_type");
 select_hitmap_type.addEventListener("change", async function () {
   // Get the selected value
   var hitmap_type = select_hitmap_type.value;
-  console.log(hitmap_type);
+  // console.log(hitmap_type);
   let ssd_block_trace_list_length = ssd_block_trace_list.length;
   if (hitmap_type == "wc") {
     var max_value = max_write_count;
   } else if (hitmap_type == "ec") {
     var max_value = max_erase_count;
   }
+  // console.log(ssd_block_trace_list_length);
+  // console.log(max_erase_count);
   for (var i = 0; i < ssd_block_trace_list_length; i++) {
     var block = document.getElementById(ssd_block_trace_list[i]);
 
     block.style.backgroundColor = color_brighness(
       ssd_block_trace_dict[ssd_block_trace_list[i]][hitmap_type],
-      max_value
+      max_value,
+      ssd_block_trace_dict[ssd_block_trace_list[i]].aw,
     );
     await new Promise((resolve) => setTimeout(resolve, 5));
   }
