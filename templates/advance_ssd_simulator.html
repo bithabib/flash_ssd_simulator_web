@@ -111,14 +111,16 @@
                             <td id="flashSSDSize">1</td>
                             <td>
                                 <div class="input-group">
-                                    <input type="number" id="overprovisioning_ratio" class="form-control" max="15"
-                                        onchange="handleOverprovisioning(event)">
+                                    <input type="number" id="overprovisioning_ratio" class="form-control" max="20"
+                                        value="15" placeholder="less than 20%" aria-label="Overprovisioning Ratio"
+                                        aria-describedby="basic-addon2" onchange="handleOverprovisioning(event)">
                                     <div class="input-group-append">
                                         <span class="input-group-text" id="basic-addon2">%</span>
                                     </div>
                                 </div>
                             </td>
-                            <td id="totalSize">1.2288gb</td>
+                            <td id="totalSize">
+                                2.34375gb</td>
                         </tr>
                     </table>
                 </div>
@@ -150,10 +152,10 @@
                                             <div class="col">
 
                                                 <select id="select_hitmap_type" class="form-select btn-light border">
-                                                    
+
                                                     <option value="wc">Write Count</option>
                                                     <option value="ec">Erase Count</option>
-                                                    
+
                                                 </select>
 
                                             </div>
@@ -272,7 +274,9 @@
                 </table>
                 <div class="row">
                     <div class="col-md-8 mt-5">
-                        <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+                        <div id="wafChartContainer" style="height: 370px; width: 100%;"></div>
+                        <div id="writeCountChartContainer" style="height: 370px; width: 100%;"></div>
+                        <div id="eraseCountChartContainer" style="height: 370px; width: 100%;"></div>
                     </div>
                     <div class="col-md-4 mt-5">
                         <p class="h5 mt-5 text-center">Write Amplification Factor (WAF)</p>
