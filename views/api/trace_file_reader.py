@@ -94,7 +94,6 @@ def write_block(allocation_scheme, traces):
     lba_block_trace_dict = lba_block_trace_dict_global
     global block_tracer_global
     block_tracer = block_tracer_global
-    # print(ssd_block_trace_dict)
     trace_list_tracer = 0
     def delete_lba(block_trace):
         ssd_block_trace_dict[block_trace['bid']]['dpc'] += block_trace['wpc']
@@ -109,7 +108,6 @@ def write_block(allocation_scheme, traces):
             ssd_block_trace_dict[block_id]['wc'] += 1
             ssd_block_trace_dict[block_id]['lba'].append(lba)
             if ssd_block_trace_dict[block_id]['wc'] > max_write_count_global:
-                # print("Testing")
                 max_write_count_global = ssd_block_trace_dict[block_id]['wc']
         else:
             ssd_block_trace_dict[block_id] = {
@@ -246,7 +244,6 @@ def garbage_collection():
             
             if 'gcs' in ssd_block_trace_dict[block]:
                 ssd_block_trace_dict[block]['gcs'] += (ssd_block_trace_dict[block]['wpc'] - ssd_block_trace_dict[block]['dpc'])
-                print(ssd_block_trace_dict[block]['gcs'])
                 
             ssd_block_trace_dict[block]['aw'] = 0
             ssd_block_trace_dict[block]['wpc'] = 0
