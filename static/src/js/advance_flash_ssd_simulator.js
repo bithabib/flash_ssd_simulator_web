@@ -467,3 +467,20 @@ select_hitmap_type.addEventListener("change", async function () {
     await new Promise((resolve) => setTimeout(resolve, 5));
   }
 });
+
+function reset () {
+  // Call api /write/complete
+  fetch("/write/complete", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({}),
+  })
+    .then((response) => response.json())
+    .then(async (data) => {
+      console.log(data);
+      // reload the page
+      location.reload();
+    });
+}
