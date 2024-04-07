@@ -174,11 +174,10 @@ function color_brighness(part, whole, aw, garbage = false) {
 // Call function to upload trace file
 async function upload_trace_file(event) {
   var file = event.target.files[0];
-  const fields_name = ["lba", "io_s"];
+  const fields_name = ["lba", "io_s", "iot"];
   var allocation_scheme = document.getElementById(
     "ssd_allocation_scheme"
   ).value;
-
   if (file) {
     const reader = new FileReader();
     reader.onload = async function (e) {
@@ -193,7 +192,9 @@ async function upload_trace_file(event) {
           for (let k = 0; k < fields_name.length; k++) {
             trace[fields_name[k]] = values[k + 1];
           }
-          traceList.push(trace);
+          if (trace["iot"] == "W" || trace["iot"] == "w") {
+            traceList.push(trace);
+          }
         }
         // console.log("traceList");
         // console.log(traceList);
@@ -284,6 +285,11 @@ async function upload_trace_file(event) {
             await new Promise((resolve) => setTimeout(resolve, 1000));
 
             if (nandWritePercentage >= writeableSSDSizePercent) {
+              if (nandWritePercentage > 100) {
+                // notify user that ssd is full
+                alert("SSD is full");
+              }
+
               startProcessingGif("Garbage Collection");
               await fetch("/garbage_collection", {
                 method: "POST",
@@ -468,7 +474,7 @@ select_hitmap_type.addEventListener("change", async function () {
   }
 });
 
-function reset () {
+function reset() {
   // Call api /write/complete
   fetch("/write/complete", {
     method: "POST",
