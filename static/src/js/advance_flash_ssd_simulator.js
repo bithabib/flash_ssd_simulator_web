@@ -1,3 +1,77 @@
+// Waf Graph update
+function updateWAFGraph(
+  wafGraphData,
+  writeCountGraphData,
+  averageWriteCountGraphData,
+  eraseCountGraphData,
+  averageEraseCountGraphData
+) {
+  var wafChart = new CanvasJS.Chart("wafChartContainer", {
+    animationEnabled: true,
+    theme: "light2",
+    title: {
+      text: "Write Amplification Factor Over Time",
+    },
+    data: [
+      {
+        type: "line",
+        indexLabelFontSize: 16,
+        dataPoints: wafGraphData,
+        name: "WAF",
+      },
+    ],
+  });
+
+  var writeCountChart = new CanvasJS.Chart("writeCountChartContainer", {
+    animationEnabled: true,
+    theme: "light2",
+    title: {
+      text: "Write Count Over Time",
+    },
+    data: [
+      {
+        type: "line",
+        indexLabelFontSize: 16,
+        dataPoints: writeCountGraphData,
+        name: "Write Count",
+      },
+      {
+        type: "line",
+        indexLabelFontSize: 16,
+        dataPoints: averageWriteCountGraphData,
+        name: "Average Write Count",
+      },
+    ],
+  });
+
+  var eraseCountChart = new CanvasJS.Chart("eraseCountChartContainer", {
+    animationEnabled: true,
+    theme: "light2",
+    title: {
+      text: "Erase Count Over Time",
+    },
+    data: [
+      {
+        type: "column",
+        indexLabelFontSize: 16,
+        dataPoints: eraseCountGraphData,
+        name: "Erase Count",
+      },
+      {
+        type: "line",
+        indexLabelFontSize: 16,
+        dataPoints: averageEraseCountGraphData,
+        name: "Erase Count",
+      },
+    ],
+  });
+  document.getElementById("waf_value").innerHTML =
+    wafGraphData[wafGraphData.length - 1].y.toFixed(2);
+  wafChart.render();
+  writeCountChart.render();
+  eraseCountChart.render();
+}
+
 // Function to create block for each plane
 var forceStop = false;
 var ssd_block_trace_list = [];
@@ -120,7 +194,6 @@ async function upload_trace_file(event) {
             trace[fields_name[k]] = values[k + 1];
           }
           traceList.push(trace);
-
         }
         // console.log("traceList");
         // console.log(traceList);
@@ -138,27 +211,78 @@ async function upload_trace_file(event) {
         })
           .then((response) => response.json())
           .then(async (data) => {
-            console.log(data);
+            // console.log(data);
             startProcessingGif("start writing trace to ssd");
             ssd_block_trace_list = data.traces.ssd_block_trace_list;
             ssd_block_trace_dict = data.traces.ssd_block_trace_dict;
             max_erase_count = data.traces.max_erase_count;
             max_write_count = data.traces.max_write_count;
             let ssd_block_trace_list_length = ssd_block_trace_list.length;
+
+            // all graph variable
+            var wafGraphData = [];
+            var hostWrite = 0;
+            var nandWrite = 0;
+            var writeCountGraphData = [];
+            var averageWriteCountGraphData = [];
+            var totalWriteCount = 0;
+            var eraseCountGraphData = [];
+            var totalEraseCount = 0;
+            var averageEraseCountGraphData = [];
             for (var i = 0; i < ssd_block_trace_list_length; i++) {
               var block = document.getElementById(ssd_block_trace_list[i]);
+              hostWrite += ssd_block_trace_dict[ssd_block_trace_list[i]].aw;
+              if (ssd_block_trace_dict[ssd_block_trace_list[i]].wpc > 128) {
+                console.log(ssd_block_trace_dict[ssd_block_trace_list[i]].wpc);
+              }
+              nandWrite += ssd_block_trace_dict[ssd_block_trace_list[i]].wpc;
+              totalWriteCount +=
+                ssd_block_trace_dict[ssd_block_trace_list[i]].wc;
+              totalEraseCount +=
+                ssd_block_trace_dict[ssd_block_trace_list[i]].ec;
+              wafGraphData.push({
+                y: nandWrite / hostWrite,
+              });
+
+              writeCountGraphData.push({
+                y: ssd_block_trace_dict[ssd_block_trace_list[i]].wc,
+              });
+              averageWriteCountGraphData.push({
+                y: totalWriteCount / (i + 1),
+              });
+              eraseCountGraphData.push({
+                y: ssd_block_trace_dict[ssd_block_trace_list[i]].ec,
+              });
+              averageEraseCountGraphData.push({
+                y: totalEraseCount / (i + 1),
+              });
+              // Call waf graph update function
+
+              // call function to update block color
               block.style.backgroundColor = color_brighness(
                 ssd_block_trace_dict[ssd_block_trace_list[i]].wc,
                 max_write_count
               );
               await new Promise((resolve) => setTimeout(resolve, 5));
             }
+            updateWAFGraph(
+              wafGraphData,
+              writeCountGraphData,
+              averageWriteCountGraphData,
+              eraseCountGraphData,
+              averageEraseCountGraphData
+            );
+            var writeableSSDSizePercent = 100 - getOverprovisioningRatio();
             count_written_block += ssd_block_trace_list_length;
+            var nandWritePercentage = (nandWrite / 614400) * 100;
+            console.log(nandWritePercentage);
+            console.log(writeableSSDSizePercent);
             stopProcessingGif("Trace written to ssd");
 
-            startProcessingGif("Garbage Collection");
             await new Promise((resolve) => setTimeout(resolve, 1000));
-            if (count_written_block >= 4000) {
+
+            if (nandWritePercentage >= writeableSSDSizePercent) {
+              startProcessingGif("Garbage Collection");
               await fetch("/garbage_collection", {
                 method: "POST",
                 headers: {
@@ -254,11 +378,22 @@ async function upload_trace_file(event) {
 const fileInput = document.getElementById("upload_trace_file");
 fileInput.addEventListener("change", upload_trace_file);
 
+// ----------------------------- Overprovisioning Ratio -----------------------------//
+// ----------------------------- Overprovisioning Ratio -----------------------------//
+
 // Overprovisioning ratio setup
-function handleOverprovisioning(event) {
-  var overprovisioningRatio = event.target.value;
+function getOverprovisioningRatio() {
+  var overprovisioningRatio = document.getElementById(
+    "overprovisioning_ratio"
+  ).value;
+  // parseInt to convert string to integer
+  overprovisioningRatio = parseInt(overprovisioningRatio);
+  return overprovisioningRatio;
+}
+function handleOverprovisioning() {
+  var overprovisioningRatio = getOverprovisioningRatio();
   // find the total ss size after overprovision ratio removed from total size
-  var totalSize = 1.2288;
+  var totalSize = 2.34375;
   // four decimal points
   var totalSizeAfterOverprovision = (
     totalSize -

@@ -121,7 +121,10 @@ def write_block(allocation_scheme, traces):
                 'ds': 0,
                 'lba': [lba],
             }
-            ssd_block_trace_list.append(block_id)
+            # append only block_id to ssd_block_trace_list if block_id is not in ssd_block_trace_list
+            if block_id not in ssd_block_trace_list:
+                ssd_block_trace_list.append(block_id)
+            # ssd_block_trace_list.append(block_id)
     if allocation_scheme == 's1':
         while trace_list_tracer < len(traces):
             block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer)
