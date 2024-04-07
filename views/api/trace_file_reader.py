@@ -120,6 +120,8 @@ def write_block(allocation_scheme, traces):
                 'bs': 0,
                 'ds': 0,
                 'lba': [lba],
+                'ec': 0,
+                'gcs': 0
             }
             # append only block_id to ssd_block_trace_list if block_id is not in ssd_block_trace_list
             if block_id not in ssd_block_trace_list:
@@ -241,6 +243,10 @@ def garbage_collection():
                     'io_s': (ssd_block_trace_dict[block]['aw']-ssd_block_trace_dict[block]['ds'])/len(ssd_block_trace_dict[block]['lba'])*1000,
                 })
                 del lba_block_trace_dict_global[lba]
+            
+            if 'gcs' in ssd_block_trace_dict[block]:
+                ssd_block_trace_dict[block]['gcs'] += (ssd_block_trace_dict[block]['wpc'] - ssd_block_trace_dict[block]['dpc'])
+                print(ssd_block_trace_dict[block]['gcs'])
                 
             ssd_block_trace_dict[block]['aw'] = 0
             ssd_block_trace_dict[block]['wpc'] = 0
