@@ -235,7 +235,7 @@ async function upload_trace_file(event) {
               if (ssd_block_trace_dict[ssd_block_trace_list[i]].wpc > 128) {
                 console.log(ssd_block_trace_dict[ssd_block_trace_list[i]].wpc);
               }
-              nandWrite += ssd_block_trace_dict[ssd_block_trace_list[i]].wpc;
+              nandWrite += ssd_block_trace_dict[ssd_block_trace_list[i]].wpc + ssd_block_trace_dict[ssd_block_trace_list[i]].gcs;
               totalWriteCount +=
                 ssd_block_trace_dict[ssd_block_trace_list[i]].wc;
               totalEraseCount +=
