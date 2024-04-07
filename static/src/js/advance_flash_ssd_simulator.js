@@ -474,9 +474,9 @@ select_hitmap_type.addEventListener("change", async function () {
   }
 });
 
-function reset() {
+async function reset() {
   // Call api /write/complete
-  fetch("/write/complete", {
+  await fetch("/write/complete", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
