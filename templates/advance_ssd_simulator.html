@@ -136,7 +136,7 @@
                                 <tr>
                                     <td>
                                         <div class="row">
-                                            <div class="col-5">
+                                            <div class="col ml-5">
                                                 <div class="input-group mb-1">
 
                                                     <input type="file" id="upload_trace_file" class="form-control"
@@ -149,7 +149,7 @@
 
                                                 </div>
                                             </div>
-                                            <div class="col">
+                                            <div class="col mr-5">
 
                                                 <select id="select_hitmap_type" class="form-select btn-light border">
 
@@ -159,18 +159,6 @@
                                                 </select>
 
                                             </div>
-                                            <!-- <div class="col">
-                                                <select id="delete_file" class="form-select btn-light border">
-                                                    <option value="delete_file1" selected>Delete</option>
-                                                </select>
-                                            </div> -->
-                                            <!-- <div class="col">
-                                                <button type="button" class="btn btn-light border"
-                                                    onclick="trimFunction();">
-                                                    Execute Trim
-                                                </button>
-                                            </div> -->
-
                                         </div>
                                     </td>
                                     <td rowspan="2">
@@ -186,14 +174,7 @@
                                 <tr>
                                     <td>
                                         <div class="row">
-                                            <div class="col">
-                                                <button type="button" class="btn btn-light border"
-                                                    onclick="garbageCollection()">
-                                                    Execute Garbage Collection
-                                                </button>
-                                            </div>
-
-                                            <div class="col input-group">
+                                            <div class="col input-group ml-5">
 
                                                 <div class="input-group-append">
                                                     <span class="input-group-text" id="basic-addon2">Select allocation
@@ -224,6 +205,10 @@
                                                 <button type="button" class="btn btn-light border"
                                                     onclick="stopWritingForce()">
                                                     Stop Writing(Force)
+                                                </button>
+                                                <button type="button" class="btn btn-light border"
+                                                    onclick="reset()">
+                                                    Reset
                                                 </button>
                                             </div>
                                         </div>
