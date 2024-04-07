@@ -5,6 +5,7 @@ from app import app
 import re
 import math
 import pandas as pd
+import copy
 # Device Major Number,Device Minor Number,CPU Core ID, Record ID, Timestamp (in nanoseconds), ProcessID, Trace Action, OperationType, SectorNumber + I/O Size, ProcessName
 lba_block_trace_dict_global = {}
 ssd_block_trace_dict_global = {}
@@ -93,7 +94,7 @@ def write_block(allocation_scheme, traces):
     lba_block_trace_dict = lba_block_trace_dict_global
     global block_tracer_global
     block_tracer = block_tracer_global
-    
+    # print(ssd_block_trace_dict)
     trace_list_tracer = 0
     def delete_lba(block_trace):
         ssd_block_trace_dict[block_trace['bid']]['dpc'] += block_trace['wpc']
@@ -108,6 +109,7 @@ def write_block(allocation_scheme, traces):
             ssd_block_trace_dict[block_id]['wc'] += 1
             ssd_block_trace_dict[block_id]['lba'].append(lba)
             if ssd_block_trace_dict[block_id]['wc'] > max_write_count_global:
+                # print("Testing")
                 max_write_count_global = ssd_block_trace_dict[block_id]['wc']
         else:
             ssd_block_trace_dict[block_id] = {
@@ -155,7 +157,7 @@ def write_block(allocation_scheme, traces):
                     'lba': traces[trace_list_tracer]['lba']
                 }
                 add_lba(block_id, io_size, devisable_by_4, traces[trace_list_tracer]['lba'])
-                
+            
             trace_list_tracer += 1
     
     block_tracer_global = block_tracer
@@ -183,7 +185,10 @@ def trace_file_reader():
             block_trace_info = write_block(data['allocation_scheme'], data['traceList'])
             block_trace_info['max_write_count'] = max_write_count_global
             block_trace_info['max_erase_count'] = max_erase_count_global
-            return jsonify({'message': 'File uploaded successfully', 'traces': block_trace_info}), 200
+            copy_block_trace_info = copy.deepcopy(block_trace_info)
+            for block in copy_block_trace_info['ssd_block_trace_list']:
+                copy_block_trace_info['ssd_block_trace_dict'][block].pop('lba', None)
+            return jsonify({'message': 'File uploaded successfully', 'traces': copy_block_trace_info}), 200
             # return jsonify({'error': 'No file part'}), 400
         
         allocation_scheme = request.form['allocation_scheme']
@@ -198,6 +203,7 @@ def trace_file_reader():
             traces = read_trace_file(file)
             
             block_trace_info = write_block(allocation_scheme, traces)
+            
             block_trace_info['max_write_count'] = max_write_count_global
             block_trace_info['max_erase_count'] = max_erase_count_global
             return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200

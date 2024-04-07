@@ -110,6 +110,7 @@ async function upload_trace_file(event) {
     reader.onload = async function (e) {
       const lines = e.target.result.split("\n");
       var file_lenght = lines.length;
+      var count_written_block = 0;
       for (let i = 0; i < file_lenght; i += 10000) {
         let traceList = [];
         for (let j = i; j < i + 10000 && j < file_lenght; j++) {
@@ -119,6 +120,7 @@ async function upload_trace_file(event) {
             trace[fields_name[k]] = values[k + 1];
           }
           traceList.push(trace);
+
         }
         // console.log("traceList");
         // console.log(traceList);
@@ -136,7 +138,7 @@ async function upload_trace_file(event) {
         })
           .then((response) => response.json())
           .then(async (data) => {
-            // console.log(data);
+            console.log(data);
             startProcessingGif("start writing trace to ssd");
             ssd_block_trace_list = data.traces.ssd_block_trace_list;
             ssd_block_trace_dict = data.traces.ssd_block_trace_dict;
@@ -151,35 +153,40 @@ async function upload_trace_file(event) {
               );
               await new Promise((resolve) => setTimeout(resolve, 5));
             }
+            count_written_block += ssd_block_trace_list_length;
             stopProcessingGif("Trace written to ssd");
 
             startProcessingGif("Garbage Collection");
             await new Promise((resolve) => setTimeout(resolve, 1000));
-            await fetch("/garbage_collection", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({}),
-            })
-              .then((response) => response.json())
-              .then(async (data) => {
-                // console.log(data);
-                ssd_block_trace_list = data.traces.ssd_block_trace_list;
-                ssd_block_trace_dict = data.traces.ssd_block_trace_dict;
-                let ssd_block_trace_list_length = ssd_block_trace_list.length;
-                for (var i = 0; i < ssd_block_trace_list_length; i++) {
-                  var block = document.getElementById(ssd_block_trace_list[i]);
-                  block.style.backgroundColor = color_brighness(
-                    ssd_block_trace_dict[ssd_block_trace_list[i]].wc,
-                    max_write_count,
-                    ssd_block_trace_dict[ssd_block_trace_list[i]].aw,
-                    true
-                  );
-                  await new Promise((resolve) => setTimeout(resolve, 5));
-                }
-                stopProcessingGif("Garbage Collection Done");
-              });
+            if (count_written_block >= 4000) {
+              await fetch("/garbage_collection", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({}),
+              })
+                .then((response) => response.json())
+                .then(async (data) => {
+                  // console.log(data);
+                  ssd_block_trace_list = data.traces.ssd_block_trace_list;
+                  ssd_block_trace_dict = data.traces.ssd_block_trace_dict;
+                  let ssd_block_trace_list_length = ssd_block_trace_list.length;
+                  for (var i = 0; i < ssd_block_trace_list_length; i++) {
+                    var block = document.getElementById(
+                      ssd_block_trace_list[i]
+                    );
+                    block.style.backgroundColor = color_brighness(
+                      ssd_block_trace_dict[ssd_block_trace_list[i]].wc,
+                      max_write_count,
+                      ssd_block_trace_dict[ssd_block_trace_list[i]].aw,
+                      true
+                    );
+                    await new Promise((resolve) => setTimeout(resolve, 5));
+                  }
+                  stopProcessingGif("Garbage Collection Done");
+                });
+            }
           });
 
         if (forceStop) {
@@ -197,19 +204,20 @@ async function upload_trace_file(event) {
             });
           break;
         }
+        // break;
       }
-      await fetch("/write/complete", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({}),
-      })
-        .then((response) => response.json())
-        .then(async (data) => {
-          // console.log(data);
-          stopProcessingGif("Write Complete");
-        });
+      // await fetch("/write/complete", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({}),
+      // })
+      //   .then((response) => response.json())
+      //   .then(async (data) => {
+      //     // console.log(data);
+      //     stopProcessingGif("Write Complete");
+      //   });
     };
     reader.readAsText(file);
   }
@@ -317,7 +325,7 @@ select_hitmap_type.addEventListener("change", async function () {
     block.style.backgroundColor = color_brighness(
       ssd_block_trace_dict[ssd_block_trace_list[i]][hitmap_type],
       max_value,
-      ssd_block_trace_dict[ssd_block_trace_list[i]].aw,
+      ssd_block_trace_dict[ssd_block_trace_list[i]].aw
     );
     await new Promise((resolve) => setTimeout(resolve, 5));
   }
