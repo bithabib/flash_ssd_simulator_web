@@ -234,7 +234,7 @@ readButton.addEventListener("click", async function () {
         var circle_element = document.getElementsByClassName(
           "circle" + circle_tracer
         )[0];
-        circle_element.style.backgroundColor = "black";
+        circle_element.style.backgroundColor = "lightblue";
       }
     }
     circle_tracer += 1;
@@ -258,7 +258,7 @@ eraseButton.addEventListener("click", async function () {
     // console.log("voltageCircleY: " + voltageCircleY);
     var diffYVoltage = Math.abs(voltageCircleY - controlGateY);
     // applyingVoltageMessage(true);
-    moveNegativeVoltage(voltageCircle, diffYVoltage + 200, diffYVoltage);
+    moveNegativeVoltage(voltageCircle, diffYVoltage + 150, diffYVoltage + 70);
     await new Promise((resolve) => setTimeout(resolve, 500));
   }
   // get removed electrons
