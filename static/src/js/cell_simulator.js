@@ -3,8 +3,6 @@ function getScrollPosition() {
     window.pageYOffset || document.documentElement.scrollTop;
   const horizontalScroll =
     window.pageXOffset || document.documentElement.scrollLeft;
-  // console.log("verticalScroll: " + verticalScroll);
-  // console.log("horizontalScroll: " + horizontalScroll);
   return { verticalScroll, horizontalScroll };
 }
 window.addEventListener("scroll", getScrollPosition);
@@ -69,10 +67,7 @@ var electrons = document.getElementsByClassName("rounded-circle");
 var floatingGateX = floatingGate.getBoundingClientRect().left;
 var floatingGateY = floatingGate.getBoundingClientRect().top;
 
-function moveVoltage(voltageCircle, animation, diffY) {
-  // console.log("moveVoltage");
-  // console.log("animation: " + animation);
-  // console.log("diffY: " + diffY);
+async function moveVoltage(voltageCircle, animation, diffY) {
   animation += 1;
   voltageCircle.style.top = animation + "px";
   if (diffY > Math.abs(animation)) {
@@ -84,9 +79,6 @@ function moveVoltage(voltageCircle, animation, diffY) {
 }
 
 function moveNegativeVoltage(voltageCircle, animation, diffY) {
-  // console.log("moveVoltage");
-  // console.log("animation: " + animation);
-  // console.log("diffY: " + diffY);
   animation -= 1;
   voltageCircle.style.top = animation + "px";
   if (diffY < Math.abs(animation)) {
@@ -113,11 +105,13 @@ function applyingVoltageMessage(isApplying) {
   }
 }
 
-function moveElectron(electron, animation, diffY) {
+async function moveElectron(electron, animation, diffY) {
   animation -= 1;
   electron.style.top = animation + "px";
   if (diffY > Math.abs(animation)) {
-    requestAnimationFrame(() => moveElectron(electron, animation, diffY));
+    requestAnimationFrame(
+      async () => await moveElectron(electron, animation, diffY)
+    );
   }
 }
 
@@ -129,10 +123,9 @@ async function moveElectronButton() {
     voltageCircle.style.display = "block";
     var voltageCircleY = voltageCircle.getBoundingClientRect().top;
     var controlGateY = controlGate.getBoundingClientRect().top;
-    // console.log("voltageCircleY: " + voltageCircleY);
     var diffYVoltage = Math.abs(voltageCircleY - controlGateY);
     applyingVoltageMessage(true);
-    moveVoltage(voltageCircle, 50, diffYVoltage + 60);
+    await moveVoltage(voltageCircle, 50, diffYVoltage + 60);
     await new Promise((resolve) => setTimeout(resolve, 500));
   }
   await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -142,9 +135,8 @@ async function moveElectronButton() {
     var electronY = electron.getBoundingClientRect().top;
     const scrollPositions = getCurrentScrollPositions();
     var diffY =
-      Math.abs(electronY - floatingGateY) + scrollPositions.verticalScroll - 60;
-    console.log("Vertical scroll position: " + scrollPositions.verticalScroll); // "Vertical scroll position: 0
-    moveElectron(electron, 0, diffY);
+      Math.abs(electronY - floatingGateY) + scrollPositions.verticalScroll + 40;
+    await moveElectron(electron, 0, diffY);
   }
 }
 
@@ -160,11 +152,10 @@ writeButton.addEventListener("click", moveElectronButton);
 
 async function moveElectronRead(moveCurrent, animation, diffX) {
   animation += 1;
-  console.log("animation: " + animation);
   moveCurrent.style.left = animation + "px";
   if (diffX > Math.abs(animation)) {
-    requestAnimationFrame(() =>
-      moveElectronRead(moveCurrent, animation, diffX)
+    requestAnimationFrame(
+      async () => await moveElectronRead(moveCurrent, animation, diffX)
     );
   } else {
     moveCurrent.style.left = "0px";
@@ -176,7 +167,6 @@ var readButton = document.getElementById("read_button");
 readButton.addEventListener("click", async function () {
   var cell_type_id = document.getElementById("cell_type");
   var cell_type = cell_type_id.value;
-  console.log("cell_type_value: " + cell_type);
   var cell_type_value = 0;
   if (cell_type === "single_level_cell") {
     cell_type_value = 4;
@@ -192,7 +182,6 @@ readButton.addEventListener("click", async function () {
     applying_voltage <= removed_electrons_length;
     applying_voltage += 2.5 + cell_type_value
   ) {
-    console.log("applying_voltage: " + applying_voltage);
     var applying_read_voltage = document.getElementById(
       "applying_read_voltage"
     );
@@ -205,10 +194,9 @@ readButton.addEventListener("click", async function () {
       voltageCircle.style.display = "block";
       var voltageCircleY = voltageCircle.getBoundingClientRect().top;
       var controlGateY = controlGate.getBoundingClientRect().top;
-      // console.log("voltageCircleY: " + voltageCircleY);
       var diffYVoltage = Math.abs(voltageCircleY - controlGateY);
       // applyingVoltageMessage(true);
-      moveVoltage(voltageCircle, 50, diffYVoltage + 60);
+      await moveVoltage(voltageCircle, 50, diffYVoltage + 60);
       await new Promise((resolve) => setTimeout(resolve, 500));
     }
     var moveCurrents = document.getElementsByClassName("arrow");
@@ -219,25 +207,29 @@ readButton.addEventListener("click", async function () {
         moveCurrent.style.display = "block";
         var moveCurrentX = moveCurrent.getBoundingClientRect().left;
         var diffX = Math.abs(moveCurrentX - drainX) - 60;
-        moveElectronRead(moveCurrent, 0, diffX + 70);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        var circle_element = document.getElementsByClassName(
-          "circle" + circle_tracer
-        )[0];
-        circle_element.style.backgroundColor = "red";
+        await moveElectronRead(moveCurrent, 0, diffX + 70);
+        await new Promise((resolve) => setTimeout(resolve, 500));
       } else {
         moveCurrent.style.display = "block";
         var moveCurrentX = moveCurrent.getBoundingClientRect().left;
         var diffX = Math.abs(moveCurrentX - drainX) - 60;
-        moveElectronRead(moveCurrent, 0, (diffX + 70) / 2);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await moveElectronRead(moveCurrent, 0, (diffX + 70) / 2);
+        await new Promise((resolve) => setTimeout(resolve, 500));
         var circle_element = document.getElementsByClassName(
           "circle" + circle_tracer
         )[0];
         circle_element.style.backgroundColor = "lightblue";
       }
     }
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    if (applying_voltage + 2.5 > removed_electrons_length) {
+      var circle_element = document.getElementsByClassName(
+        "circle" + circle_tracer
+      )[0];
+      circle_element.style.backgroundColor = "red";
+    }
     circle_tracer += 1;
+    await new Promise((resolve) => setTimeout(resolve, 2000));
   }
 });
 
@@ -255,7 +247,6 @@ eraseButton.addEventListener("click", async function () {
     voltageCircle.style.display = "block";
     var voltageCircleY = voltageCircle.getBoundingClientRect().top;
     var controlGateY = controlGate.getBoundingClientRect().top;
-    // console.log("voltageCircleY: " + voltageCircleY);
     var diffYVoltage = Math.abs(voltageCircleY - controlGateY);
     // applyingVoltageMessage(true);
     moveNegativeVoltage(voltageCircle, diffYVoltage + 150, diffYVoltage + 70);
@@ -270,7 +261,6 @@ eraseButton.addEventListener("click", async function () {
     const scrollPositions = getCurrentScrollPositions();
     var diffY =
       Math.abs(electronY - floatingGateY) + scrollPositions.verticalScroll - 60;
-    console.log("Vertical scroll position: " + scrollPositions.verticalScroll); // "Vertical scroll position: 0
     moveElectron(electron, 0, diffY);
   }
 });
