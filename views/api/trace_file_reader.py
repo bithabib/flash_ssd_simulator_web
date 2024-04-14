@@ -73,11 +73,25 @@ def read_trace_file(file):
 # Allocation Scheme Algorithms ------- S1 Allocation Scheme ----------------------- 
 def allocation_scheme_algorithm(allocation_scheme, block_tracer):
     global ssd_structure
+    print(allocation_scheme)
+    print(allocation_scheme)
+    print(allocation_scheme)
+    print(allocation_scheme)
+    print(allocation_scheme)
     if allocation_scheme == 's1':
         channel = math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'])) % ssd_structure['channel']
         chip = block_tracer % ssd_structure['chip']
         die = math.floor(block_tracer / ssd_structure['chip']) % ssd_structure['die']
         plane = math.floor(block_tracer / (ssd_structure['die'] * ssd_structure['chip'])) % ssd_structure['plane']
+        block_container = (math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'] * ssd_structure['channel'])) % ssd_structure['block_container'])
+        block = math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'] * ssd_structure['channel'] * ssd_structure['block_container'])) % ssd_structure['block']
+        block_id = "block" + "_" + str(channel) + "_" + str(chip) + "_" + str(die) + "_" + str(plane) + "_" + str(block_container) + "_" + str(block)
+        return block_id
+    elif allocation_scheme == 's2':
+        channel = block_tracer % ssd_structure['chip']
+        chip = math.floor(block_tracer / ssd_structure['channel']) % ssd_structure['chip']
+        die = math.floor(block_tracer / (ssd_structure['chip'] * ssd_structure['channel'])) % ssd_structure['die']
+        plane = math.floor(block_tracer / (ssd_structure['die'] * ssd_structure['chip'] * ssd_structure['channel'])) % ssd_structure['plane']
         block_container = (math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'] * ssd_structure['channel'])) % ssd_structure['block_container'])
         block = math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'] * ssd_structure['channel'] * ssd_structure['block_container'])) % ssd_structure['block']
         block_id = "block" + "_" + str(channel) + "_" + str(chip) + "_" + str(die) + "_" + str(plane) + "_" + str(block_container) + "_" + str(block)
@@ -125,44 +139,44 @@ def write_block(allocation_scheme, traces):
             if block_id not in ssd_block_trace_list:
                 ssd_block_trace_list.append(block_id)
             # ssd_block_trace_list.append(block_id)
-    if allocation_scheme == 's1':
-        while trace_list_tracer < len(traces):
-            block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer)
- 
-            io_size = int(traces[trace_list_tracer]['io_s'])/1000
-            # find how many times io_size is devisable by 4 and what is remainder 
-            devisable_by_4 = io_size // 4
-            remainder = io_size % 4
-            if remainder > 0:
-                devisable_by_4 += 1
-            if block_id in ssd_block_trace_dict:
-                if ssd_block_trace_dict[block_id]['wpc'] + devisable_by_4 > 128:
-                    if ssd_block_trace_dict[block_id]['dpc'] > 0:
-                        ssd_block_trace_dict[block_id]['bs'] = 2
-                    else:
-                        ssd_block_trace_dict[block_id]['bs'] = 1
-                    block_tracer += 1
-                    block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer)
-            if traces[trace_list_tracer]['lba'] in lba_block_trace_dict:
-                delete_lba(lba_block_trace_dict[traces[trace_list_tracer]['lba']])
-                lba_block_trace_dict[traces[trace_list_tracer]['lba']] = {
-                    'bid': block_id,
-                    'aw': io_size,
-                    'wpc': devisable_by_4,
-                    'lba': traces[trace_list_tracer]['lba']
-                }
-                add_lba(block_id, io_size, devisable_by_4, traces[trace_list_tracer]['lba'])
-            else:
-                lba_block_trace_dict[traces[trace_list_tracer]['lba']] = {
-                    'bid': block_id,
-                    'aw': io_size,
-                    'wpc': devisable_by_4,
-                    'lba': traces[trace_list_tracer]['lba']
-                }
-                add_lba(block_id, io_size, devisable_by_4, traces[trace_list_tracer]['lba'])
-            
-            trace_list_tracer += 1
-    
+
+    while trace_list_tracer < len(traces):
+        block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer)
+
+        io_size = int(traces[trace_list_tracer]['io_s'])/1000
+        # find how many times io_size is devisable by 4 and what is remainder 
+        devisable_by_4 = io_size // 4
+        remainder = io_size % 4
+        if remainder > 0:
+            devisable_by_4 += 1
+        if block_id in ssd_block_trace_dict:
+            if ssd_block_trace_dict[block_id]['wpc'] + devisable_by_4 > 128:
+                if ssd_block_trace_dict[block_id]['dpc'] > 0:
+                    ssd_block_trace_dict[block_id]['bs'] = 2
+                else:
+                    ssd_block_trace_dict[block_id]['bs'] = 1
+                block_tracer += 1
+                block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer)
+        if traces[trace_list_tracer]['lba'] in lba_block_trace_dict:
+            delete_lba(lba_block_trace_dict[traces[trace_list_tracer]['lba']])
+            lba_block_trace_dict[traces[trace_list_tracer]['lba']] = {
+                'bid': block_id,
+                'aw': io_size,
+                'wpc': devisable_by_4,
+                'lba': traces[trace_list_tracer]['lba']
+            }
+            add_lba(block_id, io_size, devisable_by_4, traces[trace_list_tracer]['lba'])
+        else:
+            lba_block_trace_dict[traces[trace_list_tracer]['lba']] = {
+                'bid': block_id,
+                'aw': io_size,
+                'wpc': devisable_by_4,
+                'lba': traces[trace_list_tracer]['lba']
+            }
+            add_lba(block_id, io_size, devisable_by_4, traces[trace_list_tracer]['lba'])
+        
+        trace_list_tracer += 1
+
     block_tracer_global = block_tracer
     lba_block_trace_dict_global = lba_block_trace_dict
     ssd_block_trace_dict_global = ssd_block_trace_dict
@@ -185,6 +199,10 @@ def trace_file_reader():
     try:
         if 'file' not in request.files:
             data = request.json
+            print(data['allocation_scheme'])
+            print(data['allocation_scheme'])
+            print(data['allocation_scheme'])
+            print(data['allocation_scheme'])
             block_trace_info = write_block(data['allocation_scheme'], data['traceList'])
             block_trace_info['max_write_count'] = max_write_count_global
             block_trace_info['max_erase_count'] = max_erase_count_global
@@ -204,7 +222,10 @@ def trace_file_reader():
         
         if file_format == 'txt':
             traces = read_trace_file(file)
-            
+            print(allocation_scheme)
+            print(allocation_scheme)
+            print(allocation_scheme)
+            print(allocation_scheme)
             block_trace_info = write_block(allocation_scheme, traces)
             
             block_trace_info['max_write_count'] = max_write_count_global
