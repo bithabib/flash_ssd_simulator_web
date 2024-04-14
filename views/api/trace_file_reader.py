@@ -73,11 +73,6 @@ def read_trace_file(file):
 # Allocation Scheme Algorithms ------- S1 Allocation Scheme ----------------------- 
 def allocation_scheme_algorithm(allocation_scheme, block_tracer):
     global ssd_structure
-    print(allocation_scheme)
-    print(allocation_scheme)
-    print(allocation_scheme)
-    print(allocation_scheme)
-    print(allocation_scheme)
     if allocation_scheme == 's1':
         channel = math.floor(block_tracer / (ssd_structure['plane'] * ssd_structure['die'] * ssd_structure['chip'])) % ssd_structure['channel']
         chip = block_tracer % ssd_structure['chip']
@@ -88,7 +83,7 @@ def allocation_scheme_algorithm(allocation_scheme, block_tracer):
         block_id = "block" + "_" + str(channel) + "_" + str(chip) + "_" + str(die) + "_" + str(plane) + "_" + str(block_container) + "_" + str(block)
         return block_id
     elif allocation_scheme == 's2':
-        channel = block_tracer % ssd_structure['chip']
+        channel = block_tracer % ssd_structure['channel']
         chip = math.floor(block_tracer / ssd_structure['channel']) % ssd_structure['chip']
         die = math.floor(block_tracer / (ssd_structure['chip'] * ssd_structure['channel'])) % ssd_structure['die']
         plane = math.floor(block_tracer / (ssd_structure['die'] * ssd_structure['chip'] * ssd_structure['channel'])) % ssd_structure['plane']
