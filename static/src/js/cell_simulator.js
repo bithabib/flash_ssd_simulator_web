@@ -135,7 +135,7 @@ async function moveElectronButton() {
     var electronY = electron.getBoundingClientRect().top;
     const scrollPositions = getCurrentScrollPositions();
     var diffY =
-      Math.abs(electronY - floatingGateY) + scrollPositions.verticalScroll + 40;
+      Math.abs(electronY - floatingGateY) + scrollPositions.verticalScroll - 5;
     await moveElectron(electron, 0, diffY);
   }
 }
