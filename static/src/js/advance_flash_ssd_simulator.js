@@ -178,6 +178,7 @@ async function upload_trace_file(event) {
   var allocation_scheme = document.getElementById(
     "ssd_allocation_scheme"
   ).value;
+  console.log(allocation_scheme);
   if (file) {
     const reader = new FileReader();
     reader.onload = async function (e) {
