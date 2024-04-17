@@ -1,1 +1,2 @@
-# This is heder 
+# Validation test with existing simulator
+- https://github.com/fadhilkurnia/ssdsim

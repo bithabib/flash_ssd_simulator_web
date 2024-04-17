@@ -185,9 +185,9 @@ async function upload_trace_file(event) {
       const lines = e.target.result.split("\n");
       var file_lenght = lines.length;
       var count_written_block = 0;
-      for (let i = 0; i < file_lenght; i += 10000) {
+      for (let i = 0; i < file_lenght; i += 100000) {
         let traceList = [];
-        for (let j = i; j < i + 10000 && j < file_lenght; j++) {
+        for (let j = i; j < i + 100000 && j < file_lenght; j++) {
           const trace = {};
           const values = lines[j].split(",");
           for (let k = 0; k < fields_name.length; k++) {
