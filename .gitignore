@@ -1,3 +1,8 @@
 .DS_store
 __pycache__/
 instance/
+build/
+workload_scenario_1.xml
+workload_scenario_2.xml
+workload_scenario_3.xml
+MQSim
