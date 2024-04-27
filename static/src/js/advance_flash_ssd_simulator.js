@@ -191,7 +191,7 @@ async function upload_trace_file(event) {
       var file_lenght = lines.length;
       var count_written_block = 0;
       var trace_different = 1;
-      var upload_length = 10;
+      var upload_length = 3;
       for (let i = 0; i < file_lenght; i += upload_length) {
         let traceList = [];
         for (let j = i; j < i + upload_length && j < file_lenght; j++) {
@@ -256,6 +256,7 @@ async function upload_trace_file(event) {
             var eraseCountGraphData = [];
             var totalEraseCount = 0;
             var averageEraseCountGraphData = [];
+            // await new Promise((resolve) => setTimeout(resolve, 5000));
             for (var i = 0; i < ssd_block_trace_list_length; i++) {
               var block = document.getElementById(ssd_block_trace_list[i]);
               hostWrite += ssd_block_trace_dict[ssd_block_trace_list[i]].aw;
@@ -314,7 +315,7 @@ async function upload_trace_file(event) {
             console.log(writeableSSDSizePercent);
             stopProcessingGif("Trace written to ssd");
 
-            await new Promise((resolve) => setTimeout(resolve, 5000));
+            // await new Promise((resolve) => setTimeout(resolve, 5000));
 
             if (nandWritePercentage < writeableSSDSizePercent) {
               if (nandWritePercentage > 100) {
@@ -336,6 +337,7 @@ async function upload_trace_file(event) {
                   ssd_block_trace_list = data.traces.ssd_block_trace_list;
                   ssd_block_trace_dict = data.traces.ssd_block_trace_dict;
                   let ssd_block_trace_list_length = ssd_block_trace_list.length;
+
                   for (var i = 0; i < ssd_block_trace_list_length; i++) {
                     var block = document.getElementById(
                       ssd_block_trace_list[i]
