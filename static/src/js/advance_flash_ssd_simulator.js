@@ -319,8 +319,8 @@ async function upload_trace_file(event) {
             stopProcessingGif("Trace written to ssd");
 
             await new Promise((resolve) => setTimeout(resolve, write_gc_devider_delay));
-            print("writeableSSDSizePercent", writeableSSDSizePercent);
-            print("nandWritePercentage", nandWritePercentage);
+            // print("writeableSSDSizePercent", writeableSSDSizePercent);
+            // print("nandWritePercentage", nandWritePercentage);
             if (nandWritePercentage > writeableSSDSizePercent) {
               if (nandWritePercentage > 100) {
                 // notify user that ssd is full
