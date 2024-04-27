@@ -164,10 +164,10 @@ function color_brighness(dpc, wpc, garbage = false) {
   //   // set color as white
   //   color = "rgb(255,255,255)";
   // }
-  // if (part == 0 && whole == 0) {
-  //   // set color as white
-  //   color = "rgb(255,255,255)";
-  // }
+  if (wpc == 0) {
+    // set color as white
+    color = "rgb(255,255,255)";
+  }
   // if (dpc == 0) {
   //   // set color as white
   //   color = "rgb(255,255,255)";
@@ -191,9 +191,10 @@ async function upload_trace_file(event) {
       var file_lenght = lines.length;
       var count_written_block = 0;
       var trace_different = 1;
-      for (let i = 0; i < file_lenght; i += 100000) {
+      var upload_length = 10;
+      for (let i = 0; i < file_lenght; i += upload_length) {
         let traceList = [];
-        for (let j = i; j < i + 100000 && j < file_lenght; j++) {
+        for (let j = i; j < i + upload_length && j < file_lenght; j++) {
           const trace = {};
           // comma in lines to split the values
           // is there is comma in the value then split by comma or split by space
@@ -291,6 +292,7 @@ async function upload_trace_file(event) {
                 ssd_block_trace_dict[ssd_block_trace_list[i]].dpc,
                 ssd_block_trace_dict[ssd_block_trace_list[i]].wpc
               );
+              block.style.backgroundImage = "none";
               // set backgroundImage as X to show that block is written
               if (ssd_block_trace_dict[ssd_block_trace_list[i]].dpc != 0) {
                 block.style.backgroundImage = 'url("static/src/logo/x.webp")';
@@ -312,9 +314,9 @@ async function upload_trace_file(event) {
             console.log(writeableSSDSizePercent);
             stopProcessingGif("Trace written to ssd");
 
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+            await new Promise((resolve) => setTimeout(resolve, 5000));
 
-            if (nandWritePercentage >= writeableSSDSizePercent) {
+            if (nandWritePercentage < writeableSSDSizePercent) {
               if (nandWritePercentage > 100) {
                 // notify user that ssd is full
                 alert("SSD is full");
@@ -340,10 +342,17 @@ async function upload_trace_file(event) {
                     );
                     block.style.backgroundColor = color_brighness(
                       ssd_block_trace_dict[ssd_block_trace_list[i]].dpc,
-                      256,
-                      256 - ssd_block_trace_dict[ssd_block_trace_list[i]].dpc,
-                      true
+                      ssd_block_trace_dict[ssd_block_trace_list[i]].wpc
                     );
+                    block.style.backgroundImage = "none";
+                    // set backgroundImage as X to show that block is written
+                    if (
+                      ssd_block_trace_dict[ssd_block_trace_list[i]].dpc != 0
+                    ) {
+                      block.style.backgroundImage =
+                        'url("static/src/logo/x.webp")';
+                      block.style.backgroundSize = "100% 100%";
+                    }
                     await new Promise((resolve) => setTimeout(resolve, 5));
                   }
                   stopProcessingGif("Garbage Collection Done");
