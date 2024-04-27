@@ -191,7 +191,10 @@ async function upload_trace_file(event) {
       var file_lenght = lines.length;
       var count_written_block = 0;
       var trace_different = 1;
-      var upload_length = 10000;
+      var upload_length = 50000;
+      var garbage_collection_delay = 5;
+      var write_delay = 5;
+      var write_gc_devider_delay = 2000;
       for (let i = 0; i < file_lenght; i += upload_length) {
         let traceList = [];
         for (let j = i; j < i + upload_length && j < file_lenght; j++) {
@@ -256,7 +259,7 @@ async function upload_trace_file(event) {
             var eraseCountGraphData = [];
             var totalEraseCount = 0;
             var averageEraseCountGraphData = [];
-            await new Promise((resolve) => setTimeout(resolve, 500));
+            await new Promise((resolve) => setTimeout(resolve, write_gc_devider_delay));
             for (var i = 0; i < ssd_block_trace_list_length; i++) {
               var block = document.getElementById(ssd_block_trace_list[i]);
               hostWrite += ssd_block_trace_dict[ssd_block_trace_list[i]].aw;
@@ -299,7 +302,7 @@ async function upload_trace_file(event) {
                 block.style.backgroundImage = 'url("static/src/logo/x.webp")';
                 block.style.backgroundSize = "100% 100%";
               }
-              await new Promise((resolve) => setTimeout(resolve, 50));
+              await new Promise((resolve) => setTimeout(resolve, write_delay));
             }
             updateWAFGraph(
               wafGraphData,
@@ -315,9 +318,10 @@ async function upload_trace_file(event) {
             console.log(writeableSSDSizePercent);
             stopProcessingGif("Trace written to ssd");
 
-            await new Promise((resolve) => setTimeout(resolve, 500));
-
-            if (nandWritePercentage < writeableSSDSizePercent) {
+            await new Promise((resolve) => setTimeout(resolve, write_gc_devider_delay));
+            print("writeableSSDSizePercent", writeableSSDSizePercent);
+            print("nandWritePercentage", nandWritePercentage);
+            if (nandWritePercentage > writeableSSDSizePercent) {
               if (nandWritePercentage > 100) {
                 // notify user that ssd is full
                 alert("SSD is full");
@@ -355,7 +359,7 @@ async function upload_trace_file(event) {
                         'url("static/src/logo/x.webp")';
                       block.style.backgroundSize = "100% 100%";
                     }
-                    await new Promise((resolve) => setTimeout(resolve, 50));
+                    await new Promise((resolve) => setTimeout(resolve, garbage_collection_delay));
                   }
                   stopProcessingGif("Garbage Collection Done");
                 });
@@ -401,7 +405,7 @@ function getOverprovisioningRatio() {
 function handleOverprovisioning() {
   var overprovisioningRatio = getOverprovisioningRatio();
   // find the total ss size after overprovision ratio removed from total size
-  var totalSize = 2.34375;
+  var totalSize = 4.68750;
   // four decimal points
   var totalSizeAfterOverprovision = (
     totalSize -
