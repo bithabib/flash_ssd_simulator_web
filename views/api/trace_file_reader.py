@@ -116,9 +116,17 @@ def write_block(allocation_scheme, traces):
     def delete_from_ssd(lba):
         if lba in lba_block_trace_dict:
             for block_id in lba_block_trace_dict[lba]:
+                print("Delete from ssd")
+                print(ssd_block_trace_dict[block_id])
+                print(lba_block_trace_dict[lba])
+                print(ssd_block_trace_dict[block_id]['lba'][lba])
                 ssd_block_trace_dict[block_id]['dpc'] += ssd_block_trace_dict[block_id]['lba'][lba]
+               
                 ssd_block_trace_dict[block_id]['lba'].pop(lba)
                 lba_block_trace_dict[lba].remove(block_id)
+                print(ssd_block_trace_dict[block_id])
+                print(lba_block_trace_dict[lba])
+                
                 ssd_block_trace_dict[block_id]['ds'] += 1
                 ssd_block_trace_dict[block_id]['bs'] = 2
         
@@ -158,7 +166,6 @@ def write_block(allocation_scheme, traces):
                 lba_block_trace_dict[lba].append(block_id)
                 
     while trace_list_tracer < len(traces):
-        print(traces[trace_list_tracer])
         if 'gcs' not in traces[trace_list_tracer]:
             delete_from_ssd(traces[trace_list_tracer]['lba'])
             total_host_write += int(traces[trace_list_tracer]['io_s'])
@@ -174,13 +181,7 @@ def write_block(allocation_scheme, traces):
             devisable_by_4 += 1
         while devisable_by_4 > 0:
             aw = 4 if io_size >= 4 else io_size
-
-            # if (block_tracer % 10000) == 0:
-            #     print("block id: ", block_tracer)
-            #     print("io_s",devisable_by_4)
             if block_id in ssd_block_trace_dict:
-                # print("io_s1",devisable_by_4)
-                # print(ssd_block_trace_dict[block_id])
                 if ssd_block_trace_dict[block_id]['bs'] == 1:
                     block_tracer += 1
                 else:
@@ -195,8 +196,6 @@ def write_block(allocation_scheme, traces):
                         block_tracer += 1
                         block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer)
             else:
-                # print("io_s1",devisable_by_4)
-                
                 add_to_ssd(block_id, aw, 1, traces[trace_list_tracer]['lba'])
                 trace_lba(block_id, traces[trace_list_tracer]['lba'])
                 devisable_by_4 -= 1
@@ -228,48 +227,43 @@ def write_block(allocation_scheme, traces):
 def trace_file_reader():
     global max_write_count_global
     global max_erase_count_global
-    try:
-        if 'file' not in request.files:
-            data = request.json
-            print(data)
-            block_trace_info = write_block(data['allocation_scheme'], data['traceList'])
-            print(block_trace_info)
-            block_trace_info['max_write_count'] = max_write_count_global
-            block_trace_info['max_erase_count'] = max_erase_count_global
-            copy_block_trace_info = copy.deepcopy(block_trace_info)
-            for block in copy_block_trace_info['ssd_block_trace_list']:
-                copy_block_trace_info['ssd_block_trace_dict'][block].pop('lba', None)
-            return jsonify({'message': 'File uploaded successfully', 'traces': copy_block_trace_info}), 200
-            # return jsonify({'error': 'No file part'}), 400
+    # try:
+    if 'file' not in request.files:
+        data = request.json
+        block_trace_info = write_block(data['allocation_scheme'], data['traceList'])
+        block_trace_info['max_write_count'] = max_write_count_global
+        block_trace_info['max_erase_count'] = max_erase_count_global
+        copy_block_trace_info = copy.deepcopy(block_trace_info)
+        for block in copy_block_trace_info['ssd_block_trace_list']:
+            copy_block_trace_info['ssd_block_trace_dict'][block].pop('lba', None)
+        return jsonify({'message': 'File uploaded successfully', 'traces': copy_block_trace_info}), 200
+        # return jsonify({'error': 'No file part'}), 400
+    
+    allocation_scheme = request.form['allocation_scheme']
+    
+    file = request.files['file']    
+    file_format = file.filename.split('.')[-1]
+    
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+    
+    if file_format == 'txt':
+        traces = read_trace_file(file)
+        block_trace_info = write_block(allocation_scheme, traces)
         
-        allocation_scheme = request.form['allocation_scheme']
-        
-        file = request.files['file']    
-        file_format = file.filename.split('.')[-1]
-        
-        if file.filename == '':
-            return jsonify({'error': 'No selected file'}), 400
-        
-        if file_format == 'txt':
-            traces = read_trace_file(file)
-            print(allocation_scheme)
-            print(allocation_scheme)
-            print(allocation_scheme)
-            print(allocation_scheme)
-            block_trace_info = write_block(allocation_scheme, traces)
-            
-            block_trace_info['max_write_count'] = max_write_count_global
-            block_trace_info['max_erase_count'] = max_erase_count_global
-            return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200
-        
-        elif file_format == 'csv':
-            df = pd.read_csv(file, nrows=10000)
-            block_trace_info = write_block(allocation_scheme, df.to_dict(orient='records'))
-            return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200
-        else:
-            return jsonify({'error': 'Invalid file type'}), 400
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        block_trace_info['max_write_count'] = max_write_count_global
+        block_trace_info['max_erase_count'] = max_erase_count_global
+        return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200
+    
+    elif file_format == 'csv':
+        df = pd.read_csv(file, nrows=10000)
+        block_trace_info = write_block(allocation_scheme, df.to_dict(orient='records'))
+        return jsonify({'message': 'File uploaded successfully', 'filename': file.filename, 'traces': block_trace_info}), 200
+    else:
+        return jsonify({'error': 'Invalid file type'}), 400
+    # except Exception as e:
+    #     
+    #     return jsonify({'error': str(e)}), 400
     
     
 @app.route('/garbage_collection' , methods=['POST'])
@@ -280,39 +274,47 @@ def garbage_collection():
     global block_tracer_global
     global max_erase_count_global
     global max_write_count_global
-    ssd_block_trace_dict = ssd_block_trace_dict_global
-    ssd_block_trace_list = ssd_block_trace_list_global
-
-    trace_list = []
-    for block in ssd_block_trace_list:
-        if ssd_block_trace_dict[block]['bs'] == 2:
-            for lba in ssd_block_trace_dict[block]['lba']:
-                trace_list.append({
-                    'lba': lba,
-                    'io_s': (ssd_block_trace_dict[block]['aw']-ssd_block_trace_dict[block]['ds'])/len(ssd_block_trace_dict[block]['lba'])*1000,
-                })
-                del lba_block_trace_dict_global[lba]
-            
-            if 'gcs' in ssd_block_trace_dict[block]:
-                ssd_block_trace_dict[block]['gcs'] += (ssd_block_trace_dict[block]['wpc'] - ssd_block_trace_dict[block]['dpc'])
-                
-            ssd_block_trace_dict[block]['aw'] = 0
-            ssd_block_trace_dict[block]['wpc'] = 0
-            ssd_block_trace_dict[block]['bs'] = 0
-            ssd_block_trace_dict[block]['dpc'] = 0
-            ssd_block_trace_dict[block]['ds'] = 0
-            if 'ec' in ssd_block_trace_dict[block]:
-                ssd_block_trace_dict[block]['ec'] += 1
+    write_trace_list = []
+    for block_id in ssd_block_trace_list_global:
+        if ssd_block_trace_dict_global[block_id]['bs'] == 2:
+            if len(ssd_block_trace_dict_global[block_id]['lba']) == 0:
+                ssd_block_trace_dict_global[block_id]['gcs'] += 1
+                ssd_block_trace_dict_global[block_id]['bs'] = 0
+                ssd_block_trace_dict_global[block_id]['wpc'] = 0
+                ssd_block_trace_dict_global[block_id]['dpc'] = 0
+                ssd_block_trace_dict_global[block_id]['ec'] += 1
+                ssd_block_trace_dict_global[block_id]['ds'] = 0
+                ssd_block_trace_dict_global[block_id]['aw'] = 0
+                # ssd_block_trace_dict_global[block_id]['lba'] = {}
+                for lba in ssd_block_trace_dict_global[block_id]['lba']:
+                    lba_block_trace_dict_global[lba].remove(block_id)
+                ssd_block_trace_dict_global[block_id]['lba'] = {}
                 
             else:
-                ssd_block_trace_dict[block]['ec'] = 1
-            if ssd_block_trace_dict[block]['ec'] > max_erase_count_global:
-                max_erase_count_global = ssd_block_trace_dict[block]['ec']
-            ssd_block_trace_dict[block]['lba'] = []
-    block_trace_info = write_block('s1', trace_list)
-    block_trace_info['max_erase_count'] = max_erase_count_global
+                for lba in ssd_block_trace_dict_global[block_id]['lba']:
+                    write_trace_list.append({
+                        'lba': lba,
+                        'io_s': ssd_block_trace_dict_global[block_id]['lba'][lba] * 4 * 1000,
+                        'gcs': 1
+                    })
+                ssd_block_trace_dict_global[block_id]['gcs'] += 1
+                ssd_block_trace_dict_global[block_id]['bs'] = 0
+                ssd_block_trace_dict_global[block_id]['wpc'] = 0
+                ssd_block_trace_dict_global[block_id]['dpc'] = 0
+                ssd_block_trace_dict_global[block_id]['ec'] += 1
+                ssd_block_trace_dict_global[block_id]['ds'] = 0
+                ssd_block_trace_dict_global[block_id]['aw'] = 0
+                # ssd_block_trace_dict_global[block_id]['lba'] = {}
+                for lba in ssd_block_trace_dict_global[block_id]['lba']:
+                    lba_block_trace_dict_global[lba].remove(block_id)
+                ssd_block_trace_dict_global[block_id]['lba'] = {}
+    
+    block_trace_info = write_block('s1', write_trace_list)
     block_trace_info['max_write_count'] = max_write_count_global
-    block_tracer_global = 0
+    block_trace_info['max_erase_count'] = max_erase_count_global
+    copy_block_trace_info = copy.deepcopy(block_trace_info)
+    for block in copy_block_trace_info['ssd_block_trace_list']:
+        copy_block_trace_info['ssd_block_trace_dict'][block].pop('lba', None)
     return jsonify({'message': 'Garbage Collection Done', 'traces': block_trace_info}), 200
 
 @app.route('/write/complete' , methods=['POST'])
