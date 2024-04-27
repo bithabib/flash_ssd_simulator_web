@@ -145,7 +145,7 @@ def write_block(allocation_scheme, traces):
         if remainder > 0:
             devisable_by_4 += 1
         if block_id in ssd_block_trace_dict:
-            if ssd_block_trace_dict[block_id]['wpc'] + devisable_by_4 > 128:
+            if ssd_block_trace_dict[block_id]['wpc'] + devisable_by_4 > 256:
                 if ssd_block_trace_dict[block_id]['dpc'] > 0:
                     ssd_block_trace_dict[block_id]['bs'] = 2
                 else:

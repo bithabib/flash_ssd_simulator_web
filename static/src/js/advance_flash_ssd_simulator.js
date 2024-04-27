@@ -153,17 +153,22 @@ function create_block_for_each_plane() {
 }
 
 function color_brighness(part, whole, aw, garbage = false) {
+  console.log(part, whole, aw, garbage);
   var percentage = (part / whole) * 100;
   var brightness = Math.floor(255 * (percentage / 100));
   if (brightness < 0) brightness = 0;
   if (brightness > 255) brightness = 255;
   // Construct the CSS color string
   var color = "rgb(0," + brightness + ",0)";
-  if (garbage && aw == 0) {
-    // set color as white
-    color = "rgb(255,255,255)";
-  }
-  if (part == 0 && whole == 0) {
+  // if (garbage && aw == 0) {
+  //   // set color as white
+  //   color = "rgb(255,255,255)";
+  // }
+  // if (part == 0 && whole == 0) {
+  //   // set color as white
+  //   color = "rgb(255,255,255)";
+  // }
+  if (part == 0) {
     // set color as white
     color = "rgb(255,255,255)";
   }
@@ -178,20 +183,36 @@ async function upload_trace_file(event) {
   var allocation_scheme = document.getElementById(
     "ssd_allocation_scheme"
   ).value;
-  console.log(allocation_scheme);
+  // console.log(allocation_scheme);
   if (file) {
     const reader = new FileReader();
     reader.onload = async function (e) {
       const lines = e.target.result.split("\n");
       var file_lenght = lines.length;
       var count_written_block = 0;
+      var trace_different = 1;
       for (let i = 0; i < file_lenght; i += 100000) {
         let traceList = [];
         for (let j = i; j < i + 100000 && j < file_lenght; j++) {
           const trace = {};
-          const values = lines[j].split(",");
+          // comma in lines to split the values
+          // is there is comma in the value then split by comma or split by space
+          if (lines[j].includes(",")) {
+            var values = lines[j].split(",");
+          }else{
+            var values = lines[j].split(" ");
+            trace_different = 0;
+            // console.log(values);
+          }
+          // const values = lines[j].split(",");
+          console.log(values.length);
           for (let k = 0; k < fields_name.length; k++) {
-            trace[fields_name[k]] = values[k + 1];
+            // if index is out of range then add w as iot
+            if (k >= values.length) {
+              trace[fields_name[k]] = "w";
+            }else{
+              trace[fields_name[k]] = values[k+trace_different];
+            }
           }
           if (trace["iot"] == "W" || trace["iot"] == "w") {
             traceList.push(trace);
@@ -203,6 +224,7 @@ async function upload_trace_file(event) {
           traceList: traceList,
           allocation_scheme: allocation_scheme,
         };
+        console.log(body);
         startProcessingGif("processing trace file");
         await fetch("/upload_trace_file", {
           method: "POST",
@@ -235,7 +257,7 @@ async function upload_trace_file(event) {
               var block = document.getElementById(ssd_block_trace_list[i]);
               hostWrite += ssd_block_trace_dict[ssd_block_trace_list[i]].aw;
               if (ssd_block_trace_dict[ssd_block_trace_list[i]].wpc > 128) {
-                console.log(ssd_block_trace_dict[ssd_block_trace_list[i]].wpc);
+                // console.log(ssd_block_trace_dict[ssd_block_trace_list[i]].wpc);
               }
               nandWrite +=
                 ssd_block_trace_dict[ssd_block_trace_list[i]].wpc +
@@ -264,8 +286,8 @@ async function upload_trace_file(event) {
 
               // call function to update block color
               block.style.backgroundColor = color_brighness(
-                ssd_block_trace_dict[ssd_block_trace_list[i]].wc,
-                max_write_count
+                ssd_block_trace_dict[ssd_block_trace_list[i]].dpc,
+                256
               );
               await new Promise((resolve) => setTimeout(resolve, 5));
             }
@@ -278,7 +300,7 @@ async function upload_trace_file(event) {
             );
             var writeableSSDSizePercent = 100 - getOverprovisioningRatio();
             count_written_block += ssd_block_trace_list_length;
-            var nandWritePercentage = (nandWrite / 614400) * 100;
+            var nandWritePercentage = (nandWrite / 1214400) * 100;
             console.log(nandWritePercentage);
             console.log(writeableSSDSizePercent);
             stopProcessingGif("Trace written to ssd");
@@ -301,7 +323,7 @@ async function upload_trace_file(event) {
               })
                 .then((response) => response.json())
                 .then(async (data) => {
-                  // console.log(data);
+                  console.log(data);
                   ssd_block_trace_list = data.traces.ssd_block_trace_list;
                   ssd_block_trace_dict = data.traces.ssd_block_trace_dict;
                   let ssd_block_trace_list_length = ssd_block_trace_list.length;
@@ -310,9 +332,9 @@ async function upload_trace_file(event) {
                       ssd_block_trace_list[i]
                     );
                     block.style.backgroundColor = color_brighness(
-                      ssd_block_trace_dict[ssd_block_trace_list[i]].wc,
-                      max_write_count,
-                      ssd_block_trace_dict[ssd_block_trace_list[i]].aw,
+                      ssd_block_trace_dict[ssd_block_trace_list[i]].dpc,
+                      256,
+                      256-ssd_block_trace_dict[ssd_block_trace_list[i]].dpc,
                       true
                     );
                     await new Promise((resolve) => setTimeout(resolve, 5));
