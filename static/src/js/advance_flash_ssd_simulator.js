@@ -152,9 +152,9 @@ function create_block_for_each_plane() {
   ssd_container.appendChild(ssd_container_trtd);
 }
 
-function color_brighness(part, whole, aw, garbage = false) {
-  console.log(part, whole, aw, garbage);
-  var percentage = (part / whole) * 100;
+function color_brighness(dpc, wpc, garbage = false) {
+  console.log(dpc, wpc, garbage);
+  var percentage = (dpc / wpc) * 100;
   var brightness = Math.floor(255 * (percentage / 100));
   if (brightness < 0) brightness = 0;
   if (brightness > 255) brightness = 255;
@@ -168,10 +168,10 @@ function color_brighness(part, whole, aw, garbage = false) {
   //   // set color as white
   //   color = "rgb(255,255,255)";
   // }
-  if (part == 0) {
-    // set color as white
-    color = "rgb(255,255,255)";
-  }
+  // if (dpc == 0) {
+  //   // set color as white
+  //   color = "rgb(255,255,255)";
+  // }
   // console.log(color);
   return color;
 }
@@ -199,7 +199,7 @@ async function upload_trace_file(event) {
           // is there is comma in the value then split by comma or split by space
           if (lines[j].includes(",")) {
             var values = lines[j].split(",");
-          }else{
+          } else {
             var values = lines[j].split(" ");
             trace_different = 0;
             // console.log(values);
@@ -210,11 +210,13 @@ async function upload_trace_file(event) {
             // if index is out of range then add w as iot
             if (k >= values.length) {
               trace[fields_name[k]] = "w";
-            }else{
-              trace[fields_name[k]] = values[k+trace_different];
+            } else {
+              trace[fields_name[k]] = values[k + trace_different];
             }
           }
           if (trace["iot"] == "W" || trace["iot"] == "w") {
+            // delete trace["iot"] from the dictionary
+            delete trace["iot"];
             traceList.push(trace);
           }
         }
@@ -235,7 +237,7 @@ async function upload_trace_file(event) {
         })
           .then((response) => response.json())
           .then(async (data) => {
-            // console.log(data);
+            console.log(data);
             startProcessingGif("start writing trace to ssd");
             ssd_block_trace_list = data.traces.ssd_block_trace_list;
             ssd_block_trace_dict = data.traces.ssd_block_trace_dict;
@@ -287,8 +289,13 @@ async function upload_trace_file(event) {
               // call function to update block color
               block.style.backgroundColor = color_brighness(
                 ssd_block_trace_dict[ssd_block_trace_list[i]].dpc,
-                256
+                ssd_block_trace_dict[ssd_block_trace_list[i]].wpc
               );
+              // set backgroundImage as X to show that block is written
+              if (ssd_block_trace_dict[ssd_block_trace_list[i]].dpc != 0) {
+                block.style.backgroundImage = 'url("static/src/logo/x.webp")';
+                block.style.backgroundSize = "100% 100%";
+              }
               await new Promise((resolve) => setTimeout(resolve, 5));
             }
             updateWAFGraph(
@@ -334,7 +341,7 @@ async function upload_trace_file(event) {
                     block.style.backgroundColor = color_brighness(
                       ssd_block_trace_dict[ssd_block_trace_list[i]].dpc,
                       256,
-                      256-ssd_block_trace_dict[ssd_block_trace_list[i]].dpc,
+                      256 - ssd_block_trace_dict[ssd_block_trace_list[i]].dpc,
                       true
                     );
                     await new Promise((resolve) => setTimeout(resolve, 5));
@@ -361,50 +368,9 @@ async function upload_trace_file(event) {
         }
         // break;
       }
-      // await fetch("/write/complete", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({}),
-      // })
-      //   .then((response) => response.json())
-      //   .then(async (data) => {
-      //     // console.log(data);
-      //     stopProcessingGif("Write Complete");
-      //   });
     };
     reader.readAsText(file);
   }
-
-  // var allocation_scheme = document.getElementById(
-  //   "ssd_allocation_scheme"
-  // ).value;
-  // // call flask api to upload trace file
-  // var formData = new FormData();
-  // formData.append("file", file);
-  // formData.append("allocation_scheme", allocation_scheme);
-  // startProcessingGif("processing trace file");
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
-  // fetch("/upload_trace_file", {
-  //   method: "POST",
-  //   body: formData,
-  // })
-  //   .then((response) => response.json())
-  //   .then(async (data) => {
-  //     console.log(data);
-  //     // loop through each trace and change color of block
-  //     startProcessingGif("start writing trace to ssd");
-  //     for (var i = 0; i < data.traces.length; i++) {
-  //       var block = document.getElementById(data.traces[i].block_id);
-  //       block.style.backgroundColor = color_brighness(
-  //         data.traces[i].number_of_hit_in_block,
-  //         7
-  //       );
-  //       await new Promise((resolve) => setTimeout(resolve, 5));
-  //     }
-  //     stopProcessingGif("Trace written to ssd");
-  //   });
 }
 const fileInput = document.getElementById("upload_trace_file");
 fileInput.addEventListener("change", upload_trace_file);
@@ -457,18 +423,6 @@ window.onload = function () {
 async function stopWritingForce() {
   forceStop = true;
   stopProcessingGif("Write Stopped");
-  // await fetch("/write/complete", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({}),
-  // })
-  //   .then((response) => response.json())
-  //   .then(async (data) => {
-  //     console.log(data);
-  //     stopProcessingGif("Write Complete");
-  //   });
 }
 
 var select_hitmap_type = document.getElementById("select_hitmap_type");
