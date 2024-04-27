@@ -118,17 +118,9 @@ def write_block(allocation_scheme, traces, gc=False):
     def delete_from_ssd(lba):
         if lba in lba_block_trace_dict:
             for block_id in lba_block_trace_dict[lba]:
-                print("Delete from ssd")
-                print(ssd_block_trace_dict[block_id])
-                print(lba_block_trace_dict[lba])
-                print(ssd_block_trace_dict[block_id]['lba'][lba])
                 ssd_block_trace_dict[block_id]['dpc'] += ssd_block_trace_dict[block_id]['lba'][lba]
-               
                 ssd_block_trace_dict[block_id]['lba'].pop(lba)
                 lba_block_trace_dict[lba].remove(block_id)
-                print(ssd_block_trace_dict[block_id])
-                print(lba_block_trace_dict[lba])
-                
                 ssd_block_trace_dict[block_id]['ds'] += 1
                 ssd_block_trace_dict[block_id]['bs'] = 2
         
