@@ -97,7 +97,7 @@ def allocation_scheme_algorithm(allocation_scheme, block_tracer):
     else:
         return None
     
-def write_block(allocation_scheme, traces):
+def write_block(allocation_scheme, traces, gc=False):  
     global ssd_block_trace_dict_global
     ssd_block_trace_dict = ssd_block_trace_dict_global
     global ssd_block_trace_list_global
@@ -105,7 +105,7 @@ def write_block(allocation_scheme, traces):
     global lba_block_trace_dict_global
     lba_block_trace_dict = lba_block_trace_dict_global
     global block_tracer_global
-    block_tracer = block_tracer_global
+    
     global total_gc_write_global
     total_gc_write = total_gc_write_global
     global total_host_write_global
@@ -113,6 +113,8 @@ def write_block(allocation_scheme, traces):
     global total_ssd_write_global
     total_ssd_write = total_ssd_write_global
     trace_list_tracer = 0
+    if not gc:
+        block_tracer_global = 0
     def delete_from_ssd(lba):
         if lba in lba_block_trace_dict:
             for block_id in lba_block_trace_dict[lba]:
@@ -171,7 +173,7 @@ def write_block(allocation_scheme, traces):
             total_host_write += int(traces[trace_list_tracer]['io_s'])
         else:
             total_gc_write += traces[trace_list_tracer]['io_s']
-        block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer)
+        block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer_global)
 
         io_size = int(traces[trace_list_tracer]['io_s'])/1000
         # find how many times io_size is devisable by 4 and what is remainder 
@@ -180,38 +182,46 @@ def write_block(allocation_scheme, traces):
         if remainder > 0:
             devisable_by_4 += 1
         while devisable_by_4 > 0:
+            
             aw = 4 if io_size >= 4 else io_size
+
             if block_id in ssd_block_trace_dict:
+                
                 if ssd_block_trace_dict[block_id]['bs'] == 1:
-                    block_tracer += 1
+                    block_tracer_global += 1
+                    block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer_global)
                 else:
+                    
                     add_to_ssd(block_id, aw, 1, traces[trace_list_tracer]['lba'])
                     trace_lba(block_id, traces[trace_list_tracer]['lba'])
                     devisable_by_4 -= 1
                     io_size -= 4
-                    block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer)
+                    block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer_global)
                 
                     if ssd_block_trace_dict[block_id]['wpc'] >= 256:
-                        ssd_block_trace_dict[block_id]['bs'] = 1
-                        block_tracer += 1
-                        block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer)
+                        if ssd_block_trace_dict[block_id]['dpc'] > 0:
+                            ssd_block_trace_dict[block_id]['bs'] = 3
+                        else:
+                            ssd_block_trace_dict[block_id]['bs'] = 1
+                        block_tracer_global += 1
+                        block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer_global)
+
             else:
                 add_to_ssd(block_id, aw, 1, traces[trace_list_tracer]['lba'])
                 trace_lba(block_id, traces[trace_list_tracer]['lba'])
                 devisable_by_4 -= 1
                 io_size -= 4
-                block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer)
+                block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer_global)
             
                 if ssd_block_trace_dict[block_id]['wpc'] >= 256:
                     ssd_block_trace_dict[block_id]['bs'] = 1
-                    block_tracer += 1
-                    block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer)
+                    block_tracer_global += 1
+                    block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer_global)
             total_ssd_write += 4000
 
         
         trace_list_tracer += 1
 
-    block_tracer_global = block_tracer
     lba_block_trace_dict_global = lba_block_trace_dict
     ssd_block_trace_dict_global = ssd_block_trace_dict
     ssd_block_trace_list_global = ssd_block_trace_list
@@ -276,7 +286,7 @@ def garbage_collection():
     global max_write_count_global
     write_trace_list = []
     for block_id in ssd_block_trace_list_global:
-        if ssd_block_trace_dict_global[block_id]['bs'] == 2:
+        if ssd_block_trace_dict_global[block_id]['bs'] == 2 or ssd_block_trace_dict_global[block_id]['bs'] == 3:
             if len(ssd_block_trace_dict_global[block_id]['lba']) == 0:
                 ssd_block_trace_dict_global[block_id]['gcs'] += 1
                 ssd_block_trace_dict_global[block_id]['bs'] = 0
@@ -309,7 +319,7 @@ def garbage_collection():
                     lba_block_trace_dict_global[lba].remove(block_id)
                 ssd_block_trace_dict_global[block_id]['lba'] = {}
     
-    block_trace_info = write_block('s1', write_trace_list)
+    block_trace_info = write_block('s1', write_trace_list, True)
     block_trace_info['max_write_count'] = max_write_count_global
     block_trace_info['max_erase_count'] = max_erase_count_global
     copy_block_trace_info = copy.deepcopy(block_trace_info)
