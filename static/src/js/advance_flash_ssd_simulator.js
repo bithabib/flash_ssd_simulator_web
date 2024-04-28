@@ -153,26 +153,16 @@ function create_block_for_each_plane() {
 }
 
 function color_brighness(dpc, wpc, garbage = false) {
-  console.log(dpc, wpc, garbage);
   var percentage = (dpc / wpc) * 100;
   var brightness = Math.floor(255 * (percentage / 100));
   if (brightness < 0) brightness = 0;
   if (brightness > 255) brightness = 255;
   // Construct the CSS color string
   var color = "rgb(0," + brightness + ",0)";
-  // if (garbage && aw == 0) {
-  //   // set color as white
-  //   color = "rgb(255,255,255)";
-  // }
   if (wpc == 0) {
     // set color as white
     color = "rgb(255,255,255)";
   }
-  // if (dpc == 0) {
-  //   // set color as white
-  //   color = "rgb(255,255,255)";
-  // }
-  // console.log(color);
   return color;
 }
 
@@ -183,15 +173,16 @@ async function upload_trace_file(event) {
   var allocation_scheme = document.getElementById(
     "ssd_allocation_scheme"
   ).value;
-  // console.log(allocation_scheme);
   if (file) {
     const reader = new FileReader();
+    var wafGraphData = [{ y: 0 }];
     reader.onload = async function (e) {
       const lines = e.target.result.split("\n");
       var file_lenght = lines.length;
       var count_written_block = 0;
       var trace_different = 1;
-      var upload_length = 50000;
+      // var upload_length = 50000;
+      var upload_length = 15;
       var garbage_collection_delay = 5;
       var write_delay = 5;
       var write_gc_devider_delay = 2000;
@@ -206,10 +197,7 @@ async function upload_trace_file(event) {
           } else {
             var values = lines[j].split(" ");
             trace_different = 0;
-            // console.log(values);
           }
-          // const values = lines[j].split(",");
-          console.log(values.length);
           for (let k = 0; k < fields_name.length; k++) {
             // if index is out of range then add w as iot
             if (k >= values.length) {
@@ -224,13 +212,11 @@ async function upload_trace_file(event) {
             traceList.push(trace);
           }
         }
-        // console.log("traceList");
-        // console.log(traceList);
         var body = {
           traceList: traceList,
           allocation_scheme: allocation_scheme,
         };
-        console.log(body);
+        
         startProcessingGif("processing trace file");
         await fetch("/upload_trace_file", {
           method: "POST",
@@ -250,7 +236,6 @@ async function upload_trace_file(event) {
             let ssd_block_trace_list_length = ssd_block_trace_list.length;
 
             // all graph variable
-            var wafGraphData = [];
             var hostWrite = 0;
             var nandWrite = 0;
             var writeCountGraphData = [];
@@ -259,13 +244,12 @@ async function upload_trace_file(event) {
             var eraseCountGraphData = [];
             var totalEraseCount = 0;
             var averageEraseCountGraphData = [];
-            await new Promise((resolve) => setTimeout(resolve, write_gc_devider_delay));
+            await new Promise((resolve) =>
+              setTimeout(resolve, write_gc_devider_delay)
+            );
             for (var i = 0; i < ssd_block_trace_list_length; i++) {
               var block = document.getElementById(ssd_block_trace_list[i]);
               hostWrite += ssd_block_trace_dict[ssd_block_trace_list[i]].aw;
-              if (ssd_block_trace_dict[ssd_block_trace_list[i]].wpc > 128) {
-                // console.log(ssd_block_trace_dict[ssd_block_trace_list[i]].wpc);
-              }
               nandWrite +=
                 ssd_block_trace_dict[ssd_block_trace_list[i]].wpc +
                 ssd_block_trace_dict[ssd_block_trace_list[i]].gcs;
@@ -273,10 +257,6 @@ async function upload_trace_file(event) {
                 ssd_block_trace_dict[ssd_block_trace_list[i]].wc;
               totalEraseCount +=
                 ssd_block_trace_dict[ssd_block_trace_list[i]].ec;
-              wafGraphData.push({
-                y: (nandWrite * 4) / hostWrite,
-              });
-
               writeCountGraphData.push({
                 y: ssd_block_trace_dict[ssd_block_trace_list[i]].wc,
               });
@@ -314,14 +294,14 @@ async function upload_trace_file(event) {
             var writeableSSDSizePercent = 100 - getOverprovisioningRatio();
             count_written_block += ssd_block_trace_list_length;
             var nandWritePercentage = (nandWrite / 1214400) * 100;
-            console.log(nandWritePercentage);
-            console.log(writeableSSDSizePercent);
             stopProcessingGif("Trace written to ssd");
 
-            await new Promise((resolve) => setTimeout(resolve, write_gc_devider_delay));
+            await new Promise((resolve) =>
+              setTimeout(resolve, write_gc_devider_delay)
+            );
             // print("writeableSSDSizePercent", writeableSSDSizePercent);
             // print("nandWritePercentage", nandWritePercentage);
-            if (nandWritePercentage > writeableSSDSizePercent) {
+            if (nandWritePercentage < writeableSSDSizePercent) {
               if (nandWritePercentage > 100) {
                 // notify user that ssd is full
                 alert("SSD is full");
@@ -341,11 +321,40 @@ async function upload_trace_file(event) {
                   ssd_block_trace_list = data.traces.ssd_block_trace_list;
                   ssd_block_trace_dict = data.traces.ssd_block_trace_dict;
                   let ssd_block_trace_list_length = ssd_block_trace_list.length;
-                  
+                  // all graph variable
+                  wafGraphData.push({
+                    y: data.waf,
+                  });
+                  var hostWrite = 0;
+                  var nandWrite = 0;
+                  var writeCountGraphData = [];
+                  var averageWriteCountGraphData = [];
+                  var totalWriteCount = 0;
+                  var eraseCountGraphData = [];
+                  var totalEraseCount = 0;
+                  var averageEraseCountGraphData = [];
                   for (var i = 0; i < ssd_block_trace_list_length; i++) {
                     var block = document.getElementById(
                       ssd_block_trace_list[i]
                     );
+                    hostWrite +=
+                      ssd_block_trace_dict[ssd_block_trace_list[i]].aw;
+                    nandWrite +=
+                      ssd_block_trace_dict[ssd_block_trace_list[i]].wpc +
+                      ssd_block_trace_dict[ssd_block_trace_list[i]].gcs;
+                    totalWriteCount +=
+                      ssd_block_trace_dict[ssd_block_trace_list[i]].wc;
+                    totalEraseCount +=
+                      ssd_block_trace_dict[ssd_block_trace_list[i]].ec;
+                    averageWriteCountGraphData.push({
+                      y: totalWriteCount / (i + 1),
+                    });
+                    eraseCountGraphData.push({
+                      y: ssd_block_trace_dict[ssd_block_trace_list[i]].ec,
+                    });
+                    averageEraseCountGraphData.push({
+                      y: totalEraseCount / (i + 1),
+                    });
                     block.style.backgroundColor = color_brighness(
                       ssd_block_trace_dict[ssd_block_trace_list[i]].dpc,
                       ssd_block_trace_dict[ssd_block_trace_list[i]].wpc
@@ -359,8 +368,17 @@ async function upload_trace_file(event) {
                         'url("static/src/logo/x.webp")';
                       block.style.backgroundSize = "100% 100%";
                     }
-                    await new Promise((resolve) => setTimeout(resolve, garbage_collection_delay));
+                    await new Promise((resolve) =>
+                      setTimeout(resolve, garbage_collection_delay)
+                    );
                   }
+                  updateWAFGraph(
+                    wafGraphData,
+                    writeCountGraphData,
+                    averageWriteCountGraphData,
+                    eraseCountGraphData,
+                    averageEraseCountGraphData
+                  );
                   stopProcessingGif("Garbage Collection Done");
                 });
             }
@@ -376,7 +394,6 @@ async function upload_trace_file(event) {
           })
             .then((response) => response.json())
             .then(async (data) => {
-              // console.log(data);
               stopProcessingGif("Write Complete");
             });
           break;
@@ -405,7 +422,7 @@ function getOverprovisioningRatio() {
 function handleOverprovisioning() {
   var overprovisioningRatio = getOverprovisioningRatio();
   // find the total ss size after overprovision ratio removed from total size
-  var totalSize = 4.68750;
+  var totalSize = 4.6875;
   // four decimal points
   var totalSizeAfterOverprovision = (
     totalSize -
@@ -445,15 +462,12 @@ var select_hitmap_type = document.getElementById("select_hitmap_type");
 select_hitmap_type.addEventListener("change", async function () {
   // Get the selected value
   var hitmap_type = select_hitmap_type.value;
-  // console.log(hitmap_type);
   let ssd_block_trace_list_length = ssd_block_trace_list.length;
   if (hitmap_type == "wc") {
     var max_value = max_write_count;
   } else if (hitmap_type == "ec") {
     var max_value = max_erase_count;
   }
-  // console.log(ssd_block_trace_list_length);
-  // console.log(max_erase_count);
   for (var i = 0; i < ssd_block_trace_list_length; i++) {
     var block = document.getElementById(ssd_block_trace_list[i]);
 
@@ -477,7 +491,6 @@ async function reset() {
   })
     .then((response) => response.json())
     .then(async (data) => {
-      console.log(data);
       // reload the page
       location.reload();
     });
