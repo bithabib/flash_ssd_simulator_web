@@ -107,11 +107,8 @@ def write_block(allocation_scheme, traces, gc=False):
     global block_tracer_global
     
     global total_gc_write_global
-    total_gc_write = total_gc_write_global
     global total_host_write_global
-    total_host_write = total_host_write_global
     global total_ssd_write_global
-    total_ssd_write = total_ssd_write_global
     trace_list_tracer = 0
     if not gc:
         block_tracer_global = 0
@@ -146,7 +143,8 @@ def write_block(allocation_scheme, traces, gc=False):
                     lba: 1
                     },
                 'ec': 0,
-                'gcs': 0
+                'gcs': 0,
+                'tgc': total_gc_write_global,
             }
             # append only block_id to ssd_block_trace_list if block_id is not in ssd_block_trace_list
             if block_id not in ssd_block_trace_list:
@@ -162,9 +160,9 @@ def write_block(allocation_scheme, traces, gc=False):
     while trace_list_tracer < len(traces):
         if 'gcs' not in traces[trace_list_tracer]:
             delete_from_ssd(traces[trace_list_tracer]['lba'])
-            total_host_write += int(traces[trace_list_tracer]['io_s'])
+            total_host_write_global += int(traces[trace_list_tracer]['io_s'])
         else:
-            total_gc_write += traces[trace_list_tracer]['io_s']
+            total_gc_write_global += traces[trace_list_tracer]['io_s']
         block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer_global)
 
         io_size = int(traces[trace_list_tracer]['io_s'])/1000
@@ -209,7 +207,7 @@ def write_block(allocation_scheme, traces, gc=False):
                     ssd_block_trace_dict[block_id]['bs'] = 1
                     block_tracer_global += 1
                     block_id = allocation_scheme_algorithm(allocation_scheme, block_tracer_global)
-            total_ssd_write += 4000
+            total_ssd_write_global += 4000
 
         
         trace_list_tracer += 1
@@ -281,6 +279,9 @@ def garbage_collection():
         if ssd_block_trace_dict_global[block_id]['bs'] == 2 or ssd_block_trace_dict_global[block_id]['bs'] == 3:
             if len(ssd_block_trace_dict_global[block_id]['lba']) == 0:
                 ssd_block_trace_dict_global[block_id]['gcs'] += 1
+                # ssd_block_trace_dict_global[block_id]['gc_aw'] = ssd_block_trace_dict_global[block_id]['gc_aw'] + ssd_block_trace_dict_global[block_id]['aw'] if 'gc_aw' in ssd_block_trace_dict_global[block_id] else ssd_block_trace_dict_global[block_id]['aw']
+                # ssd_block_trace_dict_global[block_id]['gc_wpc'] = ssd_block_trace_dict_global[block_id]['gc_wpc'] + ssd_block_trace_dict_global[block_id]['wpc'] if 'gc_wpc' in ssd_block_trace_dict_global[block_id] else ssd_block_trace_dict_global[block_id]['wpc']
+                # ssd_block_trace_dict_global[block_id]['gc_dpc'] = ssd_block_trace_dict_global[block_id]['gc_dpc'] + ssd_block_trace_dict_global[block_id]['dpc'] if 'gc_dpc' in ssd_block_trace_dict_global[block_id] else ssd_block_trace_dict_global[block_id]['dpcc']
                 ssd_block_trace_dict_global[block_id]['bs'] = 0
                 ssd_block_trace_dict_global[block_id]['wpc'] = 0
                 ssd_block_trace_dict_global[block_id]['dpc'] = 0
@@ -291,6 +292,7 @@ def garbage_collection():
                 for lba in ssd_block_trace_dict_global[block_id]['lba']:
                     lba_block_trace_dict_global[lba].remove(block_id)
                 ssd_block_trace_dict_global[block_id]['lba'] = {}
+                ssd_block_trace_dict_global[block_id]['tgc'] = total_gc_write_global
                 
             else:
                 for lba in ssd_block_trace_dict_global[block_id]['lba']:
@@ -300,6 +302,9 @@ def garbage_collection():
                         'gcs': 1
                     })
                 ssd_block_trace_dict_global[block_id]['gcs'] += 1
+                # ssd_block_trace_dict_global[block_id]['gc_aw'] = ssd_block_trace_dict_global[block_id]['gc_aw'] + ssd_block_trace_dict_global[block_id]['aw'] if 'gc_aw' in ssd_block_trace_dict_global[block_id] else ssd_block_trace_dict_global[block_id]['aw']
+                # ssd_block_trace_dict_global[block_id]['gc_wpc'] = ssd_block_trace_dict_global[block_id]['gc_wpc'] + ssd_block_trace_dict_global[block_id]['wpc'] if 'gc_wpc' in ssd_block_trace_dict_global[block_id] else ssd_block_trace_dict_global[block_id]['wpc']
+                # ssd_block_trace_dict_global[block_id]['gc_dpc'] = ssd_block_trace_dict_global[block_id]['gc_dpc'] + ssd_block_trace_dict_global[block_id]['dpc'] if 'gc_dpc' in ssd_block_trace_dict_global[block_id] else ssd_block_trace_dict_global[block_id]['dpcc']
                 ssd_block_trace_dict_global[block_id]['bs'] = 0
                 ssd_block_trace_dict_global[block_id]['wpc'] = 0
                 ssd_block_trace_dict_global[block_id]['dpc'] = 0
@@ -310,6 +315,11 @@ def garbage_collection():
                 for lba in ssd_block_trace_dict_global[block_id]['lba']:
                     lba_block_trace_dict_global[lba].remove(block_id)
                 ssd_block_trace_dict_global[block_id]['lba'] = {}
+        # else:
+        #     ssd_block_trace_dict_global[block_id]['gc_aw'] = ssd_block_trace_dict_global[block_id]['gc_aw'] + ssd_block_trace_dict_global[block_id]['aw'] if 'gc_aw' in ssd_block_trace_dict_global[block_id] else ssd_block_trace_dict_global[block_id]['aw']
+        #     ssd_block_trace_dict_global[block_id]['gc_wpc'] = ssd_block_trace_dict_global[block_id]['gc_wpc'] + ssd_block_trace_dict_global[block_id]['wpc'] if 'gc_wpc' in ssd_block_trace_dict_global[block_id] else ssd_block_trace_dict_global[block_id]['wpc']
+        #     ssd_block_trace_dict_global[block_id]['gc_dpc'] = ssd_block_trace_dict_global[block_id]['gc_dpc'] + ssd_block_trace_dict_global[block_id]['dpc'] if 'gc_dpc' in ssd_block_trace_dict_global[block_id] else ssd_block_trace_dict_global[block_id]['dpcc']
+
     
     block_trace_info = write_block('s1', write_trace_list, True)
     block_trace_info['max_write_count'] = max_write_count_global
@@ -317,7 +327,9 @@ def garbage_collection():
     copy_block_trace_info = copy.deepcopy(block_trace_info)
     for block in copy_block_trace_info['ssd_block_trace_list']:
         copy_block_trace_info['ssd_block_trace_dict'][block].pop('lba', None)
-    return jsonify({'message': 'Garbage Collection Done', 'traces': block_trace_info}), 200
+    print("SSD Write", total_ssd_write_global)
+    print("Waf", (total_ssd_write_global)/total_host_write_global)
+    return jsonify({'message': 'Garbage Collection Done', 'traces': block_trace_info, 'waf': (total_ssd_write_global+total_gc_write_global)/total_host_write_global}), 200
 
 @app.route('/write/complete' , methods=['POST'])
 def complete_write():
