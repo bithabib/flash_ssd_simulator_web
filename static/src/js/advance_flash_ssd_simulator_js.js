@@ -182,6 +182,12 @@ function color_brighness() {
     if (brightness > 255) brightness = 255;
     var color = "rgb(0," + brightness + ",0)";
     var block = document.getElementById(block);
+    if (valid_page == 0 && invalid_page == 0) {
+      color = "rgb(255,255,255)";
+    } else if (valid_page == 0 && invalid_page > 0) {
+      block.style.backgroundImage = 'url("static/src/logo/x.webp")';
+    }
+
     block.style.backgroundColor = color;
   }
 }
@@ -303,12 +309,17 @@ function invalid_lba(lba) {
 // Function is_block_full to check if block is full
 // Function is_block_full to check if block is full
 function is_block_full(block_id) {
+  var total_written_pages = 0;
   if (block_id in full_ssd_storage) {
-    if (full_ssd_storage[block_id]["aw"] >= 4000 * number_of_page_per_block) {
-      return true;
-    } else {
-      return false;
-    }
+    full_ssd_storage[block_id]["vlba"].forEach((vlba) => {
+      if (vlba["status"] == "valid" || vlba["status"] == "invalid") {
+        total_written_pages += 1;
+      }
+    });
+  }
+
+  if (total_written_pages >= number_of_page_per_block) {
+    return true;
   } else {
     return false;
   }
@@ -342,8 +353,10 @@ function is_ssd_full(io_size) {
       }
     });
   }
-  console.log(full_ssd_storage);
-  if (total_written_pages * 4 * 1024+io_size >= total_ssd_size_after_overprovision) {
+  if (
+    total_written_pages * 4 * 1024 + io_size >=
+    total_ssd_size_after_overprovision
+  ) {
     return true;
   } else {
     return false;
@@ -391,8 +404,30 @@ function write(block_id, lba, io_size) {
 // Function to garbage collection
 // Function to garbage collection
 // Function to garbage collection
-function garbageCollection() {
-  var block_id = "";
+async function garbageCollection(lba, io_size) {
+  var max_invalid_page = 0;
+  var max_invalid_block = "";
+  for (var block in full_ssd_storage) {
+    var invalid_page = 0;
+    full_ssd_storage[block]["vlba"].forEach((vlba) => {
+      if (vlba["status"] == "invalid") {
+        invalid_page += 1;
+      }
+    });
+    if (invalid_page >= max_invalid_page) {
+      max_invalid_page = invalid_page;
+      max_invalid_block = block;
+    }
+  }
+  console.log(max_invalid_page);
+  // update the block
+  full_ssd_storage[max_invalid_block] = {
+    aw: 0,
+    vlba: [],
+    ec: 0,
+  };
+  color_brighness();
+  global_block_tracer = 0;
 }
 
 // Call function to upload trace file
@@ -413,25 +448,26 @@ async function upload_trace_file(event) {
 
           var is_full = is_ssd_full(io_size);
           if (is_full) {
-            garbageCollection();
-            break;
-          } else {
-            while (io_size > 0) {
-              block_id = allocation_scheme_algorithm(global_block_tracer);
-              var is_full = is_block_full(block_id);
-              if (is_full) {
-                global_block_tracer += 1;
-                color_brighness();
-                progress_setup(trace_length, i, global_block_tracer);
-                await new Promise((resolve) => setTimeout(resolve, 50));
+            await garbageCollection(lba, io_size);
+            // break;
+          }
+          while (io_size > 0) {
+            block_id = allocation_scheme_algorithm(global_block_tracer);
+            console.log(block_id);
+            console.log(block_id);
+            var is_full = is_block_full(block_id);
+            if (is_full) {
+              global_block_tracer += 1;
+              color_brighness();
+              progress_setup(trace_length, i, global_block_tracer);
+              await new Promise((resolve) => setTimeout(resolve, 50));
+            } else {
+              if (io_size > 4000) {
+                write(block_id, lba, 4000);
+                io_size = io_size - 4000;
               } else {
-                if (io_size > 4000) {
-                  write(block_id, lba, 4000);
-                  io_size = io_size - 4000;
-                } else {
-                  write(block_id, lba, io_size);
-                  io_size = 0;
-                }
+                write(block_id, lba, io_size);
+                io_size = 0;
               }
             }
           }
