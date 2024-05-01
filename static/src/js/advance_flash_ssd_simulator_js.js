@@ -388,6 +388,13 @@ function write(block_id, lba, io_size) {
   }
 }
 
+// Function to garbage collection
+// Function to garbage collection
+// Function to garbage collection
+function garbageCollection() {
+  var block_id = "";
+}
+
 // Call function to upload trace file
 async function upload_trace_file(event) {
   var file = event.target.files[0];
@@ -406,7 +413,7 @@ async function upload_trace_file(event) {
 
           var is_full = is_ssd_full(io_size);
           if (is_full) {
-            // garbageCollection();
+            garbageCollection();
             break;
           } else {
             while (io_size > 0) {
@@ -447,8 +454,8 @@ function getOverprovisioningRatio() {
   var overprovisioningRatio = document.getElementById(
     "overprovisioning_ratio"
   ).value;
-  // parseInt to convert string to integer
-  overprovisioningRatio = parseInt(overprovisioningRatio);
+  // parseFloat to convert string to float
+  overprovisioningRatio = parseFloat(overprovisioningRatio);
   return overprovisioningRatio;
 }
 function handleOverprovisioning() {
