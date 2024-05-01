@@ -317,7 +317,7 @@ function is_block_full(block_id) {
 // Function is_ssd_full to check if ssd is full
 // Function is_ssd_full to check if ssd is full
 // Function is_ssd_full to check if ssd is full
-function is_ssd_full() {
+function is_ssd_full(io_size) {
   // read overprovisioning ratio
   var overprovisioningRatio = getOverprovisioningRatio();
   var total_ssd_size =
@@ -342,7 +342,8 @@ function is_ssd_full() {
       }
     });
   }
-  if (total_written_pages * 4 * 1024 >= total_ssd_size_after_overprovision) {
+  console.log(full_ssd_storage);
+  if (total_written_pages * 4 * 1024+io_size >= total_ssd_size_after_overprovision) {
     return true;
   } else {
     return false;
@@ -403,8 +404,9 @@ async function upload_trace_file(event) {
           var io_size = parseInt(data[1]);
           invalid_lba(lba);
 
-          var is_full = is_ssd_full();
+          var is_full = is_ssd_full(io_size);
           if (is_full) {
+            // garbageCollection();
             break;
           } else {
             while (io_size > 0) {
