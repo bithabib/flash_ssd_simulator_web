@@ -90,6 +90,7 @@ var ssd_block_trace_dict = {};
 var max_erase_count = 0;
 var max_write_count = 0;
 var number_of_page_per_block = 256;
+gc_tracer = false;
 function create_block_for_each_plane() {
   // read table by id and create block for each plane
   var ssd_container = document.getElementById("ssd_container");
@@ -428,6 +429,8 @@ async function garbageCollection(lba, io_size) {
   };
   color_brighness();
   global_block_tracer = 0;
+  console.log("Garbage Collection");
+  await new Promise((resolve) => setTimeout(resolve, 500));
 }
 
 // Call function to upload trace file
@@ -450,6 +453,7 @@ async function upload_trace_file(event) {
           if (is_full) {
             await garbageCollection(lba, io_size);
             // break;
+            
           }
           while (io_size > 0) {
             block_id = allocation_scheme_algorithm(global_block_tracer);
@@ -458,9 +462,10 @@ async function upload_trace_file(event) {
             var is_full = is_block_full(block_id);
             if (is_full) {
               global_block_tracer += 1;
-              color_brighness();
-              progress_setup(trace_length, i, global_block_tracer);
-              await new Promise((resolve) => setTimeout(resolve, 50));
+              if (!gc_tracer) {
+                await new Promise((resolve) => setTimeout(resolve, 30));
+              }
+              
             } else {
               if (io_size > 4000) {
                 write(block_id, lba, 4000);
@@ -470,6 +475,11 @@ async function upload_trace_file(event) {
                 io_size = 0;
               }
             }
+          }
+          color_brighness();
+          progress_setup(trace_length, i, global_block_tracer);
+          if (gc_tracer) {
+            await new Promise((resolve) => setTimeout(resolve, 30));
           }
         }
       }
