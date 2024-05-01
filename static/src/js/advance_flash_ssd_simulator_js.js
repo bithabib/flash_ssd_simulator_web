@@ -73,6 +73,15 @@ function updateWAFGraph(
 }
 
 // Function to create block for each plane
+// All global variables
+const ssd_structure = {
+  channel: 2,
+  chip: 1,
+  die: 2,
+  plane: 4,
+  block_container: 60,
+  block: 5,
+};
 var forceStop = false;
 var ssd_block_trace_list = [];
 var ssd_block_trace_dict = {};
@@ -166,18 +175,122 @@ function color_brighness(dpc, wpc, garbage = false) {
   return color;
 }
 
-// Call function to upload trace file
-async function upload_trace_file(event) {
-  var file = event.target.files[0];
-  const fields_name = ["lba", "io_s", "iot"];
+// Function to select allocation scheme
+// Function to select allocation scheme
+// Function to select allocation scheme
+function allocation_scheme_algorithm(block_tracer) {
   var allocation_scheme = document.getElementById(
     "ssd_allocation_scheme"
   ).value;
+  var channel = 0;
+  var chip = 0;
+  var die = 0;
+  var plane = 0;
+  var block_container = 0;
+  var block = 0;
+  if (allocation_scheme == "s1") {
+    channel =
+      Math.floor(
+        block_tracer /
+          (ssd_structure["plane"] *
+            ssd_structure["die"] *
+            ssd_structure["chip"])
+      ) % ssd_structure["channel"];
+    chip = block_tracer % ssd_structure["chip"];
+    die =
+      Math.floor(block_tracer / ssd_structure["chip"]) % ssd_structure["die"];
+    plane =
+      Math.floor(
+        block_tracer / (ssd_structure["die"] * ssd_structure["chip"])
+      ) % ssd_structure["plane"];
+    block_container =
+      Math.floor(
+        block_tracer /
+          (ssd_structure["plane"] *
+            ssd_structure["die"] *
+            ssd_structure["chip"] *
+            ssd_structure["channel"])
+      ) % ssd_structure["block_container"];
+    block =
+      Math.floor(
+        block_tracer /
+          (ssd_structure["plane"] *
+            ssd_structure["die"] *
+            ssd_structure["chip"] *
+            ssd_structure["channel"] *
+            ssd_structure["block_container"])
+      ) % ssd_structure["block"];
+  } else if (allocation_scheme == "s2") {
+    channel = block_tracer % ssd_structure["channel"];
+    chip =
+      Math.floor(block_tracer / ssd_structure["channel"]) %
+      ssd_structure["chip"];
+    die =
+      Math.floor(
+        block_tracer / (ssd_structure["chip"] * ssd_structure["channel"])
+      ) % ssd_structure["die"];
+    plane =
+      Math.floor(
+        block_tracer /
+          (ssd_structure["die"] *
+            ssd_structure["chip"] *
+            ssd_structure["channel"])
+      ) % ssd_structure["plane"];
+    block_container =
+      Math.floor(
+        block_tracer /
+          (ssd_structure["plane"] *
+            ssd_structure["die"] *
+            ssd_structure["chip"] *
+            ssd_structure["channel"])
+      ) % ssd_structure["block_container"];
+    block =
+      Math.floor(
+        block_tracer /
+          (ssd_structure["plane"] *
+            ssd_structure["die"] *
+            ssd_structure["chip"] *
+            ssd_structure["channel"] *
+            ssd_structure["block_container"])
+      ) % ssd_structure["block"];
+  } else {
+    return None;
+  }
+  var block_id =
+    "block" +
+    "_" +
+    channel +
+    "_" +
+    chip +
+    "_" +
+    die +
+    "_" +
+    plane +
+    "_" +
+    block_container +
+    "_" +
+    block;
+  return block_id;
+}
+
+// Call function to upload trace file
+async function upload_trace_file(event) {
+  var file = event.target.files[0];
   if (file) {
     const reader = new FileReader();
     reader.onload = async function (e) {
       const lines = e.target.result.split("\n");
       console.log(lines.length);
+      lines.forEach(async (line, index) => {
+        console.log("line", line);
+        if (line != "") {
+          var data = line.split(" ");
+          var lba = parseInt(data[0]);
+          var io_size = parseInt(data[1]);
+          console.log("lba", lba, "io_size", io_size);
+          console.log(allocation_scheme_algorithm(0));
+        }
+      });
     };
     reader.readAsText(file);
   }
