@@ -82,11 +82,14 @@ const ssd_structure = {
   block_container: 60,
   block: 5,
 };
+var global_block_tracer = 0;
+var full_ssd_storage = {};
 var forceStop = false;
 var ssd_block_trace_list = [];
 var ssd_block_trace_dict = {};
 var max_erase_count = 0;
 var max_write_count = 0;
+var number_of_page_per_block = 256;
 function create_block_for_each_plane() {
   // read table by id and create block for each plane
   var ssd_container = document.getElementById("ssd_container");
@@ -161,18 +164,26 @@ function create_block_for_each_plane() {
   ssd_container.appendChild(ssd_container_trtd);
 }
 
-function color_brighness(dpc, wpc, garbage = false) {
-  var percentage = (dpc / wpc) * 100;
-  var brightness = Math.floor(255 * (percentage / 100));
-  if (brightness < 0) brightness = 0;
-  if (brightness > 255) brightness = 255;
-  // Construct the CSS color string
-  var color = "rgb(0," + brightness + ",0)";
-  if (wpc == 0) {
-    // set color as white
-    color = "rgb(255,255,255)";
+function color_brighness() {
+  for (var block in full_ssd_storage) {
+    // get the block by get element by id
+    var valid_page = 0;
+    var invalid_page = 0;
+    full_ssd_storage[block]["vlba"].forEach((vlba) => {
+      if (vlba["status"] == "valid") {
+        valid_page += 1;
+      } else {
+        invalid_page += 1;
+      }
+    });
+    var percentage = (invalid_page / (valid_page + invalid_page)) * 100;
+    var brightness = Math.floor(255 * (percentage / 100));
+    if (brightness < 0) brightness = 0;
+    if (brightness > 255) brightness = 255;
+    var color = "rgb(0," + brightness + ",0)";
+    var block = document.getElementById(block);
+    block.style.backgroundColor = color;
   }
-  return color;
 }
 
 // Function to select allocation scheme
@@ -273,6 +284,85 @@ function allocation_scheme_algorithm(block_tracer) {
   return block_id;
 }
 
+// Function to check if lba is available in full_ssd_storage
+// Function to check if lba is available in full_ssd_storage
+// Function to check if lba is available in full_ssd_storage
+function invalid_lba(lba) {
+  if (full_ssd_storage) {
+    for (var block in full_ssd_storage) {
+      full_ssd_storage[block]["vlba"].forEach((vlba) => {
+        if (lba == vlba["lba"]) {
+          vlba["status"] = "invalid";
+        }
+      });
+    }
+  }
+}
+
+// Function is_block_full to check if block is full
+// Function is_block_full to check if block is full
+// Function is_block_full to check if block is full
+function is_block_full(block_id) {
+  if (block_id in full_ssd_storage) {
+    if (full_ssd_storage[block_id]["aw"] >= 4000 * number_of_page_per_block) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+
+// Function is_ssd_full to check if ssd is full
+// Function is_ssd_full to check if ssd is full
+// Function is_ssd_full to check if ssd is full
+function is_ssd_full() {
+  // read overprovisioning ratio
+  var overprovisioningRatio = getOverprovisioningRatio();
+  console.log("overprovisioningRatio", overprovisioningRatio);
+  var total_ssd_size =
+    ssd_structure["channel"] *
+    ssd_structure["chip"] *
+    ssd_structure["die"] *
+    ssd_structure["plane"] *
+    ssd_structure["block_container"] *
+    ssd_structure["block"] *
+    number_of_page_per_block *
+    4000;
+  // ssd size in gb
+  console.log("total_ssd_size", total_ssd_size);
+}
+
+// Function to write data to block
+// Function to write data to block
+// Function to write data to block
+function write(block_id, lba, io_size) {
+  if (block_id in full_ssd_storage) {
+    full_ssd_storage[block_id]["aw"] += io_size;
+    full_ssd_storage[block_id]["wc"] += 1;
+    full_ssd_storage[block_id]["vlba"].push({
+      lba: lba,
+      size: io_size,
+      status: "valid",
+    });
+  } else {
+    full_ssd_storage[block_id] = {
+      aw: io_size,
+      wc: 1,
+      vlba: [
+        {
+          lba: lba,
+          size: io_size,
+          status: "valid",
+        },
+      ],
+      ec: 0,
+    };
+  }
+  // console.log("full_ssd_storage", full_ssd_storage);
+}
+
 // Call function to upload trace file
 async function upload_trace_file(event) {
   var file = event.target.files[0];
@@ -287,10 +377,32 @@ async function upload_trace_file(event) {
           var data = line.split(" ");
           var lba = parseInt(data[0]);
           var io_size = parseInt(data[1]);
-          console.log("lba", lba, "io_size", io_size);
-          console.log(allocation_scheme_algorithm(0));
+          invalid_lba(lba);
+
+          var is_full = is_ssd_full();
+          if (is_full) {
+            // run gc
+          } else {
+            while (io_size > 0) {
+              block_id = allocation_scheme_algorithm(global_block_tracer);
+              var is_full = is_block_full(block_id);
+              if (is_full) {
+                global_block_tracer += 1;
+              } else {
+                if (io_size > 4000) {
+                  write(block_id, lba, 4000);
+                  io_size = io_size - 4000;
+                } else {
+                  write(block_id, lba, io_size);
+                  io_size = 0;
+                }
+              }
+            }
+          }
         }
       });
+      console.log("full_ssd_storage", full_ssd_storage);
+      color_brighness();
     };
     reader.readAsText(file);
   }
@@ -312,13 +424,19 @@ function getOverprovisioningRatio() {
 }
 function handleOverprovisioning() {
   var overprovisioningRatio = getOverprovisioningRatio();
-  // find the total ss size after overprovision ratio removed from total size
-  var totalSize = 4.6875;
-  // four decimal points
-  var totalSizeAfterOverprovision = (
-    totalSize -
-    (totalSize * overprovisioningRatio) / 100
-  ).toFixed(4);
+  var totalSize =
+    ssd_structure["channel"] *
+    ssd_structure["chip"] *
+    ssd_structure["die"] *
+    ssd_structure["plane"] *
+    ssd_structure["block_container"] *
+    ssd_structure["block"] *
+    number_of_page_per_block *1024*4;
+  var totalSizeAfterOverprovision = totalSize * (1 - overprovisioningRatio / 100);
+  // convert byte to gb
+  totalSizeAfterOverprovision = totalSizeAfterOverprovision / 1024 / 1024 / 1024;
+  // two decimal places
+  totalSizeAfterOverprovision = totalSizeAfterOverprovision.toFixed(2);
   ssd_size_holder = document.getElementById("totalSize");
   ssd_size_holder.innerHTML = totalSizeAfterOverprovision + "gb";
 }
@@ -341,6 +459,7 @@ function startProcessingGif(message) {
 window.onload = function () {
   create_block_for_each_plane();
   stopProcessingGif("Please start writing");
+  handleOverprovisioning();
 };
 
 async function stopWritingForce() {
