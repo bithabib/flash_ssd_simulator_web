@@ -320,7 +320,6 @@ function is_block_full(block_id) {
 function is_ssd_full() {
   // read overprovisioning ratio
   var overprovisioningRatio = getOverprovisioningRatio();
-  console.log("overprovisioningRatio", overprovisioningRatio);
   var total_ssd_size =
     ssd_structure["channel"] *
     ssd_structure["chip"] *
@@ -329,9 +328,35 @@ function is_ssd_full() {
     ssd_structure["block_container"] *
     ssd_structure["block"] *
     number_of_page_per_block *
-    4000;
-  // ssd size in gb
-  console.log("total_ssd_size", total_ssd_size);
+    1024 *
+    4;
+
+  var total_ssd_size_after_overprovision =
+    total_ssd_size * (1 - overprovisioningRatio / 100);
+  // count valid and invalid pages together
+  var total_written_pages = 0;
+  for (var block in full_ssd_storage) {
+    full_ssd_storage[block]["vlba"].forEach((vlba) => {
+      if (vlba["status"] == "valid" || vlba["status"] == "invalid") {
+        total_written_pages += 1;
+      }
+    });
+  }
+  if (total_written_pages * 4 * 1024 >= total_ssd_size_after_overprovision) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// Function to setup progress bar
+// Function to setup progress bar
+// Function to setup progress bar
+function progress_setup(trace_length, i, global_block_tracer) {
+  var trace_progress = document.getElementById("trace_progress");
+  trace_progress.value = (i / trace_length) * 100;
+  var ssd_progress = document.getElementById("ssd_progress");
+  ssd_progress.value = (global_block_tracer / 4800) * 100;
 }
 
 // Function to write data to block
@@ -360,7 +385,6 @@ function write(block_id, lba, io_size) {
       ec: 0,
     };
   }
-  // console.log("full_ssd_storage", full_ssd_storage);
 }
 
 // Call function to upload trace file
@@ -370,24 +394,27 @@ async function upload_trace_file(event) {
     const reader = new FileReader();
     reader.onload = async function (e) {
       const lines = e.target.result.split("\n");
-      console.log(lines.length);
-      lines.forEach(async (line, index) => {
-        console.log("line", line);
-        if (line != "") {
-          var data = line.split(" ");
+      var trace_length = lines.length;
+      for (var i = 0; i < trace_length; i++) {
+        startProcessingGif("start writing trace to ssd");
+        if (lines[i] != "") {
+          var data = lines[i].split(" ");
           var lba = parseInt(data[0]);
           var io_size = parseInt(data[1]);
           invalid_lba(lba);
 
           var is_full = is_ssd_full();
           if (is_full) {
-            // run gc
+            break;
           } else {
             while (io_size > 0) {
               block_id = allocation_scheme_algorithm(global_block_tracer);
               var is_full = is_block_full(block_id);
               if (is_full) {
                 global_block_tracer += 1;
+                color_brighness();
+                progress_setup(trace_length, i, global_block_tracer);
+                await new Promise((resolve) => setTimeout(resolve, 50));
               } else {
                 if (io_size > 4000) {
                   write(block_id, lba, 4000);
@@ -400,8 +427,8 @@ async function upload_trace_file(event) {
             }
           }
         }
-      });
-      console.log("full_ssd_storage", full_ssd_storage);
+      }
+      stopProcessingGif("Write Completed");
       color_brighness();
     };
     reader.readAsText(file);
@@ -431,10 +458,14 @@ function handleOverprovisioning() {
     ssd_structure["plane"] *
     ssd_structure["block_container"] *
     ssd_structure["block"] *
-    number_of_page_per_block *1024*4;
-  var totalSizeAfterOverprovision = totalSize * (1 - overprovisioningRatio / 100);
+    number_of_page_per_block *
+    1024 *
+    4;
+  var totalSizeAfterOverprovision =
+    totalSize * (1 - overprovisioningRatio / 100);
   // convert byte to gb
-  totalSizeAfterOverprovision = totalSizeAfterOverprovision / 1024 / 1024 / 1024;
+  totalSizeAfterOverprovision =
+    totalSizeAfterOverprovision / 1024 / 1024 / 1024;
   // two decimal places
   totalSizeAfterOverprovision = totalSizeAfterOverprovision.toFixed(2);
   ssd_size_holder = document.getElementById("totalSize");
