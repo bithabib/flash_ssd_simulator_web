@@ -142,39 +142,9 @@
                                                     <input type="file" id="upload_trace_file" class="form-control"
                                                         placeholder="Upload Trace File" aria-label="measurement"
                                                         aria-describedby="basic-addon2">
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text" id="basic-addon2">Upload Trace
-                                                            File</span>
-                                                    </div>
-
                                                 </div>
                                             </div>
-                                            <div class="col mr-5">
-
-                                                <select id="select_hitmap_type" class="form-select btn-light border">
-
-                                                    <option value="wc">Write Count</option>
-                                                    <option value="ec">Erase Count</option>
-
-                                                </select>
-
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td rowspan="2">
-                                        <div class="rounded-circle d-flex justify-content-center align-items-center text-white"
-                                            id="processing_status_container"
-                                            style="width: 130px; height: 130px; background-color: #e4eef1; background-size: cover; background-image: url(/static/src/logo/1amw.gif);">
-
-                                            <p class="mt-2 text-center" id="processing_status">upload trace file</p>
-
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="row">
-                                            <div class="col input-group ml-5">
+                                            <div class="col mr-5 input-group">
 
                                                 <div class="input-group-append">
                                                     <span class="input-group-text" id="basic-addon2">Select allocation
@@ -201,13 +171,40 @@
                                                 </select>
 
                                             </div>
+                                        </div>
+                                    </td>
+                                    <td rowspan="2">
+                                        <div class="rounded-circle d-flex justify-content-center align-items-center text-white"
+                                            id="processing_status_container"
+                                            style="width: 130px; height: 130px; background-color: #e4eef1; background-size: cover; background-image: url(/static/src/logo/1amw.gif);">
+
+                                            <p class="mt-2 text-center" id="processing_status">upload trace file</p>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col ml-5 row">
+                                                <div class="col-12">
+                                                    <label for="trace_progress">Trace progress</label>
+                                                    <progress id="trace_progress" value="0" max="100" style="width: 70%;"> 32% </progress>
+                                                </div>
+                                                <div class="col-12">
+                                                    <label for="ssd_progress">SDD progress</label>
+                                                    <progress id="ssd_progress" value="0" max="100" style="width: 70%;"> 32% </progress>
+                                                </div>
+
+
+
+                                            </div>
                                             <div class="col">
                                                 <button type="button" class="btn btn-light border"
                                                     onclick="stopWritingForce()">
                                                     Stop Writing(Force)
                                                 </button>
-                                                <button type="button" class="btn btn-light border"
-                                                    onclick="reset()">
+                                                <button type="button" class="btn btn-light border" onclick="reset()">
                                                     Reset
                                                 </button>
                                             </div>
