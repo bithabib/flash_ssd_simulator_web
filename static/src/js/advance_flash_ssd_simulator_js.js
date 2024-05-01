@@ -406,6 +406,7 @@ function write(block_id, lba, io_size) {
 // Function to garbage collection
 // Function to garbage collection
 async function garbageCollection(lba, io_size) {
+  gc_tracer = true;
   var max_invalid_page = 0;
   var max_invalid_block = "";
   for (var block in full_ssd_storage) {
