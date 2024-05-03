@@ -346,7 +346,6 @@ function get_total_ssd_after_overprovisioning() {
     4;
   var total_ssd_size_after_overprovision =
     total_ssd_size * (1 - overprovisioningRatio / 100);
-  console.log(total_ssd_size_after_overprovision);
   return total_ssd_size_after_overprovision;
 }
 
@@ -355,7 +354,7 @@ function get_total_ssd_after_overprovisioning() {
 // get number of logical block address
 function get_number_of_logical_block_address() {
   var total_ssd_size = get_total_ssd_after_overprovisioning();
-  var number_of_logical_block_address = (total_ssd_size / sector_size) - 1;
+  var number_of_logical_block_address = total_ssd_size / sector_size - 1;
   return number_of_logical_block_address;
 }
 // Function is_ssd_full to check if ssd is full
@@ -365,8 +364,6 @@ function will_run_gc(io_size) {
   // read overprovisioning ratio
   var total_ssd_size_after_overprovision =
     get_total_ssd_after_overprovisioning() * gc_threshold;
-  console.log(total_ssd_size_after_overprovision);
-
   // count valid and invalid pages together
   var total_written_pages = 0;
   for (var block in full_ssd_storage) {
@@ -427,16 +424,7 @@ function write(block_id, lba, io_size) {
 // Greedy Garbage Collection
 // Greedy Garbage Collection
 // Greedy Garbage Collection
-async function greedyGarbageCollection(lba, io_size) {}
-// Function to lrw Garbage Collection
-// Function to lrw Garbage Collection
-// Function to lrw Garbage Collection
-async function lrwGarbageCollection(lba, io_size) {}
-// Function to garbage collection
-// Function to garbage collection
-// Function to garbage collection
-async function garbageCollection(lba, io_size) {
-  gc_tracer = true;
+function greedyGarbageCollection() {
   var max_invalid_page = 0;
   var max_invalid_block = "";
   for (var block in full_ssd_storage) {
@@ -451,8 +439,18 @@ async function garbageCollection(lba, io_size) {
       max_invalid_block = block;
     }
   }
-  // update the block
-  full_ssd_storage[max_invalid_block] = {
+  return max_invalid_block;
+}
+// Function to lrw Garbage Collection
+// Function to lrw Garbage Collection
+// Function to lrw Garbage Collection
+async function lrwGarbageCollection() {}
+// Function to garbage collection
+// Function to garbage collection
+// Function to garbage collection
+async function garbageCollection(lba, io_size) {
+  var gc_block = greedyGarbageCollection();
+  full_ssd_storage[gc_block] = {
     aw: 0,
     vlba: [],
     ec: 0,
