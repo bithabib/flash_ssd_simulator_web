@@ -82,6 +82,10 @@ const ssd_structure = {
   block_container: 60,
   block: 5,
 };
+const sector_size = 512;
+const page_size = 4 * 1024;
+const gc_free_space_percentage = 5;
+const gc_threshold = 90;
 var global_block_tracer = 0;
 var full_ssd_storage = {};
 var forceStop = false;
