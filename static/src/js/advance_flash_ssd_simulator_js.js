@@ -85,7 +85,7 @@ const ssd_structure = {
 const sector_size = 512;
 const page_size = 4 * 1024;
 const gc_free_space_percentage = 5;
-const gc_threshold = 90;
+const gc_threshold = 0.9;
 var global_block_tracer = 0;
 var full_ssd_storage = {};
 var forceStop = false;
@@ -329,13 +329,11 @@ function is_block_full(block_id) {
     return false;
   }
 }
-
-// Function is_ssd_full to check if ssd is full
-// Function is_ssd_full to check if ssd is full
-// Function is_ssd_full to check if ssd is full
-function will_run_gc(io_size) {
-  // read overprovisioning ratio
-  var overprovisioningRatio = getOverprovisioningRatio() + (100 - gc_threshold);
+// get total ssd after overprovisioning
+// get total ssd after overprovisioning
+// get total ssd after overprovisioning
+function get_total_ssd_after_overprovisioning() {
+  var overprovisioningRatio = getOverprovisioningRatio();
   var total_ssd_size =
     ssd_structure["channel"] *
     ssd_structure["chip"] *
@@ -346,9 +344,29 @@ function will_run_gc(io_size) {
     number_of_page_per_block *
     1024 *
     4;
-
   var total_ssd_size_after_overprovision =
     total_ssd_size * (1 - overprovisioningRatio / 100);
+  console.log(total_ssd_size_after_overprovision);
+  return total_ssd_size_after_overprovision;
+}
+
+// get number of logical block address
+// get number of logical block address
+// get number of logical block address
+function get_number_of_logical_block_address() {
+  var total_ssd_size = get_total_ssd_after_overprovisioning();
+  var number_of_logical_block_address = (total_ssd_size / sector_size) - 1;
+  return number_of_logical_block_address;
+}
+// Function is_ssd_full to check if ssd is full
+// Function is_ssd_full to check if ssd is full
+// Function is_ssd_full to check if ssd is full
+function will_run_gc(io_size) {
+  // read overprovisioning ratio
+  var total_ssd_size_after_overprovision =
+    get_total_ssd_after_overprovisioning() * gc_threshold;
+  console.log(total_ssd_size_after_overprovision);
+
   // count valid and invalid pages together
   var total_written_pages = 0;
   for (var block in full_ssd_storage) {
@@ -367,9 +385,8 @@ function will_run_gc(io_size) {
     return false;
   }
 }
-function gc_stop_condition_met(){
+function gc_stop_condition_met() {}
 
-}
 // Function to setup progress bar
 // Function to setup progress bar
 // Function to setup progress bar
@@ -407,7 +424,14 @@ function write(block_id, lba, io_size) {
     };
   }
 }
-
+// Greedy Garbage Collection
+// Greedy Garbage Collection
+// Greedy Garbage Collection
+async function greedyGarbageCollection(lba, io_size) {}
+// Function to lrw Garbage Collection
+// Function to lrw Garbage Collection
+// Function to lrw Garbage Collection
+async function lrwGarbageCollection(lba, io_size) {}
 // Function to garbage collection
 // Function to garbage collection
 // Function to garbage collection
@@ -427,7 +451,6 @@ async function garbageCollection(lba, io_size) {
       max_invalid_block = block;
     }
   }
-  console.log(max_invalid_page);
   // update the block
   full_ssd_storage[max_invalid_block] = {
     aw: 0,
@@ -436,8 +459,7 @@ async function garbageCollection(lba, io_size) {
   };
   color_brighness();
   global_block_tracer = 0;
-  console.log("Garbage Collection");
-  await new Promise((resolve) => setTimeout(resolve, 500));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 }
 
 // Call function to upload trace file
@@ -452,7 +474,7 @@ async function upload_trace_file(event) {
         startProcessingGif("start writing trace to ssd");
         if (lines[i] != "") {
           var data = lines[i].split(" ");
-          var lba = parseInt(data[0]);
+          var lba = parseInt(data[0]) % get_number_of_logical_block_address();
 
           var io_size = parseInt(data[1]);
           invalid_lba(lba);
@@ -461,19 +483,15 @@ async function upload_trace_file(event) {
           if (is_full) {
             await garbageCollection(lba, io_size);
             // break;
-            
           }
           while (io_size > 0) {
             block_id = allocation_scheme_algorithm(global_block_tracer);
-            console.log(block_id);
-            console.log(block_id);
             var is_full = is_block_full(block_id);
             if (is_full) {
               global_block_tracer += 1;
               if (!gc_tracer) {
                 await new Promise((resolve) => setTimeout(resolve, 30));
               }
-              
             } else {
               if (io_size > 4000) {
                 write(block_id, lba, 4000);
