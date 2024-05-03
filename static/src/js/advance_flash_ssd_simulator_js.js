@@ -333,9 +333,9 @@ function is_block_full(block_id) {
 // Function is_ssd_full to check if ssd is full
 // Function is_ssd_full to check if ssd is full
 // Function is_ssd_full to check if ssd is full
-function is_ssd_full(io_size) {
+function will_run_gc(io_size) {
   // read overprovisioning ratio
-  var overprovisioningRatio = getOverprovisioningRatio();
+  var overprovisioningRatio = getOverprovisioningRatio() + (100 - gc_threshold);
   var total_ssd_size =
     ssd_structure["channel"] *
     ssd_structure["chip"] *
@@ -367,7 +367,9 @@ function is_ssd_full(io_size) {
     return false;
   }
 }
+function gc_stop_condition_met(){
 
+}
 // Function to setup progress bar
 // Function to setup progress bar
 // Function to setup progress bar
@@ -451,10 +453,11 @@ async function upload_trace_file(event) {
         if (lines[i] != "") {
           var data = lines[i].split(" ");
           var lba = parseInt(data[0]);
+
           var io_size = parseInt(data[1]);
           invalid_lba(lba);
 
-          var is_full = is_ssd_full(io_size);
+          var is_full = will_run_gc(io_size);
           if (is_full) {
             await garbageCollection(lba, io_size);
             // break;
