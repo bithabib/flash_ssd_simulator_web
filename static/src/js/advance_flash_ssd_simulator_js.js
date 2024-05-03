@@ -397,7 +397,7 @@ function progress_setup(trace_length, i, global_block_tracer) {
 // Function to write data to block
 // Function to write data to block
 // Function to write data to block
-function write(block_id, lba, io_size) {
+function write_page(block_id, lba, io_size) {
   if (block_id in full_ssd_storage) {
     full_ssd_storage[block_id]["aw"] += io_size;
     full_ssd_storage[block_id]["wc"] += 1;
@@ -419,6 +419,29 @@ function write(block_id, lba, io_size) {
       ],
       ec: 0,
     };
+  }
+}
+// Function to write data to ssd
+// Function to write data to ssd
+// Function to write data to ssd
+async function write_ssd(lba, io_size) {
+  while (io_size > 0) {
+    block_id = allocation_scheme_algorithm(global_block_tracer);
+    var is_full = is_block_full(block_id);
+    if (is_full) {
+      global_block_tracer += 1;
+      if (!gc_tracer) {
+        await new Promise((resolve) => setTimeout(resolve, 30));
+      }
+    } else {
+      if (io_size > 4000) {
+        write_page(block_id, lba, 4000);
+        io_size = io_size - 4000;
+      } else {
+        write_page(block_id, lba, io_size);
+        io_size = 0;
+      }
+    }
   }
 }
 // Greedy Garbage Collection
@@ -444,7 +467,7 @@ function greedyGarbageCollection() {
 // Function to lrw Garbage Collection
 // Function to lrw Garbage Collection
 // Function to lrw Garbage Collection
-async function lrwGarbageCollection() {}
+function lrwGarbageCollection() {}
 // Function to garbage collection
 // Function to garbage collection
 // Function to garbage collection
@@ -482,24 +505,7 @@ async function upload_trace_file(event) {
             await garbageCollection(lba, io_size);
             // break;
           }
-          while (io_size > 0) {
-            block_id = allocation_scheme_algorithm(global_block_tracer);
-            var is_full = is_block_full(block_id);
-            if (is_full) {
-              global_block_tracer += 1;
-              if (!gc_tracer) {
-                await new Promise((resolve) => setTimeout(resolve, 30));
-              }
-            } else {
-              if (io_size > 4000) {
-                write(block_id, lba, 4000);
-                io_size = io_size - 4000;
-              } else {
-                write(block_id, lba, io_size);
-                io_size = 0;
-              }
-            }
-          }
+          await write_ssd(lba, io_size);
           color_brighness();
           progress_setup(trace_length, i, global_block_tracer);
           if (gc_tracer) {
