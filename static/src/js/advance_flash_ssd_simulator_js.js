@@ -1,11 +1,38 @@
 // Waf Graph update
-function updateWAFGraph(
-  wafGraphData,
-  writeCountGraphData,
-  averageWriteCountGraphData,
-  eraseCountGraphData,
-  averageEraseCountGraphData
-) {
+function updateWAFGraph() {
+  var wafGraphData = [
+    {
+      y: 1.0,
+    }
+  ];
+  var writeCountGraphData=[];
+  var averageWriteCount = 0;
+  var averageWriteCountGraphData = [];
+  var eraseCountGraphData = [];
+  var averageEraseCount = 0;
+  var averageEraseCountGraphData = [];
+
+  var counter = 1;
+  for (var block in full_ssd_storage) {
+    writeCountGraphData.push({
+      x: block,
+      y: full_ssd_storage[block]["wc"],
+    });
+    eraseCountGraphData.push({
+      y: full_ssd_storage[block]["ec"],
+    });
+    averageWriteCount += full_ssd_storage[block]["wc"];
+    averageEraseCount += full_ssd_storage[block]["ec"];
+    averageEraseCountGraphData.push({
+      y: averageEraseCount / counter,
+    });
+    averageWriteCountGraphData.push({
+      y: averageWriteCount / counter,
+    });
+    counter += 1;
+  }
+  console.log(writeCountGraphData);
+
   var wafChart = new CanvasJS.Chart("wafChartContainer", {
     animationEnabled: true,
     theme: "light2",
@@ -362,8 +389,6 @@ function get_number_of_logical_block_address() {
 // Function is_ssd_full to check if ssd is full
 function will_run_gc(io_size, gc_free_space = 0) {
   // read overprovisioning ratio
-  console.log("GC Free Space: ", gc_free_space);
-  console.log("GC Free Space: ", gc_threshold);
   var gc_free_plus_threshold = gc_threshold - gc_free_space;
   var total_ssd_size_after_overprovision =
     get_total_ssd_after_overprovisioning() * gc_free_plus_threshold;
@@ -478,7 +503,6 @@ function lrwGarbageCollection() {}
 // Function to garbage collection
 // Function to garbage collection
 async function garbageCollection() {
-  console.log("Garbage Collection");
   var gc_block = greedyGarbageCollection();
   for (var lba in full_ssd_storage[gc_block]["vlba"]) {
     if (full_ssd_storage[gc_block]["vlba"][lba]["status"] == "valid") {
@@ -516,10 +540,7 @@ async function upload_trace_file(event) {
         startProcessingGif("start writing trace to ssd");
         if (lines[i] != "") {
           var data = lines[i].split(" ");
-          console.log(get_number_of_logical_block_address());
           var lba = parseInt(data[0]) % get_number_of_logical_block_address();
-          console.log(lba);
-
           var io_size = parseInt(data[1]);
           invalid_lba(lba);
           var run_gc = will_run_gc(io_size);
@@ -538,6 +559,10 @@ async function upload_trace_file(event) {
           if (gc_tracer) {
             await new Promise((resolve) => setTimeout(resolve, 30));
           }
+        }
+        //
+        if (i % 1000 == 0) {
+          updateWAFGraph();
         }
       }
       stopProcessingGif("Write Completed");
