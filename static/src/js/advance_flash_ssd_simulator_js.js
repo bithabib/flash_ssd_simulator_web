@@ -82,7 +82,7 @@ const ssd_structure = {
   block_container: 60,
   block: 5,
 };
-const sector_size = 520192;
+const sector_size = 1024*4;
 const page_size = 4 * 1024;
 const gc_free_space_percentage = 0.10;
 const gc_threshold = 0.9;
@@ -396,7 +396,7 @@ function progress_setup(trace_length, i, global_block_tracer) {
   var trace_progress = document.getElementById("trace_progress");
   trace_progress.value = (i / trace_length) * 100;
   var ssd_progress = document.getElementById("ssd_progress");
-  ssd_progress.value = (global_block_tracer / 4800) * 100;
+  ssd_progress.value = (global_block_tracer / 4000) * 100;
 }
 
 // Function to write data to block
