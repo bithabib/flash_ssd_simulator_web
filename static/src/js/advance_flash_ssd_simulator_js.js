@@ -84,7 +84,7 @@ const ssd_structure = {
 };
 const sector_size = 512;
 const page_size = 4 * 1024;
-const gc_free_space_percentage = 5;
+const gc_free_space_percentage = 0.50;
 const gc_threshold = 0.9;
 var global_block_tracer = 0;
 var full_ssd_storage = {};
@@ -354,16 +354,19 @@ function get_total_ssd_after_overprovisioning() {
 // get number of logical block address
 function get_number_of_logical_block_address() {
   var total_ssd_size = get_total_ssd_after_overprovisioning();
-  var number_of_logical_block_address = total_ssd_size / sector_size - 1;
-  return number_of_logical_block_address;
+  var number_of_logical_block_address = (total_ssd_size / sector_size) - 1;
+  return parseInt(number_of_logical_block_address);
 }
 // Function is_ssd_full to check if ssd is full
 // Function is_ssd_full to check if ssd is full
 // Function is_ssd_full to check if ssd is full
-function will_run_gc(io_size) {
+function will_run_gc(io_size, gc_free_space = 0) {
   // read overprovisioning ratio
+  console.log("GC Free Space: ", gc_free_space);
+  console.log("GC Free Space: ", gc_threshold);
+  var gc_free_plus_threshold = gc_threshold - gc_free_space;
   var total_ssd_size_after_overprovision =
-    get_total_ssd_after_overprovisioning() * gc_threshold;
+    get_total_ssd_after_overprovisioning() * gc_free_plus_threshold;
   // count valid and invalid pages together
   var total_written_pages = 0;
   for (var block in full_ssd_storage) {
@@ -382,7 +385,9 @@ function will_run_gc(io_size) {
     return false;
   }
 }
-function gc_stop_condition_met() {}
+function gc_stop_condition_met(io_size) {
+  return will_run_gc(io_size, gc_free_space_percentage);
+}
 
 // Function to setup progress bar
 // Function to setup progress bar
@@ -424,11 +429,11 @@ function write_page(block_id, lba, io_size) {
 // Function to write data to ssd
 // Function to write data to ssd
 // Function to write data to ssd
-async function write_ssd(lba, io_size) {
+async function write_ssd(lba, io_size, gc_block = "") {
   while (io_size > 0) {
     block_id = allocation_scheme_algorithm(global_block_tracer);
     var is_full = is_block_full(block_id);
-    if (is_full) {
+    if (is_full || gc_block == block_id) {
       global_block_tracer += 1;
       if (!gc_tracer) {
         await new Promise((resolve) => setTimeout(resolve, 30));
@@ -462,6 +467,7 @@ function greedyGarbageCollection() {
       max_invalid_block = block;
     }
   }
+
   return max_invalid_block;
 }
 // Function to lrw Garbage Collection
@@ -471,18 +477,20 @@ function lrwGarbageCollection() {}
 // Function to garbage collection
 // Function to garbage collection
 // Function to garbage collection
-async function garbageCollection(lba, io_size) {
+async function garbageCollection() {
+  console.log("Garbage Collection");
   var gc_block = greedyGarbageCollection();
   for (var lba in full_ssd_storage[gc_block]["vlba"]) {
     if (full_ssd_storage[gc_block]["vlba"][lba]["status"] == "valid") {
       global_block_tracer = 0;
       write_ssd(
         full_ssd_storage[gc_block]["vlba"][lba]["lba"],
-        full_ssd_storage[gc_block]["vlba"][lba]["size"]
+        full_ssd_storage[gc_block]["vlba"][lba]["size"],
+        gc_block
       );
     }
   }
-  
+
   var write_count = full_ssd_storage[gc_block]["wc"];
   var erase_count = full_ssd_storage[gc_block]["ec"] + 1;
   full_ssd_storage[gc_block] = {
@@ -494,7 +502,6 @@ async function garbageCollection(lba, io_size) {
   color_brighness();
   global_block_tracer = 0;
   await new Promise((resolve) => setTimeout(resolve, 5000));
-  console.log("After GC: ", full_ssd_storage);
 }
 
 // Call function to upload trace file
@@ -509,18 +516,20 @@ async function upload_trace_file(event) {
         startProcessingGif("start writing trace to ssd");
         if (lines[i] != "") {
           var data = lines[i].split(" ");
+          console.log(get_number_of_logical_block_address());
           var lba = parseInt(data[0]) % get_number_of_logical_block_address();
+          console.log(lba);
+
 
           var io_size = parseInt(data[1]);
           invalid_lba(lba);
-
-          var is_full = will_run_gc(io_size);
-          if (is_full) {
-            await garbageCollection(lba, io_size);
-            // break;
+          var run_gc = will_run_gc(io_size);
+          if (run_gc) {
+            while (gc_stop_condition_met(io_size)) {
+              await garbageCollection();
+            }
           }
           await write_ssd(lba, io_size);
-          console.log("Outside GC ", full_ssd_storage);
           color_brighness();
           progress_setup(trace_length, i, global_block_tracer);
           if (gc_tracer) {
