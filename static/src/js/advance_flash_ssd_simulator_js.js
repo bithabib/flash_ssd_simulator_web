@@ -57,7 +57,7 @@ function updateWAFGraph() {
     },
     data: [
       {
-        type: "line",
+        type: "column",
         indexLabelFontSize: 16,
         dataPoints: writeCountGraphData,
         name: "Write Count",
