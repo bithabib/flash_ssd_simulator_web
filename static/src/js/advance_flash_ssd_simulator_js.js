@@ -82,9 +82,9 @@ const ssd_structure = {
   block_container: 60,
   block: 5,
 };
-const sector_size = 512;
+const sector_size = 520192;
 const page_size = 4 * 1024;
-const gc_free_space_percentage = 0.50;
+const gc_free_space_percentage = 0.10;
 const gc_threshold = 0.9;
 var global_block_tracer = 0;
 var full_ssd_storage = {};
@@ -501,7 +501,7 @@ async function garbageCollection() {
   };
   color_brighness();
   global_block_tracer = 0;
-  await new Promise((resolve) => setTimeout(resolve, 5000));
+  await new Promise((resolve) => setTimeout(resolve, 100));
 }
 
 // Call function to upload trace file
