@@ -434,7 +434,7 @@ async function write_ssd(lba, io_size) {
         await new Promise((resolve) => setTimeout(resolve, 30));
       }
     } else {
-      if (io_size > 4000) {
+      if (io_size >= 4000) {
         write_page(block_id, lba, 4000);
         io_size = io_size - 4000;
       } else {
@@ -473,14 +473,28 @@ function lrwGarbageCollection() {}
 // Function to garbage collection
 async function garbageCollection(lba, io_size) {
   var gc_block = greedyGarbageCollection();
+  for (var lba in full_ssd_storage[gc_block]["vlba"]) {
+    if (full_ssd_storage[gc_block]["vlba"][lba]["status"] == "valid") {
+      global_block_tracer = 0;
+      write_ssd(
+        full_ssd_storage[gc_block]["vlba"][lba]["lba"],
+        full_ssd_storage[gc_block]["vlba"][lba]["size"]
+      );
+    }
+  }
+  
+  var write_count = full_ssd_storage[gc_block]["wc"];
+  var erase_count = full_ssd_storage[gc_block]["ec"] + 1;
   full_ssd_storage[gc_block] = {
+    wc: write_count,
     aw: 0,
     vlba: [],
-    ec: 0,
+    ec: erase_count,
   };
   color_brighness();
   global_block_tracer = 0;
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 5000));
+  console.log("After GC: ", full_ssd_storage);
 }
 
 // Call function to upload trace file
@@ -506,6 +520,7 @@ async function upload_trace_file(event) {
             // break;
           }
           await write_ssd(lba, io_size);
+          console.log("Outside GC ", full_ssd_storage);
           color_brighness();
           progress_setup(trace_length, i, global_block_tracer);
           if (gc_tracer) {
