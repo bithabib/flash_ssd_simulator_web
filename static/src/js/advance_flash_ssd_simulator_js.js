@@ -82,10 +82,10 @@ const ssd_structure = {
   block_container: 60,
   block: 5,
 };
-const sector_size = 1024*4;
+const sector_size = 1024 * 4;
 const page_size = 4 * 1024;
-const gc_free_space_percentage = 0.10;
-const gc_threshold = 0.9;
+const gc_free_space_percentage = 0.15;
+const gc_threshold = 0.95;
 var global_block_tracer = 0;
 var full_ssd_storage = {};
 var forceStop = false;
@@ -354,7 +354,7 @@ function get_total_ssd_after_overprovisioning() {
 // get number of logical block address
 function get_number_of_logical_block_address() {
   var total_ssd_size = get_total_ssd_after_overprovisioning();
-  var number_of_logical_block_address = (total_ssd_size / sector_size) - 1;
+  var number_of_logical_block_address = total_ssd_size / sector_size - 1;
   return parseInt(number_of_logical_block_address);
 }
 // Function is_ssd_full to check if ssd is full
@@ -520,14 +520,17 @@ async function upload_trace_file(event) {
           var lba = parseInt(data[0]) % get_number_of_logical_block_address();
           console.log(lba);
 
-
           var io_size = parseInt(data[1]);
           invalid_lba(lba);
           var run_gc = will_run_gc(io_size);
           if (run_gc) {
+            startProcessingGif("Garbage Collection");
             while (gc_stop_condition_met(io_size)) {
+              // set message to garbage collection
+
               await garbageCollection();
             }
+            stopProcessingGif("Garbage Collection Completed");
           }
           await write_ssd(lba, io_size);
           color_brighness();
