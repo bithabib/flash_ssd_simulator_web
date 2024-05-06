@@ -4,7 +4,7 @@ const gc_free_space_percentage = 0.15;
 const gc_threshold = 0.95;
 var global_block_tracer = 0;
 var full_ssd_storage = {};
-var lba_contain_block_address = {};
+// var lba_contain_block_address = {};
 var forceStop = false;
 var waf_trace = [
   {
@@ -326,30 +326,29 @@ function allocation_scheme_algorithm(block_tracer) {
 // Function to check if lba is available in full_ssd_storage
 // Function to check if lba is available in full_ssd_storage
 function invalid_lba(lba) {
-  var block_list = [];
-  if (lba in lba_contain_block_address) {
-    block_list = lba_contain_block_address[lba];
-  }
+  // var block_list = [];
+  // if (lba in lba_contain_block_address) {
+  //   block_list = lba_contain_block_address[lba];
+  // }
+  // if (full_ssd_storage) {
+  //   block_list.forEach((block) => {
+  //     full_ssd_storage[block]["vlba"].forEach((vlba) => {
+  //       if (lba == vlba["lba"]) {
+  //         vlba["status"] = "invalid";
+  //       }
+  //     });
+  //   });
+  // }
+
   if (full_ssd_storage) {
-    block_list.forEach((block) => {
+    for (var block in full_ssd_storage) {
       full_ssd_storage[block]["vlba"].forEach((vlba) => {
         if (lba == vlba["lba"]) {
           vlba["status"] = "invalid";
         }
       });
-    });
+    }
   }
-
-  // if (full_ssd_storage) {
-  //   for (var block in full_ssd_storage) {
-  //     full_ssd_storage[block]["vlba"].forEach((vlba) => {
-  //       if (lba == vlba["lba"]) {
-  //         console.log("test", block, block_list);
-  //         vlba["status"] = "invalid";
-  //       }
-  //     });
-  //   }
-  // }
 }
 
 // Function is_block_full to check if block is full
@@ -453,15 +452,14 @@ function write_page(block_id, lba, io_size, is_gc_running = false) {
   waf_trace.push({
     y: waf,
   });
-  if (lba in lba_contain_block_address) {
-    // check if block_id not in lba_contain_block_address
-    if (!lba_contain_block_address[lba].includes(block_id)) {
-      lba_contain_block_address[lba].push(block_id);
-    }
-  } else {
-    lba_contain_block_address[lba] = [block_id];
-  }
-  // console.log(lba_contain_block_address);
+  // if (lba in lba_contain_block_address) {
+  //   // check if block_id not in lba_contain_block_address
+  //   if (!lba_contain_block_address[lba].includes(block_id)) {
+  //     lba_contain_block_address[lba].push(block_id);
+  //   }
+  // } else {
+  //   lba_contain_block_address[lba] = [block_id];
+  // }
   if (block_id in full_ssd_storage) {
     full_ssd_storage[block_id]["aw"] += io_size;
     full_ssd_storage[block_id]["wc"] += 1;
@@ -548,10 +546,6 @@ async function garbageCollection() {
     for (var lba in full_ssd_storage[gc_block]["vlba"]) {
       if (full_ssd_storage[gc_block]["vlba"][lba]["status"] == "valid") {
         global_block_tracer = 0;
-        // lba_contain_block_address[
-        //   full_ssd_storage[gc_block]["vlba"][lba]["lba"]
-        // ].indexOf(gc_block);
-
         await write_ssd(
           full_ssd_storage[gc_block]["vlba"][lba]["lba"],
           full_ssd_storage[gc_block]["vlba"][lba]["size"],
@@ -559,18 +553,17 @@ async function garbageCollection() {
           true
         );
         valid_page_tracer += 1;
-      } else {
-        // console.log("test", lba_contain_block_address);
-
-        lba_contain_block_address[
-          full_ssd_storage[gc_block]["vlba"][lba]["lba"]
-        ].splice(
-          lba_contain_block_address[
-            full_ssd_storage[gc_block]["vlba"][lba]["lba"]
-          ].indexOf(gc_block),
-          1
-        );
-      }
+      } 
+      // else {
+      //   lba_contain_block_address[
+      //     full_ssd_storage[gc_block]["vlba"][lba]["lba"]
+      //   ].splice(
+      //     lba_contain_block_address[
+      //       full_ssd_storage[gc_block]["vlba"][lba]["lba"]
+      //     ].indexOf(gc_block),
+      //     1
+      //   );
+      // }
     }
     var write_count = full_ssd_storage[gc_block]["wc"];
     var erase_count = full_ssd_storage[gc_block]["ec"] + 1;
