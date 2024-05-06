@@ -470,7 +470,9 @@ async function write_ssd(lba, io_size, gc_block = "", is_gc_running = false) {
     if (is_full || gc_block == block_id) {
       global_block_tracer += 1;
       if (!is_gc_running) {
-        await new Promise((resolve) => setTimeout(resolve, 30));
+        if (global_block_tracer % 4) {
+          await new Promise((resolve) => setTimeout(resolve, 5));
+        }
       }
     } else {
       if (io_size >= 4000) {
@@ -578,9 +580,6 @@ async function upload_trace_file(event) {
           await write_ssd(lba, io_size);
           color_brighness();
           progress_setup(trace_length, i, global_block_tracer);
-          if (gc_tracer) {
-            await new Promise((resolve) => setTimeout(resolve, 30));
-          }
         }
         //
         if (i % 1000 == 0) {
