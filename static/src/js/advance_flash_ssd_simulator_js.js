@@ -469,8 +469,9 @@ async function write_ssd(lba, io_size, gc_block = "", is_gc_running = false) {
     block_id = allocation_scheme_algorithm(global_block_tracer);
     var is_full = is_block_full(block_id);
     if (is_full || gc_block == block_id) {
+      
       global_block_tracer += 1;
-      if (!gc_tracer) {
+      if (!is_gc_running) {
         await new Promise((resolve) => setTimeout(resolve, 30));
       }
     } else {
@@ -559,6 +560,7 @@ async function upload_trace_file(event) {
             startProcessingGif("Garbage Collection");
             while (gc_stop_condition_met(io_size)) {
               // set message to garbage collection
+              console.log("Garbage Collection");
 
               await garbageCollection();
             }
