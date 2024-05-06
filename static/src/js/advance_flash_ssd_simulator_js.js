@@ -45,7 +45,6 @@ function updateWAFGraph() {
     });
     counter += 1;
   }
-  console.log(writeCountGraphData);
 
   var wafChart = new CanvasJS.Chart("wafChartContainer", {
     animationEnabled: true,
@@ -469,7 +468,6 @@ async function write_ssd(lba, io_size, gc_block = "", is_gc_running = false) {
     block_id = allocation_scheme_algorithm(global_block_tracer);
     var is_full = is_block_full(block_id);
     if (is_full || gc_block == block_id) {
-      
       global_block_tracer += 1;
       if (!is_gc_running) {
         await new Promise((resolve) => setTimeout(resolve, 30));
@@ -503,8 +501,11 @@ function greedyGarbageCollection() {
       max_invalid_block = block;
     }
   }
-
-  return max_invalid_block;
+  if (max_invalid_page == 0) {
+    return "";
+  } else {
+    return max_invalid_block;
+  }
 }
 // Function to lrw Garbage Collection
 // Function to lrw Garbage Collection
@@ -515,29 +516,35 @@ function lrwGarbageCollection() {}
 // Function to garbage collection
 async function garbageCollection() {
   var gc_block = greedyGarbageCollection();
-  for (var lba in full_ssd_storage[gc_block]["vlba"]) {
-    if (full_ssd_storage[gc_block]["vlba"][lba]["status"] == "valid") {
-      global_block_tracer = 0;
-      await write_ssd(
-        full_ssd_storage[gc_block]["vlba"][lba]["lba"],
-        full_ssd_storage[gc_block]["vlba"][lba]["size"],
-        gc_block,
-        true
-      );
+  if (gc_block == "") {
+    return false;
+  } else {
+    var valid_page_tracer = 0;
+    for (var lba in full_ssd_storage[gc_block]["vlba"]) {
+      if (full_ssd_storage[gc_block]["vlba"][lba]["status"] == "valid") {
+        global_block_tracer = 0;
+        await write_ssd(
+          full_ssd_storage[gc_block]["vlba"][lba]["lba"],
+          full_ssd_storage[gc_block]["vlba"][lba]["size"],
+          gc_block,
+          true
+        );
+        valid_page_tracer += 1;
+      }
     }
+    var write_count = full_ssd_storage[gc_block]["wc"];
+    var erase_count = full_ssd_storage[gc_block]["ec"] + 1;
+    full_ssd_storage[gc_block] = {
+      wc: write_count,
+      aw: 0,
+      vlba: [],
+      ec: erase_count,
+    };
+    color_brighness();
+    global_block_tracer = 0;
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    return true;
   }
-
-  var write_count = full_ssd_storage[gc_block]["wc"];
-  var erase_count = full_ssd_storage[gc_block]["ec"] + 1;
-  full_ssd_storage[gc_block] = {
-    wc: write_count,
-    aw: 0,
-    vlba: [],
-    ec: erase_count,
-  };
-  color_brighness();
-  global_block_tracer = 0;
-  await new Promise((resolve) => setTimeout(resolve, 100));
 }
 
 // Call function to upload trace file
@@ -560,9 +567,11 @@ async function upload_trace_file(event) {
             startProcessingGif("Garbage Collection");
             while (gc_stop_condition_met(io_size)) {
               // set message to garbage collection
-              console.log("Garbage Collection");
 
-              await garbageCollection();
+              var is_continue = await garbageCollection();
+              if (!is_continue) {
+                break;
+              }
             }
             stopProcessingGif("Garbage Collection Completed");
           }
