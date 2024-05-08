@@ -490,8 +490,8 @@ async function write_ssd(lba, io_size, gc_block = "", is_gc_running = false) {
     var is_full = is_block_full(block_id);
     if (is_full || gc_block == block_id) {
       global_block_tracer += 1;
-      if (!is_gc_running) {
-        await new Promise((resolve) => setTimeout(resolve, 30));
+      if (!is_gc_running || !is_full) {
+        await new Promise((resolve) => setTimeout(resolve, 1));
       }
     } else {
       if (io_size >= 4000) {
@@ -571,7 +571,7 @@ async function garbageCollection() {
     };
     color_brighness();
     global_block_tracer = 0;
-    await new Promise((resolve) => setTimeout(resolve, 30));
+    await new Promise((resolve) => setTimeout(resolve, 10));
     return true;
   }
 }
