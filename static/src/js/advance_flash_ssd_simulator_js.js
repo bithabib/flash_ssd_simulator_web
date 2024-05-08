@@ -46,7 +46,9 @@ function updateWAFGraph() {
     });
     counter += 1;
   }
-
+  waf_trace.push({
+    y: ssd_write / host_write,
+  });
   var wafChart = new CanvasJS.Chart("wafChartContainer", {
     animationEnabled: true,
     theme: "light2",
@@ -448,10 +450,6 @@ function write_page(block_id, lba, io_size, is_gc_running = false) {
     host_write += io_size;
     ssd_write += 4000;
   }
-  var waf = ssd_write / host_write;
-  waf_trace.push({
-    y: waf,
-  });
   // if (lba in lba_contain_block_address) {
   //   // check if block_id not in lba_contain_block_address
   //   if (!lba_contain_block_address[lba].includes(block_id)) {
@@ -493,7 +491,7 @@ async function write_ssd(lba, io_size, gc_block = "", is_gc_running = false) {
     if (is_full || gc_block == block_id) {
       global_block_tracer += 1;
       if (!is_gc_running) {
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 30));
       }
     } else {
       if (io_size >= 4000) {
@@ -542,7 +540,6 @@ async function garbageCollection() {
   if (gc_block == "") {
     return false;
   } else {
-    var valid_page_tracer = 0;
     for (var lba in full_ssd_storage[gc_block]["vlba"]) {
       if (full_ssd_storage[gc_block]["vlba"][lba]["status"] == "valid") {
         global_block_tracer = 0;
@@ -552,8 +549,7 @@ async function garbageCollection() {
           gc_block,
           true
         );
-        valid_page_tracer += 1;
-      } 
+      }
       // else {
       //   lba_contain_block_address[
       //     full_ssd_storage[gc_block]["vlba"][lba]["lba"]
@@ -575,7 +571,7 @@ async function garbageCollection() {
     };
     color_brighness();
     global_block_tracer = 0;
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 30));
     return true;
   }
 }
