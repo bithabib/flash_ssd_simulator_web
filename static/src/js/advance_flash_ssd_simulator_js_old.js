@@ -1,11 +1,36 @@
+// All global variables
+const ssd_structure = {
+  channel: 2,
+  chip: 1,
+  die: 2,
+  plane: 4,
+  block_container: 60,
+  block: 5,
+};
+const sector_size = 520192;
+const page_size = 4 * 1024;
+const gc_free_space_percentage = 0.15;
+const gc_threshold = 0.95;
+var global_block_tracer = 0;
+var full_ssd_storage = {};
+var forceStop = false;
+var ssd_block_trace_list = [];
+var ssd_block_trace_dict = {};
+var ssd_write = 0;
+var host_write = 0;
+var waf_trace = [
+  {
+    y: 1,
+  },
+];
+var max_erase_count = 0;
+var max_write_count = 0;
+var number_of_page_per_block = 256;
+gc_tracer = false;
+
 // Waf Graph update
 function updateWAFGraph() {
-  var wafGraphData = [
-    {
-      y: 1.0,
-    }
-  ];
-  var writeCountGraphData=[];
+  var writeCountGraphData = [];
   var averageWriteCount = 0;
   var averageWriteCountGraphData = [];
   var eraseCountGraphData = [];
@@ -31,7 +56,9 @@ function updateWAFGraph() {
     });
     counter += 1;
   }
-  console.log(writeCountGraphData);
+  waf_trace.push({
+    y: ssd_write / host_write,
+  });
 
   var wafChart = new CanvasJS.Chart("wafChartContainer", {
     animationEnabled: true,
@@ -43,7 +70,7 @@ function updateWAFGraph() {
       {
         type: "line",
         indexLabelFontSize: 16,
-        dataPoints: wafGraphData,
+        dataPoints: waf_trace,
         name: "WAF",
       },
     ],
@@ -92,36 +119,13 @@ function updateWAFGraph() {
       },
     ],
   });
-  document.getElementById("waf_value").innerHTML =
-    wafGraphData[wafGraphData.length - 1].y.toFixed(2);
   wafChart.render();
   writeCountChart.render();
   eraseCountChart.render();
 }
 
 // Function to create block for each plane
-// All global variables
-const ssd_structure = {
-  channel: 2,
-  chip: 1,
-  die: 2,
-  plane: 4,
-  block_container: 60,
-  block: 5,
-};
-const sector_size = 1024 * 4;
-const page_size = 4 * 1024;
-const gc_free_space_percentage = 0.15;
-const gc_threshold = 0.95;
-var global_block_tracer = 0;
-var full_ssd_storage = {};
-var forceStop = false;
-var ssd_block_trace_list = [];
-var ssd_block_trace_dict = {};
-var max_erase_count = 0;
-var max_write_count = 0;
-var number_of_page_per_block = 256;
-gc_tracer = false;
+
 function create_block_for_each_plane() {
   // read table by id and create block for each plane
   var ssd_container = document.getElementById("ssd_container");
@@ -427,7 +431,13 @@ function progress_setup(trace_length, i, global_block_tracer) {
 // Function to write data to block
 // Function to write data to block
 // Function to write data to block
-function write_page(block_id, lba, io_size) {
+function write_page(block_id, lba, io_size, is_gc_running = false) {
+  if (is_gc_running) {
+    ssd_write += 4000;
+  } else {
+    host_write += io_size;
+    ssd_write += 4000;
+  }
   if (block_id in full_ssd_storage) {
     full_ssd_storage[block_id]["aw"] += io_size;
     full_ssd_storage[block_id]["wc"] += 1;
@@ -454,7 +464,7 @@ function write_page(block_id, lba, io_size) {
 // Function to write data to ssd
 // Function to write data to ssd
 // Function to write data to ssd
-async function write_ssd(lba, io_size, gc_block = "") {
+async function write_ssd(lba, io_size, gc_block = "", is_gc_running = false) {
   while (io_size > 0) {
     block_id = allocation_scheme_algorithm(global_block_tracer);
     var is_full = is_block_full(block_id);
@@ -465,10 +475,10 @@ async function write_ssd(lba, io_size, gc_block = "") {
       }
     } else {
       if (io_size >= 4000) {
-        write_page(block_id, lba, 4000);
+        write_page(block_id, lba, 4000, is_gc_running);
         io_size = io_size - 4000;
       } else {
-        write_page(block_id, lba, io_size);
+        write_page(block_id, lba, io_size, is_gc_running);
         io_size = 0;
       }
     }
@@ -507,10 +517,11 @@ async function garbageCollection() {
   for (var lba in full_ssd_storage[gc_block]["vlba"]) {
     if (full_ssd_storage[gc_block]["vlba"][lba]["status"] == "valid") {
       global_block_tracer = 0;
-      write_ssd(
+      await write_ssd(
         full_ssd_storage[gc_block]["vlba"][lba]["lba"],
         full_ssd_storage[gc_block]["vlba"][lba]["size"],
-        gc_block
+        gc_block,
+        true
       );
     }
   }
