@@ -1,7 +1,7 @@
 const sector_size = 1024 * 4 * 6;
 const page_size = 4 * 1024;
-const gc_free_space_percentage = 0.15;
-const gc_threshold = 0.95;
+const gc_free_space_percentage = 0.02;
+const gc_threshold = 0.99;
 var global_block_tracer = 0;
 var full_ssd_storage = {};
 // var lba_contain_block_address = {};
