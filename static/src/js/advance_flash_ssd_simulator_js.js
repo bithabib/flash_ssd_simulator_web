@@ -580,6 +580,8 @@ async function upload_trace_file(event) {
   var file = event.target.files[0];
   if (file) {
     const reader = new FileReader();
+    // get the file name
+    var file_name = file.name;
     reader.onload = async function (e) {
       const lines = e.target.result.split("\n");
       var trace_length = lines.length;
@@ -613,6 +615,24 @@ async function upload_trace_file(event) {
           updateWAFGraph();
         }
       }
+      // save ssd_storage as a json file
+      var ssd_storage = JSON.stringify(full_ssd_storage);
+      var blob = new Blob([ssd_storage], { type: "application/json" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = file_name + ".json";
+      a.click();
+
+      // save waf_trace as a json file
+      var waf_storage = JSON.stringify(waf_trace);
+      var blob = new Blob([waf_storage], { type: "application/json" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = file_name + "_waf.json";
+      a.click();
+
       stopProcessingGif("Write Completed");
       color_brighness();
     };
