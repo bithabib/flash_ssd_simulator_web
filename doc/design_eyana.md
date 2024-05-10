@@ -16,3 +16,8 @@
    - Greedy
    - FTL
    
+
+## Idea regarding ssd simulator 
+  - We will trace how many times a block is erased, based on number of erase and invalid pages this block will be erased next time.
+     - Equation: 
+       - Erase = (invalid_page/total_page)*100 - (this_block_erase_count/max_erase_count)*100
