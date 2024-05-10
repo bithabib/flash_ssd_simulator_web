@@ -30,7 +30,6 @@ function updateWAFGraph() {
   var counter = 1;
   for (var block in full_ssd_storage) {
     writeCountGraphData.push({
-      x: block,
       y: full_ssd_storage[block]["wc"],
     });
     eraseCountGraphData.push({
