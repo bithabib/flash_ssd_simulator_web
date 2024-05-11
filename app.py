@@ -12,6 +12,7 @@ from views.api import trace_file_reader
 from views.api import trace_file_converter
 from views import trace_file_converter
 from views import documentation
+from views import json_upload_to_regenerate
 
 # from views import sitemap_xml
 
