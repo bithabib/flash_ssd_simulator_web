@@ -45,9 +45,6 @@ function updateWAFGraph() {
     });
     counter += 1;
   }
-  waf_trace.push({
-    y: ssd_write / host_write,
-  });
   var wafChart = new CanvasJS.Chart("wafChartContainer", {
     animationEnabled: true,
     theme: "light2",
@@ -197,7 +194,7 @@ function create_block_for_each_plane() {
   ssd_container.appendChild(ssd_container_trtd);
 }
 
-function color_brighness() {
+async function color_brighness() {
   for (var block in full_ssd_storage) {
     // get the block by get element by id
     var valid_page = 0;
@@ -222,6 +219,7 @@ function color_brighness() {
     }
 
     block.style.backgroundColor = color;
+    await new Promise((resolve) => setTimeout(resolve, 3));
   }
 }
 
@@ -323,359 +321,43 @@ function allocation_scheme_algorithm(block_tracer) {
   return block_id;
 }
 
-// Function to check if lba is available in full_ssd_storage
-// Function to check if lba is available in full_ssd_storage
-// Function to check if lba is available in full_ssd_storage
-function invalid_lba(lba) {
-  // var block_list = [];
-  // if (lba in lba_contain_block_address) {
-  //   block_list = lba_contain_block_address[lba];
-  // }
-  // if (full_ssd_storage) {
-  //   block_list.forEach((block) => {
-  //     full_ssd_storage[block]["vlba"].forEach((vlba) => {
-  //       if (lba == vlba["lba"]) {
-  //         vlba["status"] = "invalid";
-  //       }
-  //     });
-  //   });
-  // }
 
-  if (full_ssd_storage) {
-    for (var block in full_ssd_storage) {
-      full_ssd_storage[block]["vlba"].forEach((vlba) => {
-        if (lba == vlba["lba"]) {
-          vlba["status"] = "invalid";
-        }
-      });
-    }
-  }
-}
-
-// Function is_block_full to check if block is full
-// Function is_block_full to check if block is full
-// Function is_block_full to check if block is full
-function is_block_full(block_id) {
-  var total_written_pages = 0;
-  if (block_id in full_ssd_storage) {
-    full_ssd_storage[block_id]["vlba"].forEach((vlba) => {
-      if (vlba["status"] == "valid" || vlba["status"] == "invalid") {
-        total_written_pages += 1;
-      }
-    });
-  }
-
-  if (total_written_pages >= number_of_page_per_block) {
-    return true;
-  } else {
-    return false;
-  }
-}
-// get total ssd after overprovisioning
-// get total ssd after overprovisioning
-// get total ssd after overprovisioning
-function get_total_ssd_after_overprovisioning() {
-  var overprovisioningRatio = getOverprovisioningRatio();
-  var total_ssd_size =
-    ssd_structure["channel"] *
-    ssd_structure["chip"] *
-    ssd_structure["die"] *
-    ssd_structure["plane"] *
-    ssd_structure["block_container"] *
-    ssd_structure["block"] *
-    number_of_page_per_block *
-    1024 *
-    4;
-  var total_ssd_size_after_overprovision =
-    total_ssd_size * (1 - overprovisioningRatio / 100);
-  return total_ssd_size_after_overprovision;
-}
-
-// get number of logical block address
-// get number of logical block address
-// get number of logical block address
-function get_number_of_logical_block_address() {
-  var total_ssd_size = get_total_ssd_after_overprovisioning();
-  var number_of_logical_block_address = total_ssd_size / sector_size - 1;
-  return parseInt(number_of_logical_block_address);
-}
-// Function is_ssd_full to check if ssd is full
-// Function is_ssd_full to check if ssd is full
-// Function is_ssd_full to check if ssd is full
-function will_run_gc(io_size, gc_free_space = 0) {
-  // read overprovisioning ratio
-  var gc_free_plus_threshold = gc_threshold - gc_free_space;
-  var total_ssd_size_after_overprovision =
-    get_total_ssd_after_overprovisioning() * gc_free_plus_threshold;
-  // count valid and invalid pages together
-  var total_written_pages = 0;
-  for (var block in full_ssd_storage) {
-    full_ssd_storage[block]["vlba"].forEach((vlba) => {
-      if (vlba["status"] == "valid" || vlba["status"] == "invalid") {
-        total_written_pages += 1;
-      }
-    });
-  }
-  if (
-    total_written_pages * 4 * 1024 + io_size >=
-    total_ssd_size_after_overprovision
-  ) {
-    return true;
-  } else {
-    return false;
-  }
-}
-function gc_stop_condition_met(io_size) {
-  return will_run_gc(io_size, gc_free_space_percentage);
-}
-
-// Function to setup progress bar
-// Function to setup progress bar
-// Function to setup progress bar
-function progress_setup(trace_length, i, global_block_tracer) {
-  var trace_progress = document.getElementById("trace_progress");
-  trace_progress.value = (i / trace_length) * 100;
-  var ssd_progress = document.getElementById("ssd_progress");
-  ssd_progress.value = (global_block_tracer / 4000) * 100;
-}
-
-// Function to write data to block
-// Function to write data to block
-// Function to write data to block
-function write_page(block_id, lba, io_size, is_gc_running = false) {
-  if (is_gc_running) {
-    ssd_write += 4000;
-  } else {
-    host_write += io_size;
-    ssd_write += 4000;
-  }
-  // if (lba in lba_contain_block_address) {
-  //   // check if block_id not in lba_contain_block_address
-  //   if (!lba_contain_block_address[lba].includes(block_id)) {
-  //     lba_contain_block_address[lba].push(block_id);
-  //   }
-  // } else {
-  //   lba_contain_block_address[lba] = [block_id];
-  // }
-  if (block_id in full_ssd_storage) {
-    full_ssd_storage[block_id]["aw"] += io_size;
-    full_ssd_storage[block_id]["wc"] += 1;
-    full_ssd_storage[block_id]["vlba"].push({
-      lba: lba,
-      size: io_size,
-      status: "valid",
-    });
-  } else {
-    full_ssd_storage[block_id] = {
-      aw: io_size,
-      wc: 1,
-      vlba: [
-        {
-          lba: lba,
-          size: io_size,
-          status: "valid",
-        },
-      ],
-      ec: 0,
-    };
-  }
-}
-// Function to write data to ssd
-// Function to write data to ssd
-// Function to write data to ssd
-async function write_ssd(lba, io_size, gc_block = "", is_gc_running = false) {
-  while (io_size > 0) {
-    block_id = allocation_scheme_algorithm(global_block_tracer);
-    var is_full = is_block_full(block_id);
-    if (is_full || gc_block == block_id) {
-      global_block_tracer += 1;
-      if (!is_gc_running || !is_full) {
-        await new Promise((resolve) => setTimeout(resolve, 1));
-      }
-    } else {
-      if (io_size >= 4000) {
-        write_page(block_id, lba, 4000, is_gc_running);
-        io_size = io_size - 4000;
-      } else {
-        write_page(block_id, lba, io_size, is_gc_running);
-        io_size = 0;
-      }
-    }
-  }
-}
-// Greedy Garbage Collection
-// Greedy Garbage Collection
-// Greedy Garbage Collection
-function greedyGarbageCollection() {
-  var max_invalid_page = 0;
-  var max_invalid_block = "";
-  for (var block in full_ssd_storage) {
-    var invalid_page = 0;
-    full_ssd_storage[block]["vlba"].forEach((vlba) => {
-      if (vlba["status"] == "invalid") {
-        invalid_page += 1;
-      }
-    });
-    if (invalid_page >= max_invalid_page) {
-      max_invalid_page = invalid_page;
-      max_invalid_block = block;
-    }
-  }
-  if (max_invalid_page == 0) {
-    return "";
-  } else {
-    return max_invalid_block;
-  }
-}
-// Function to lrw Garbage Collection
-// Function to lrw Garbage Collection
-// Function to lrw Garbage Collection
-function lrwGarbageCollection() {}
-// Function to garbage collection
-// Function to garbage collection
-// Function to garbage collection
-async function garbageCollection() {
-  var gc_block = greedyGarbageCollection();
-  if (gc_block == "") {
-    return false;
-  } else {
-    for (var lba in full_ssd_storage[gc_block]["vlba"]) {
-      if (full_ssd_storage[gc_block]["vlba"][lba]["status"] == "valid") {
-        global_block_tracer = 0;
-        await write_ssd(
-          full_ssd_storage[gc_block]["vlba"][lba]["lba"],
-          full_ssd_storage[gc_block]["vlba"][lba]["size"],
-          gc_block,
-          true
-        );
-      }
-      // else {
-      //   lba_contain_block_address[
-      //     full_ssd_storage[gc_block]["vlba"][lba]["lba"]
-      //   ].splice(
-      //     lba_contain_block_address[
-      //       full_ssd_storage[gc_block]["vlba"][lba]["lba"]
-      //     ].indexOf(gc_block),
-      //     1
-      //   );
-      // }
-    }
-    var write_count = full_ssd_storage[gc_block]["wc"];
-    var erase_count = full_ssd_storage[gc_block]["ec"] + 1;
-    full_ssd_storage[gc_block] = {
-      wc: write_count,
-      aw: 0,
-      vlba: [],
-      ec: erase_count,
-    };
-    color_brighness();
-    global_block_tracer = 0;
-    await new Promise((resolve) => setTimeout(resolve, 10));
-    return true;
-  }
-}
 
 // Call function to upload trace file
 async function upload_trace_file(event) {
   var file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    // get the file name
-    var file_name = file.name;
-    reader.onload = async function (e) {
-      const lines = e.target.result.split("\n");
-      var trace_length = lines.length;
-      for (var i = 0; i < trace_length; i++) {
-        startProcessingGif("start writing trace to ssd");
-        if (lines[i] != "") {
-          var data = lines[i].split(" ");
-          var lba = parseInt(data[0]) % get_number_of_logical_block_address();
-          var io_size = parseInt(data[1]);
-          invalid_lba(lba);
-          var run_gc = will_run_gc(io_size);
-          if (run_gc) {
-            startProcessingGif("Garbage Collection");
-            while (gc_stop_condition_met(io_size)) {
-              // set message to garbage collection
-
-              var is_continue = await garbageCollection();
-              if (!is_continue) {
-                break;
-              }
-            }
-            stopProcessingGif("Garbage Collection Completed");
-          }
-          await write_ssd(lba, io_size);
-          color_brighness();
-
-          progress_setup(trace_length, i, global_block_tracer);
-        }
-        //
-        if (i % 1000 == 0) {
-          updateWAFGraph();
-        }
-      }
-      // save ssd_storage as a json file
-      var ssd_storage = JSON.stringify(full_ssd_storage);
-      var blob = new Blob([ssd_storage], { type: "application/json" });
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement("a");
-      a.href = url;
-      a.download = file_name + ".json";
-      a.click();
-
-      // save waf_trace as a json file
-      var waf_storage = JSON.stringify(waf_trace);
-      var blob = new Blob([waf_storage], { type: "application/json" });
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement("a");
-      a.href = url;
-      a.download = file_name + "_waf.json";
-      a.click();
-
-      stopProcessingGif("Write Completed");
-      color_brighness();
-    };
-    reader.readAsText(file);
+  console.log("this is test",file);
+  if (!file) {
+    console.error("No file selected");
+    return;
   }
+  console.log("this is test",file);
+  const reader = new FileReader();
+  reader.onload = async function (e) {
+    console.log("test");
+    try {
+      // read the file name 
+      var file_name = file.name;
+      // if file name contain waf then update the waf graph
+      if (file_name.includes("waf")) {
+        var waf_data = JSON.parse(e.target.result);
+        waf_trace = waf_data;
+        updateWAFGraph();
+        return;
+      }
+      full_ssd_storage = JSON.parse(e.target.result);
+      color_brighness();
+      updateWAFGraph();
+    } catch (e) {
+      console.error("Invalid file format");
+      return;
+    }
+  };
+  reader.readAsText(file);
 }
 const fileInput = document.getElementById("upload_trace_file");
 fileInput.addEventListener("change", upload_trace_file);
 
-// ----------------------------- Overprovisioning Ratio -----------------------------//
-// ----------------------------- Overprovisioning Ratio -----------------------------//
-
-// Overprovisioning ratio setup
-function getOverprovisioningRatio() {
-  var overprovisioningRatio = document.getElementById(
-    "overprovisioning_ratio"
-  ).value;
-  // parseFloat to convert string to float
-  overprovisioningRatio = parseFloat(overprovisioningRatio);
-  return overprovisioningRatio;
-}
-function handleOverprovisioning() {
-  var overprovisioningRatio = getOverprovisioningRatio();
-  var totalSize =
-    ssd_structure["channel"] *
-    ssd_structure["chip"] *
-    ssd_structure["die"] *
-    ssd_structure["plane"] *
-    ssd_structure["block_container"] *
-    ssd_structure["block"] *
-    number_of_page_per_block *
-    1024 *
-    4;
-  var totalSizeAfterOverprovision =
-    totalSize * (1 - overprovisioningRatio / 100);
-  // convert byte to gb
-  totalSizeAfterOverprovision =
-    totalSizeAfterOverprovision / 1024 / 1024 / 1024;
-  // two decimal places
-  totalSizeAfterOverprovision = totalSizeAfterOverprovision.toFixed(2);
-  ssd_size_holder = document.getElementById("totalSize");
-  ssd_size_holder.innerHTML = totalSizeAfterOverprovision + "gb";
-}
 
 // ----------------------------- Processing Status -----------------------------//
 // ----------------------------- Processing Status -----------------------------//
@@ -701,20 +383,4 @@ window.onload = function () {
 async function stopWritingForce() {
   forceStop = true;
   stopProcessingGif("Write Stopped");
-}
-
-async function reset() {
-  // Call api /write/complete
-  await fetch("/write/complete", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({}),
-  })
-    .then((response) => response.json())
-    .then(async (data) => {
-      // reload the page
-      location.reload();
-    });
 }
