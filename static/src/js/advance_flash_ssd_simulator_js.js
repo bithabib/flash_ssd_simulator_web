@@ -1,9 +1,19 @@
-const sector_size = 1024 * 4 * 6;
+const sector_size = 1;
 const page_size = 4 * 1024;
 const gc_free_space_percentage = 0.02;
 const gc_threshold = 0.99;
 var global_block_tracer = 0;
-var full_ssd_storage = {};
+var full_ssd_storage = {
+  // block_id: {
+  //   aw: 0,
+  //   wc: 0,
+  //   vlba: [
+  //     {
+  //       lba: 0,
+  //       size: 0,
+  //       status: "valid",
+  //     },
+};
 // var lba_contain_block_address = {};
 var forceStop = false;
 var waf_trace = [
@@ -581,38 +591,48 @@ async function upload_trace_file(event) {
   if (file) {
     const reader = new FileReader();
     // get the file name
+    var max_io_size = 11363045376;
     var file_name = file.name;
     reader.onload = async function (e) {
       const lines = e.target.result.split("\n");
       var trace_length = lines.length;
-      for (var i = 0; i < trace_length; i++) {
-        startProcessingGif("start writing trace to ssd");
-        if (lines[i] != "") {
-          var data = lines[i].split(" ");
-          var lba = parseInt(data[0]) % get_number_of_logical_block_address();
-          var io_size = parseInt(data[1]);
-          invalid_lba(lba);
-          var run_gc = will_run_gc(io_size);
-          if (run_gc) {
-            startProcessingGif("Garbage Collection");
-            while (gc_stop_condition_met(io_size)) {
-              // set message to garbage collection
-
-              var is_continue = await garbageCollection();
-              if (!is_continue) {
-                break;
-              }
+      var total_io_size = 0;
+      while (max_io_size > total_io_size) {
+        for (var i = 0; i < trace_length; i++) {
+          startProcessingGif("start writing trace to ssd");
+          if (lines[i] != "") {
+            var data = lines[i].split(" ");
+            var lba = parseInt(data[0]) % get_number_of_logical_block_address();
+            var io_size = parseInt(data[1]);
+            total_io_size += io_size;
+            console.log(total_io_size);
+            if (total_io_size > max_io_size) {
+              stopProcessingGif("Write Completed");
+              break;
             }
-            stopProcessingGif("Garbage Collection Completed");
-          }
-          await write_ssd(lba, io_size);
-          color_brighness();
+            invalid_lba(lba);
+            var run_gc = will_run_gc(io_size);
+            if (run_gc) {
+              startProcessingGif("Garbage Collection");
+              while (gc_stop_condition_met(io_size)) {
+                // set message to garbage collection
 
-          progress_setup(trace_length, i, global_block_tracer);
-        }
-        //
-        if (i % 1000 == 0) {
-          updateWAFGraph();
+                var is_continue = await garbageCollection();
+                if (!is_continue) {
+                  break;
+                }
+              }
+              stopProcessingGif("Garbage Collection Completed");
+            }
+            await write_ssd(lba, io_size);
+            color_brighness();
+
+            progress_setup(trace_length, i, global_block_tracer);
+          }
+          //
+          if (i % 1000 == 0) {
+            updateWAFGraph();
+          }
         }
       }
       // save ssd_storage as a json file
