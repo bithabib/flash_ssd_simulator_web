@@ -454,10 +454,10 @@ function progress_setup(trace_length, i, global_block_tracer) {
 // Function to write data to block
 function write_page(block_id, lba, io_size, is_gc_running = false) {
   if (is_gc_running) {
-    ssd_write += 4000;
+    ssd_write += 4096;
   } else {
     host_write += io_size;
-    ssd_write += 4000;
+    ssd_write += io_size;
   }
   // if (lba in lba_contain_block_address) {
   //   // check if block_id not in lba_contain_block_address
@@ -507,6 +507,9 @@ async function write_ssd(lba, io_size, gc_block = "", is_gc_running = false) {
         write_page(block_id, lba, 4096, is_gc_running);
         io_size = io_size - 4096;
       } else {
+        if (io_size == 0) {
+          break;
+        }
         write_page(block_id, lba, io_size, is_gc_running);
         io_size = 0;
       }
@@ -519,17 +522,22 @@ async function write_ssd(lba, io_size, gc_block = "", is_gc_running = false) {
 function greedyGarbageCollection() {
   var max_invalid_page = 0;
   var max_invalid_block = "";
-  for (var block in full_ssd_storage) {
-    var invalid_page = 0;
-    full_ssd_storage[block]["vlba"].forEach((vlba) => {
-      if (vlba["status"] == "invalid") {
-        invalid_page += 1;
+  var i = 0;
+  while (i < 4799) {
+    var block = allocation_scheme_algorithm(i);
+    if (block in full_ssd_storage) {
+      var invalid_page = 0;
+      full_ssd_storage[block]["vlba"].forEach((vlba) => {
+        if (vlba["status"] == "invalid") {
+          invalid_page += 1;
+        }
+      });
+      if (invalid_page > max_invalid_page) {
+        max_invalid_page = invalid_page;
+        max_invalid_block = block;
       }
-    });
-    if (invalid_page >= max_invalid_page) {
-      max_invalid_page = invalid_page;
-      max_invalid_block = block;
     }
+    i += 1;
   }
   if (max_invalid_page == 0) {
     return "";
@@ -629,7 +637,14 @@ async function upload_trace_file(event) {
                 }
                 stopProcessingGif("Garbage Collection Completed");
               }
-              await write_ssd(page_start, 4096);
+              if (io_size >= 4096) {
+                await write_ssd(page_start, 4096);
+                io_size = io_size - 4096;
+              } else {
+                await write_ssd(page_start, io_size);
+                io_size = 0;
+                break;
+              }
               page_start += 1;
             }
             color_brighness();
@@ -641,6 +656,7 @@ async function upload_trace_file(event) {
             updateWAFGraph();
           }
         }
+        break;
       }
       // save ssd_storage as a json file
       var ssd_storage = JSON.stringify(full_ssd_storage);
