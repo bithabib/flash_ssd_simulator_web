@@ -385,8 +385,9 @@ function write_page(page_start, update_ppn, is_gc = false) {
     update_block = update_ppn;
   }
   if (is_gc) {
-    console.log("GC is running");
-    console.log(update_block);
+    startProcessingGif("Garbage Collection");
+  }else{
+    startProcessingGif("Writing Page");
   }
   update_mapping_table(page_start, update_ppn);
 }
@@ -502,7 +503,7 @@ async function garbageCollection() {
       if (address_mapping_table[i] != null) {
         if (address_mapping_table[i]["ppn"] == gc_block) {
           var update_ppn = await get_update_ppn(true);
-          write_page(address_mapping_table[i]["lpn"], update_ppn);
+          write_page(address_mapping_table[i]["lpn"], update_ppn, true);
         }
       }
     }
@@ -575,7 +576,25 @@ async function upload_trace_file(event) {
 const fileInput = document.getElementById("upload_trace_file");
 fileInput.addEventListener("change", upload_trace_file);
 
+
+// ----------------------------- Processing Status -----------------------------//
+// ----------------------------- Processing Status -----------------------------//
+function stopProcessingGif(message) {
+  var div = document.getElementById("processing_status_container");
+  div.style.backgroundImage = "none";
+  var processingStatus = document.getElementById("processing_status");
+  processingStatus.innerHTML = message;
+}
+function startProcessingGif(message) {
+  var div = document.getElementById("processing_status_container");
+  div.style.backgroundImage = 'url("static/src/logo/1amw.gif")';
+  var processingStatus = document.getElementById("processing_status");
+  processingStatus.innerHTML = message;
+}
+
+
 window.onload = function () {
   create_block_for_each_plane();
+  stopProcessingGif("Please upload trace");
   handleOverprovisioning();
 };
