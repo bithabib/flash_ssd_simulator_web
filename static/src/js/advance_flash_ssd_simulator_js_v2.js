@@ -144,6 +144,28 @@ function handleOverprovisioning() {
     ssd_structure.sector;
   var totalSizeAfterOverprovision =
     totalSize * (1 - overprovisioningRatio / 100);
+
+  // number of block reserved for overprovisioning
+  var total_block =
+    ssd_structure.channel *
+    ssd_structure.chip *
+    ssd_structure.die *
+    ssd_structure.plane *
+    ssd_structure.block_container *
+    ssd_structure.block;
+  var overprovisioning_block = total_block * (overprovisioningRatio / 100);
+
+  for (var i = total_block - 1; i >= 0; i--) {
+    var block = allocation_scheme_algorithm(i);
+    if (overprovisioning_block > 0) {
+      ssd_storage[block]["ov"] = true;
+      overprovisioning_block -= 1;
+    } else {
+      ssd_storage[block]["ov"] = false;
+    }
+  }
+  console.log(ssd_storage);
+
   // convert byte to gb
   totalSizeAfterOverprovision =
     totalSizeAfterOverprovision / 1024 / 1024 / 1024;
@@ -291,7 +313,7 @@ function allocation_scheme_algorithm(block_tracer) {
   return block_id;
 }
 
-function allocate_block() {
+function allocate_block(gc) {
   for (
     var i = 0;
     i <
@@ -307,19 +329,29 @@ function allocate_block() {
     if (update_block != null) {
       break;
     }
-    if (ssd_storage[p_block]["status"] == "free") {
-      update_block = ssd_storage[p_block];
-      break;
+    if (gc) {
+      if (
+        ssd_storage[p_block]["ov"] &&
+        ssd_storage[p_block]["status"] == "free"
+      ) {
+        update_block = ssd_storage[p_block];
+        break;
+      }
+    } else {
+      if (ssd_storage[p_block]["status"] == "free") {
+        update_block = ssd_storage[p_block];
+        break;
+      }
     }
   }
   return update_block;
 }
 
 // Function to get update ppn for each block
-async function get_update_ppn() {
+async function get_update_ppn(gc = false) {
   if (update_block == null) {
     await new Promise((resolve) => setTimeout(resolve, 1));
-    var update_ppn = allocate_block();
+    var update_ppn = allocate_block(gc);
   } else {
     var update_ppn = update_block;
   }
@@ -373,7 +405,7 @@ function isInvalid(page_start) {
 // Function is_ssd_full to check if ssd is full
 // Function is_ssd_full to check if ssd is full
 // Function is_ssd_full to check if ssd is full
-function will_run_gc(io_size, gc_free_space = 0) {
+function will_run_gc(gc_free_space = 0) {
   // read overprovisioning ratio
   var gc_free_plus_threshold = gc_threshold - gc_free_space;
   var total_ssd_size_after_overprovision =
@@ -381,13 +413,13 @@ function will_run_gc(io_size, gc_free_space = 0) {
   // count valid and invalid pages together
   var total_written_pages = 0;
   for (var block in ssd_storage) {
-    total_written_pages += ssd_storage[block]["valid_pages"];
-    total_written_pages += ssd_storage[block]["invalid_pages"];
+    if (!ssd_storage[block]["ov"]) {
+      total_written_pages += ssd_storage[block]["valid_pages"];
+      total_written_pages += ssd_storage[block]["invalid_pages"];
+    }
   }
-  console.log(total_written_pages);
   if (
-    total_written_pages * ssd_structure.sector_size * ssd_structure.sector +
-      io_size >=
+    total_written_pages * ssd_structure.sector_size * ssd_structure.sector >=
     total_ssd_size_after_overprovision
   ) {
     return true;
@@ -402,7 +434,10 @@ function will_run_gc(io_size, gc_free_space = 0) {
 function greedyGarbageCollection() {
   var max_invalid_page = 0;
   var max_invalid_block = "";
+  var min_valid_page = ssd_structure.page;
+  var min_valid_block = "";
   var i = 0;
+  var tracer = true;
   while (
     i <
     ssd_structure.block_container *
@@ -413,16 +448,32 @@ function greedyGarbageCollection() {
       ssd_structure.plane
   ) {
     var block = allocation_scheme_algorithm(i);
+
     if (block in ssd_storage) {
       if (ssd_storage[block]["invalid_pages"] > max_invalid_page) {
         max_invalid_page = ssd_storage[block]["invalid_pages"];
         max_invalid_block = block;
       }
+      if (
+        ssd_storage[block]["valid_pages"] <= min_valid_page &&
+        ssd_storage[block]["valid_pages"] > 0 &&
+        ssd_storage[block]["ov"] == false
+      ) {
+        if (ssd_storage[block]["valid_pages"] == min_valid_page && tracer) {
+          tracer = false;
+          min_valid_block = block;
+        } else {
+          if (ssd_storage[block]["valid_pages"] < min_valid_page) {
+            min_valid_block = block;
+            min_valid_page = ssd_storage[block]["valid_pages"];
+          }
+        }
+      }
     }
     i += 1;
   }
   if (max_invalid_page == 0) {
-    return "";
+    return min_valid_block;
   } else {
     return max_invalid_block;
   }
@@ -436,24 +487,22 @@ function lrwGarbageCollection() {}
 // Function to garbage collection
 async function garbageCollection() {
   var gc_block = greedyGarbageCollection();
-  if (gc_block == "") {
-    return false;
-  } else if (ssd_storage[gc_block].invalid_pages == 256) {
+  if (ssd_storage[gc_block].invalid_pages == 256) {
     ssd_storage[gc_block]["invalid_pages"] = 0;
     ssd_storage[gc_block]["valid_pages"] = 0;
     ssd_storage[gc_block]["offset"] = 0;
     ssd_storage[gc_block]["erase_count"] += 1;
     ssd_storage[gc_block]["status"] = "free";
     color_brighness();
-    await new Promise((resolve) => setTimeout(resolve, 10));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     return true;
   } else {
     // loop in array of address mapping table don't use forEach
     for (var i = 0; i < address_mapping_table.length; i++) {
       if (address_mapping_table[i] != null) {
         if (address_mapping_table[i]["ppn"] == gc_block) {
-          var update_ppn = await get_update_ppn();
-          write_page(address_mapping_table[i]["lpn"], update_ppn, true);
+          var update_ppn = await get_update_ppn(true);
+          write_page(address_mapping_table[i]["lpn"], update_ppn);
         }
       }
     }
@@ -498,19 +547,17 @@ async function upload_trace_file(event) {
             (lba + sector_count + (ssd_structure.sector - 1)) /
               ssd_structure.sector
           );
-          var run_gc = will_run_gc(0);
+          var run_gc = will_run_gc();
           if (run_gc) {
-            console.log("GC is running");
             while (run_gc) {
               is_gc_complete = await garbageCollection();
               if (!is_gc_complete) {
                 break;
               }
-              run_gc = will_run_gc(0, gc_free_space_percentage);
-              await new Promise((resolve) => setTimeout(resolve, 1000));
+              run_gc = will_run_gc(gc_free_space_percentage);
+              await new Promise((resolve) => setTimeout(resolve, 10));
             }
           }
-          console.log(run_gc);
           while (page_start < page_end) {
             isInvalid(page_start);
             var update_ppn = await get_update_ppn();
