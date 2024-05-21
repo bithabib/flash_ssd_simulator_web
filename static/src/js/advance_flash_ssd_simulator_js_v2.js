@@ -386,7 +386,7 @@ function write_page(page_start, update_ppn, is_gc = false) {
   }
   if (is_gc) {
     startProcessingGif("Garbage Collection");
-  }else{
+  } else {
     startProcessingGif("Writing Page");
   }
   update_mapping_table(page_start, update_ppn);
@@ -526,7 +526,6 @@ async function upload_trace_file(event) {
     reader.onload = async function (e) {
       const lines = e.target.result.split("\n");
       var trace_length = lines.length;
-      var total_io_size = 0;
       for (var i = 0; i < trace_length; i++) {
         if (lines[i] != "") {
           var data = lines[i].split(" ");
@@ -541,7 +540,7 @@ async function upload_trace_file(event) {
               ssd_structure.die *
               ssd_structure.chip *
               ssd_structure.channel);
-          var io_size = parseInt(data[1]);
+          var io_size = parseInt(data[1]) * ssd_structure.sector_size; // remove ssd_structure.sector_size if i/o size is given in replace of sector
           var sector_count = Math.ceil(io_size / ssd_structure.sector_size);
           var page_start = Math.floor(lba / ssd_structure.sector);
           var page_end = Math.floor(
@@ -556,7 +555,6 @@ async function upload_trace_file(event) {
                 break;
               }
               run_gc = will_run_gc(gc_free_space_percentage);
-              await new Promise((resolve) => setTimeout(resolve, 10));
             }
           }
           while (page_start < page_end) {
@@ -568,6 +566,9 @@ async function upload_trace_file(event) {
           color_brighness();
         }
         progress_setup(trace_length, i);
+        if (i % 256 == 0) {
+          await new Promise((resolve) => setTimeout(resolve, 10));
+        }
       }
     };
     reader.readAsText(file);
@@ -575,7 +576,6 @@ async function upload_trace_file(event) {
 }
 const fileInput = document.getElementById("upload_trace_file");
 fileInput.addEventListener("change", upload_trace_file);
-
 
 // ----------------------------- Processing Status -----------------------------//
 // ----------------------------- Processing Status -----------------------------//
@@ -591,7 +591,6 @@ function startProcessingGif(message) {
   var processingStatus = document.getElementById("processing_status");
   processingStatus.innerHTML = message;
 }
-
 
 window.onload = function () {
   create_block_for_each_plane();
