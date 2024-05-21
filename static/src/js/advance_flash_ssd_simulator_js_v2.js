@@ -208,6 +208,7 @@ function color_brighness() {
     if (valid_page == 0 && invalid_page == 0) {
       color = "rgb(255,255,255)";
     } else if (valid_page == 0 && invalid_page > 0) {
+      console.log("Set X image");
       block.style.backgroundImage = 'url("static/src/logo/x.webp")';
     }
 
@@ -342,6 +343,29 @@ function allocate_block(gc) {
         update_block = ssd_storage[p_block];
         break;
       }
+    }
+  }
+  if (update_block == null) {
+    for (
+      var i = 0;
+      i <
+      ssd_structure.block_container *
+        ssd_structure.block *
+        ssd_structure.channel *
+        ssd_structure.chip *
+        ssd_structure.die *
+        ssd_structure.plane;
+      i++
+    ) {
+      p_block = allocation_scheme_algorithm(i);
+      if (
+        ssd_storage[p_block]["status"] == "inused" ||
+        ssd_storage[p_block]["status"] == "free"
+      ) {
+        update_block = ssd_storage[p_block];
+        break;
+      }
+      i += 1;
     }
   }
   return update_block;
@@ -488,14 +512,14 @@ function lrwGarbageCollection() {}
 // Function to garbage collection
 async function garbageCollection() {
   var gc_block = greedyGarbageCollection();
-  if (ssd_storage[gc_block].invalid_pages == 256) {
+  if (ssd_storage[gc_block].invalid_pages == ssd_structure.page) {
     ssd_storage[gc_block]["invalid_pages"] = 0;
     ssd_storage[gc_block]["valid_pages"] = 0;
     ssd_storage[gc_block]["offset"] = 0;
     ssd_storage[gc_block]["erase_count"] += 1;
     ssd_storage[gc_block]["status"] = "free";
     color_brighness();
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 10));
     return true;
   } else {
     // loop in array of address mapping table don't use forEach
@@ -566,7 +590,7 @@ async function upload_trace_file(event) {
           color_brighness();
         }
         progress_setup(trace_length, i);
-        if (i % 256 == 0) {
+        if (i % ssd_structure.page == 0) {
           await new Promise((resolve) => setTimeout(resolve, 10));
         }
       }
