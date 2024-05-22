@@ -41,7 +41,8 @@ var ssd_storage = {};
 var host_write = 0;
 var internal_write = 0;
 var waf_log = [];
-
+// var run_till = 150;
+var run_till = 15980000;
 function create_block_for_each_plane() {
   // read table by id and create block for each plane
   var ssd_container = document.getElementById("ssd_container");
@@ -565,21 +566,22 @@ async function upload_trace_file(event) {
     reader.onload = async function (e) {
       const lines = e.target.result.split("\n");
       var trace_length = lines.length;
-      for (var i = 0; i < trace_length; i++) {
-        if (lines[i] != "") {
-          var data = lines[i].split(" ");
-          // var lba = parseInt(data[0]) % (256 * 300 * 16 * 8);
-          // var lba =
-          //   parseInt(data[0]) %
-          //   (ssd_structure.sector *
-          //     ssd_structure.page *
-          //     ssd_structure.block *
-          //     ssd_structure.block_container *
-          //     ssd_structure.plane *
-          //     ssd_structure.die *
-          //     ssd_structure.chip *
-          //     ssd_structure.channel);
-          var lba = parseInt(data[0]);
+      for (var i = 0; i < run_till; i++) {
+        var i_2 = i%trace_length;
+        if (lines[i_2] != "") {
+          var data = lines[i_2].split(" ");
+          var lba = parseInt(data[0]) % (256 * 300 * 16 * 8);
+          var lba =
+            parseInt(data[0]) %
+            (ssd_structure.sector *
+              ssd_structure.page *
+              ssd_structure.block *
+              ssd_structure.block_container *
+              ssd_structure.plane *
+              ssd_structure.die *
+              ssd_structure.chip *
+              ssd_structure.channel);
+          // var lba = parseInt(data[0]);
           var io_size = parseInt(data[1]); // add * ssd_structure.sector_size if sector is given in replace of i/o size
           // var io_size = parseInt(data[1]) * ssd_structure.sector_size; // remove ssd_structure.sector_size if i/o size is given in replace of sector
           var sector_count = Math.ceil(io_size / ssd_structure.sector_size);
@@ -606,15 +608,18 @@ async function upload_trace_file(event) {
           }
           color_brighness();
         }
-        progress_setup(trace_length, i);
-        console.log("test",i);
-        if (i % ssd_structure.page == 0) {
+        progress_setup(run_till, i);
+        if (i_2 % ssd_structure.page == 0) {
           waf_log.push({
             waf: internal_write / host_write,
           });
           await new Promise((resolve) => setTimeout(resolve, 10));
         }
       }
+      waf_log.push({
+        waf: internal_write / host_write,
+      });
+      progress_setup(run_till, run_till);
       // save ssd_storage as a json file
       var ssd_storage = JSON.stringify(ssd_storage);
       var blob = new Blob([ssd_storage], { type: "application/json" });
