@@ -561,6 +561,7 @@ async function upload_trace_file(event) {
   var file = event.target.files[0];
   if (file) {
     const reader = new FileReader();
+    var file_name = file.name
     reader.onload = async function (e) {
       const lines = e.target.result.split("\n");
       var trace_length = lines.length;
