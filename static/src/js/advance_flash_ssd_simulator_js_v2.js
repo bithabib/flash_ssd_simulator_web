@@ -208,11 +208,18 @@ function color_brighness() {
     if (brightness > 255) brightness = 255;
     var color = "rgb(0," + brightness + ",0)";
     var block = document.getElementById(block);
+    // remove background image
+    block.style.backgroundImage = "none";
     if (valid_page == 0 && invalid_page == 0) {
       color = "rgb(255,255,255)";
     } else if (valid_page == 0 && invalid_page > 0) {
       console.log("Set X image");
       block.style.backgroundImage = 'url("static/src/logo/x.webp")';
+      block.style.backgroundSize = "cover";
+    }else if (valid_page > 0 && invalid_page == 0) {
+      console.log("Set tick image");
+      block.style.backgroundImage = 'url("static/src/logo/r.webp")';
+      block.style.backgroundSize = "cover";
     }
 
     block.style.backgroundColor = color;
@@ -561,17 +568,19 @@ async function upload_trace_file(event) {
         if (lines[i] != "") {
           var data = lines[i].split(" ");
           // var lba = parseInt(data[0]) % (256 * 300 * 16 * 8);
-          var lba =
-            parseInt(data[0]) %
-            (ssd_structure.sector *
-              ssd_structure.page *
-              ssd_structure.block *
-              ssd_structure.block_container *
-              ssd_structure.plane *
-              ssd_structure.die *
-              ssd_structure.chip *
-              ssd_structure.channel);
-          var io_size = parseInt(data[1]) * ssd_structure.sector_size; // remove ssd_structure.sector_size if i/o size is given in replace of sector
+          // var lba =
+          //   parseInt(data[0]) %
+          //   (ssd_structure.sector *
+          //     ssd_structure.page *
+          //     ssd_structure.block *
+          //     ssd_structure.block_container *
+          //     ssd_structure.plane *
+          //     ssd_structure.die *
+          //     ssd_structure.chip *
+          //     ssd_structure.channel);
+          var lba = parseInt(data[0]);
+          var io_size = parseInt(data[1]); // add * ssd_structure.sector_size if sector is given in replace of i/o size
+          // var io_size = parseInt(data[1]) * ssd_structure.sector_size; // remove ssd_structure.sector_size if i/o size is given in replace of sector
           var sector_count = Math.ceil(io_size / ssd_structure.sector_size);
           var page_start = Math.floor(lba / ssd_structure.sector);
           var page_end = Math.floor(
@@ -597,6 +606,7 @@ async function upload_trace_file(event) {
           color_brighness();
         }
         progress_setup(trace_length, i);
+        console.log("test",i);
         if (i % ssd_structure.page == 0) {
           waf_log.push({
             waf: internal_write / host_write,
