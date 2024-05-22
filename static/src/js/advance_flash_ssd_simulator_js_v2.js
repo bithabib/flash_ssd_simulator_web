@@ -38,6 +38,9 @@ var address_mapping_table = new Array(
 
 var update_block = null;
 var ssd_storage = {};
+var host_write = 0;
+var internal_write = 0;
+var waf_log = [];
 
 function create_block_for_each_plane() {
   // read table by id and create block for each plane
@@ -408,9 +411,13 @@ function write_page(page_start, update_ppn, is_gc = false) {
     ssd_storage[update_ppn["block_id"]] = update_ppn;
     update_block = update_ppn;
   }
+
   if (is_gc) {
+    internal_write += 4096;
     startProcessingGif("Garbage Collection");
   } else {
+    host_write += 4096;
+    internal_write += 4096;
     startProcessingGif("Writing Page");
   }
   update_mapping_table(page_start, update_ppn);
@@ -591,9 +598,32 @@ async function upload_trace_file(event) {
         }
         progress_setup(trace_length, i);
         if (i % ssd_structure.page == 0) {
+          waf_log.push({
+            waf: internal_write / host_write,
+          });
           await new Promise((resolve) => setTimeout(resolve, 10));
         }
       }
+      // save ssd_storage as a json file
+      var ssd_storage = JSON.stringify(ssd_storage);
+      var blob = new Blob([ssd_storage], { type: "application/json" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = file_name + ".json";
+      a.click();
+
+      // save waf_trace as a json file
+      var waf_storage = JSON.stringify(waf_log);
+      var blob = new Blob([waf_storage], { type: "application/json" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = file_name + "_waf.json";
+      a.click();
+
+      stopProcessingGif("Write Completed");
+      color_brighness();
     };
     reader.readAsText(file);
   }
