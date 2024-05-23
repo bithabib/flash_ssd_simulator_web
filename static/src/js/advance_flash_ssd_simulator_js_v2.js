@@ -35,19 +35,19 @@ var address_mapping_table = new Array(
     ssd_structure.block *
     ssd_structure.page
 );
-
 var update_block = null;
 var ssd_storage = {};
 var host_write = 0;
 var internal_write = 0;
 var waf_log = [];
 // var run_till = 150;
-var run_till = 15980000;
+var run_till = 3686400;
 function create_block_for_each_plane() {
   // read table by id and create block for each plane
   var ssd_container = document.getElementById("ssd_container");
   var ssd_container_trh = document.createElement("tr");
   var ssd_container_trtd = document.createElement("tr");
+
   for (var i = 0; i < ssd_structure.channel; i++) {
     var ssd_container_trhv = document.createElement("th");
     ssd_container_trhv.innerHTML = "Package " + i;
@@ -123,6 +123,62 @@ function create_block_for_each_plane() {
   }
   ssd_container.appendChild(ssd_container_trh);
   ssd_container.appendChild(ssd_container_trtd);
+  IntialSSDSetup();
+}
+
+function IntialSSDSetup() {
+  var total_block =
+    ssd_structure.channel *
+    ssd_structure.chip *
+    ssd_structure.die *
+    ssd_structure.plane *
+    ssd_structure.block_container *
+    ssd_structure.block;
+  var initially_filled_percentage = document.getElementById(
+    "initially_filled_percentage"
+  ).value;
+  var initially_filled_block = Math.floor(
+    (initially_filled_percentage / 100) * total_block
+  );
+  for (var i = 0; i < total_block; i++) {
+    var block = allocation_scheme_algorithm(i);
+    if (i < initially_filled_block) {
+      ssd_storage[block]["status"] = "used";
+      ssd_storage[block]["valid_pages"] = ssd_structure.page;
+      ssd_storage[block]["invalid_pages"] = 0;
+      ssd_storage[block]["offset"] = ssd_structure.page;
+      ssd_storage[block]["write_count"] = ssd_structure.page;
+      ssd_storage[block]["erase_count"] = 0;
+      for (
+        var j = i * ssd_structure.page;
+        j < (i + 1) * ssd_structure.page;
+        j++
+      ) {
+        address_mapping_table[j] = {
+          lpn: j,
+          ppn: block,
+          offset: j - i * ssd_structure.page + 1,
+        };
+      }
+    } else {
+      ssd_storage[block]["status"] = "free";
+      ssd_storage[block]["valid_pages"] = 0;
+      ssd_storage[block]["invalid_pages"] = 0;
+      ssd_storage[block]["offset"] = 0;
+      ssd_storage[block]["write_count"] = 0;
+      ssd_storage[block]["erase_count"] = 0;
+      for (
+        var j = i * ssd_structure.page;
+        j < (i + 1) * ssd_structure.page;
+        j++
+      ) {
+        address_mapping_table[j] = null;
+      }
+    }
+
+    
+  }
+  color_brighness();
 }
 
 function progress_setup(trace_length, i) {
@@ -168,8 +224,6 @@ function handleOverprovisioning() {
       ssd_storage[block]["ov"] = false;
     }
   }
-  console.log(ssd_storage);
-
   // convert byte to gb
   totalSizeAfterOverprovision =
     totalSizeAfterOverprovision / 1024 / 1024 / 1024;
@@ -214,11 +268,9 @@ function color_brighness() {
     if (valid_page == 0 && invalid_page == 0) {
       color = "rgb(255,255,255)";
     } else if (valid_page == 0 && invalid_page > 0) {
-      console.log("Set X image");
       block.style.backgroundImage = 'url("static/src/logo/x.webp")';
       block.style.backgroundSize = "cover";
-    }else if (valid_page > 0 && invalid_page == 0) {
-      console.log("Set tick image");
+    } else if (valid_page > 0 && invalid_page == 0) {
       block.style.backgroundImage = 'url("static/src/logo/r.webp")';
       block.style.backgroundSize = "cover";
     }
@@ -562,12 +614,12 @@ async function upload_trace_file(event) {
   var file = event.target.files[0];
   if (file) {
     const reader = new FileReader();
-    var file_name = file.name
+    var file_name = file.name;
     reader.onload = async function (e) {
       const lines = e.target.result.split("\n");
       var trace_length = lines.length;
       for (var i = 0; i < run_till; i++) {
-        var i_2 = i%trace_length;
+        var i_2 = i % trace_length;
         if (lines[i_2] != "") {
           var data = lines[i_2].split(" ");
           var lba = parseInt(data[0]) % (256 * 300 * 16 * 8);
@@ -582,8 +634,8 @@ async function upload_trace_file(event) {
               ssd_structure.chip *
               ssd_structure.channel);
           // var lba = parseInt(data[0]);
-          var io_size = parseInt(data[1]); // add * ssd_structure.sector_size if sector is given in replace of i/o size
-          // var io_size = parseInt(data[1]) * ssd_structure.sector_size; // remove ssd_structure.sector_size if i/o size is given in replace of sector
+          // var io_size = parseInt(data[1]); // add * ssd_structure.sector_size if sector is given in replace of i/o size
+          var io_size = parseInt(data[1]) * ssd_structure.sector_size; // remove ssd_structure.sector_size if i/o size is given in replace of sector
           var sector_count = Math.ceil(io_size / ssd_structure.sector_size);
           var page_start = Math.floor(lba / ssd_structure.sector);
           var page_end = Math.floor(

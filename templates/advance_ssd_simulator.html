@@ -119,8 +119,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td id="totalSize">
-                                4.68750gb</td>
+                            <td id="totalSize"></td>
                         </tr>
                     </table>
                 </div>
@@ -200,13 +199,22 @@
 
                                             </div>
                                             <div class="col">
-                                                <button type="button" class="btn btn-light border"
-                                                    onclick="stopWritingForce()">
-                                                    Stop Writing(Force)
-                                                </button>
-                                                <button type="button" class="btn btn-light border" onclick="reset()">
-                                                    Reset
-                                                </button>
+                                                <div class="input-group mb-1">
+                                                    <input type="number" id="initially_filled_percentage" class="form-control"
+                                                        placeholder="Initially Filled %" aria-label="measurement"
+                                                        aria-describedby="basic-addon2" value="60" onchange="IntialSSDSetup()">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text" id="basic-addon2">Initially Filled %</span>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="input-group mb-1">
+                                                    <input type="number" id="ssd_interval" class="form-control"
+                                                        placeholder="SSD Interval" aria-label="measurement"
+                                                        aria-describedby="basic-addon2" value="1000">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text" id="basic-addon2">ms</span>
+                                                    </div>
+                                                </div> -->
                                             </div>
                                         </div>
                                     </td>
