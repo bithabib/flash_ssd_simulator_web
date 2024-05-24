@@ -41,7 +41,7 @@ var host_write = 0;
 var internal_write = 0;
 var waf_log = [];
 // var run_till = 150;
-var run_till = 3686400;
+var run_till = 1843200;
 function create_block_for_each_plane() {
   // read table by id and create block for each plane
   var ssd_container = document.getElementById("ssd_container");
@@ -175,8 +175,6 @@ function IntialSSDSetup() {
         address_mapping_table[j] = null;
       }
     }
-
-    
   }
   color_brighness();
 }
@@ -428,8 +426,12 @@ function allocate_block(gc) {
         update_block = ssd_storage[p_block];
         break;
       }
-      i += 1;
     }
+  }
+  if (update_block == null) {
+    console.log("SSD is full");
+    console.log(ssd_storage);
+    console.log(address_mapping_table);
   }
   return update_block;
 }
