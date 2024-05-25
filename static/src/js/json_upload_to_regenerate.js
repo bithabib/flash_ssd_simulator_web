@@ -113,6 +113,7 @@ function create_block_for_each_plane() {
 
 var waf_trace = [];
 function updateWAFGraph() {
+  console.log(ssd_storage);
   var writeCountGraphData = [];
   var averageWriteCount = 0;
   var averageWriteCountGraphData = [];
@@ -123,13 +124,13 @@ function updateWAFGraph() {
   var counter = 1;
   for (var block in ssd_storage) {
     writeCountGraphData.push({
-      y: ssd_storage[block]["wc"],
+      y: ssd_storage[block]["write_count"],
     });
     eraseCountGraphData.push({
-      y: ssd_storage[block]["ec"],
+      y: ssd_storage[block]["erase_count"],
     });
-    averageWriteCount += ssd_storage[block]["wc"];
-    averageEraseCount += ssd_storage[block]["ec"];
+    averageWriteCount += ssd_storage[block]["write_count"];
+    averageEraseCount += ssd_storage[block]["erase_count"];
     averageEraseCountGraphData.push({
       y: averageEraseCount / counter,
     });
@@ -237,12 +238,10 @@ function color_brighness() {
 // // Call function to upload trace file
 async function upload_trace_file(event) {
   var file = event.target.files[0];
-  console.log("this is test", file);
   if (!file) {
     console.error("No file selected");
     return;
   }
-  console.log("this is test", file);
   const reader = new FileReader();
   reader.onload = async function (e) {
     console.log("test");
@@ -262,12 +261,7 @@ async function upload_trace_file(event) {
         updateWAFGraph();
         return;
       }
-      console.log("ssd_storage");
-
       ssd_storage = JSON.parse(e.target.result);
-      console.log("ssd_storage");
-      console.log("ssd_storage");
-      console.log("ssd_storage");
       color_brighness();
       updateWAFGraph();
     } catch (e) {
