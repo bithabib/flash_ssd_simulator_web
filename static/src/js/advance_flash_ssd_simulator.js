@@ -19,11 +19,13 @@ var overprovisioningRatio = 0;
 
 // # Time in us for flash operations us means microsecond
 const flash_operation_time = {
-  read_msb: 80,
-  read_lsb: 25,
+  read_msb: 25,
+  read_lsb: 80,
   write_msb: 200,
   write_lsb: 1500,
-  erase_block: 1500,
+  read: 25,
+  write: 0.5, // millisecond per page
+  erase_block: 2, // millisecond per block
 };
 // declare address mapping table with size of total page number
 var address_mapping_table = new Array(
@@ -40,8 +42,10 @@ var ssd_storage = {};
 var host_write = 0;
 var internal_write = 0;
 var waf_log = [];
-// var run_till = 150;
-var run_till = 1843200;
+var cummalative_time_per_packet = 0;
+var cummalative_time_per_packet_log = [];
+// var run_till = 157;
+var run_till = 2198512;
 
 function create_block_for_each_plane() {
   // read table by id and create block for each plane
@@ -483,6 +487,7 @@ function write_page(page_start, update_ppn, is_gc = false) {
     internal_write += 4096;
     startProcessingGif("Writing Page");
   }
+  cummalative_time_per_packet += flash_operation_time.write;
   update_mapping_table(page_start, update_ppn);
 }
 
@@ -606,6 +611,7 @@ async function garbageCollection() {
     ssd_storage[gc_block]["offset"] = 0;
     ssd_storage[gc_block]["erase_count"] += 1;
     ssd_storage[gc_block]["status"] = "free";
+    cummalative_time_per_packet += flash_operation_time.erase_block;
 
     color_brighness();
     await new Promise((resolve) => setTimeout(resolve, 10));
@@ -668,11 +674,17 @@ async function upload_trace_file(event) {
           waf_log.push({
             waf: internal_write / host_write,
           });
-          await new Promise((resolve) => setTimeout(resolve, 10));
+          cummalative_time_per_packet_log.push({
+            time: cummalative_time_per_packet,
+          });
+          await new Promise((resolve) => setTimeout(resolve, 2));
         }
       }
       waf_log.push({
         waf: internal_write / host_write,
+      });
+      cummalative_time_per_packet_log.push({
+        time: cummalative_time_per_packet,
       });
       progress_setup(run_till, run_till);
       // save ssd_storage as a json file
@@ -691,6 +703,19 @@ async function upload_trace_file(event) {
       var a = document.createElement("a");
       a.href = url;
       a.download = file_name + "_waf.json";
+      a.click();
+
+      // save cummalative_time_per_packet_log as a json file
+      var cummalative_time_per_packet_storage = JSON.stringify(
+        cummalative_time_per_packet_log
+      );
+      var blob = new Blob([cummalative_time_per_packet_storage], {
+        type: "application/json",
+      });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = file_name + "_cummalative_time_per_packet.json";
       a.click();
 
       stopProcessingGif("Write Completed");
