@@ -47,7 +47,7 @@ var cummalative_time_per_packet = 0;
 var cummalative_time_per_packet_log = [];
 // var run_till = 157;
 // var run_till = 1598512;
-var run_till = 9000000;
+var run_till = 354589;
 
 function create_block_for_each_plane() {
   // read table by id and create block for each plane
