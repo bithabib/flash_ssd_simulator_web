@@ -11,7 +11,7 @@ const ssd_structure = {
   page: 256,
   sector: 8,
   sector_size: 512,
-  page_size: 8192,
+  page_size: 4096,
 };
 // const gc_free_space_percentage = 0.0005;
 const gc_free_space_percentage = 0.001;
@@ -46,7 +46,8 @@ var waf_log = [];
 var cummalative_time_per_packet = 0;
 var cummalative_time_per_packet_log = [];
 // var run_till = 157;
-var run_till = 1598512;
+// var run_till = 1598512;
+var run_till = 9000000;
 
 function create_block_for_each_plane() {
   // read table by id and create block for each plane
@@ -494,11 +495,11 @@ function write_page(page_start, update_ppn, is_gc = false) {
   }
 
   if (is_gc) {
-    internal_write += 4096;
+    internal_write += 8;
     startProcessingGif("Garbage Collection");
   } else {
-    host_write += 4096;
-    internal_write += 4096;
+    host_write += 8;
+    internal_write += 8;
     startProcessingGif("Writing Page");
   }
   cummalative_time_per_packet += flash_operation_time.write;
@@ -697,7 +698,8 @@ async function upload_trace_file(event) {
         }
       }
       waf_log.push({
-        waf: internal_write / host_write,
+        iw: internal_write,
+        hw: host_write,
       });
       cummalative_time_per_packet_log.push({
         time: cummalative_time_per_packet,
