@@ -8,7 +8,7 @@ const ssd_structure = {
   plane: 4,
   block_container: 60,
   block: 5,
-  page: 256,
+  page: 512,
   sector: 8,
   sector_size: 512,
   page_size: 4096,
@@ -17,6 +17,7 @@ const ssd_structure = {
 const gc_free_space_percentage = 0.001;
 const gc_threshold = 0.9995;
 var overprovisioningRatio = 0;
+
 // # Time in us for flash operations us means microsecond
 const flash_operation_time = {
   read_msb: 25,
@@ -477,7 +478,7 @@ function update_mapping_table(page_start, update_ppn) {
 
 // Function to backup lsb page
 function write_page(page_start, update_ppn, is_gc = false) {
-  if (update_ppn["offset"] == 255) {
+  if (update_ppn["offset"] == ssd_structure.page-1) {
     update_ppn["offset"] += 1;
     update_ppn["status"] = "used";
     update_ppn["valid_pages"] += 1;
