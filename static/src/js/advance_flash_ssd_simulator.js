@@ -17,7 +17,6 @@ const ssd_structure = {
 const gc_free_space_percentage = 0.001;
 const gc_threshold = 0.9995;
 var overprovisioningRatio = 0;
-
 // # Time in us for flash operations us means microsecond
 const flash_operation_time = {
   read_msb: 25,
