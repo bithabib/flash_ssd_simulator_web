@@ -6,16 +6,18 @@ const ssd_structure = {
   chip: 1,
   die: 2,
   plane: 4,
-  block_container: 60,
-  block: 5,
+  block_container: 64,
+  block: 8,
   page: 512,
   sector: 8,
   sector_size: 512,
   page_size: 4096,
 };
 // const gc_free_space_percentage = 0.0005;
-const gc_free_space_percentage = 0.001;
-const gc_threshold = 0.9995;
+const gc_free_space_percentage = 0.005;
+const gc_threshold = 0.80; // 
+// const gc_threshold = 6;
+
 var overprovisioningRatio = 0;
 
 // # Time in us for flash operations us means microsecond
@@ -47,7 +49,7 @@ var cummalative_time_per_packet = 0;
 var cummalative_time_per_packet_log = [];
 // var run_till = 157;
 // var run_till = 1598512;
-var run_till = 2576129;
+var run_till = 383166;
 
 function create_block_for_each_plane() {
   // read table by id and create block for each plane
@@ -645,14 +647,14 @@ async function upload_trace_file(event) {
         var i_2 = i % trace_length;
         if (lines[i_2] != "") {
           var data = lines[i_2].split(" ");
-          var lba =
-            parseInt(data[0]) %
-            parseInt(
-              number_of_logical_block() *
-                ssd_structure.sector *
-                (1 - overprovisioningRatio / 100)
-            );
-          // var lba = parseInt(data[0]);
+          // var lba =
+          //   parseInt(data[0]) %
+          //   parseInt(
+          //     number_of_logical_block() *
+          //       ssd_structure.sector *
+          //       (1 - overprovisioningRatio / 100)
+          //   );
+          var lba = parseInt(data[0]);
           // var io_size = parseInt(data[1]); // add * ssd_structure.sector_size if sector is given in replace of i/o size
           var io_size = parseInt(data[1]) * ssd_structure.sector_size; // remove ssd_structure.sector_size if i/o size is given in replace of sector
           var sector_count = Math.ceil(io_size / ssd_structure.sector_size);
