@@ -21,3 +21,10 @@
   - We will trace how many times a block is erased, based on number of erase and invalid pages this block will be erased next time.
      - Equation: 
        - Erase = (invalid_page/total_page)*100 - (this_block_erase_count/max_erase_count)*100
+
+
+## 03-09-2024 Meeting Preparation 
+  - Study DFP and ZNS SSD
+  - Idea 2: Wear leveling withour wear leveling algorithm
+We will keep another information to trace which block will be erase next. Block will be choosen based on number of invalid page and max erase count. We will find a law to get it.
+  - Finding the limitation of other paper and how we can improve it.
