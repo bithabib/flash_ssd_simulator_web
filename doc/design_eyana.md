@@ -24,7 +24,6 @@
 
 
 ## 03-09-2024 Meeting Preparation 
-  - Study DFP and ZNS SSD
-  - Idea 2: Wear leveling withour wear leveling algorithm
-We will keep another information to trace which block will be erase next. Block will be choosen based on number of invalid page and max erase count. We will find a law to get it.
+  - Study FDP and ZNS SSD
+  - Idea 2: Wear leveling withour wear leveling algorithm We will keep another information to trace which block will be erase next. Block will be choosen based on number of invalid page and max erase count. We will find a law to get it.
   - Finding the limitation of other paper and how we can improve it.
