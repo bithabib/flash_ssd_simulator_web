@@ -46,84 +46,82 @@
         </div>
     </header>
 
-    <div class="container">
-        <div class="container center">
-            <div class="row">
-                <div class="col">
-                    <table class="table table-bordered">
-                        <tr>
-                            <th>
-                                <div class="definition-header">
-                                    <span class="definition_ssd" id="page">?</span>
-                                    Page Size
-                                </div>
-                            </th>
-                            <th>
-                                <div class="definition-header">
-                                    <span class="definition_ssd" id="block">?</span>
-                                    Page per block
-                                </div>
-                            </th>
-                            <th>
-                                <div class="definition-header">
-                                    <span class="definition_ssd" id="plane">?</span>
-                                    Block per plane
-                                </div>
-                            </th>
-                            <th>
-                                <div class="definition-header">
-                                    <span class="definition_ssd" id="die">?</span>
-                                    Plane per die
-                                </div>
-                            </th>
-                            <th>
-                                <div class="definition-header">
-                                    <span class="definition_ssd" id="package">?</span>
-                                    Die per chip
-                                </div>
-                            </th>
-                            <th>
-                                <div class="definition-header">
-                                    <span class="definition_ssd" id="ssd_size">?</span>
-                                    Chip per package
-                                </div>
-                            </th>
-                            <th>
-                                <div class="definition-header">
-                                    <span class="definition_ssd" id="ssd_size">?</span>
-                                    Overprovisioning Ratio
-                                </div>
-                            </th>
-                            <th>
-                                <div class="definition-header">
-                                    <span class="definition_ssd" id="ssd_size">?</span>
-                                    Total SSD Size
-                                </div>
-                            </th>
+    <div class="container" style="margin-left: 10%;">
+        <div class="mr-5">
 
-                        </tr>
-                        <tr>
-                            <td id="pageSize">4kb</td>
-                            <td id="blockSize">256</td>
-                            <td id="planeSize">300</td>
-                            <td id="dieSize">4</td>
-                            <td id="packageSize">2</td>
-                            <td id="flashSSDSize">1</td>
-                            <td>
-                                <div class="input-group">
-                                    <input type="number" id="overprovisioning_ratio" class="form-control" max="35"
-                                        value="15" placeholder="less than 35%" aria-label="Overprovisioning Ratio"
-                                        aria-describedby="basic-addon2" onchange="handleOverprovisioning(event)">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text" id="basic-addon2">%</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td id="totalSize"></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+            <table class="table table-bordered">
+                <tr>
+                    <th>
+                        <div class="definition-header">
+                            <span class="definition_ssd" id="page">?</span>
+                            Page Size
+                        </div>
+                    </th>
+                    <th>
+                        <div class="definition-header">
+                            <span class="definition_ssd" id="block">?</span>
+                            Page per block
+                        </div>
+                    </th>
+                    <th>
+                        <div class="definition-header">
+                            <span class="definition_ssd" id="plane">?</span>
+                            Block per plane
+                        </div>
+                    </th>
+                    <th>
+                        <div class="definition-header">
+                            <span class="definition_ssd" id="die">?</span>
+                            Plane per die
+                        </div>
+                    </th>
+                    <th>
+                        <div class="definition-header">
+                            <span class="definition_ssd" id="package">?</span>
+                            Die per chip
+                        </div>
+                    </th>
+                    <th>
+                        <div class="definition-header">
+                            <span class="definition_ssd" id="ssd_size">?</span>
+                            Chip per package
+                        </div>
+                    </th>
+                    <th>
+                        <div class="definition-header">
+                            <span class="definition_ssd" id="ssd_size">?</span>
+                            Overprovisioning Ratio
+                        </div>
+                    </th>
+                    <th>
+                        <div class="definition-header">
+                            <span class="definition_ssd" id="ssd_size">?</span>
+                            Total SSD Size
+                        </div>
+                    </th>
+
+                </tr>
+                <tr>
+                    <td id="pageSize">4kb</td>
+                    <td id="blockSize">256</td>
+                    <td id="planeSize">300</td>
+                    <td id="dieSize">4</td>
+                    <td id="packageSize">2</td>
+                    <td id="flashSSDSize">1</td>
+                    <td>
+                        <div class="input-group">
+                            <input type="number" id="overprovisioning_ratio" class="form-control" max="35" value="15"
+                                placeholder="less than 35%" aria-label="Overprovisioning Ratio"
+                                aria-describedby="basic-addon2" onchange="handleOverprovisioning(event)">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon2">%</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td id="totalSize"></td>
+                </tr>
+            </table>
+
         </div>
         <div id="fullscreen_div">
             <div class="row">
@@ -187,11 +185,13 @@
                                             <div class="col ml-5 row">
                                                 <div class="col-12">
                                                     <label for="trace_progress">Trace progress</label>
-                                                    <progress id="trace_progress" value="0" max="100" style="width: 70%;"> 32% </progress>
+                                                    <progress id="trace_progress" value="0" max="100"
+                                                        style="width: 70%;"> 32% </progress>
                                                 </div>
                                                 <div class="col-12">
                                                     <label for="ssd_progress">SDD progress</label>
-                                                    <progress id="ssd_progress" value="0" max="100" style="width: 70%;"> 32% </progress>
+                                                    <progress id="ssd_progress" value="0" max="100" style="width: 70%;">
+                                                        32% </progress>
                                                 </div>
 
 
@@ -199,21 +199,15 @@
                                             </div>
                                             <div class="col">
                                                 <div class="input-group mb-1">
-                                                    <input type="number" id="initially_filled_percentage" class="form-control"
-                                                        placeholder="Initially Filled %" aria-label="measurement"
-                                                        aria-describedby="basic-addon2" value="60" onchange="IntialSSDSetup()">
+                                                    <input type="number" id="initially_filled_percentage"
+                                                        class="form-control" placeholder="Initially Filled %"
+                                                        aria-label="measurement" aria-describedby="basic-addon2"
+                                                        value="60" onchange="IntialSSDSetup()">
                                                     <div class="input-group-append">
-                                                        <span class="input-group-text" id="basic-addon2">Initially Filled %</span>
+                                                        <span class="input-group-text" id="basic-addon2">Initially
+                                                            Filled %</span>
                                                     </div>
                                                 </div>
-                                                <!-- <div class="input-group mb-1">
-                                                    <input type="number" id="ssd_interval" class="form-control"
-                                                        placeholder="SSD Interval" aria-label="measurement"
-                                                        aria-describedby="basic-addon2" value="1000">
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text" id="basic-addon2">ms</span>
-                                                    </div>
-                                                </div> -->
                                             </div>
                                         </div>
                                     </td>
