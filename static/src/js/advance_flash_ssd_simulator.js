@@ -20,6 +20,9 @@ const gc_threshold = 0.80; //
 
 var overprovisioningRatio = 0;
 
+var max_write = 1;
+var max_erase = 1;
+
 // # Time in us for flash operations us means microsecond
 const flash_operation_time = {
   read_msb: 25,
@@ -276,13 +279,26 @@ function color_brighness() {
     var write_count = ssd_storage[block]["write_count"];
     var erase_count = ssd_storage[block]["erase_count"];
 
+    if (write_count > max_write) {
+      max_write = write_count;
+    }
+    if (erase_count > max_erase) {
+      max_erase = erase_count;
+    }
+
+    var hot_write_ratio = write_count / max_write;
+    var hot_erase_ratio = erase_count / max_erase;
+    
+
     // console.log("Fuck ajsdhflajshdfjlkasdhf alsjdflkj as",valid_page, invalid_page, write_count, erase_count);
 
     var percentage = invalid_page / (valid_page + invalid_page);
-    var brightness = Math.floor(255 * percentage);
-    if (brightness < 0) brightness = 0;
-    if (brightness > 255) brightness = 255;
-    var color = "rgb(0," + brightness + ",0)";
+    var r_write = Math.floor(255*hot_write_ratio)
+    var g_erase = Math.floor(255*hot_erase_ratio)
+    var b_invalid_page = Math.floor(255 * percentage);
+    if (b_invalid_page < 0) b_invalid_page = 0;
+    if (b_invalid_page > 255) b_invalid_page = 255;
+    var color = "rgb("+r_write +","+ g_erase + ","+ b_invalid_page+")";
     var block = document.getElementById(block);
     // remove background image
     block.style.backgroundImage = "none";
@@ -297,6 +313,7 @@ function color_brighness() {
     }
 
     block.style.backgroundColor = color;
+    // console.log("Color", color);
   }
 }
 
