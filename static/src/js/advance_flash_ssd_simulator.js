@@ -272,9 +272,14 @@ function color_brighness() {
     // get the block by get element by id
     var valid_page = ssd_storage[block]["valid_pages"];
     var invalid_page = ssd_storage[block]["invalid_pages"];
+    // get the write count and erase count
+    var write_count = ssd_storage[block]["write_count"];
+    var erase_count = ssd_storage[block]["erase_count"];
 
-    var percentage = (invalid_page / (valid_page + invalid_page)) * 100;
-    var brightness = Math.floor(255 * (percentage / 100));
+    // console.log("Fuck ajsdhflajshdfjlkasdhf alsjdflkj as",valid_page, invalid_page, write_count, erase_count);
+
+    var percentage = invalid_page / (valid_page + invalid_page);
+    var brightness = Math.floor(255 * percentage);
     if (brightness < 0) brightness = 0;
     if (brightness > 255) brightness = 255;
     var color = "rgb(0," + brightness + ",0)";
