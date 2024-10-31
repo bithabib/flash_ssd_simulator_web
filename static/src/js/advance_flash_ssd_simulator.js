@@ -14,14 +14,11 @@ const ssd_structure = {
   page_size: 4096,
 };
 // const gc_free_space_percentage = 0.0005;
-const gc_free_space_percentage = 0.005;
-const gc_threshold = 0.80; // 
-// const gc_threshold = 6;
-
+const gc_free_space_percentage = 0.001;
+const gc_threshold = 0.9995;
 var overprovisioningRatio = 0;
-
-var max_write = 1;
-var max_erase = 1;
+var max_write = 255;
+var max_erase = 255;
 
 // # Time in us for flash operations us means microsecond
 const flash_operation_time = {
@@ -52,7 +49,7 @@ var cummalative_time_per_packet = 0;
 var cummalative_time_per_packet_log = [];
 // var run_till = 157;
 // var run_till = 1598512;
-var run_till = 383166;
+var run_till = 2576129;
 
 function create_block_for_each_plane() {
   // read table by id and create block for each plane
@@ -278,7 +275,6 @@ function color_brighness() {
     // get the write count and erase count
     var write_count = ssd_storage[block]["write_count"];
     var erase_count = ssd_storage[block]["erase_count"];
-
     if (write_count > max_write) {
       max_write = write_count;
     }
@@ -286,19 +282,34 @@ function color_brighness() {
       max_erase = erase_count;
     }
 
-    var hot_write_ratio = write_count / max_write;
-    var hot_erase_ratio = erase_count / max_erase;
-    
-
-    // console.log("Fuck ajsdhflajshdfjlkasdhf alsjdflkj as",valid_page, invalid_page, write_count, erase_count);
-
-    var percentage = invalid_page / (valid_page + invalid_page);
-    var r_write = Math.floor(255*hot_write_ratio)
-    var g_erase = Math.floor(255*hot_erase_ratio)
-    var b_invalid_page = Math.floor(255 * percentage);
-    if (b_invalid_page < 0) b_invalid_page = 0;
-    if (b_invalid_page > 255) b_invalid_page = 255;
-    var color = "rgb("+r_write +","+ g_erase + ","+ b_invalid_page+")";
+    // var hot_write_ratio = write_count / max_write;
+    // var hot_erase_ratio = erase_count / max_erase;
+    // var percentage = invalid_page / (valid_page + invalid_page);
+    var percentage = 0;
+    var heat_map_value = document.getElementById("heat_map").value;
+    //     valid_invalid
+    // write_count
+    // erase_count
+    // read_count
+    if (heat_map_value == "valid_invalid") {
+      percentage = invalid_page / (valid_page + invalid_page);
+    }
+    if (heat_map_value == "write_count") {
+      percentage = write_count / max_write;
+    }
+    if (heat_map_value == "erase_count") {
+      percentage = erase_count / max_erase;
+    }
+    if (heat_map_value == "read_count") {
+      percentage = 0;
+    }
+    // var r_write = Math.floor(255 * hot_write_ratio);
+    // var g_erase = Math.floor(255 * hot_erase_ratio);
+    var color_code = Math.floor(255 * percentage);
+    if (color_code < 0) color_code = 0;
+    if (color_code > 255) color_code = 255;
+    var color = "rgb(" + color_code + ",0,0)";
+    // var color = "rgb(" + r_write + "," + b_invalid_page + "," + g_erase + ")";
     var block = document.getElementById(block);
     // remove background image
     block.style.backgroundImage = "none";
@@ -313,7 +324,6 @@ function color_brighness() {
     }
 
     block.style.backgroundColor = color;
-    // console.log("Color", color);
   }
 }
 
@@ -502,7 +512,7 @@ function update_mapping_table(page_start, update_ppn) {
 
 // Function to backup lsb page
 function write_page(page_start, update_ppn, is_gc = false) {
-  if (update_ppn["offset"] == ssd_structure.page-1) {
+  if (update_ppn["offset"] == ssd_structure.page - 1) {
     update_ppn["offset"] += 1;
     update_ppn["status"] = "used";
     update_ppn["valid_pages"] += 1;
@@ -669,14 +679,14 @@ async function upload_trace_file(event) {
         var i_2 = i % trace_length;
         if (lines[i_2] != "") {
           var data = lines[i_2].split(" ");
-          // var lba =
-          //   parseInt(data[0]) %
-          //   parseInt(
-          //     number_of_logical_block() *
-          //       ssd_structure.sector *
-          //       (1 - overprovisioningRatio / 100)
-          //   );
-          var lba = parseInt(data[0]);
+          var lba =
+            parseInt(data[0]) %
+            parseInt(
+              number_of_logical_block() *
+                ssd_structure.sector *
+                (1 - overprovisioningRatio / 100)
+            );
+          // var lba = parseInt(data[0]);
           // var io_size = parseInt(data[1]); // add * ssd_structure.sector_size if sector is given in replace of i/o size
           var io_size = parseInt(data[1]) * ssd_structure.sector_size; // remove ssd_structure.sector_size if i/o size is given in replace of sector
           var sector_count = Math.ceil(io_size / ssd_structure.sector_size);
