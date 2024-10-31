@@ -132,7 +132,7 @@
                                 <tr>
                                     <td>
                                         <div class="row">
-                                            <div class="col ml-5">
+                                            <div class="col-4 ml-3">
                                                 <div class="input-group mb-1">
 
                                                     <input type="file" id="upload_trace_file" class="form-control"
@@ -140,7 +140,7 @@
                                                         aria-describedby="basic-addon2">
                                                 </div>
                                             </div>
-                                            <div class="col mr-5 input-group">
+                                            <div class="col-4 ml-4 input-group">
 
                                                 <div class="input-group-append">
                                                     <span class="input-group-text" id="basic-addon2">Select allocation
@@ -167,6 +167,20 @@
                                                 </select>
 
                                             </div>
+
+                                            <div class="col-3 ml-2 input-group"">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text" id="basic-addon2">Heat map</span>
+                                                </div>
+                                                <select id="heat_map" class="form-select btn-light border">
+                                                    <option value="valid_invalid" selected>Valid/Invalid Page</option>
+                                                    <option value="write_count">Write Count</option>
+                                                    <option value="erase_count">Erase Count</option>
+                                                    <option value="erase_count">Read</option>
+                                                </select>
+
+                                            </div>
+
                                         </div>
                                     </td>
                                     <td rowspan="2">
