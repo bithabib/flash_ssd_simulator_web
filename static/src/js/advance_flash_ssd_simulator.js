@@ -19,6 +19,7 @@ const gc_threshold = 0.9995;
 var overprovisioningRatio = 0;
 var max_write = 255;
 var max_erase = 255;
+var max_d_time = 1;
 
 // # Time in us for flash operations us means microsecond
 const flash_operation_time = {
@@ -107,6 +108,7 @@ function create_block_for_each_plane() {
                 invalid_pages: 0,
                 write_count: 0,
                 erase_count: 0,
+                d_time: 0,
               };
               block_table_trtd.appendChild(block_table_trtdv);
             }
@@ -267,7 +269,7 @@ function get_total_ssd() {
 }
 
 // color brightness function to change color of block
-function color_brighness() {
+async function color_brighness() {
   for (var block in ssd_storage) {
     // get the block by get element by id
     var valid_page = ssd_storage[block]["valid_pages"];
@@ -275,6 +277,7 @@ function color_brighness() {
     // get the write count and erase count
     var write_count = ssd_storage[block]["write_count"];
     var erase_count = ssd_storage[block]["erase_count"];
+    var d_time = ssd_storage[block]["d_time"];
     if (write_count > max_write) {
       max_write = write_count;
     }
@@ -295,14 +298,18 @@ function color_brighness() {
       percentage = invalid_page / (valid_page + invalid_page);
     }
     if (heat_map_value == "write_count") {
-      percentage = write_count / max_write;
+      percentage = (write_count === 0) ? 0 || 1 : write_count / max_write;
     }
     if (heat_map_value == "erase_count") {
-      percentage = erase_count / max_erase;
+      percentage = (erase_count === 0) ? 0 : erase_count / max_erase;
     }
     if (heat_map_value == "read_count") {
       percentage = 0;
     }
+    if (heat_map_value == "death_time") {
+      percentage = d_time / max_d_time;
+    }
+    // stop for 10 second 
     // var r_write = Math.floor(255 * hot_write_ratio);
     // var g_erase = Math.floor(255 * hot_erase_ratio);
     var color_code = Math.floor(255 * percentage);
@@ -512,19 +519,17 @@ function update_mapping_table(page_start, update_ppn) {
 
 // Function to backup lsb page
 function write_page(page_start, update_ppn, is_gc = false) {
+  update_ppn["offset"] += 1;
+  update_ppn["valid_pages"] += 1;
+  update_ppn["write_count"] += 1;
+  max_d_time += 1;
+  update_ppn["d_time"] = max_d_time;
+  ssd_storage[update_ppn["block_id"]] = update_ppn;
   if (update_ppn["offset"] == ssd_structure.page - 1) {
-    update_ppn["offset"] += 1;
     update_ppn["status"] = "used";
-    update_ppn["valid_pages"] += 1;
-    update_ppn["write_count"] += 1;
-    ssd_storage[update_ppn["block_id"]] = update_ppn;
     update_block = null;
   } else {
-    update_ppn["offset"] += 1;
     update_ppn["status"] = "inused";
-    update_ppn["valid_pages"] += 1;
-    update_ppn["write_count"] += 1;
-    ssd_storage[update_ppn["block_id"]] = update_ppn;
     update_block = update_ppn;
   }
 
@@ -699,17 +704,12 @@ async function upload_trace_file(event) {
           if (run_gc) {
             var number_times_gc = 0;
             while (run_gc) {
-              console.log(number_times_gc);
               is_gc_complete = await garbageCollection();
               if (!is_gc_complete) {
                 break;
               }
               run_gc = will_run_gc(gc_free_space_percentage);
               number_times_gc += 1;
-              // if (number_times_gc > 10) {
-              //   console.log(number_times_gc);
-              //   break;
-              // }
             }
           }
           while (page_start < page_end) {
