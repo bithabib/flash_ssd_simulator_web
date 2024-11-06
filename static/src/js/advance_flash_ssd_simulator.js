@@ -647,7 +647,7 @@ async function garbageCollection() {
     ssd_storage[gc_block]["erase_count"] += 1;
     ssd_storage[gc_block]["status"] = "free";
     color_brighness();
-    await new Promise((resolve) => setTimeout(resolve, 10));
+    await new Promise((resolve) => setTimeout(resolve, 5));
     return true;
   } else {
     // loop in array of address mapping table don't use forEach
@@ -667,7 +667,7 @@ async function garbageCollection() {
     cummalative_time_per_packet += flash_operation_time.erase_block;
 
     color_brighness();
-    await new Promise((resolve) => setTimeout(resolve, 10));
+    await new Promise((resolve) => setTimeout(resolve, 5));
     return true;
   }
 }
