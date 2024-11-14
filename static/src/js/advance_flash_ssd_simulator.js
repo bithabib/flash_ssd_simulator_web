@@ -298,10 +298,10 @@ async function color_brighness() {
       percentage = invalid_page / (valid_page + invalid_page);
     }
     if (heat_map_value == "write_count") {
-      percentage = (write_count === 0) ? 0 || 1 : write_count / max_write;
+      percentage = write_count === 0 ? 0 || 1 : write_count / max_write;
     }
     if (heat_map_value == "erase_count") {
-      percentage = (erase_count === 0) ? 0 : erase_count / max_erase;
+      percentage = erase_count === 0 ? 0 : erase_count / max_erase;
     }
     if (heat_map_value == "read_count") {
       percentage = 0;
@@ -309,7 +309,7 @@ async function color_brighness() {
     if (heat_map_value == "death_time") {
       percentage = d_time / max_d_time;
     }
-    // stop for 10 second 
+    // stop for 10 second
     // var r_write = Math.floor(255 * hot_write_ratio);
     // var g_erase = Math.floor(255 * hot_erase_ratio);
     var color_code = Math.floor(255 * percentage);
@@ -395,6 +395,138 @@ function allocation_scheme_algorithm(block_tracer) {
             ssd_structure["chip"] *
             ssd_structure["channel"])
       ) % ssd_structure["plane"];
+    block_container =
+      Math.floor(
+        block_tracer /
+          (ssd_structure["plane"] *
+            ssd_structure["die"] *
+            ssd_structure["chip"] *
+            ssd_structure["channel"])
+      ) % ssd_structure["block_container"];
+    block =
+      Math.floor(
+        block_tracer /
+          (ssd_structure["plane"] *
+            ssd_structure["die"] *
+            ssd_structure["chip"] *
+            ssd_structure["channel"] *
+            ssd_structure["block_container"])
+      ) % ssd_structure["block"];
+  } else if (allocation_scheme == "s3") {
+    channel = block_tracer % ssd_structure["channel"];
+    plane =
+      Math.floor(block_tracer / ssd_structure["channel"]) %
+      ssd_structure["plane"];
+    chip =
+      Math.floor(
+        block_tracer / (ssd_structure["plane"] * ssd_structure["channel"])
+      ) % ssd_structure["chip"];
+    die =
+      Math.floor(
+        block_tracer /
+          (ssd_structure["plane"] *
+            ssd_structure["chip"] *
+            ssd_structure["channel"])
+      ) % ssd_structure["die"];
+    block_container =
+      Math.floor(
+        block_tracer /
+          (ssd_structure["plane"] *
+            ssd_structure["die"] *
+            ssd_structure["chip"] *
+            ssd_structure["channel"])
+      ) % ssd_structure["block_container"];
+    block =
+      Math.floor(
+        block_tracer /
+          (ssd_structure["plane"] *
+            ssd_structure["die"] *
+            ssd_structure["chip"] *
+            ssd_structure["channel"] *
+            ssd_structure["block_container"])
+      ) % ssd_structure["block"];
+  } else if (allocation_scheme == "s4") {
+    channel = block_tracer % ssd_structure["channel"];
+    die =
+      Math.floor(block_tracer / ssd_structure["channel"]) %
+      ssd_structure["die"];
+    chip =
+      Math.floor(
+        block_tracer / (ssd_structure["die"] * ssd_structure["channel"])
+      ) % ssd_structure["chip"];
+    plane =
+      Math.floor(
+        block_tracer /
+          (ssd_structure["die"] *
+            ssd_structure["chip"] *
+            ssd_structure["channel"])
+      ) % ssd_structure["plane"];
+    block_container =
+      Math.floor(
+        block_tracer /
+          (ssd_structure["plane"] *
+            ssd_structure["die"] *
+            ssd_structure["chip"] *
+            ssd_structure["channel"])
+      ) % ssd_structure["block_container"];
+    block =
+      Math.floor(
+        block_tracer /
+          (ssd_structure["plane"] *
+            ssd_structure["die"] *
+            ssd_structure["chip"] *
+            ssd_structure["channel"] *
+            ssd_structure["block_container"])
+      ) % ssd_structure["block"];
+  } else if (allocation_scheme == "s5") {
+    channel = block_tracer % ssd_structure["channel"];
+    plane =
+      Math.floor(block_tracer / ssd_structure["channel"]) %
+      ssd_structure["plane"];
+    die =
+      Math.floor(
+        block_tracer / (ssd_structure["plane"] * ssd_structure["channel"])
+      ) % ssd_structure["die"];
+    chip =
+      Math.floor(
+        block_tracer /
+          (ssd_structure["plane"] *
+            ssd_structure["die"] *
+            ssd_structure["channel"])
+      ) % ssd_structure["chip"];
+    block_container =
+      Math.floor(
+        block_tracer /
+          (ssd_structure["plane"] *
+            ssd_structure["die"] *
+            ssd_structure["chip"] *
+            ssd_structure["channel"])
+      ) % ssd_structure["block_container"];
+    block =
+      Math.floor(
+        block_tracer /
+          (ssd_structure["plane"] *
+            ssd_structure["die"] *
+            ssd_structure["chip"] *
+            ssd_structure["channel"] *
+            ssd_structure["block_container"])
+      ) % ssd_structure["block"];
+  } else if (allocation_scheme == "s6") {
+    channel = block_tracer % ssd_structure["channel"];
+    die =
+      Math.floor(block_tracer / ssd_structure["channel"]) %
+      ssd_structure["plane"];
+    plane =
+      Math.floor(
+        block_tracer / (ssd_structure["die"] * ssd_structure["channel"])
+      ) % ssd_structure["plane"];
+    chip =
+      Math.floor(
+        block_tracer /
+          (ssd_structure["plane"] *
+            ssd_structure["die"] *
+            ssd_structure["channel"])
+      ) % ssd_structure["chip"];
     block_container =
       Math.floor(
         block_tracer /
