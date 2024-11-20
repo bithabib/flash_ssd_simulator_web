@@ -5,20 +5,20 @@ const ssd_structure = {
   channel: 2,
   chip: 1,
   die: 2,
-  plane: 4,
+  plane: 3,
   block_container: 64,
   block: 8,
-  page: 512,
+  page: 128,
   sector: 8,
   sector_size: 512,
   page_size: 4096,
 };
 // const gc_free_space_percentage = 0.0005;
-const gc_free_space_percentage = 0.001;
-const gc_threshold = 0.9995;
+const gc_free_space_percentage = 0.0005;
+const gc_threshold = 0.995;
 var overprovisioningRatio = 0;
 var max_write = 255;
-var max_erase = 255;
+var max_erase = 1;
 var max_d_time = 1;
 
 // # Time in us for flash operations us means microsecond
@@ -50,7 +50,7 @@ var cummalative_time_per_packet = 0;
 var cummalative_time_per_packet_log = [];
 // var run_till = 157;
 // var run_till = 1598512;
-var run_till = 2576129;
+var run_till = 1576129;
 
 function create_block_for_each_plane() {
   // read table by id and create block for each plane
@@ -289,33 +289,39 @@ async function color_brighness() {
     // var hot_erase_ratio = erase_count / max_erase;
     // var percentage = invalid_page / (valid_page + invalid_page);
     var percentage = 0;
+    var percentagevi = 0;
     var heat_map_value = document.getElementById("heat_map").value;
     //     valid_invalid
     // write_count
     // erase_count
     // read_count
-    if (heat_map_value == "valid_invalid") {
-      percentage = invalid_page / (valid_page + invalid_page);
-    }
+    // if (heat_map_value == "valid_invalid" || ) {
+    percentagevi = invalid_page / (valid_page + invalid_page);
+    // }
     if (heat_map_value == "write_count") {
       percentage = write_count === 0 ? 0 || 1 : write_count / max_write;
     }
     if (heat_map_value == "erase_count") {
       percentage = erase_count === 0 ? 0 : erase_count / max_erase;
+      // if(erase_count >= 1) {
+      //   console.log(erase_count, max_erase);
+      // }
     }
     if (heat_map_value == "read_count") {
       percentage = 0;
     }
     if (heat_map_value == "death_time") {
-      percentage = d_time / max_d_time;
+      percentage = Math.pow(d_time / max_d_time, 0.15);
     }
     // stop for 10 second
     // var r_write = Math.floor(255 * hot_write_ratio);
     // var g_erase = Math.floor(255 * hot_erase_ratio);
     var color_code = Math.floor(255 * percentage);
+    var color_codevi = Math.floor(255 * percentagevi);
     if (color_code < 0) color_code = 0;
     if (color_code > 255) color_code = 255;
-    var color = "rgb(" + color_code + ",0,0)";
+    var color =
+      "rgb(" + color_code + "," + color_codevi + "," + color_code + ")";
     // var color = "rgb(" + r_write + "," + b_invalid_page + "," + g_erase + ")";
     var block = document.getElementById(block);
     // remove background image
