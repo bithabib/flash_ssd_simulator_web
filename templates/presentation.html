@@ -43,49 +43,74 @@
     {% include 'includes/header.html' %}
     <div style="margin-top: 3%; margin: 3%;">
         <div class="row">
-            <div class="col-md-6">
-                <h1 style="font-size: 100px;">
+            <div class="col-md-7">
+                <h1 style="font-size: 90px;">
                     <strong>EyanaSSD</strong>
                 </h1>
 
-                <h1 style="font-size: 70px;">
+                <h1 style="font-size: 60px;">
                     Explore the Inner Workings of
                     Solid-State Drives with Data Visualization
                 </h1>
 
                 <p class="h1 text-xs-center spacing"><span class="t-b"
                         style="font-family:Sans-serif; color:#E65100;">Intuitive Visualization</span><span
-                        style="font-family:arial; color:rgb(73, 69, 69);">: Metrics are visualized through a
-                        two-dimensional display that shows the continuous writing patterns in SSD </span>
+                        style="font-family:arial; color:rgb(73, 69, 69);">: The EyanaSSD Simulator provides an
+                        intuitive two-dimensional display that visualizes key SSD metrics, enabling users to monitor
+                        continuous writing patterns and understand the inner workings of SSDs. </span>
                 </p>
                 <p class="h1 text-xs-center spacing"><span class="t-b"
                         style="font-family:Sans-serif; color:#EF6C00;">Workload Analysis</span><span
-                        style="font-family:arial; color:rgb(73, 69, 69);">: evaluated on <b>Sequential, Uniform Random
-                            and Zipf</b> workloads from FEMU</span></p>
+                        style="font-family:arial; color:rgb(73, 69, 69);">: It supports comprehensive evaluation of
+                        various workloads, including Sequential, Uniform Random, and Zipf distributions, with data
+                        sourced from FEMU, offering detailed insights into SSD performance under different
+                        scenarios.</span></p>
                 <p class="h1 text-xs-center spacing"><span class="t-b"
                         style="font-family:Sans-serif; color:#FB8C00;">Educational</span><span
-                        style="font-family:arial; color:rgb(73, 69, 69);">: more then one thousand user liked it and
-                        comfirm that its save time</span></p>
+                        style="font-family:arial; color:rgb(73, 69, 69);">: With over a thousand users praising its
+                        effectiveness, EyanaSSD Simulator has proven to save time and enhance understanding of SSD
+                        behavior, making it a valuable educational tool.</span></p>
 
                 <p class="h1 text-xs-center spacing"><span class="t-b"
                         style="font-family:Sans-serif; color:#FFA726;">Simple and Easy Access</span><span
-                        style="font-family:arial; color:rgb(73, 69, 69);">: the only web-based simulator. Upload your
-                        workload watch the process</span></p>
+                        style="font-family:arial; color:rgb(73, 69, 69);">: The Eyana SSD Simulator is the only
+                        web-based SSD simulator that allows users to upload workloads, visualize real-time processes,
+                        and explore various SSD features with ease.</span></p>
 
                 <p class="h1 text-xs-center spacing"><span class="t-b"
                         style="font-family:Sans-serif; color:#FFCC80;">User-friendly</span><span
-                        style="font-family:arial; color:rgb(73, 69, 69);">: upload any workload as per the workload
-                        format and analyze </span></p>
+                        style="font-family:arial; color:rgb(73, 69, 69);">: Simply upload your workload in the supported
+                        format, and the simulator automatically analyzes the data, providing clear, actionable insights
+                        into SSD performance.
+
+                    </span></p>
             </div>
-            <div class="col-md-6">
-                <img src="static/src/images/ssd.png" class="img-fluid" alt="EyanaSSD">
+            <div class="col-md-5  row">
+                <!-- <img src="static/src/images/cell_simulator.gif" class="img-fluid" alt="EyanaSSD"> -->
+                <div class="col-12">
+                    <video autoplay loop muted style="width: 100%;">
+                        <source src="static/src/images/cell.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="col-12">
+                    <!-- <video autoplay loop muted style="width: 100%; height: auto;">
+                        <source src="static/src/images/sequential_gif.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video> -->
+                    <video autoplay loop muted style="width: 100%; height: auto;">
+                        <source src="static/src/images/sequential.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <!-- <img src="static/src/images/ssd.png" class="img-fluid" alt="EyanaSSD"> -->
             </div>
             <div class="col-md-12 row">
                 <div class="col-md-12">
-                    <h1 style="font-size: 100px; text-align: center; margin-top: 3%;">
+                    <h1 style="font-size: 90px; text-align: center; margin-top: 3%;">
                         <strong>How does EyanaSSD work?</strong>
                     </h1>
-                    <h1 style="font-size: 70px; text-align: center; margin-left: 5%; margin-right: 5%;">
+                    <h1 style="font-size: 60px; text-align: center; margin-left: 5%; margin-right: 5%;">
                         Metrics are visualized through a two-dimensional
                         display that shows the continuous writing patterns in SSD
                     </h1>
@@ -111,32 +136,40 @@
 
 
                 <div class="col-md-6 mt-2">
-                    <iframe width="1280" height="720" src="https://www.youtube.com/embed/WeNKzftR_7s"
-                        title="Uniform Random V2" frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                    <h1><strong>Workload Type:</strong> Uniform Random</h1>
+                    <video autoplay loop muted style="width: 100%;">
+                        <source src="static/src/images/unirandomS.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h1 style="text-align: center;"><strong>Workload Type:</strong> Uniform Random</h1>
                 </div>
                 <div class="col-md-6 mt-2">
-                    <iframe style="text-align: center;" width="1280" height="720"
-                        src="https://www.youtube.com/embed/fRs2sE3fqVo" title="Sequential Workload" frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <video autoplay loop muted style="width: 100%;">
+                        <source src="static/src/images/sequential.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
 
-                    <h1><strong>Workload Type:</strong> Sequential</h1>
+                    <h1 style="text-align: center;"><strong>Workload Type:</strong> Sequential</h1>
 
 
                 </div>
 
                 <div class="col-md-6 mt-2">
-                    <iframe width="1280" height="720" src="https://www.youtube.com/embed/dDTbJiSTgQk"
-                        title="Zipf Workload" frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <video autoplay loop muted style="width: 100%;">
+                        <source src="static/src/images/ZipfS.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
 
-                    <h1><strong>Workload Type:</strong> Zipf</h1>
+                    <h1 style="text-align: center;"><strong>Workload Type:</strong> Zipf</h1>
 
 
+                </div>
+                <div class="col-md-6 mt-2">
+                    <video autoplay loop muted style="width: 100%;">
+                        <source src="static/src/images/basic_ssd.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+
+                    <h1 style="text-align: center;"><strong>Basic SSD Simulator(Education)</strong></h1>
                 </div>
 
 
