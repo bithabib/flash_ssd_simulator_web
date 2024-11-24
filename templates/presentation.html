@@ -138,16 +138,26 @@
 
 
                 <div class="col-md-6 mt-2">
-                    <video id="uni" autoplay loop muted style="width: 100%;">
+                    <!-- <video id="uni" autoplay loop muted style="width: 100%;">
                         <source src="static/src/images/unirandomS.mp4" type="video/mp4">
                         Your browser does not support the video tag.
-                    </video>
+                    </video> -->
+
+
+                    <iframe width="100%" height="720"
+                        src="https://www.youtube.com/embed/c4CCnUvB6fU?autoplay=1&mute=1&loop=1"
+                        title="unirandomS Fast Forward" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                     <h1 style="text-align: center;"><strong>Workload Type:</strong> Uniform Random</h1>
-                    <div style="margin-top: 10px; text-align: center;">
+                    <!-- <div style="margin-top: 10px; text-align: center;">
                         <label for="uniSpeedSlider">Playback Speed:</label>
                         <input id="uniSpeedSlider" type="range" min="0.1" max="2" step="0.1" value="1"
                             style="width: 200px;" />
                         <span id="uniSpeedDisplay">1x</span>
+                        <div id="videoControls">
+                            <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span>
+                        </div>
                     </div>
                     <script>
                         const uniVideo = document.getElementById('uni');
@@ -160,16 +170,40 @@
                             uniVideo.playbackRate = speed;
                             uniSpeedDisplay.textContent = `${speed.toFixed(1)}x`;
                         });
-                    </script>
+
+                        const currentTimeDisplay = document.getElementById('currentTime');
+                        const totalTimeDisplay = document.getElementById('totalTime');
+
+                        // Format time in mm:ss
+                        function formatTime(seconds) {
+                            const minutes = Math.floor(seconds / 60);
+                            const secs = Math.floor(seconds % 60);
+                            return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+                        }
+
+                        // Update total video time on metadata load
+                        uniVideo.addEventListener('loadedmetadata', () => {
+                            totalTimeDisplay.textContent = formatTime(uniVideo.duration);
+                        });
+
+                        // Update current time during playback
+                        uniVideo.addEventListener('timeupdate', () => {
+                            currentTimeDisplay.textContent = formatTime(uniVideo.currentTime);
+                        });
+                    </script> -->
                 </div>
                 <div class="col-md-6 mt-2">
-                    <video id="seq" autoplay loop muted style="width: 100%;">
+                    <!-- <video id="seq" autoplay loop muted style="width: 100%;">
                         <source src="static/src/images/sequential.mp4" type="video/mp4">
                         Your browser does not support the video tag.
-                    </video>
-
+                    </video> -->
+                    <iframe width="100%" height="720"
+                        src="https://www.youtube.com/embed/yN9UOzE1oAE?autoplay=1&mute=1&loop=1"
+                        title="Sequential  Fast Forward" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                     <h1 style="text-align: center;"><strong>Workload Type:</strong> Sequential</h1>
-                    <div style="margin-top: 10px; text-align: center;">
+                    <!-- <div style="margin-top: 10px; text-align: center;">
                         <label for="seqSpeedSlider">Playback Speed:</label>
                         <input id="seqSpeedSlider" type="range" min="0.1" max="2" step="0.1" value="1"
                             style="width: 200px;" />
@@ -186,18 +220,23 @@
                             seqVideo.playbackRate = speed;
                             seqSpeedDisplay.textContent = `${speed.toFixed(1)}x`;
                         });
-                    </script>
+                    </script> -->
 
                 </div>
 
                 <div class="col-md-6 mt-2">
-                    <video id="zip" autoplay loop muted style="width: 100%;">
+                    <!-- <video id="zip" autoplay loop muted style="width: 100%;">
                         <source src="static/src/images/ZipfS.mp4" type="video/mp4">
                         Your browser does not support the video tag.
-                    </video>
+                    </video> -->
+                    <iframe width="100%" height="720"
+                        src="https://www.youtube.com/embed/f0_XfwO6X6w?autoplay=1&mute=1&loop=1"
+                        title="ZipfS Fast Forward" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
                     <h1 style="text-align: center;"><strong>Workload Type:</strong> Zipf</h1>
-                    <div style="margin-top: 10px; text-align: center;">
+                    <!-- <div style="margin-top: 10px; text-align: center;">
                         <label for="zipSpeedSlider">Playback Speed:</label>
                         <input id="zipSpeedSlider" type="range" min="0.1" max="2" step="0.1" value="1"
                             style="width: 200px;" />
@@ -214,12 +253,18 @@
                             zipVideo.playbackRate = speed;
                             zipSpeedDisplay.textContent = `${speed.toFixed(1)}x`;
                         });
-                    </script>
+                    </script> -->
 
 
                 </div>
                 <div class="col-md-6 mt-2">
-                    <video id="basic" autoplay loop muted style="width: 100%;">
+                    <iframe width="100%" height="720"
+                        src="https://www.youtube.com/embed/nn6c7FWKRbc?autoplay=1&mute=1&loop=1"
+                        title="Basic SSD Fast Forward" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    <h1 style="text-align: center;"><strong>Basic SSD Simulator(Education)</strong></h1>
+                    <!-- <video id="basic" autoplay loop muted style="width: 100%;">
                         <source src="static/src/images/basic_ssd.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -242,7 +287,7 @@
                             basicVideo.playbackRate = speed;
                             basicSpeedDisplay.textContent = `${speed.toFixed(1)}x`;
                         });
-                    </script>
+                    </script> -->
                 </div>
 
 
@@ -257,11 +302,21 @@
                     Metrics are visualized through a two-dimensional
                     display that shows the continuous writing patterns in SSD
                 </h1>
-                <video id="tutorial" autoplay loop muted style="width: 100%; height: 800px;">
+            </div>
+            <div class="col-md-12" style="display: flex; justify-content: center; align-items: center;">
+
+
+
+                <!-- <video id="tutorial" autoplay loop muted style="width: 100%; height: 800px;">
                     <source src="static/src/images/tutorial.mp4" type="video/mp4">
                     Your browser does not support the video tag.
-                </video>
-                <div style="margin-top: 10px; text-align: center;">
+                </video> -->
+                <iframe width="60%" height="720"
+                    src="https://www.youtube.com/embed/ib0WDeuhbFY?autoplay=1&mute=1&loop=1"
+                    title="SSD tutorial Fast Forward" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <!-- <div style="margin-top: 10px; text-align: center;">
                     <label for="tutorialSpeedSlider">Playback Speed:</label>
                     <input id="tutorialSpeedSlider" type="range" min="0.5" max="2" step="0.1" value="1"
                         style="width: 200px;" />
@@ -278,7 +333,7 @@
                         tutorialVideo.playbackRate = speed;
                         tutorialSpeedDisplay.textContent = `${speed.toFixed(1)}x`;
                     });
-                </script>
+                </script> -->
             </div>
         </div>
     </div>
