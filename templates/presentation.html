@@ -138,40 +138,111 @@
 
 
                 <div class="col-md-6 mt-2">
-                    <video autoplay loop muted style="width: 100%;">
+                    <video id="uni" autoplay loop muted style="width: 100%;">
                         <source src="static/src/images/unirandomS.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                     <h1 style="text-align: center;"><strong>Workload Type:</strong> Uniform Random</h1>
+                    <div style="margin-top: 10px; text-align: center;">
+                        <label for="uniSpeedSlider">Playback Speed:</label>
+                        <input id="uniSpeedSlider" type="range" min="0.1" max="2" step="0.1" value="1"
+                            style="width: 200px;" />
+                        <span id="uniSpeedDisplay">1x</span>
+                    </div>
+                    <script>
+                        const uniVideo = document.getElementById('uni');
+                        const uniSpeedSlider = document.getElementById('uniSpeedSlider');
+                        const uniSpeedDisplay = document.getElementById('uniSpeedDisplay');
+
+                        // Update playback speed and display current value
+                        uniSpeedSlider.addEventListener('input', (event) => {
+                            const speed = parseFloat(event.target.value);
+                            uniVideo.playbackRate = speed;
+                            uniSpeedDisplay.textContent = `${speed.toFixed(1)}x`;
+                        });
+                    </script>
                 </div>
                 <div class="col-md-6 mt-2">
-                    <video autoplay loop muted style="width: 100%;">
+                    <video id="seq" autoplay loop muted style="width: 100%;">
                         <source src="static/src/images/sequential.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
 
                     <h1 style="text-align: center;"><strong>Workload Type:</strong> Sequential</h1>
+                    <div style="margin-top: 10px; text-align: center;">
+                        <label for="seqSpeedSlider">Playback Speed:</label>
+                        <input id="seqSpeedSlider" type="range" min="0.1" max="2" step="0.1" value="1"
+                            style="width: 200px;" />
+                        <span id="seqSpeedDisplay">1x</span>
+                    </div>
+                    <script>
+                        const seqVideo = document.getElementById('seq');
+                        const seqSpeedSlider = document.getElementById('seqSpeedSlider');
+                        const seqSpeedDisplay = document.getElementById('seqSpeedDisplay');
 
+                        // Update playback speed and display current value
+                        seqSpeedSlider.addEventListener('input', (event) => {
+                            const speed = parseFloat(event.target.value);
+                            seqVideo.playbackRate = speed;
+                            seqSpeedDisplay.textContent = `${speed.toFixed(1)}x`;
+                        });
+                    </script>
 
                 </div>
 
                 <div class="col-md-6 mt-2">
-                    <video autoplay loop muted style="width: 100%;">
+                    <video id="zip" autoplay loop muted style="width: 100%;">
                         <source src="static/src/images/ZipfS.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
 
                     <h1 style="text-align: center;"><strong>Workload Type:</strong> Zipf</h1>
+                    <div style="margin-top: 10px; text-align: center;">
+                        <label for="zipSpeedSlider">Playback Speed:</label>
+                        <input id="zipSpeedSlider" type="range" min="0.1" max="2" step="0.1" value="1"
+                            style="width: 200px;" />
+                        <span id="zipSpeedDisplay">1x</span>
+                    </div>
+                    <script>
+                        const zipVideo = document.getElementById('zip');
+                        const zipSpeedSlider = document.getElementById('zipSpeedSlider');
+                        const zipSpeedDisplay = document.getElementById('zipSpeedDisplay');
+
+                        // Update playback speed and display current value
+                        zipSpeedSlider.addEventListener('input', (event) => {
+                            const speed = parseFloat(event.target.value);
+                            zipVideo.playbackRate = speed;
+                            zipSpeedDisplay.textContent = `${speed.toFixed(1)}x`;
+                        });
+                    </script>
 
 
                 </div>
                 <div class="col-md-6 mt-2">
-                    <video autoplay loop muted style="width: 100%;">
+                    <video id="basic" autoplay loop muted style="width: 100%;">
                         <source src="static/src/images/basic_ssd.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
 
                     <h1 style="text-align: center;"><strong>Basic SSD Simulator(Education)</strong></h1>
+                    <div style="margin-top: 10px; text-align: center;">
+                        <label for="basicSpeedSlider">Playback Speed:</label>
+                        <input id="basicSpeedSlider" type="range" min="0.1" max="2" step="0.1" value="1"
+                            style="width: 200px;" />
+                        <span id="basicSpeedDisplay">1x</span>
+                    </div>
+                    <script>
+                        const basicVideo = document.getElementById('basic');
+                        const basicSpeedSlider = document.getElementById('basicSpeedSlider');
+                        const basicSpeedDisplay = document.getElementById('basicSpeedDisplay');
+
+                        // Update playback speed and display current value
+                        basicSpeedSlider.addEventListener('input', (event) => {
+                            const speed = parseFloat(event.target.value);
+                            basicVideo.playbackRate = speed;
+                            basicSpeedDisplay.textContent = `${speed.toFixed(1)}x`;
+                        });
+                    </script>
                 </div>
 
 
@@ -186,10 +257,28 @@
                     Metrics are visualized through a two-dimensional
                     display that shows the continuous writing patterns in SSD
                 </h1>
-                <video autoplay loop muted style="width: 100%; height: 800px;">
+                <video id="tutorial" autoplay loop muted style="width: 100%; height: 800px;">
                     <source src="static/src/images/tutorial.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
+                <div style="margin-top: 10px; text-align: center;">
+                    <label for="tutorialSpeedSlider">Playback Speed:</label>
+                    <input id="tutorialSpeedSlider" type="range" min="0.5" max="2" step="0.1" value="1"
+                        style="width: 200px;" />
+                    <span id="tutorialSpeedDisplay">1x</span>
+                </div>
+                <script>
+                    const tutorialVideo = document.getElementById('tutorial');
+                    const tutorialSpeedSlider = document.getElementById('tutorialSpeedSlider');
+                    const tutorialSpeedDisplay = document.getElementById('tutorialSpeedDisplay');
+
+                    // Update playback speed and display current value
+                    tutorialSpeedSlider.addEventListener('input', (event) => {
+                        const speed = parseFloat(event.target.value);
+                        tutorialVideo.playbackRate = speed;
+                        tutorialSpeedDisplay.textContent = `${speed.toFixed(1)}x`;
+                    });
+                </script>
             </div>
         </div>
     </div>
