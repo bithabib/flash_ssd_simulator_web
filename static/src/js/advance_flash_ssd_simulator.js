@@ -321,7 +321,7 @@ async function color_brighness() {
     if (color_code < 0) color_code = 0;
     if (color_code > 255) color_code = 255;
     var color =
-      "rgb(" + color_code + "," + color_codevi + "," + color_code + ")";
+      "rgb(" + 0 + "," + color_codevi + "," + 0 + ")";
     // var color = "rgb(" + r_write + "," + b_invalid_page + "," + g_erase + ")";
     var block = document.getElementById(block);
     // remove background image
