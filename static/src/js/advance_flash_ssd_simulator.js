@@ -5,7 +5,7 @@ const ssd_structure = {
   channel: 2,
   chip: 1,
   die: 2,
-  plane: 3,
+  plane: 4,
   block_container: 64,
   block: 8,
   page: 128,
@@ -14,7 +14,7 @@ const ssd_structure = {
   page_size: 4096,
 };
 // const gc_free_space_percentage = 0.0005;
-const gc_free_space_percentage = 0.0005;
+const gc_free_space_percentage = 0.005;
 const gc_threshold = 0.995;
 var overprovisioningRatio = 0;
 var max_write = 255;
@@ -320,8 +320,7 @@ async function color_brighness() {
     var color_codevi = Math.floor(255 * percentagevi);
     if (color_code < 0) color_code = 0;
     if (color_code > 255) color_code = 255;
-    var color =
-      "rgb(" + 0 + "," + color_codevi + "," + 0 + ")";
+    var color = "rgb(" + 0 + "," + color_codevi + "," + 0 + ")";
     // var color = "rgb(" + r_write + "," + b_invalid_page + "," + g_erase + ")";
     var block = document.getElementById(block);
     // remove background image
@@ -700,8 +699,9 @@ function isInvalid(page_start) {
 function will_run_gc(gc_free_space = 0) {
   // read overprovisioning ratio
   var gc_free_plus_threshold = gc_threshold - gc_free_space;
-  var total_ssd_size_after_overprovision =
-    get_total_ssd() * gc_free_plus_threshold;
+  var total_ssd_size_after_overprovision = Math.floor(
+    get_total_ssd() * gc_free_plus_threshold
+  );
   // count valid and invalid pages together
   var total_written_pages = 0;
   for (var block in ssd_storage) {
@@ -710,6 +710,9 @@ function will_run_gc(gc_free_space = 0) {
     total_written_pages += ssd_storage[block]["invalid_pages"];
     // }
   }
+  // console.log(total_ssd_size_after_overprovision, total_written_pages * ssd_structure.sector_size * ssd_structure.sector);
+
+  // total_written_pages = total_written_pages + 1024;
   if (
     total_written_pages * ssd_structure.sector_size * ssd_structure.sector >=
     total_ssd_size_after_overprovision
@@ -867,6 +870,21 @@ async function upload_trace_file(event) {
             time: cummalative_time_per_packet,
           });
           await new Promise((resolve) => setTimeout(resolve, 2));
+        }
+        if (i > 100000) {
+          if ((i + 1) % 10000 == 0) {
+            // save ssd_storage as a json file after every 10000 packet and save with different name i/packet number
+            var ssd_storage_json = JSON.stringify(ssd_storage);
+            var blob = new Blob([ssd_storage_json], {
+              type: "application/json",
+            });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            a.href = url;
+            a.download = file_name + "_" + i+1 + ".json";
+            a.click();
+            console.log("Saved");
+          }
         }
       }
       waf_log.push({
