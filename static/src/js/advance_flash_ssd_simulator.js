@@ -5,7 +5,7 @@ const ssd_structure = {
   channel: 2,
   chip: 1,
   die: 2,
-  plane: 4,
+  plane: 3,
   block_container: 64,
   block: 8,
   page: 128,
@@ -14,8 +14,8 @@ const ssd_structure = {
   page_size: 4096,
 };
 // const gc_free_space_percentage = 0.0005;
-const gc_free_space_percentage = 0.005;
-const gc_threshold = 0.995;
+const gc_free_space_percentage = 0.0005;
+const gc_threshold = 0.999;
 var overprovisioningRatio = 0;
 var max_write = 255;
 var max_erase = 1;
@@ -697,22 +697,26 @@ function isInvalid(page_start) {
 // Function is_ssd_full to check if ssd is full
 // Function is_ssd_full to check if ssd is full
 function will_run_gc(gc_free_space = 0) {
-  // read overprovisioning ratio
   var gc_free_plus_threshold = gc_threshold - gc_free_space;
   var total_ssd_size_after_overprovision = Math.floor(
     get_total_ssd() * gc_free_plus_threshold
   );
   // count valid and invalid pages together
   var total_written_pages = 0;
+  var free_block_count = 0;
   for (var block in ssd_storage) {
-    // if (!ssd_storage[block]["ov"]) {
     total_written_pages += ssd_storage[block]["valid_pages"];
     total_written_pages += ssd_storage[block]["invalid_pages"];
-    // }
-  }
-  // console.log(total_ssd_size_after_overprovision, total_written_pages * ssd_structure.sector_size * ssd_structure.sector);
+    // how many free block are there
+    if (ssd_storage[block]["status"] == "free") {
+      free_block_count += 1;
+    }
 
-  // total_written_pages = total_written_pages + 1024;
+    // console.log(total_written_pages);
+  }
+  if (free_block_count <= 3) {
+    return true;
+  }
   if (
     total_written_pages * ssd_structure.sector_size * ssd_structure.sector >=
     total_ssd_size_after_overprovision
@@ -721,6 +725,14 @@ function will_run_gc(gc_free_space = 0) {
   } else {
     return false;
   }
+  // **********************************************
+
+  // const gc_free_space_percentage = 0.005;
+  // const gc_threshold = 0.999;
+  // var gc_free_plus_threshold = gc_threshold - gc_free_space;
+  // var run_gc = total_lba*gc_free_plus_threshold;
+  // console.log(total_lba, run_gc, total_lba-run_gc);
+  // return false;
 }
 
 // Greedy Garbage Collection
@@ -881,7 +893,7 @@ async function upload_trace_file(event) {
             var url = URL.createObjectURL(blob);
             var a = document.createElement("a");
             a.href = url;
-            a.download = file_name + "_" + i+1 + ".json";
+            a.download = file_name + "_" + i + 1 + ".json";
             a.click();
             console.log("Saved");
           }
