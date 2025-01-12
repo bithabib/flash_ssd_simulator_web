@@ -899,10 +899,10 @@ async function upload_trace_file(event) {
           }
         }
       }
-      waf_log.push({
-        iw: internal_write,
-        hw: host_write,
-      });
+      // waf_log.push({
+      //   iw: internal_write,
+      //   hw: host_write,
+      // });
       cummalative_time_per_packet_log.push({
         time: cummalative_time_per_packet,
       });
