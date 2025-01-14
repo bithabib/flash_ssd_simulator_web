@@ -8,7 +8,7 @@ const ssd_structure = {
   plane: 3,
   block_container: 64,
   block: 8,
-  page: 128,
+  page: 64,
   sector: 8,
   sector_size: 512,
   page_size: 4096,
