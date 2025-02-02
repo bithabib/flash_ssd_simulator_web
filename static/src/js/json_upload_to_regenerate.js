@@ -2,16 +2,16 @@ const ssd_structure = {
   channel: 2,
   chip: 1,
   die: 2,
-  plane: 4,
-  block_container: 60,
-  block: 5,
+  plane: 3,
+  block_container: 64,
+  block: 8,
   page: 256,
   sector: 8,
   sector_size: 512,
-  page_size: 8192,
+  page_size: 4096,
 };
-const gc_free_space_percentage = 0.02;
-const gc_threshold = 0.99;
+const gc_free_space_percentage = 0.0005;
+const gc_threshold = 0.999;
 var overprovisioningRatio = 0;
 
 // # Time in us for flash operations us means microsecond
@@ -262,6 +262,7 @@ async function upload_trace_file(event) {
         return;
       }
       ssd_storage = JSON.parse(e.target.result);
+      console.log(ssd_storage);
       color_brighness();
       updateWAFGraph();
     } catch (e) {
