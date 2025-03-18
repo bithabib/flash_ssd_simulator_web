@@ -46,9 +46,9 @@ EyanaSSD is an innovative educational and research tool designed to provide an i
 
 EyanaSSD features real-time workload visualization through embedded videos:
 
-- **Uniform Random Workload:**  
-- **Sequential Workload:**  
-- **Zipf Workload:**  
+- **Uniform Random Workload:** [Uniform Random](https://www.youtube.com/embed/c4CCnUvB6fU?autoplay=1&mute=1&cc_load_policy=1)
+- **Sequential Workload:**  [Uniform Random](https://www.youtube.com/embed/yN9UOzE1oAE?autoplay=1&mute=1&cc_load_policy=1)
+- **Zipf Workload:**  [Uniform Random](https://www.youtube.com/embed/f0_XfwO6X6w?autoplay=1&mute=1&cc_load_policy=1)
 - **Basic SSD Simulator (Educational):**  
 
 ## How to Upload Workloads?
@@ -80,8 +80,8 @@ EyanaSSD allows users to upload workloads and analyze their SSD performance effe
 
 ## Technology Stack
 
-- **Front-end:** HTML, CSS, Bootstrap
-- **Back-end:** Python/Django (Assumed)
+- **Front-end:** HTML, CSS, Bootstrap, JavaScript
+- **Back-end:** Python/Flask
 - **Video Integration:** YouTube Embeds
 - **Data Source:** FEMU SSD Traces
 
