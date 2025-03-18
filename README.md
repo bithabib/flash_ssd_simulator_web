@@ -49,7 +49,7 @@ EyanaSSD features real-time workload visualization through embedded videos:
 - **Uniform Random Workload:** [Uniform Random](https://www.youtube.com/embed/c4CCnUvB6fU?autoplay=1&mute=1&cc_load_policy=1)
 - **Sequential Workload:**  [Sequential](https://www.youtube.com/embed/yN9UOzE1oAE?autoplay=1&mute=1&cc_load_policy=1)
 - **Zipf Workload:**  [Zipf](https://www.youtube.com/embed/f0_XfwO6X6w?autoplay=1&mute=1&cc_load_policy=1)
-- **Basic SSD Simulator (Educational):**  
+- **Basic SSD Simulator (Educational):** [Educational](https://www.youtube.com/embed/nn6c7FWKRbc?autoplay=1&mute=1&cc_load_policy=1)
 
 ## How to Upload Workloads?
 
