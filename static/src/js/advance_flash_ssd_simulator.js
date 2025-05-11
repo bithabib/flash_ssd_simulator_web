@@ -48,10 +48,11 @@ var internal_write = 0;
 var waf_log = [];
 var cummalative_time_per_packet = 0;
 var cummalative_time_per_packet_log = [];
+var cummalative_read_latency = 0;
 // var run_till = 157;
 // var run_till = 1598512;
-var run_till = 2000000;
-
+// var run_till = 2000000; /this one i editted at 05/12/2025 01:47AM
+var run_till = 15400;
 function create_block_for_each_plane() {
   // read table by id and create block for each plane
   var ssd_container = document.getElementById("ssd_container");
@@ -833,45 +834,52 @@ async function upload_trace_file(event) {
     reader.onload = async function (e) {
       const lines = e.target.result.split("\n");
       var trace_length = lines.length;
+      var number_times_gc = 0;
       for (var i = 0; i < run_till; i++) {
         var i_2 = i % trace_length;
         if (lines[i_2] != "") {
           var data = lines[i_2].split(" ");
-          var lba =
-            parseInt(data[0]) %
-            parseInt(
-              number_of_logical_block() *
-                ssd_structure.sector *
-                (1 - overprovisioningRatio / 100)
+          if (data[0] == "R") {
+            console.log("Read");
+            console.log(number_times_gc);
+            cummalative_read_latency += 2 * number_times_gc + 25;
+          } else {
+            var lba =
+              parseInt(data[1]) %
+              parseInt(
+                number_of_logical_block() *
+                  ssd_structure.sector *
+                  (1 - overprovisioningRatio / 100)
+              );
+            // var lba = parseInt(data[0]);
+            // var io_size = parseInt(data[1]); // add * ssd_structure.sector_size if sector is given in replace of i/o size
+            var io_size = parseInt(data[2]) * ssd_structure.sector_size; // remove ssd_structure.sector_size if i/o size is given in replace of sector
+            var sector_count = Math.ceil(io_size / ssd_structure.sector_size);
+            var page_start = Math.floor(lba / ssd_structure.sector);
+            var page_end = Math.floor(
+              (lba + sector_count + (ssd_structure.sector - 1)) /
+                ssd_structure.sector
             );
-          // var lba = parseInt(data[0]);
-          // var io_size = parseInt(data[1]); // add * ssd_structure.sector_size if sector is given in replace of i/o size
-          var io_size = parseInt(data[1]) * ssd_structure.sector_size; // remove ssd_structure.sector_size if i/o size is given in replace of sector
-          var sector_count = Math.ceil(io_size / ssd_structure.sector_size);
-          var page_start = Math.floor(lba / ssd_structure.sector);
-          var page_end = Math.floor(
-            (lba + sector_count + (ssd_structure.sector - 1)) /
-              ssd_structure.sector
-          );
-          var run_gc = will_run_gc();
-          if (run_gc) {
-            var number_times_gc = 0;
-            while (run_gc) {
-              is_gc_complete = await garbageCollection();
-              if (!is_gc_complete) {
-                break;
+            var run_gc = will_run_gc();
+            if (run_gc) {
+              number_times_gc = 0;
+              while (run_gc) {
+                is_gc_complete = await garbageCollection();
+                if (!is_gc_complete) {
+                  break;
+                }
+                run_gc = will_run_gc(gc_free_space_percentage);
+                number_times_gc += 1;
               }
-              run_gc = will_run_gc(gc_free_space_percentage);
-              number_times_gc += 1;
             }
+            while (page_start < page_end) {
+              isInvalid(page_start);
+              var update_ppn = await get_update_ppn();
+              write_page(page_start, update_ppn);
+              page_start += 1;
+            }
+            color_brighness();
           }
-          while (page_start < page_end) {
-            isInvalid(page_start);
-            var update_ppn = await get_update_ppn();
-            write_page(page_start, update_ppn);
-            page_start += 1;
-          }
-          color_brighness();
         }
         progress_setup(run_till, i);
         if (i_2 % ssd_structure.page == 0) {
@@ -880,6 +888,7 @@ async function upload_trace_file(event) {
           });
           cummalative_time_per_packet_log.push({
             time: cummalative_time_per_packet,
+            read_latency: cummalative_read_latency,
           });
           await new Promise((resolve) => setTimeout(resolve, 2));
         }
