@@ -1,34 +1,69 @@
 // ------------------------------------------Write Amplification Factor------------------------------------------------------//
-function updateWAFGraph() {
-  var chart = new CanvasJS.Chart("chartContainer", {
-    animationEnabled: true,
-    theme: "light2",
-    title: {
-      text: "Write Amplification Factor Over Time",
-    },
-    data: [
-      {
-        type: "line",
-        indexLabelFontSize: 16,
-        dataPoints: [],
-      },
-    ],
-  });
+// The WAF chart is created ONCE and then updated in place, so it renders cleanly
+// (no flicker from rebuilding a fresh chart on every write).
+var wafChart = null;
 
-  // get data from the server
+function getWafChart() {
+  if (!wafChart) {
+    wafChart = new CanvasJS.Chart("chartContainer", {
+      animationEnabled: false,
+      theme: "light2",
+      title: { text: "Write Amplification Factor Over Time", fontSize: 20 },
+      axisX: {
+        title: "Write / garbage-collection operations",
+        titleFontSize: 13,
+        gridThickness: 0,
+        lineColor: "#ccc",
+        tickColor: "#ccc",
+      },
+      axisY: {
+        title: "WAF  (physical ÷ host writes)",
+        titleFontSize: 13,
+        includeZero: false,
+        minimum: 1,
+        gridColor: "#eee",
+        lineColor: "#ccc",
+      },
+      data: [
+        {
+          type: "line",
+          color: "#2ca02c",
+          lineThickness: 2,
+          markerType: "circle",
+          markerSize: 6,
+          markerColor: "#2ca02c",
+          toolTipContent: "Op {x}: WAF = {y}",
+          dataPoints: [],
+        },
+      ],
+    });
+  }
+  return wafChart;
+}
+
+function updateWAFGraph() {
+  var chart = getWafChart();
   fetch("/get_data")
     .then((response) => response.json())
     .then((data) => {
-      document.getElementById("waf_value").innerHTML =
-        data[data.length - 1].y.toFixed(2);
-      chart.options.data[0].dataPoints = data;
+      if (!data || !data.length) {
+        chart.render();
+        return;
+      }
+      // index each point on the x-axis and round the WAF for a clean display
+      var points = data.map(function (d, i) {
+        return { x: i + 1, y: Math.round((d.y + Number.EPSILON) * 1000) / 1000 };
+      });
+      var last = points[points.length - 1].y;
+      if (last != null) {
+        document.getElementById("waf_value").innerHTML = last.toFixed(2);
+      }
+      chart.options.data[0].dataPoints = points;
       chart.render();
     })
     .catch((error) => {
       console.error("Error:", error);
     });
-
-  chart.render();
 }
 
 var totalUploadedWritesForWaf = 0;
@@ -43,7 +78,10 @@ function updateWaf() {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      value: totalActualWritesForWaf / totalUploadedWritesForWaf,
+      value:
+        totalUploadedWritesForWaf > 0
+          ? totalActualWritesForWaf / totalUploadedWritesForWaf
+          : 1,
     }),
   })
     .then((response) => response.json())
@@ -65,9 +103,6 @@ function stopProcessingGif(message) {
   processingStatus.innerHTML = message;
 }
 function startProcessingGif(message) {
-  console.log("start processing gif");
-  console.log("start processing gif");
-  console.log("start processing gif");
   var div = document.getElementById("processing_status_container");
   div.style.backgroundImage = 'url("static/src/logo/1amw.gif")';
   var processingStatus = document.getElementById("processing_status");
@@ -701,7 +736,7 @@ async function garbageUpdateMappingTable(
   page_info = logical_address_with_page_info.substring(10);
   page_number = page_info[logicalAddressTracer];
 
-  for (i = 0; i < rows.length; i++) {
+  for (let i = 0; i < rows.length; i++) {
     // if logical address is found in the mapping table
     if (rows[i].cells[1].innerHTML == logical_address + page_number) {
       rows[i].style.backgroundColor = "yellow";
@@ -726,13 +761,18 @@ function getRandomBlockParallel(blocks, prefix) {
 var file_tracer = 0;
 async function FileUpload(fileSize, fileName, fileIndex) {
   // Bytes to kb 2 decimal places
-  totalActualWritesForWaf += fileSize;
-  updateWaf();
   var fileSizeInKB = (fileSize / 1024).toFixed(2);
-  if (fileSizeInKB >= globalFileSize) {
+  // Ignore invalid/empty writes so they cannot corrupt the WAF series with NaN.
+  if (!Number.isFinite(fileSize) || fileSize <= 0) {
+    return;
+  }
+  if (parseFloat(fileSizeInKB) >= globalFileSize) {
     alert("File size is too large, please select a file less than 512kb");
     return;
   } else {
+    // Count toward "actual" physical writes only once the write is accepted.
+    totalActualWritesForWaf += fileSize;
+    updateWaf();
     garbage_file_cheker = fileName.includes("garbage");
     if (!garbage_file_cheker) {
       fileMapping.addMapping(fileName, mapping_table_row, 0);
@@ -958,7 +998,7 @@ async function FileUpload(fileSize, fileName, fileIndex) {
 
       // Get the block page tracer from the correct page
       var blockPageTracer = 0;
-      for (i = 0; i < block.written_page.length; i++) {
+      for (let i = 0; i < block.written_page.length; i++) {
         if (block.written_page[i].data == 0) {
           blockPageTracer = i + 1;
           break;
@@ -1104,6 +1144,10 @@ async function handleFileInputChangeChache() {
   var write_file_kb = document.getElementById("write_file_kb").value;
   // parse in float
   write_file_kb = parseFloat(write_file_kb);
+  if (!Number.isFinite(write_file_kb) || write_file_kb <= 0) {
+    stopProcessingGif("Enter a valid file size in KB");
+    return;
+  }
   var write_file_name =
     "file_" + uploaded_write_counter + "_" + write_file_kb + "kb";
   uploaded_write_counter++;
@@ -1369,8 +1413,6 @@ async function garbageCollectionAndTrim(isTrim) {
       removedBlock.written_page[2].state == "invalid",
       removedBlock.written_page[3].state == "invalid",
     ];
-    console.log(isPageInvalid);
-    console.log(isPageInvalid);
     // check if at least one page is invalid
     if (
       isPageInvalid[0] ||
@@ -1405,11 +1447,8 @@ async function garbageCollectionAndTrim(isTrim) {
             total_valid_page_size += parseFloat(
               removedBlock.written_page[j].data
             );
-            console.log("total_valid_page_size");
-            console.log(total_valid_page_size);
             // covert j to string
             valid_page_tracer += j + 1;
-            console.log(valid_page_tracer);
             removedBlock.written_page[j].data = 0;
           }
         }

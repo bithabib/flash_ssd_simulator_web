@@ -49,6 +49,79 @@ var waf_log = [];
 var cummalative_time_per_packet = 0;
 var cummalative_time_per_packet_log = [];
 var cummalative_read_latency = 0;
+
+// -------------------- Live metric charts (WAF / writes / erase) --------------------
+// The advance simulator already computes WAF (internal_write / host_write) and
+// tracks per-block write/erase counts; these three CanvasJS charts render that
+// data into the previously-empty chart boxes. Charts are created once and
+// updated in place so they display cleanly.
+var advWafChart = null;
+var advWriteChart = null;
+var advEraseChart = null;
+
+function initAdvCharts() {
+  if (advWafChart || typeof CanvasJS === "undefined") return;
+  if (!document.getElementById("wafChartContainer")) return;
+  advWafChart = new CanvasJS.Chart("wafChartContainer", {
+    animationEnabled: false, theme: "light2",
+    title: { text: "Write Amplification (WAF) over time", fontSize: 16 },
+    axisX: { title: "operations", titleFontSize: 12, gridThickness: 0, lineColor: "#ccc" },
+    axisY: { title: "WAF", titleFontSize: 12, includeZero: false, minimum: 1, gridColor: "#eee" },
+    data: [{ type: "line", color: "#2ca02c", lineThickness: 2, toolTipContent: "op {x}: WAF {y}", dataPoints: [] }],
+  });
+  advWriteChart = new CanvasJS.Chart("writeCountChartContainer", {
+    animationEnabled: false, theme: "light2",
+    title: { text: "Host vs. physical writes", fontSize: 16 },
+    axisX: { title: "operations", titleFontSize: 12, gridThickness: 0, lineColor: "#ccc" },
+    axisY: { title: "pages written", titleFontSize: 12, includeZero: true, gridColor: "#eee" },
+    legend: { fontSize: 12, horizontalAlign: "center" },
+    data: [
+      { type: "line", name: "host writes", showInLegend: true, color: "#1f77b4", lineThickness: 2, dataPoints: [] },
+      { type: "line", name: "physical writes (incl. GC)", showInLegend: true, color: "#d62728", lineThickness: 2, dataPoints: [] },
+    ],
+  });
+  advEraseChart = new CanvasJS.Chart("eraseCountChartContainer", {
+    animationEnabled: false, theme: "light2",
+    title: { text: "Erase-count distribution across blocks", fontSize: 16 },
+    axisX: { title: "erases per block", titleFontSize: 12, interval: 1 },
+    axisY: { title: "number of blocks", titleFontSize: 12, includeZero: true, gridColor: "#eee" },
+    data: [{ type: "column", color: "#ff7f0e", toolTipContent: "{label} erases: {y} blocks", dataPoints: [] }],
+  });
+  advWafChart.render();
+  advWriteChart.render();
+  advEraseChart.render();
+}
+
+function updateAdvCharts() {
+  initAdvCharts();
+  if (!advWafChart) return;
+  // WAF over time
+  advWafChart.options.data[0].dataPoints = waf_log.map(function (d, i) {
+    return { x: i + 1, y: Math.round((d.waf + Number.EPSILON) * 1000) / 1000 };
+  });
+  advWafChart.render();
+  // host vs physical writes over time
+  var hw = [], iw = [];
+  waf_log.forEach(function (d, i) {
+    if (d.hw != null) hw.push({ x: i + 1, y: d.hw });
+    if (d.iw != null) iw.push({ x: i + 1, y: d.iw });
+  });
+  advWriteChart.options.data[0].dataPoints = hw;
+  advWriteChart.options.data[1].dataPoints = iw;
+  advWriteChart.render();
+  // erase-count distribution across all blocks
+  var counts = {}, maxE = 0;
+  for (var b in ssd_storage) {
+    var e = ssd_storage[b].erase_count || 0;
+    counts[e] = (counts[e] || 0) + 1;
+    if (e > maxE) maxE = e;
+  }
+  var bars = [];
+  for (var k = 0; k <= maxE; k++) bars.push({ label: String(k), y: counts[k] || 0 });
+  advEraseChart.options.data[0].dataPoints = bars;
+  advEraseChart.render();
+}
+
 // var run_till = 157;
 // var run_till = 1598512;
 // var run_till = 2000000; /this one i editted at 05/12/2025 01:47AM
@@ -894,8 +967,11 @@ async function upload_trace_file(event) {
         progress_setup(run_till, i);
         if (i_2 % ssd_structure.page == 0) {
           waf_log.push({
-            waf: internal_write / host_write,
+            waf: host_write ? internal_write / host_write : 1,
+            hw: host_write,
+            iw: internal_write,
           });
+          if (waf_log.length % 15 === 0) updateAdvCharts();
           cummalative_time_per_packet_log.push({
             time: cummalative_time_per_packet,
             read_latency: cummalative_read_latency,
@@ -926,6 +1002,7 @@ async function upload_trace_file(event) {
       });
       progress_setup(run_till, run_till);
       color_brighness(); // full repaint of the final device state
+      updateAdvCharts(); // final render of the WAF / writes / erase charts
       // save ssd_storage as a json file
       var ssd_storage_json = JSON.stringify(ssd_storage);
       var blob = new Blob([ssd_storage_json], { type: "application/json" });
@@ -986,4 +1063,5 @@ window.onload = function () {
   stopProcessingGif("Please upload trace");
   handleOverprovisioning();
   initSpeedControl(); // wire the playback-speed slider (if present)
+  initAdvCharts(); // draw the (empty) WAF / writes / erase charts with axes
 };
