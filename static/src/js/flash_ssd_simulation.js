@@ -2,6 +2,11 @@
 // The WAF chart is created ONCE and then updated in place, so it renders cleanly
 // (no flicker from rebuilding a fresh chart on every write).
 var wafChart = null;
+// Per-session WAF trend (client-side): each accepted write appends the current
+// write-amplification, so the chart shows THIS session's curve rather than a
+// global running average shared across all visitors.
+var wafSeries = [];
+var wafOpCounter = 0;
 
 function getWafChart() {
   if (!wafChart) {
@@ -43,27 +48,12 @@ function getWafChart() {
 
 function updateWAFGraph() {
   var chart = getWafChart();
-  fetch("/get_data")
-    .then((response) => response.json())
-    .then((data) => {
-      if (!data || !data.length) {
-        chart.render();
-        return;
-      }
-      // index each point on the x-axis and round the WAF for a clean display
-      var points = data.map(function (d, i) {
-        return { x: i + 1, y: Math.round((d.y + Number.EPSILON) * 1000) / 1000 };
-      });
-      var last = points[points.length - 1].y;
-      if (last != null) {
-        document.getElementById("waf_value").innerHTML = last.toFixed(2);
-      }
-      chart.options.data[0].dataPoints = points;
-      chart.render();
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  if (wafSeries.length) {
+    document.getElementById("waf_value").innerHTML =
+      wafSeries[wafSeries.length - 1].y.toFixed(2);
+  }
+  chart.options.data[0].dataPoints = wafSeries;
+  chart.render();
 }
 
 var totalUploadedWritesForWaf = 0;
@@ -71,26 +61,25 @@ var totalActualWritesForWaf = 0;
 // Initialize the chart
 
 function updateWaf() {
-  // call api to update the graph
-  fetch("/insert_data", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      value:
-        totalUploadedWritesForWaf > 0
-          ? totalActualWritesForWaf / totalUploadedWritesForWaf
-          : 1,
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      updateWAFGraph();
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  var waf =
+    totalUploadedWritesForWaf > 0
+      ? totalActualWritesForWaf / totalUploadedWritesForWaf
+      : 1;
+  wafOpCounter++;
+  wafSeries.push({
+    x: wafOpCounter,
+    y: Math.round((waf + Number.EPSILON) * 1000) / 1000,
+  });
+  updateWAFGraph();
+}
+
+// Reset the per-session WAF trend (used when the device geometry is rebuilt).
+function resetWaf() {
+  wafSeries = [];
+  wafOpCounter = 0;
+  totalActualWritesForWaf = 0;
+  totalUploadedWritesForWaf = 0;
+  updateWAFGraph();
 }
 
 var uploaded_write_counter = 0;
@@ -759,6 +748,19 @@ function getRandomBlockParallel(blocks, prefix) {
 }
 // File tracer from logical address
 var file_tracer = 0;
+// Count erased (writable) pages across all blocks. A page is free when its
+// data is 0 — the same test the allocator uses. Invalidated (deleted) pages are
+// NOT free until Garbage Collection erases them, which mirrors real flash.
+function countFreePages() {
+  var free = 0;
+  blockList.block_list.forEach(function (b) {
+    b.written_page.forEach(function (p) {
+      if (p.data == 0) free++;
+    });
+  });
+  return free;
+}
+
 async function FileUpload(fileSize, fileName, fileIndex) {
   // Bytes to kb 2 decimal places
   var fileSizeInKB = (fileSize / 1024).toFixed(2);
@@ -770,10 +772,25 @@ async function FileUpload(fileSize, fileName, fileIndex) {
     alert("File size is too large, please select a file less than 512kb");
     return;
   } else {
+    var isGcWrite = fileName.includes("garbage");
+    // SSD-full guard: a host write needs enough erased (free) pages to land on,
+    // otherwise the allocator would spin forever or write past a full block.
+    // GC relocations are exempt — they are what free the space back up.
+    if (!isGcWrite) {
+      var pagesNeeded = Math.ceil(parseFloat(fileSizeInKB) / 4);
+      if (countFreePages() < pagesNeeded) {
+        alert(
+          "The SSD is full. Delete files and run Garbage Collection to reclaim " +
+            "invalidated pages before writing more."
+        );
+        stopProcessingGif("SSD full — run Garbage Collection");
+        return;
+      }
+    }
     // Count toward "actual" physical writes only once the write is accepted.
     totalActualWritesForWaf += fileSize;
     updateWaf();
-    garbage_file_cheker = fileName.includes("garbage");
+    garbage_file_cheker = isGcWrite;
     if (!garbage_file_cheker) {
       fileMapping.addMapping(fileName, mapping_table_row, 0);
     }
@@ -1706,4 +1723,6 @@ function calculateFlashMemorySize() {
     mapping_table.appendChild(row);
   }
   document.getElementById("mapping_table_entries").textContent = n;
+  // The device geometry just changed, so any previous WAF trend is stale.
+  resetWaf();
 }
