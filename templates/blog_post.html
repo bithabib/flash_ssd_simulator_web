@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ post.title | striptags }} — Learn SSD</title>
+  <meta name="description" content="{{ post.subtitle | striptags }}" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  {% include 'includes/blog_style.html' %}
+</head>
+<body>
+  {% include 'includes/header.html' %}
+
+  <div class="blog-wrap">
+    <div class="row" style="margin-top:16px">
+      <!-- sidebar: all posts -->
+      <div class="col-md-3 d-none d-md-block">
+        <nav class="blog-side">
+          <a href="/blog" style="font-weight:600;color:#1f77b4">&larr; All topics</a>
+          {% for cat in categories %}
+            <div class="side-cat">{{ cat | safe }}</div>
+            {% for p in posts if p.category == cat %}
+              <a href="/blog/{{ p.slug }}" class="{{ 'active' if p.slug == post.slug else '' }}">
+                {{ posts.index(p) + 1 }}. {{ p.title | safe }}
+              </a>
+            {% endfor %}
+          {% endfor %}
+        </nav>
+      </div>
+
+      <!-- article -->
+      <div class="col-md-9">
+        <article class="article">
+          <span class="cat-badge">{{ post.category | safe }}</span>
+          <h1>{{ post.title | safe }}</h1>
+          <p class="subtitle">{{ post.subtitle | safe }}</p>
+
+          {{ post.html | safe }}
+
+          {% if related %}
+          <div class="related">
+            <b>Related topics:</b>
+            {% for r in related %}
+              <a href="/blog/{{ r.slug }}">{{ r.title | safe }}</a>{% if not loop.last %} &nbsp;·&nbsp; {% endif %}
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <div class="prevnext">
+            {% if prev_post %}
+              <a href="/blog/{{ prev_post.slug }}"><span class="lbl">&larr; Previous</span>{{ prev_post.title | safe }}</a>
+            {% else %}<span></span>{% endif %}
+            {% if next_post %}
+              <a href="/blog/{{ next_post.slug }}" style="text-align:right"><span class="lbl">Next &rarr;</span>{{ next_post.title | safe }}</a>
+            {% else %}<span></span>{% endif %}
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

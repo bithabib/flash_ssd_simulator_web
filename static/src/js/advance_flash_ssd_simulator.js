@@ -53,6 +53,34 @@ var cummalative_read_latency = 0;
 // var run_till = 1598512;
 // var run_till = 2000000; /this one i editted at 05/12/2025 01:47AM
 var run_till = 15400;
+
+// --- performance: cached DOM elements + dirty-block rendering + speed control ---
+var blockEl = {};              // blockId -> <td> element (cache; avoids getElementById per paint)
+var dirtyBlocks = new Set();   // blocks changed since the last paint
+var renderScheduled = false;   // is a repaint already queued for the next frame?
+var playbackSpeed = 300;       // writes processed per animation frame (higher = faster playback)
+const DEBUG_DUMP = false;      // set true only to dump ssd_storage JSON every 10k writes (debug)
+
+// mark a block as needing repaint and schedule a single coalesced render on the next frame
+function markDirty(blockId) {
+  dirtyBlocks.add(blockId);
+  if (!renderScheduled) {
+    renderScheduled = true;
+    requestAnimationFrame(renderDirty);
+  }
+}
+// wire the speed slider if present (index.html adds #playback_speed)
+function initSpeedControl() {
+  var s = document.getElementById("playback_speed");
+  if (s) {
+    playbackSpeed = parseInt(s.value) || playbackSpeed;
+    s.addEventListener("input", function () {
+      playbackSpeed = Math.max(1, parseInt(s.value) || 1);
+      var lbl = document.getElementById("playback_speed_label");
+      if (lbl) lbl.textContent = playbackSpeed + " writes/frame";
+    });
+  }
+}
 function create_block_for_each_plane() {
   // read table by id and create block for each plane
   var ssd_container = document.getElementById("ssd_container");
@@ -101,6 +129,7 @@ function create_block_for_each_plane() {
               var p_block =
                 "block_" + i + "_" + j + "_" + k + "_" + l + "_" + m + "_" + n;
               block_table_trtdv.setAttribute("id", p_block);
+              blockEl[p_block] = block_table_trtdv; // cache the element for fast repaint
               ssd_storage[p_block] = {
                 block_id: p_block,
                 status: "free", // free, inused, used
@@ -269,75 +298,64 @@ function get_total_ssd() {
   return total_ssd_size;
 }
 
-// color brightness function to change color of block
-async function color_brighness() {
-  for (var block in ssd_storage) {
-    // get the block by get element by id
-    var valid_page = ssd_storage[block]["valid_pages"];
-    var invalid_page = ssd_storage[block]["invalid_pages"];
-    // get the write count and erase count
-    var write_count = ssd_storage[block]["write_count"];
-    var erase_count = ssd_storage[block]["erase_count"];
-    var d_time = ssd_storage[block]["d_time"];
-    if (write_count > max_write) {
-      max_write = write_count;
-    }
-    if (erase_count > max_erase) {
-      max_erase = erase_count;
-    }
+// --- Rendering: paint ONE block using the cached element (no getElementById) ---
+function paintBlock(block, heat_map_value) {
+  var el = blockEl[block];
+  var b = ssd_storage[block];
+  if (!el || !b) return;
+  var valid_page = b["valid_pages"];
+  var invalid_page = b["invalid_pages"];
+  var write_count = b["write_count"];
+  var erase_count = b["erase_count"];
+  var d_time = b["d_time"];
+  if (write_count > max_write) max_write = write_count;
+  if (erase_count > max_erase) max_erase = erase_count;
 
-    // var hot_write_ratio = write_count / max_write;
-    // var hot_erase_ratio = erase_count / max_erase;
-    // var percentage = invalid_page / (valid_page + invalid_page);
-    var percentage = 0;
-    var percentagevi = 0;
-    var heat_map_value = document.getElementById("heat_map").value;
-    //     valid_invalid
-    // write_count
-    // erase_count
-    // read_count
-    // if (heat_map_value == "valid_invalid" || ) {
-    percentagevi = invalid_page / (valid_page + invalid_page);
-    // }
-    if (heat_map_value == "write_count") {
-      percentage = write_count === 0 ? 0 || 1 : write_count / max_write;
-    }
-    if (heat_map_value == "erase_count") {
-      percentage = erase_count === 0 ? 0 : erase_count / max_erase;
-      // if(erase_count >= 1) {
-      //   console.log(erase_count, max_erase);
-      // }
-    }
-    if (heat_map_value == "read_count") {
-      percentage = 0;
-    }
-    if (heat_map_value == "death_time") {
-      percentage = Math.pow(d_time / max_d_time, 0.15);
-    }
-    // stop for 10 second
-    // var r_write = Math.floor(255 * hot_write_ratio);
-    // var g_erase = Math.floor(255 * hot_erase_ratio);
-    var color_code = Math.floor(255 * percentage);
-    var color_codevi = Math.floor(255 * percentagevi);
-    if (color_code < 0) color_code = 0;
-    if (color_code > 255) color_code = 255;
-    var color = "rgb(" + 0 + "," + color_codevi + "," + 0 + ")";
-    // var color = "rgb(" + r_write + "," + b_invalid_page + "," + g_erase + ")";
-    var block = document.getElementById(block);
-    // remove background image
-    block.style.backgroundImage = "none";
-    if (valid_page == 0 && invalid_page == 0) {
-      color = "rgb(255,255,255)";
-    } else if (valid_page == 0 && invalid_page > 0) {
-      block.style.backgroundImage = 'url("static/src/logo/x.webp")';
-      block.style.backgroundSize = "cover";
-    } else if (valid_page > 0 && invalid_page == 0) {
-      block.style.backgroundImage = 'url("static/src/logo/r.webp")';
-      block.style.backgroundSize = "cover";
-    }
-
-    block.style.backgroundColor = color;
+  var total = valid_page + invalid_page;
+  var percentagevi = total > 0 ? invalid_page / total : 0; // avoid 0/0 = NaN on free blocks
+  var percentage = 0;
+  if (heat_map_value == "write_count") {
+    percentage = write_count === 0 ? 0 : write_count / max_write; // fixed: was "0 || 1" (=1)
+  } else if (heat_map_value == "erase_count") {
+    percentage = erase_count === 0 ? 0 : erase_count / max_erase;
+  } else if (heat_map_value == "read_count") {
+    percentage = 0;
+  } else if (heat_map_value == "death_time") {
+    percentage = Math.pow(d_time / max_d_time, 0.15);
   }
+  // valid/invalid heat map: green channel encodes invalid ratio (bright = more invalid)
+  var color_codevi = Math.min(255, Math.max(0, Math.floor(255 * percentagevi)));
+  var color = "rgb(0," + color_codevi + ",0)";
+
+  el.style.backgroundImage = "none";
+  if (valid_page == 0 && invalid_page == 0) {
+    color = "rgb(255,255,255)"; // free block -> white
+  } else if (valid_page == 0 && invalid_page > 0) {
+    el.style.backgroundImage = 'url("static/src/logo/x.webp")'; // fully invalid (cross)
+    el.style.backgroundSize = "cover";
+  } else if (valid_page > 0 && invalid_page == 0) {
+    el.style.backgroundImage = 'url("static/src/logo/r.webp")'; // fully valid (tick)
+    el.style.backgroundSize = "cover";
+  }
+  el.style.backgroundColor = color;
+}
+
+// repaint ONLY the blocks changed since the last frame (called via requestAnimationFrame)
+function renderDirty() {
+  renderScheduled = false;
+  var hmEl = document.getElementById("heat_map");
+  var hm = hmEl ? hmEl.value : "valid_invalid";
+  dirtyBlocks.forEach(function (id) {
+    paintBlock(id, hm);
+  });
+  dirtyBlocks.clear();
+}
+
+// full repaint of every block (use for initial/final state only, not per write)
+function color_brighness() {
+  var hmEl = document.getElementById("heat_map");
+  var hm = hmEl ? hmEl.value : "valid_invalid";
+  for (var block in ssd_storage) paintBlock(block, hm);
 }
 
 // Function to select allocation scheme
@@ -637,13 +655,7 @@ function allocate_block(gc) {
 
 // Function to get update ppn for each block
 async function get_update_ppn(gc = false) {
-  if (update_block == null) {
-    await new Promise((resolve) => setTimeout(resolve, 1));
-    var update_ppn = allocate_block(gc);
-  } else {
-    var update_ppn = update_block;
-  }
-  return update_ppn;
+  return update_block == null ? allocate_block(gc) : update_block;
 }
 
 // Function to update mapping table
@@ -681,6 +693,7 @@ function write_page(page_start, update_ppn, is_gc = false) {
   }
   cummalative_time_per_packet += flash_operation_time.write;
   update_mapping_table(page_start, update_ppn);
+  markDirty(update_ppn["block_id"]); // queue this block for repaint on the next frame
 }
 
 // Function to check invalid page
@@ -691,6 +704,7 @@ function isInvalid(page_start) {
     block["valid_pages"] -= 1;
     block["invalid_pages"] += 1;
     ssd_storage[ppn] = block;
+    markDirty(ppn); // the block that lost a valid page needs repaint
   }
 }
 
@@ -800,8 +814,7 @@ async function garbageCollection() {
     ssd_storage[gc_block]["offset"] = 0;
     ssd_storage[gc_block]["erase_count"] += 1;
     ssd_storage[gc_block]["status"] = "free";
-    color_brighness();
-    await new Promise((resolve) => setTimeout(resolve, 5));
+    markDirty(gc_block);
     return true;
   } else {
     // loop in array of address mapping table don't use forEach
@@ -819,9 +832,7 @@ async function garbageCollection() {
     ssd_storage[gc_block]["erase_count"] += 1;
     ssd_storage[gc_block]["status"] = "free";
     cummalative_time_per_packet += flash_operation_time.erase_block;
-
-    color_brighness();
-    await new Promise((resolve) => setTimeout(resolve, 5));
+    markDirty(gc_block);
     return true;
   }
 }
@@ -878,7 +889,6 @@ async function upload_trace_file(event) {
               write_page(page_start, update_ppn);
               page_start += 1;
             }
-            color_brighness();
           }
         }
         progress_setup(run_till, i);
@@ -890,22 +900,21 @@ async function upload_trace_file(event) {
             time: cummalative_time_per_packet,
             read_latency: cummalative_read_latency,
           });
-          await new Promise((resolve) => setTimeout(resolve, 2));
         }
-        if (i > 100000) {
-          if ((i + 1) % 10000 == 0) {
-            // save ssd_storage as a json file after every 10000 packet and save with different name i/packet number
-            var ssd_storage_json = JSON.stringify(ssd_storage);
-            var blob = new Blob([ssd_storage_json], {
-              type: "application/json",
-            });
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement("a");
-            a.href = url;
-            a.download = file_name + "_" + i + 1 + ".json";
-            a.click();
-            console.log("Saved");
-          }
+        // Yield to the browser to paint the dirty blocks every `playbackSpeed`
+        // writes. Higher speed -> fewer yields -> faster playback. Blocks are
+        // repainted incrementally via markDirty()/renderDirty(), not here.
+        if (i % playbackSpeed === 0) {
+          await new Promise((resolve) => requestAnimationFrame(resolve));
+        }
+        if (DEBUG_DUMP && i > 100000 && (i + 1) % 10000 == 0) {
+          var ssd_storage_json = JSON.stringify(ssd_storage);
+          var blob = new Blob([ssd_storage_json], { type: "application/json" });
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = url;
+          a.download = file_name + "_" + (i + 1) + ".json";
+          a.click();
         }
       }
       // waf_log.push({
@@ -916,6 +925,7 @@ async function upload_trace_file(event) {
         time: cummalative_time_per_packet,
       });
       progress_setup(run_till, run_till);
+      color_brighness(); // full repaint of the final device state
       // save ssd_storage as a json file
       var ssd_storage_json = JSON.stringify(ssd_storage);
       var blob = new Blob([ssd_storage_json], { type: "application/json" });
@@ -975,4 +985,5 @@ window.onload = function () {
   create_block_for_each_plane();
   stopProcessingGif("Please upload trace");
   handleOverprovisioning();
+  initSpeedControl(); // wire the playback-speed slider (if present)
 };

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Learn SSD — Eyana Blog</title>
+  <meta name="description" content="A beginner-friendly, illustrated guide to how solid-state drives work: flash memory, pages and blocks, the FTL, garbage collection, write amplification, wear leveling, and ZNS." />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  {% include 'includes/blog_style.html' %}
+</head>
+<body>
+  {% include 'includes/header.html' %}
+
+  <div class="blog-wrap">
+    <div class="blog-hero">
+      <span class="cat-badge">Learn SSD</span>
+      <h1>Understand SSDs from the ground up</h1>
+      <p class="lead">A plain-English, illustrated guide to everything happening inside a solid-state
+        drive — and everything you need to read the EyanaSSDSim paper. No prior background assumed.
+        Read top to bottom as a course, or jump to any topic.</p>
+      <p><a class="btn btn-primary btn-sm" href="/blog/ssd-basics">Start reading &rarr;</a>
+         <a class="btn btn-outline-secondary btn-sm" href="/stream">Open the Live Simulator</a></p>
+    </div>
+
+    {% for cat in categories %}
+      <div class="cat-title">{{ cat | safe }}</div>
+      <div class="row">
+        {% for post in posts if post.category == cat %}
+          <div class="col-md-6 mb-3">
+            <a class="post-card" href="/blog/{{ post.slug }}">
+              <span class="post-num">{{ "%02d"|format(posts.index(post) + 1) }}</span>
+              <span class="cat-badge">{{ post.category | safe }}</span>
+              <h5>{{ post.title | safe }}</h5>
+              <p>{{ post.subtitle | safe }}</p>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+    <p class="text-muted" style="margin:26px 0 50px; font-size:13px">
+      These posts accompany the EyanaSSDSim simulator and paper. Concepts are introduced in reading
+      order; each post links to the related ones and to the live tool where you can see it in action.
+    </p>
+  </div>
+</body>
+</html>

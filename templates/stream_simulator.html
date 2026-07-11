@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EyanaSSDSim — Server-side Trace Simulation</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; color: #222; }
+    h2 { margin-bottom: 4px; }
+    .sub { color: #666; font-size: 13px; margin-bottom: 18px; }
+    .controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+    button { padding: 6px 12px; cursor: pointer; }
+    select, input[type=file] { padding: 5px; }
+    .bar { height: 10px; width: 320px; background: #eee; border-radius: 5px; overflow: hidden; }
+    #stream_progress { height: 100%; width: 0%; background: #2ca02c; transition: width .2s; }
+    #stream_status { font-family: ui-monospace, monospace; font-size: 13px; margin: 10px 0; }
+    #stream_grid { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 10px; }
+    .legend { font-size: 12px; color: #555; margin-top: 10px; }
+    .swatch { display:inline-block; width:12px; height:12px; vertical-align:middle; margin:0 3px 0 10px; border:1px solid #ccc; }
+    /* nested parallel-geometry boxes: channel > chip > die > plane > blocks */
+    .grp { display: inline-block; border: 1px solid; border-radius: 4px; padding: 3px; vertical-align: top; }
+    .grp-label { font-size: 9px; color: #444; margin-bottom: 2px; text-align: center; }
+    .grp.channel { border-color: #333; padding: 5px; background: #fafafa; }
+    .grp.chip    { border-color: #888; margin: 2px; background: #fff; }
+    .grp.die     { border-color: #b0b0b0; margin: 2px; }
+    .grp.plane   { border-color: #dcdcdc; margin: 1px; }
+    .grp.channel > .grp-label { font-size: 11px; font-weight: 600; }
+    .grp.chip, .grp.die, .grp.plane { display: inline-block; }
+    .block-grid { display: grid; gap: 1px; }
+    .blk { width: 7px; height: 7px; background: #fff; box-shadow: inset 0 0 0 0.5px #e0e0e0; background-repeat: no-repeat; }
+    #charts { display: grid; grid-template-columns: repeat(2, minmax(300px, 1fr)); gap: 16px; max-width: 920px; margin-top: 10px; }
+    .chart-card { border: 1px solid #e5e5e5; border-radius: 6px; padding: 8px; height: 240px; }
+    /* ZNS zone cards */
+    #stream_grid.zns { display: grid; grid-template-columns: repeat(auto-fill, 108px); gap: 8px; }
+    .zone { width: 108px; border: 2px solid #bbb; border-radius: 4px; padding: 4px; font-size: 10px; box-sizing: border-box; }
+    .zone.open { border-color: #1f77b4; }
+    .zone.full { border-color: #333; }
+    .zone.hot { box-shadow: 0 0 0 2px #d62728; }
+    .zone.cold { box-shadow: 0 0 0 2px #1f77b4; }
+    .zone-head { display: flex; justify-content: space-between; margin-bottom: 3px; }
+    .zone-bar { display: flex; height: 14px; width: 100%; background: #fff; border: 1px solid #ddd; overflow: hidden; }
+    .zseg-valid { background: #2ca02c; }
+    .zseg-stale { background: #888; }
+  </style>
+</head>
+<body>
+  {% include 'includes/header.html' %}
+
+  <div style="max-width:1000px">
+    <h2>EyanaSSDSim — Live SSD &amp; ZNS Simulator</h2>
+    <div class="sub">The trace runs on the Python engine on the server; the browser only renders the streamed grid snapshots.</div>
+
+    <div style="background:#f6f9fc;border:1px solid #e1e8ef;border-radius:8px;padding:14px 18px;margin:12px 0 18px">
+      <p style="margin:0 0 8px"><b>New to SSDs?</b> This page shows, live, what happens <i>inside</i> a solid-state drive as a
+      workload writes to it — how data lands in flash blocks, how stale data piles up, and how <b>garbage collection</b> and
+      <b>wear</b> unfold over time. Switch to <b>ZNS mode</b> to see zoned namespaces instead.</p>
+      <p style="margin:0">👉 For a plain-English, beginner-friendly explanation of every concept (blocks, pages, WAF,
+      garbage collection, wear leveling, ZNS…), read the <a href="/blog"><b>Learn SSD blog</b></a>. Each idea used on this
+      page has its own illustrated post.</p>
+    </div>
+
+    <!-- quick visual: the flash hierarchy this simulator draws -->
+    <svg viewBox="0 0 720 120" width="100%" style="max-width:720px;border:1px solid #eee;border-radius:6px;background:#fff">
+      <rect x="6" y="18" width="708" height="90" fill="#fafafa" stroke="#333"/>
+      <text x="12" y="14" font-size="11" fill="#333">SSD</text>
+      <g font-size="10" fill="#444">
+        <rect x="18" y="30" width="150" height="70" fill="#eef4fb" stroke="#1f77b4"/><text x="24" y="44">Channel</text>
+        <rect x="30" y="52" width="128" height="42" fill="#f3f8ee" stroke="#2ca02c"/><text x="36" y="66">Chip → Die → Plane</text>
+        <g fill="#2ca02c">
+          <rect x="40" y="74" width="10" height="14"/><rect x="52" y="74" width="10" height="14"/>
+          <rect x="64" y="74" width="10" height="14"/><rect x="76" y="74" width="10" height="14"/>
+        </g>
+        <text x="176" y="70" fill="#888">…parallel channels…</text>
+      </g>
+      <text x="430" y="70" font-size="11" fill="#666">each tiny square in the grid below = one flash <b>block</b></text>
+    </svg>
+  </div>
+
+  <div class="controls">
+    <input type="file" id="trace_upload" accept=".csv,.txt,.trace" />
+    <button onclick="uploadTrace()">Upload trace</button>
+    <label>Trace: <select id="trace_select" style="min-width:280px"></select></label>
+    <button onclick="loadTraces()" title="Refresh list">&#8635;</button>
+  </div>
+
+  <div class="controls">
+    <label>Over-provisioning:
+      <select id="stream_op">
+        <option value="0.10">10%</option>
+        <option value="0.20">20%</option>
+        <option value="0.25">25%</option>
+      </select>
+    </label>
+    <label>Update every:
+      <input type="range" id="stream_interval" min="0.25" max="3" step="0.25" value="1"
+             oninput="document.getElementById('interval_val').textContent = this.value + 's'" />
+      <span id="interval_val">1s</span>
+    </label>
+    <button onclick="runSimulation()">&#9654; Run</button>
+    <button onclick="stopSimulation()">&#9632; Stop</button>
+    <div class="bar"><div id="stream_progress"></div></div>
+  </div>
+
+  <div class="controls">
+    <strong style="font-size:13px">Device geometry:</strong>
+    <label title="Independent flash buses (parallel channels)">Channels
+      <select id="geo_channel"><option>1</option><option selected>2</option><option>4</option><option>8</option><option>16</option></select>
+    </label>
+    <label title="NAND packages (targets/CEs) per channel — must be &#8805; 2">Chips/ch
+      <select id="geo_chip"><option selected>2</option><option>4</option><option>8</option></select>
+    </label>
+    <label title="Dies (LUNs) per package">Dies/chip
+      <select id="geo_die"><option>1</option><option selected>2</option><option>4</option><option>8</option></select>
+    </label>
+    <label title="Planes per die — modern NAND is 2- or 4-plane">Planes/die
+      <select id="geo_plane"><option>1</option><option>2</option><option selected>4</option></select>
+    </label>
+    <label title="Blocks per plane (scaled down for visualization)">Blocks/plane
+      <select id="geo_bpp"><option>16</option><option>32</option><option selected>38</option><option>64</option><option>128</option><option>256</option></select>
+    </label>
+    <label title="Pages per block — NAND standard is a power of two">Pages/block
+      <select id="geo_ppb"><option>64</option><option>128</option><option selected>256</option><option>512</option></select>
+    </label>
+    <span style="font-size:12px;color:#888">(chip &#8805; 2 keeps allocation schemes distinct)</span>
+  </div>
+
+  <div class="controls">
+    <strong style="font-size:13px">Simulation mode:</strong>
+    <label><input type="radio" name="engine" value="conventional" checked onchange="onModeChange()" /> Conventional SSD (device-managed GC)</label>
+    <label><input type="radio" name="engine" value="zns" onchange="onModeChange()" /> ZNS (host-managed zones)</label>
+    <span id="zns_opts" style="display:none">
+      <label title="Physical blocks grouped into one sequential-write zone — must divide total blocks">Blocks/zone
+        <select id="zns_bpz"><option>19</option><option selected>38</option><option>76</option></select>
+      </label>
+      <label title="Send overwrites to a separate hot zone from write-once/GC data — ZNS's key advantage">
+        <input type="checkbox" id="zns_hotcold" checked /> Hot/cold separation
+      </label>
+    </span>
+  </div>
+
+  <div id="stream_status">Upload a trace, select it, then press Run.</div>
+
+  <div id="block_detail_wrap" style="margin:8px 0 6px; font-size:12px; color:#555;">
+    <span id="block_detail_label"></span>
+    <div id="block_detail" style="display:inline-grid; gap:1px; vertical-align:middle; margin-left:8px;"></div>
+  </div>
+
+  <div id="stream_grid"></div>
+  <div class="legend" id="legend_conv">
+    Each small square is one flash block, grouped by Channel &#8594; Chip &#8594; Die &#8594; Plane
+    (the parallel geometry chosen above). Color follows the advance-simulator code:
+    the green channel encodes the invalid (stale) page ratio &mdash; near-black = mostly valid,
+    bright green = mostly invalid.
+    <br />
+    <span class="swatch" style="background:#fff"></span>free (erased)
+    <span class="swatch" style="background:rgb(0,0,0)"></span>&#10003; fully valid
+    <span class="swatch" style="background:rgb(0,90,0)"></span>mostly valid
+    <span class="swatch" style="background:rgb(0,180,0)"></span>mostly invalid
+    <span class="swatch" style="background:rgb(0,255,0)"></span>&#10007; fully invalid
+  </div>
+  <div class="legend" id="legend_zns" style="display:none">
+    Each box is one <b>zone</b> (a group of blocks written strictly sequentially). The bar shows the zone's pages:
+    <span class="swatch" style="background:#2ca02c"></span>valid (live)
+    <span class="swatch" style="background:#888"></span>stale (invalidated)
+    <span class="swatch" style="background:#fff"></span>unwritten (below write pointer)
+    &nbsp;&mdash;&nbsp; border: <span style="border:2px solid #bbb;padding:0 4px">EMPTY</span>
+    <span style="border:2px solid #1f77b4;padding:0 4px">OPEN</span>
+    <span style="border:2px solid #333;padding:0 4px">FULL</span>.
+    <span style="color:#d62728">&#9679; hot</span> / <span style="color:#1f77b4">&#9679; cold</span> mark the open streams; the number is the zone's reset count.
+  </div>
+
+  <h3 style="margin-top:26px; margin-bottom:2px;">Live metrics</h3>
+  <div class="sub">Computed from each streamed snapshot &mdash; they redraw at your chosen update frequency, same as the grid.</div>
+  <div id="charts">
+    <div class="chart-card"><canvas id="chart_waf"></canvas></div>
+    <div class="chart-card"><canvas id="chart_cv"></canvas></div>
+    <div class="chart-card"><canvas id="chart_erase"></canvas></div>
+    <div class="chart-card"><canvas id="chart_invalid"></canvas></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="/static/src/js/stream_visualizer.js?v=7"></script>
+</body>
+</html>

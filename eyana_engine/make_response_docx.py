@@ -32,13 +32,13 @@ ITEMS = [
   "GC policies (e.g., cost-benefit, windowed).",
   "We rebuilt the simulation core with a pluggable GC interface and implemented two "
   "additional policies -- cost-benefit (age/utilization-weighted) and FIFO -- beyond "
-  "greedy. A comparative evaluation shows the cost-benefit policy achieves more uniform "
-  "wear than greedy for the uniform random workload (Gini 0.052 -> 0.045), while greedy "
-  "attains the lowest write amplification for the Zipf workload; FIFO is the weakest for "
-  "Zipf. This demonstrates the engine is not tied to greedy and can serve as a testbed "
-  "for reclaim policies.",
-  "added a pluggable GC interface with cost-benefit and FIFO policies, together with a "
-  "comparison figure (WAF and Gini per policy) and discussion in the Discussion section."),
+  "greedy. A comparative evaluation (presented together with the ZNS comparison in a single "
+  "reclaim-strategy figure) shows the cost-benefit policy yields slightly more uniform wear "
+  "than greedy for the uniform random workload, while among the conventional policies greedy "
+  "attains the lowest write amplification for the Zipf workload and FIFO is the weakest. This "
+  "demonstrates the engine is not tied to greedy and can serve as a testbed for reclaim policies.",
+  "added a pluggable GC interface with cost-benefit and FIFO policies and a combined "
+  "reclaim-strategy comparison figure (WAF and wear per strategy) with discussion."),
 
  ("Reviewer#1, Concern # 3",
   "The tool is limited to a small capacity (a few GB) and its performance can be affected "
@@ -118,10 +118,15 @@ ITEMS = [
   "Placement work (the FDP open-source ecosystem and FlashAlloc), and Quadruple-Level Cell (QLC) "
   "NAND analysis. We also explain why the quantitative wear-leveling analysis presented here (DoIPD, "
   "DoEC, CV, Gini, and Fourier spread) is increasingly relevant for high-density QLC and PLC NAND, "
-  "which are more sensitive to write amplification and uneven wear. As a direction for future work, "
-  "we describe a zone-aware extension of EyanaSSDSim with host-managed garbage collection and "
-  "hot/cold zone separation for ZNS-specific analysis.",
-  "expanded the Discussion with recent ZNS, FDP, and QLC references and outlined the ZNS extension."),
+  "which are more sensitive to write amplification and uneven wear. Most importantly, we added a "
+  "Zoned Namespace (ZNS) mode to EyanaSSDSim, with host-managed garbage collection and optional "
+  "hot/cold zone separation, and present it alongside the conventional garbage-collection policies "
+  "in a single reclaim-strategy comparison figure. This comparison shows that ZNS eliminates write "
+  "amplification for sequential workloads (WAF 1.38 to 1.00) and that hot/cold zone separation "
+  "reduces it further for the skewed Zipf workload (to 1.02).",
+  "added a ZNS mode and folded its comparison into a single reclaim-strategy figure (greedy, "
+  "cost-benefit, FIFO, ZNS, and ZNS with hot/cold separation), and expanded the Discussion with "
+  "recent ZNS, FDP, and QLC references."),
 
  ("Reviewer#1, Concern # 11 (additional)",
   "Internal contradiction: Section IV-B states the uniform random pattern is beneficial for "
@@ -251,7 +256,7 @@ LOCATIONS = {
  "Reviewer#1, Concern # 7": "See the Evaluation Metrics list in Section IV, the notation table (Table 6), and the DoIPD/DoEC equations in Section V.",
  "Reviewer#1, Concern # 8 (additional)": "See Table 2 (device specification) and Section III.",
  "Reviewer#1, Concern # 9 (additional)": "See Section VI (Performance Validation).",
- "Reviewer#1, Concern # 10 (additional)": "See Section VII (Discussion and Implication).",
+ "Reviewer#1, Concern # 10 (additional)": "See Figure 13 (reclaim-strategy comparison including ZNS) and the Discussion in Section VII.",
  "Reviewer#1, Concern # 11 (additional)": "See the erase-count analysis in Section V and Figures 5 and 6.",
  "Reviewer#1, Concern # 12 (additional)": "See Section VIII (Survey Result).",
  "Reviewer#2, Concern # 1": "See Section VII (Discussion) and the new Figure 13.",

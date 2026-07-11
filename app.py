@@ -14,6 +14,8 @@ from views import trace_file_converter
 from views import documentation
 from views import json_upload_to_regenerate
 from views import presentation
+from views import simulate_stream  # server-side trace simulation + SSE grid streaming
+from views import blog  # beginner blog explaining SSDs and ZNS
 # from views import sitemap_xml
 
 # Configure the SQLite database URI

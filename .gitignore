@@ -12,3 +12,5 @@ env/
 .venv/
 real_data/traces/
 results/
+real_data/uploaded_traces/prn_0.csv
+real_data/uploaded_traces/proj_0.csv
