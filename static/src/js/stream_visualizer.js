@@ -370,8 +370,37 @@ function renderZns(snap) {
   );
 }
 
+// FDP mode: same block grid + valid/invalid coloring as conventional, plus a
+// colored border marking each block's placement handle (hot=red, cold=blue).
+function renderFdp(snap) {
+  const geo = snap.geo;
+  const key = `${geo.channel}-${geo.chip}-${geo.die}-${geo.plane}-${geo.blocks_per_plane}`;
+  if (streamGeoKey !== key) buildGrid(geo);
+  const inv = snap.invalid, val = snap.valid, handle = snap.handle;
+  for (let i = 0; i < inv.length; i++) {
+    const cell = streamCells[i];
+    paintCell(cell, val[i], inv[i]);
+    const h = handle[i];
+    cell.style.boxShadow =
+      h === 0 ? "inset 0 0 0 1px #d62728" :          // hot handle
+      h === 1 ? "inset 0 0 0 1px #1f77b4" :          // cold handle
+                "inset 0 0 0 0.5px #e0e0e0";          // free
+  }
+  updateCharts(snap);
+  document.getElementById("stream_progress").style.width = snap.progress + "%";
+  const eta = snap.phase === "done" ? "0s" : fmtTime(snap.eta_sec || 0);
+  setStatus(
+    `${snap.phase}  |  ${snap.progress}%  |  FDP ${snap.hot_cold ? "hot/cold hints" : "single handle"}` +
+      `  |  writes: ${snap.host_writes.toLocaleString()}  |  WAF: ${snap.waf}` +
+      `  |  GC writes: ${snap.gc_writes.toLocaleString()}` +
+      `  |  ${(snap.writes_per_sec || 0).toLocaleString()} w/s  |  elapsed ${fmtTime(snap.elapsed_sec || 0)}  |  ~${eta} left`
+  );
+}
+
 function renderSnapshot(snap) {
-  if ((snap.engine || "conventional") === "zns") { renderZns(snap); return; }
+  const engine = snap.engine || "conventional";
+  if (engine === "zns") { renderZns(snap); return; }
+  if (engine === "fdp") { renderFdp(snap); return; }
   const geo = snap.geo;
   const key = `${geo.channel}-${geo.chip}-${geo.die}-${geo.plane}-${geo.blocks_per_plane}`;
   if (streamGeoKey !== key) buildGrid(geo);
@@ -413,6 +442,9 @@ function runSimulation() {
   if (engine === "zns") {
     const hc = document.getElementById("zns_hotcold").checked ? 1 : 0;
     url += `&engine=zns&hot_cold=${hc}&blocks_per_zone=${g("zns_bpz")}`;
+  } else if (engine === "fdp") {
+    const hc = document.getElementById("fdp_hotcold").checked ? 1 : 0;
+    url += `&engine=fdp&hot_cold=${hc}`;
   }
   const src = new EventSource(url);
   currentSource = src;
@@ -501,10 +533,13 @@ function renderSkeleton() {
 
 // Show ZNS options + swap the legend when the simulation mode changes.
 function onModeChange() {
-  const zns = document.querySelector('input[name="engine"]:checked').value === "zns";
+  const engine = document.querySelector('input[name="engine"]:checked').value;
+  const zns = engine === "zns", fdp = engine === "fdp";
   document.getElementById("zns_opts").style.display = zns ? "" : "none";
-  document.getElementById("legend_conv").style.display = zns ? "none" : "";
+  document.getElementById("fdp_opts").style.display = fdp ? "" : "none";
+  document.getElementById("legend_conv").style.display = (zns || fdp) ? "none" : "";
   document.getElementById("legend_zns").style.display = zns ? "" : "none";
+  document.getElementById("legend_fdp").style.display = fdp ? "" : "none";
   renderSkeleton();
 }
 

@@ -15,6 +15,7 @@ from werkzeug.utils import secure_filename
 from app import app
 from eyana_engine.stream_sim import simulate_stream
 from eyana_engine.zns_stream import simulate_zns_stream
+from eyana_engine.fdp_stream import simulate_fdp_stream
 
 
 @app.route("/stream")
@@ -99,6 +100,11 @@ def api_simulate():
                 channel=channel, chip=chip, die=die, plane=plane,
                 blocks_per_plane=bpp, pages_per_block=ppb,
                 blocks_per_zone=bpz, hot_cold=hot_cold)
+        if engine == "fdp":
+            return simulate_fdp_stream(
+                path, kind=kind, op=op, interval_sec=interval_sec, limit=limit,
+                channel=channel, chip=chip, die=die, plane=plane,
+                blocks_per_plane=bpp, pages_per_block=ppb, hot_cold=hot_cold)
         return simulate_stream(
             path, kind=kind, op=op, interval_sec=interval_sec, limit=limit,
             channel=channel, chip=chip, die=die, plane=plane,
