@@ -576,10 +576,137 @@ in exchange for lower amplification, more predictable latency, and longer flash 
 
 {_paper("The Live Simulator has a full <b>ZNS mode</b>. Pick it, choose Blocks/zone, and toggle <b>hot/cold separation</b>. On a real trace, conventional WAF ≈ 2.4 while ZNS hot/cold drops to ≈ 1.1 — you can watch individual zones fill, get chosen for reset, and clear. This is the follow-up direction the paper discusses.")}
 """,
-"related": ["write-amplification", "garbage-collection", "eyanassdsim"],
+"related": ["write-amplification", "garbage-collection", "fdp"],
 },
 
-# 12 ---------------------------------------------------------------------
+# 12 ----------------------------------------------------------------------
+{
+"slug": "fdp",
+"category": "Advanced",
+"title": "Flexible Data Placement (FDP): Hints Instead of Rules",
+"subtitle": "A gentle way to cut write amplification — the host gives the SSD little hints, and the SSD still does the cleanup.",
+"html": f"""
+<p>By now you know the villain of SSD performance:
+<a href="/blog/write-amplification">write amplification</a>. A normal SSD runs its own
+<a href="/blog/garbage-collection">garbage collection</a>, but it has no idea which of your data
+changes often (<b>hot</b>) and which almost never changes (<b>cold</b>). So it mixes them in the same
+blocks. When it cleans a block, it must copy out the cold data that happened to sit next to the hot
+data &mdash; extra writes you never asked for.</p>
+
+<p><b>Flexible Data Placement (FDP)</b> fixes this with the lightest possible touch: the host adds a
+tiny <b>hint</b> to each write saying roughly &ldquo;this belongs with that.&rdquo; The SSD uses the
+hint to keep similar data together &mdash; and still does its own cleanup.</p>
+
+{_key("The host tags each write with a <b>placement handle</b> (officially a <i>Reclaim Unit Handle</i>, RUH) &mdash; think of it as a label like &ldquo;hot&rdquo; or &ldquo;cold.&rdquo; The SSD groups all writes with the same label into the same <b>Reclaim Unit (RU)</b>, a dedicated region of flash.")}
+
+<svg viewBox="0 0 660 180" width="100%" style="max-width:660px" class="figsvg">
+  <text x="10" y="16" font-size="12">Host tags each write; the device groups same-tagged data into one Reclaim Unit</text>
+  <g font-size="11">
+    <rect x="20" y="34" width="120" height="24" fill="#fdecec" stroke="#d62728"/><text x="30" y="50" fill="#d62728">write (hot)</text>
+    <rect x="20" y="66" width="120" height="24" fill="#eaf1fb" stroke="#1f77b4"/><text x="30" y="82" fill="#1f77b4">write (cold)</text>
+    <rect x="20" y="98" width="120" height="24" fill="#fdecec" stroke="#d62728"/><text x="30" y="114" fill="#d62728">write (hot)</text>
+  </g>
+  <text x="150" y="80" font-size="20" fill="#888">&#8594;</text>
+  <rect x="190" y="30" width="200" height="46" fill="#fff" stroke="#d62728"/>
+  <text x="196" y="26" font-size="10" fill="#d62728">Hot RU (fills with soon-dead data)</text>
+  <g fill="#d62728"><rect x="196" y="40" width="24" height="26"/><rect x="224" y="40" width="24" height="26"/><rect x="252" y="40" width="24" height="26"/></g>
+  <rect x="190" y="96" width="200" height="46" fill="#fff" stroke="#1f77b4"/>
+  <text x="196" y="92" font-size="10" fill="#1f77b4">Cold RU (write-once, stays valid)</text>
+  <g fill="#2ca02c"><rect x="196" y="106" width="24" height="26"/><rect x="224" y="106" width="24" height="26"/></g>
+  <text x="410" y="56" font-size="11" fill="#555">Cleaning the hot RU copies</text>
+  <text x="410" y="72" font-size="11" fill="#555">almost nothing &rarr; WAF &rarr; 1.0.</text>
+  <text x="410" y="118" font-size="11" fill="#555">Cold RU is never cleaned.</text>
+</svg>
+<div class="cap">Same-labelled data lands together, so a hot RU fills with soon-dead data and is reclaimed with almost no copying.</div>
+
+<h3>Why grouping cuts write amplification</h3>
+<p>Because all the hot data sits in <b>hot RUs</b>, those units fill with data that is about to be
+overwritten. By the time the SSD cleans a hot RU, nearly every page is already invalid &rarr; it
+copies almost nothing &rarr; write amplification drops toward the ideal <b>1.0</b>. Meanwhile the
+<b>cold RUs</b> hold write-once data that just sits there and never needs cleaning.</p>
+
+{_analogy("FDP is <b>labelled recycling bins</b>. A conventional SSD is one bin for everything &mdash; the facility must hand-sort it. FDP gives you paper / glass / trash bins up front: the facility still runs the machines, but each bin empties cleanly. (<a href='/blog/zns'>ZNS</a>, by contrast, is running the whole recycling plant yourself.)")}
+
+<h3>The big difference from ZNS</h3>
+<p>This is the key beginner point: <b>with FDP the device still does the garbage collection.</b> The
+host only gives <i>hints</i>, and it can still write anywhere in any order. So FDP keeps the ordinary
+SSD interface &mdash; your software barely changes. <a href="/blog/zns">ZNS</a> is stricter and more
+powerful (host-managed, strictly sequential zones) but demands far more of the software.</p>
+
+<h3>One extra knob: II vs PI</h3>
+<p>When the SSD cleans a reclaim unit and finds a few pages still alive, where do those survivors go?</p>
+<ul>
+  <li><b>Initially Isolated (II)</b> &mdash; all survivors are swept into one shared cleanup area. Simple, and <b>robust when spare space is tight</b>.</li>
+  <li><b>Persistently Isolated (PI)</b> &mdash; each label's survivors stay with their own label, keeping the separation perfectly pure. <b>Best when there is plenty of spare space</b>, but it can backfire when space is scarce.</li>
+</ul>
+<p>It's a real trade-off with no universal winner &mdash; exactly the kind of thing the simulator lets you explore.</p>
+
+{_paper("The <a href='/stream'>Live Simulator</a> has an <b>FDP mode</b> (Conventional / FDP / ZNS). Toggle the hot/cold hint and watch reclaim units fill and clear. The academic reference for FDP is the <b>WARP</b> study (USENIX FAST 2026), the first open emulator and characterisation of real FDP SSDs.")}
+
+<p>Next, see all three side by side:
+<a href="/blog/conventional-zns-fdp">Conventional vs ZNS vs FDP &mdash; Who Cleans Up?</a></p>
+""",
+"related": ["zns", "conventional-zns-fdp", "write-amplification"],
+},
+
+# 13 ----------------------------------------------------------------------
+{
+"slug": "conventional-zns-fdp",
+"category": "Advanced",
+"title": "Conventional vs ZNS vs FDP: Who Cleans Up?",
+"subtitle": "The one picture that makes all three click — a spectrum from &lsquo;the device does everything&rsquo; to &lsquo;the host does everything&rsquo;.",
+"html": f"""
+<p>Three ways to run a flash SSD sound complicated, but one question separates them:
+<b>who is responsible for garbage collection, and how much does the software have to help?</b>
+Line them up on that single axis and it all clicks.</p>
+
+<svg viewBox="0 0 680 120" width="100%" style="max-width:680px" class="figsvg">
+  <line x1="40" y1="60" x2="640" y2="60" stroke="#bbb" stroke-width="2"/>
+  <text x="40" y="95" font-size="11" fill="#888">device does the work</text>
+  <text x="540" y="95" font-size="11" fill="#888">host does the work</text>
+  <g text-anchor="middle" font-size="12">
+    <circle cx="90" cy="60" r="8" fill="#2ca02c"/><text x="90" y="40" fill="#2ca02c">Conventional</text><text x="90" y="80" font-size="10" fill="#666">device GC</text>
+    <circle cx="340" cy="60" r="8" fill="#ff7f0e"/><text x="340" y="40" fill="#ff7f0e">FDP</text><text x="340" y="80" font-size="10" fill="#666">device GC + host hints</text>
+    <circle cx="590" cy="60" r="8" fill="#1f77b4"/><text x="590" y="40" fill="#1f77b4">ZNS</text><text x="590" y="80" font-size="10" fill="#666">host GC, zones</text>
+  </g>
+</svg>
+<div class="cap">The device does everything on the left; the host takes over on the right. FDP sits in the middle.</div>
+
+<table class="btable">
+<tr><th></th><th>Conventional</th><th>FDP</th><th>ZNS</th></tr>
+<tr><td><b>Who does garbage collection?</b></td><td>the device</td><td><b>the device</b></td><td>the host</td></tr>
+<tr><td><b>What the host must do</b></td><td>nothing</td><td>add a hint per write</td><td>manage zones &amp; run GC</td></tr>
+<tr><td><b>Write rule</b></td><td>write anywhere</td><td>write anywhere (+ hint)</td><td>strictly sequential</td></tr>
+<tr><td><b>Software change</b></td><td>none</td><td>small</td><td>large</td></tr>
+<tr><td><b>Typical write amplification</b></td><td>highest</td><td>low</td><td>lowest</td></tr>
+</table>
+
+<h3>One line each</h3>
+<ul>
+  <li><b>Conventional</b> &mdash; full service: you write wherever you like and the drive figures out cleanup by itself. Easiest, but it mixes hot and cold data, so it wastes the most writes.</li>
+  <li><b>FDP</b> &mdash; you add a small label to each write; the drive still cleans up, but now keeps similar data together, so it wastes far less. Your software barely changes.</li>
+  <li><b>ZNS</b> &mdash; you write in strict order into zones and do the cleanup yourself. Most efficient of all, but your software has to be zone-aware.</li>
+</ul>
+
+{_analogy("Hotel housekeeping. <b>Conventional</b> = full service: you leave and they clean however they like. <b>FDP</b> = you leave your recycling pre-sorted so cleaning is faster. <b>ZNS</b> = you clean your own room and just hand back the key.")}
+
+<h3>When would you pick each?</h3>
+<ul>
+  <li><b>Conventional</b>: everyday drives, where simplicity matters more than squeezing out every last write.</li>
+  <li><b>FDP</b>: data centres that want lower write amplification and longer flash life <i>without</i> rewriting their software &mdash; today's industry sweet spot.</li>
+  <li><b>ZNS</b>: systems already built around logs and zones (databases, log-structured file systems) that can invest in host-managed placement for the best possible efficiency.</li>
+</ul>
+
+{_paper("Run all three in the <a href='/stream'>Live Simulator</a> on the same trace and compare WAF directly. EyanaSSDSim implements a conventional FTL, a host-managed ZNS engine, and an FDP engine aligned to the FEMU/WARP model.")}
+
+<p>Deep dives: <a href="/blog/fdp">FDP</a> &middot; <a href="/blog/zns">ZNS</a> &middot;
+<a href="/blog/garbage-collection">Garbage Collection</a> &middot;
+<a href="/blog/write-amplification">Write Amplification</a>.</p>
+""",
+"related": ["fdp", "zns", "garbage-collection"],
+},
+
+# 14 ---------------------------------------------------------------------
 {
 "slug": "eyanassdsim",
 "category": "The Paper",
