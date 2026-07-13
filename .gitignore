@@ -15,3 +15,4 @@ results/
 real_data/uploaded_traces/prn_0.csv
 real_data/uploaded_traces/proj_0.csv
 server_info
+fdp_validation_results.csv

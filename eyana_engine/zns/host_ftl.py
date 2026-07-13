@@ -33,7 +33,14 @@ class HostFTL:
         # capacity being (1-op)*physical, NOT from reserving the whole OP as
         # free zones (doing so leaves GC zero working room -> infinite loop).
         n_streams = 2 if hot_cold else 1
+        self.n_streams = n_streams
         self.min_free = n_streams + 2
+        # Lazy GC: prefer reclaiming (near-)fully-invalid zones. Background GC is
+        # deferred while the emptiest full zone still holds more than this many
+        # valid pages; only a critically-low free pool forces reclaim regardless.
+        # This is what lets sequential rewrites reach WAF ~= 1.0 at low OP: old
+        # zones are left to fully invalidate before being reset (no migration).
+        self.lazy_max_valid = max(1, dev.zone_pages // 10)
         if dev.n_zones <= self.min_free:
             raise ValueError(f"too few zones ({dev.n_zones}) for {n_streams} "
                              f"streams; use smaller blocks_per_zone")
@@ -77,22 +84,25 @@ class HostFTL:
             self.host_writes += 1
 
     def _maybe_gc(self):
-        # keep at least min_free empty zones available; guard against a
-        # no-progress loop when the device is genuinely over-utilised.
+        # Keep >= min_free empty zones. GC is lazy until the free pool is
+        # critically low (<= n_streams), at which point reclaim is forced so it
+        # always makes progress; a genuine over-utilisation still raises.
         guard = 0
         limit = 2 * self.dev.n_zones
         while len(self.free_zones) < self.min_free:
+            critical = len(self.free_zones) <= self.n_streams
             before = len(self.free_zones)
-            if not self._gc_once():
-                break
+            if not self._gc_once(force=critical):
+                break                       # lazy-deferred, or no victim
             guard += 1
             if len(self.free_zones) <= before and guard > limit:
                 raise RuntimeError(
                     "ZNS host GC made no progress; device over-utilised "
                     "(raise op_ratio or reduce workload footprint)")
 
-    def _victim(self):
-        """Greedy: FULL, non-open zone with the fewest valid pages."""
+    def _victim(self, force: bool):
+        """Greedy: FULL, non-open zone with the fewest valid pages. When not
+        forced, defer if even the emptiest zone is not (near-)fully invalid."""
         dev = self.dev
         best, best_valid = -1, None
         open_ids = {self.open["hot"], self.open["cold"]}
@@ -102,11 +112,15 @@ class HostFTL:
             v = self.valid_in_zone[z]
             if best_valid is None or v < best_valid:
                 best_valid, best = v, z
+        if best < 0:
+            return -1
+        if not force and best_valid is not None and best_valid > self.lazy_max_valid:
+            return -1                        # lazy: not invalid enough yet
         return best
 
-    def _gc_once(self) -> bool:
+    def _gc_once(self, force: bool = False) -> bool:
         dev = self.dev
-        z = self._victim()
+        z = self._victim(force)
         if z < 0:
             return False
         base = dev.zone_base_ppn(z)
