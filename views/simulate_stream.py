@@ -27,7 +27,7 @@ UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "..", "real_data",
                           "uploaded_traces")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-ALLOWED = {".csv", ".txt", ".trace", ".tar", ".bz2"}
+ALLOWED = {".csv", ".txt", ".trace", ".tar", ".bz2", ".gz"}
 
 
 def _guess_kind(filename):
