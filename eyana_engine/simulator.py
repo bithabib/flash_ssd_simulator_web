@@ -107,63 +107,86 @@ class Simulator:
             self._reclaim_block(victim, p)
             force = False                      # only force the first pass
 
-    def _gc_superblock(self, p: int, force: bool = False):
-        """FEMU-style GC at *line/superblock* granularity.
+    # GC scratch: lines kept free per plane so a line reclaim always has room to
+    # migrate into (mirrors FEMU's gc_thres reserve). 2 = 1 in-use + 1 migration.
+    _SB_RESERVE = 2
 
-        A line L is the set of blocks {plane*bpp + L for every plane}; FEMU
-        erases a whole line at once, so the victim is chosen by aggregate invalid
-        pages across the line and ALL its blocks' live pages are migrated. Trigger
-        is device-global utilisation with the same high/low watermarks.
-        """
-        dev, cfg = self.dev, self.cfg
-        nblocks = cfg.total_blocks
+    def _gc_superblock(self, p: int, force: bool = False):
+        """FEMU-style GC at *line/superblock* granularity: reclaim the emptiest
+        line (fewest valid pages, greedy) ONE at a time, lazily, keeping a small
+        per-plane free reserve so migration never runs dry.  A line L is the set
+        {plane*bpp + L}; the whole line is erased together."""
+        dev = self.dev
         bpp, planes = dev.bpp, dev.planes
-        while True:
-            used = nblocks - int(dev.is_free.sum())
-            if not force and used / nblocks <= cfg.gc_low_watermark:
-                break
-            # within-plane indices currently used as an active (open) block
+
+        def plane_free_min():
+            return min(len(dev.free_list[pp]) for pp in range(planes))
+
+        guard, limit = 0, 4 * bpp
+        while force or plane_free_min() < self._SB_RESERVE:
             active_L = {int(ab) % bpp for ab in dev.active_block if ab != -1}
-            best_L, best_inv = -1, 0
+            # greedy: allocated line with the FEWEST valid pages. Prefer non-open
+            # lines; fall back to open ones only if nothing else is reclaimable
+            # (erase_block safely resets an active pointer) -- avoids both the
+            # stall-crash and the thrash of always allowing open lines.
+            best_L, best_valid = -1, None
+            fb_L, fb_valid = -1, None
             for L in range(bpp):
-                if L in active_L:
-                    continue                       # never GC the open line
-                inv, allfree = 0, True
+                valid, alloc = 0, False
                 for pp in range(planes):
                     b = pp * bpp + L
                     if not dev.is_free[b]:
-                        allfree = False
-                        inv += int(dev.invalid_count[b])
-                if allfree:
+                        alloc = True
+                        valid += int(dev.valid_count[b])
+                if not alloc:
                     continue
-                if inv > best_inv:
-                    best_inv, best_L = inv, L
-            if best_L < 0 or best_inv == 0:
-                break                              # nothing worth reclaiming
-            self._reclaim_line(best_L)
+                if fb_valid is None or valid < fb_valid:
+                    fb_valid, fb_L = valid, L        # fallback: any allocated line
+                if L in active_L:
+                    continue
+                if best_valid is None or valid < best_valid:
+                    best_valid, best_L = valid, L
+            L = best_L if best_L >= 0 else fb_L      # fallback to open line if needed
+            if L < 0:
+                break
+            self._reclaim_line(L)
             force = False
+            guard += 1
+            if guard > limit:
+                break
 
     def _reclaim_line(self, L: int):
-        """Migrate live pages of every block in line L (each staying in its own
-        plane), then erase the whole line."""
+        """Reclaim line L like FEMU: collect its live pages, ERASE the whole line
+        first (freeing one block per plane), THEN migrate the survivors back into
+        their own planes.  Erasing before migrating guarantees free room, so
+        migration can never run dry -- the crux that makes this crash-proof."""
         dev = self.dev
         ppb, bpp = self.cfg.pages_per_block, self.dev.bpp
+        # 1. collect live (lpn, plane) across the whole line
+        live = []
         for pp in range(dev.planes):
             b = pp * bpp + L
             if dev.is_free[b]:
                 continue
             base = b * ppb
+            seg = dev.reverse_map[base:base + ppb]
             for off in range(ppb):
-                ppn = base + off
-                lpn = dev.reverse_map[ppn]
-                if lpn != FREE and dev.forward_map[lpn] == ppn:
-                    new_ppn = dev.alloc_page(pp)
-                    if new_ppn is None:
-                        raise RuntimeError("no free page for superblock GC "
-                                           "migration; raise OP or watermark")
-                    dev.valid_count[b] -= 1
-                    self._place(lpn, new_ppn, host=False)
-            dev.erase_block(b)
+                lpn = int(seg[off])
+                if lpn != FREE and dev.forward_map[lpn] == base + off:
+                    live.append((lpn, pp))
+        # 2. erase the whole line first -> frees a block in every touched plane
+        for pp in range(dev.planes):
+            b = pp * bpp + L
+            if not dev.is_free[b]:
+                dev.erase_block(b)
+                self.erases += 1
+                self.time_us += self.cfg.t_erase_block
+        # 3. migrate survivors back (each stays in its plane; room is guaranteed)
+        for lpn, pp in live:
+            new_ppn = dev.alloc_page(pp)
+            if new_ppn is None:                     # cannot happen after erase
+                raise RuntimeError("superblock GC: no room even after line erase")
+            self._place(lpn, new_ppn, host=False)
             self.erases += 1
             self.time_us += self.cfg.t_erase_block
 
