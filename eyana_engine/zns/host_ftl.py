@@ -21,10 +21,16 @@ from .zone import ZoneState
 
 class HostFTL:
     def __init__(self, dev: ZNSDevice, op_ratio: float = 0.10,
-                 hot_cold: bool = False):
+                 hot_cold: bool = False, gc_policy: str = "greedy"):
         self.dev = dev
         cfg = dev.cfg
         self.hot_cold = hot_cold
+        # victim selection: "greedy" (fewest valid) or "cost_benefit" (F2FS-style
+        # age x invalidity, which defers stable cold zones instead of repeatedly
+        # migrating them -- the fix for the cold-pollution feedback loop).
+        self.gc_policy = gc_policy
+        self.now = 0                                          # monotonic write clock
+        self.zone_mtime = np.zeros(dev.n_zones, dtype=np.int64)  # last-append time / zone
         self.forward = np.full(cfg.logical_pages, FREE, dtype=np.int32)  # lpn -> ppn
         self.valid_in_zone = np.zeros(dev.n_zones, dtype=np.int64)
         self.free_zones = list(range(dev.n_zones))   # all EMPTY at start
@@ -78,6 +84,8 @@ class HostFTL:
         ppn = dev.append(z, lpn)
         self.forward[lpn] = ppn
         self.valid_in_zone[z] += 1
+        self.now += 1
+        self.zone_mtime[z] = self.now          # zone's most-recent write (for age)
         if is_gc:
             self.gc_writes += 1
         else:
@@ -101,6 +109,11 @@ class HostFTL:
                     "(raise op_ratio or reduce workload footprint)")
 
     def _victim(self, force: bool):
+        if self.gc_policy == "cost_benefit":
+            return self._victim_cb(force)
+        return self._victim_greedy(force)
+
+    def _victim_greedy(self, force: bool):
         """Greedy: FULL, non-open zone with the fewest valid pages. When not
         forced, defer if even the emptiest zone is not (near-)fully invalid."""
         dev = self.dev
@@ -116,6 +129,33 @@ class HostFTL:
             return -1
         if not force and best_valid is not None and best_valid > self.lazy_max_valid:
             return -1                        # lazy: not invalid enough yet
+        return best
+
+    def _victim_cb(self, force: bool):
+        """F2FS-style cost-benefit: maximise  age * (1 - u) / (2u)  where u is the
+        zone's valid ratio and age = now - last-write time.  A fully-invalid zone
+        (u=0) is a free reclaim and always wins.  This DEFERS old-but-still-valid
+        cold zones (low (1-u)) rather than repeatedly migrating them, which is what
+        prevents the cold-pollution feedback loop that makes greedy hot/cold blow up."""
+        dev = self.dev
+        zp = dev.zone_pages
+        open_ids = {self.open["hot"], self.open["cold"]}
+        best, best_score = -1, None
+        for z in range(dev.n_zones):
+            if dev.state[z] != ZoneState.FULL or z in open_ids:
+                continue
+            valid = int(self.valid_in_zone[z])
+            if valid == 0:
+                return z                                    # free reclaim, take it
+            u = valid / zp
+            age = self.now - int(self.zone_mtime[z])
+            score = age * (1.0 - u) / (2.0 * u)
+            if best_score is None or score > best_score:
+                best_score, best = score, z
+        if best < 0:
+            return -1
+        if not force and self.valid_in_zone[best] > self.lazy_max_valid:
+            return -1                        # lazy: nothing worth reclaiming yet
         return best
 
     def _gc_once(self, force: bool = False) -> bool:
