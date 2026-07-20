@@ -1,0 +1,6 @@
+config,WAF,reclaims,mean_valid_frac_at_reclaim,reclaim_efficiency,DEC_erase_std,wear_max
+Conventional,1.1822,2157,0.2206,4.083,0.86,5
+FDP-single,1.2062,69,0.2438,3.461,0.363,3
+FDP-PI (hot/cold),1.1391,65,0.1746,6.26,1.131,3
+ZNS-single,1.206,69,0.2436,3.463,0.565,3
+ZNS hot/cold,1.1537,66,0.19,5.808,1.368,4

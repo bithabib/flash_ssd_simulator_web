@@ -23,6 +23,7 @@ class SSDConfig:
     gc_high_watermark: float = 0.95   # start GC when plane free blocks fall below (1-this)
     gc_low_watermark: float = 0.90    # stop GC once utilisation drops to this
     gc_policy: str = "greedy"         # "greedy" | "cost_benefit" | "fifo"
+    gc_granularity: str = "block"     # "block" (per-plane) | "superblock" (FEMU line-GC)
 
     # --- latency model (microseconds) ---
     t_read_page: float = 40.0
@@ -68,6 +69,8 @@ class SSDConfig:
             raise ValueError("op_ratio must be in [0, 1)")
         if not (0.0 < self.gc_low_watermark < self.gc_high_watermark < 1.0):
             raise ValueError("require 0 < gc_low_watermark < gc_high_watermark < 1")
+        if self.gc_granularity not in ("block", "superblock"):
+            raise ValueError("gc_granularity must be 'block' or 'superblock'")
         # Need at least one spare (erased) block per plane for GC to migrate into.
         if self.blocks_per_plane < 2:
             raise ValueError("blocks_per_plane must be >= 2 to leave GC headroom")

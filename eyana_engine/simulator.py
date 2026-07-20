@@ -90,6 +90,8 @@ class Simulator:
         return out
 
     def _garbage_collect(self, p: int, force: bool = False):
+        if self.cfg.gc_granularity == "superblock":
+            return self._gc_superblock(p, force)
         dev, cfg = self.dev, self.cfg
         # reclaim until we drop to the low watermark (or nothing left to reclaim)
         while True:
@@ -104,6 +106,66 @@ class Simulator:
                 break
             self._reclaim_block(victim, p)
             force = False                      # only force the first pass
+
+    def _gc_superblock(self, p: int, force: bool = False):
+        """FEMU-style GC at *line/superblock* granularity.
+
+        A line L is the set of blocks {plane*bpp + L for every plane}; FEMU
+        erases a whole line at once, so the victim is chosen by aggregate invalid
+        pages across the line and ALL its blocks' live pages are migrated. Trigger
+        is device-global utilisation with the same high/low watermarks.
+        """
+        dev, cfg = self.dev, self.cfg
+        nblocks = cfg.total_blocks
+        bpp, planes = dev.bpp, dev.planes
+        while True:
+            used = nblocks - int(dev.is_free.sum())
+            if not force and used / nblocks <= cfg.gc_low_watermark:
+                break
+            # within-plane indices currently used as an active (open) block
+            active_L = {int(ab) % bpp for ab in dev.active_block if ab != -1}
+            best_L, best_inv = -1, 0
+            for L in range(bpp):
+                if L in active_L:
+                    continue                       # never GC the open line
+                inv, allfree = 0, True
+                for pp in range(planes):
+                    b = pp * bpp + L
+                    if not dev.is_free[b]:
+                        allfree = False
+                        inv += int(dev.invalid_count[b])
+                if allfree:
+                    continue
+                if inv > best_inv:
+                    best_inv, best_L = inv, L
+            if best_L < 0 or best_inv == 0:
+                break                              # nothing worth reclaiming
+            self._reclaim_line(best_L)
+            force = False
+
+    def _reclaim_line(self, L: int):
+        """Migrate live pages of every block in line L (each staying in its own
+        plane), then erase the whole line."""
+        dev = self.dev
+        ppb, bpp = self.cfg.pages_per_block, self.dev.bpp
+        for pp in range(dev.planes):
+            b = pp * bpp + L
+            if dev.is_free[b]:
+                continue
+            base = b * ppb
+            for off in range(ppb):
+                ppn = base + off
+                lpn = dev.reverse_map[ppn]
+                if lpn != FREE and dev.forward_map[lpn] == ppn:
+                    new_ppn = dev.alloc_page(pp)
+                    if new_ppn is None:
+                        raise RuntimeError("no free page for superblock GC "
+                                           "migration; raise OP or watermark")
+                    dev.valid_count[b] -= 1
+                    self._place(lpn, new_ppn, host=False)
+            dev.erase_block(b)
+            self.erases += 1
+            self.time_us += self.cfg.t_erase_block
 
     def _reclaim_block(self, victim: int, p: int):
         """Migrate live pages of `victim` (staying in plane p), then erase it."""
