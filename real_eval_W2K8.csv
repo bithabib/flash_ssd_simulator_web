@@ -1,0 +1,8 @@
+label,waf,reclaims,vfrac,free_pct,reff,dec
+Conventional,1.0,0,nan,nan,nan,0.0
+FDP-single,1.0,0,nan,nan,nan,0.0
+FDP-PI,1.0,0,nan,nan,nan,0.0
+ZNS-single,1.0,0,nan,nan,nan,0.0
+ZNS hot/cold (greedy),1.0,0,nan,nan,nan,0.0
+ZNS hot/cold (cost-benefit),1.0,0,nan,nan,nan,0.0
+ZNS-single (cost-benefit),1.0,0,nan,nan,nan,0.0
