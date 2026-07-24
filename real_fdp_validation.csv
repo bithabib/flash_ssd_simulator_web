@@ -1,0 +1,3 @@
+trace,config,femu_waf,sim_waf
+prxy_1_3M,FDP-single,1.561,1.256
+prxy_1_3M,FDP-PI,1.487,1.059
