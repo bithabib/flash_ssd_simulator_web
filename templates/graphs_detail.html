@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ g.title }} — Eyana SSD Simulator</title>
+    <meta name="description" content="{{ g.blurb }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+      .d-wrap { max-width: 980px; margin: 0 auto; padding: 0 16px 60px; }
+      .d-back { display:inline-block; margin: 22px 0 4px; color:#1e6b34; text-decoration:none; font-size:13.5px; }
+      .d-back:hover { text-decoration: underline; }
+      .d-cat { font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:#1e6b34;
+               background:#eef7ee; border:1px solid #d6ecd6; border-radius:20px; padding:3px 12px; display:inline-block; }
+      .d-title { font-weight:700; margin:12px 0 8px; color:#123; }
+      .d-details { font-size:16px; line-height:1.7; color:#233; margin: 12px 0 26px; }
+      .d-details ul { padding-left: 22px; }
+      .d-details li { margin: 6px 0; }
+      .d-details code { background:#f3f3f3; padding:1px 6px; border-radius:4px; font-size:14px; }
+      .d-findings { background:#eef7ee; border:1px solid #d6ecd6; border-left:4px solid #2f4536;
+                    border-radius:8px; padding:14px 18px 8px; margin: 6px 0 26px; }
+      .d-findings-h { font-weight:700; color:#1e6b34; font-size:14px; text-transform:uppercase;
+                      letter-spacing:.04em; margin-bottom:6px; }
+      .d-findings ul { padding-left: 20px; margin: 6px 0; }
+      .d-findings li { margin: 7px 0; font-size:15px; line-height:1.6; color:#233; }
+      .d-fig { margin: 22px 0 6px; border:1px solid #eee; border-radius:10px; background:#f7f6f3; padding:8px; }
+      .d-fig img { width:100%; height:auto; display:block; border-radius:6px; }
+      .d-cap { text-align:center; font-size:13px; color:#889; margin: 4px 0 22px; font-style:italic; }
+      .d-nav { display:flex; justify-content:space-between; gap:12px; margin:34px 0 10px;
+               border-top:1px solid #eee; padding-top:16px; }
+      .d-nav a { max-width:48%; text-decoration:none; color:#1e6b34; font-size:14px; }
+      .d-nav .lbl { display:block; font-size:11px; color:#99a; text-transform:uppercase; }
+      .d-allbtn { display:inline-block; margin-top:8px; background:#2f4536; color:#fff; border-radius:8px;
+                  padding:8px 18px; text-decoration:none; }
+      .d-allbtn:hover { background:#1e6b34; color:#fff; text-decoration:none; }
+    </style>
+</head>
+<body>
+    {% include 'includes/header.html' %}
+    <div class="d-wrap">
+      <a class="d-back" href="/graphs"><i class="fas fa-arrow-left"></i> All graphs</a>
+      <div><span class="d-cat">{{ g.category }}</span></div>
+      <h1 class="d-title">{{ g.title }}</h1>
+
+      <div class="d-details">{{ g.details | safe }}</div>
+
+      {% if g.findings %}
+      <div class="d-findings">
+        <div class="d-findings-h"><i class="fas fa-flask"></i> What we found</div>
+        {{ g.findings | safe }}
+      </div>
+      {% endif %}
+
+      {% for f in figs %}
+        <div class="d-fig"><img src="/figures/full/{{ f.file }}" alt="{{ g.title }}" loading="lazy"></div>
+        {% if f.caption %}<div class="d-cap">{{ f.caption }}</div>{% endif %}
+      {% endfor %}
+
+      <div class="d-nav">
+        <div>
+          {% if prev_g %}<a href="/graphs/{{ prev_g.id }}"><span class="lbl">Previous</span>&larr; {{ prev_g.title }}</a>{% endif %}
+        </div>
+        <div style="text-align:right;">
+          {% if next_g %}<a href="/graphs/{{ next_g.id }}"><span class="lbl">Next</span>{{ next_g.title }} &rarr;</a>{% endif %}
+        </div>
+      </div>
+      <a class="d-allbtn" href="/graphs">&larr; Back to all graphs</a>
+    </div>
+</body>
+</html>
