@@ -17,3 +17,5 @@ real_data/uploaded_traces/proj_0.csv
 server_info
 fdp_validation_results.csv
 CAMRESISAA02-lvm1.csv
+# contains an embedded SNIA session cookie + IP — never commit
+download_trace_148_for_ip_*.sh
