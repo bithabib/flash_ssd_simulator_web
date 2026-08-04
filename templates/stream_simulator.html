@@ -29,7 +29,12 @@
     .block-grid { display: grid; gap: 1px; }
     .blk { width: 7px; height: 7px; background: #fff; box-shadow: inset 0 0 0 0.5px #e0e0e0; background-repeat: no-repeat; }
     #charts { display: grid; grid-template-columns: repeat(2, minmax(300px, 1fr)); gap: 16px; max-width: 920px; margin-top: 10px; }
-    .chart-card { border: 1px solid #e5e5e5; border-radius: 6px; padding: 8px; height: 240px; }
+    .chart-card { border: 1px solid #e5e5e5; border-radius: 6px; padding: 8px; height: 276px;
+                  display: flex; flex-direction: column; }
+    .chart-card > canvas { flex: 1; min-height: 0; }
+    .detail-link { display: inline-block; margin-top: 6px; font-size: 12.5px; color: #2f4536;
+                   text-decoration: none; align-self: flex-end; font-weight: 600; }
+    .detail-link:hover { color: #1e6b34; text-decoration: underline; }
     /* ZNS zone cards */
     #stream_grid.zns { display: grid; grid-template-columns: repeat(auto-fill, 108px); gap: 8px; }
     .zone { width: 108px; border: 2px solid #bbb; border-radius: 4px; padding: 4px; font-size: 10px; box-sizing: border-box; }
@@ -185,10 +190,28 @@
   <h3 style="margin-top:26px; margin-bottom:2px;">Live metrics</h3>
   <div class="sub">Computed from each streamed snapshot &mdash; they redraw at your chosen update frequency, same as the grid.</div>
   <div id="charts">
-    <div class="chart-card"><canvas id="chart_waf"></canvas></div>
-    <div class="chart-card"><canvas id="chart_cv"></canvas></div>
-    <div class="chart-card"><canvas id="chart_erase"></canvas></div>
-    <div class="chart-card"><canvas id="chart_invalid"></canvas></div>
+    <div class="chart-card">
+      <canvas id="chart_waf"></canvas>
+      <a class="detail-link" href="/graphs/mechanism" target="_blank">Details: what sets WAF &rarr;</a>
+    </div>
+    <div class="chart-card">
+      <canvas id="chart_cv"></canvas>
+      <a class="detail-link" href="/graphs/wear" target="_blank">Details: wear distribution &rarr;</a>
+    </div>
+    <div class="chart-card">
+      <canvas id="chart_erase"></canvas>
+      <a class="detail-link" href="/graphs/wear" target="_blank">Details: wear &amp; endurance &rarr;</a>
+    </div>
+    <div class="chart-card">
+      <canvas id="chart_invalid"></canvas>
+      <a class="detail-link" href="/graphs/invalidity" target="_blank">Details: invalidity distribution &rarr;</a>
+    </div>
+  </div>
+  <div style="margin-top:14px;">
+    <a href="/graphs" target="_blank"
+       style="display:inline-block;background:#2f4536;color:#fff;border-radius:8px;padding:9px 20px;text-decoration:none;font-size:14px;">
+       Open the full graph gallery &amp; details &rarr;</a>
+    <span class="sub" style="margin-left:10px;">Every evaluation figure, each with an explanation.</span>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
