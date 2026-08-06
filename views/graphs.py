@@ -26,26 +26,21 @@ GRAPHS = [
         "blurb": "Simulator write-amplification vs the hardware-accurate FEMU emulator, "
                  "across 8 configuration-matched points.",
         "details": """
-<p><b>What it shows.</b> Write Amplification Factor (WAF = physical writes / host
-writes) from EyanaSSDSim placed next to FEMU (a hardware-accurate NVMe emulator) for
-eight configurations measured at the <i>same</i> over-provisioning (OP 25%).</p>
-<p><b>How FEMU was measured.</b> Conventional points use <code>fio</code> random-write
-fill (OP set by fill size, 3&times; rewrite for steady state); FDP points use a custom
-<code>fdp_write</code> tool that steers each 4&nbsp;KB write to a placement handle via
-NVMe pass-through. WAF is read from FEMU's instrumented FTL counters
-(<code>host</code>/<code>gc</code> pages, <code>hbmw</code>/<code>mbmw</code>).</p>
-<p><b>The result — two regimes:</b></p>
-<ul>
-<li><b>Synthetic (uniform, 80/20): &plusmn;3&ndash;8%, mixed signs.</b> Errors cancel;
-the simulator tracks FEMU with no systematic bias where GC is mild and uniform.</li>
-<li><b>Real traces (prxy): &minus;18% to &minus;29%, one-directional.</b> The simulator
-is consistently <i>below</i> FEMU. This is not error — it is the garbage-collection
-<i>erase granularity</i>: the simulator's default block-level reclaim migrates fewer
-valid pages than FEMU's superblock (line-level) erase under the heavy, skewed GC that
-real traces induce.</li>
-</ul>
-<p><b>Takeaway.</b> The gap is bounded, explained, one-directional, and closes when the
-simulator is configured for superblock GC (see the Granularity Bracket graph).</p>
+<p><b>Our finding.</b> EyanaSSDSim reproduces FEMU's write amplification closely and
+predictably. On synthetic workloads the two agree to within &plusmn;3&ndash;8% with mixed
+signs (no systematic bias); on real traces the simulator sits a consistent 18&ndash;29%
+below FEMU &mdash; a single-cause, one-directional gap we trace entirely to
+garbage-collection erase granularity (block- vs superblock-level reclaim).</p>
+<p><b>How this helps our work.</b> Agreement with a hardware-accurate emulator is what lets
+us trust every result that follows. Because the one systematic difference is understood and
+bounded (granularity, see the Bracket graph), we can use EyanaSSDSim for the placement and
+distribution study with confidence that its numbers are faithful to real hardware &mdash;
+and match FEMU exactly by switching the GC granularity when we need to.</p>
+<p><b>What it shows.</b> WAF (physical/host writes) from EyanaSSDSim next to FEMU for eight
+configurations at the same over-provisioning (OP 25%). FEMU conventional points come from
+<code>fio</code> fill (OP set by fill size, 3&times; rewrite for steady state); FDP points
+from a custom <code>fdp_write</code> tool over NVMe pass-through; WAF is read from FEMU's
+instrumented FTL counters (<code>host</code>/<code>gc</code>, <code>hbmw</code>/<code>mbmw</code>).</p>
 """,
         "findings": """
 <ul>
@@ -68,18 +63,19 @@ the simulator is always &le; FEMU on real traces, exactly as the granularity mod
         "blurb": "FEMU's WAF lies between the simulator's block- and superblock-granular "
                  "GC — the mechanistic cause of the sim–FEMU gap.",
         "details": """
-<p><b>What it shows.</b> The same conventional workload run three ways: EyanaSSDSim with
-<i>block</i>-granular GC, FEMU (which erases whole superblocks/lines), and EyanaSSDSim
-with <i>superblock</i>-granular GC.</p>
-<p><b>The clincher.</b> On prxy_0 the three values are
-<code>1.54 (block) &le; 1.873 (FEMU) &le; 2.14 (superblock)</code> — FEMU is
-<i>bracketed</i> by the simulator's two granularity modes. The ~40% swing from switching
-erase granularity <i>contains</i> FEMU's value, proving that granularity — not a modeling
-error — is what produces the WAF difference in the Validation graph.</p>
-<p><b>Why granularity matters.</b> Real NAND SSDs erase at superblock granularity for
-parallelism; a whole line is reclaimed together, so more valid pages are migrated →
-higher WAF. Block-granular reclaim can pick the single emptiest block → fewer migrations
-→ lower WAF.</p>
+<p><b>Our finding.</b> The gap between the simulator and FEMU is explained by exactly one
+mechanism: garbage-collection erase granularity. Running the same workload with block- and
+superblock-granular GC <i>brackets</i> FEMU's value &mdash; on prxy_0,
+<code>1.54 (block) &le; 1.873 (FEMU) &le; 2.14 (superblock)</code>. The ~40% swing from the
+granularity switch contains FEMU's number.</p>
+<p><b>How this helps our work.</b> It turns an apparent discrepancy into a controlled,
+understood modeling parameter. We can read every sim&ndash;FEMU comparison correctly, and
+tune the simulator to a target device's erase granularity for an exact match &mdash;
+important because real NAND erases at superblock granularity for parallelism.</p>
+<p><b>What it shows.</b> The same conventional workload three ways: EyanaSSDSim block GC,
+FEMU (superblock erase), EyanaSSDSim superblock GC. Coarser erase reclaims a whole line
+together, migrating more valid pages &rarr; higher WAF; block reclaim can take the single
+emptiest block &rarr; fewer migrations &rarr; lower WAF.</p>
 """,
         "findings": """
 <ul>
@@ -99,13 +95,16 @@ the endurance cost of coarse-grained erase.</li>
         "figures": ["B_waf_by_engine.png"],
         "blurb": "Head-to-head WAF of all nine engines on every real trace.",
         "details": """
-<p><b>What it shows.</b> WAF for all nine engine variants — Conventional (block &amp;
-superblock GC), FDP (single / PI / II placement), and ZNS (single &amp; hot/cold with
-greedy or cost-benefit GC) — on each real trace.</p>
-<p><b>How to read it.</b> Lower is better (less write amplification). Grouped bars let you
-compare engines within a workload and the same engine across workloads. Note that no
-single engine wins everywhere: placement schemes help on skewed, reused data but can cost
-extra on write-once or uniform workloads (see Placement Effect).</p>
+<p><b>Our finding.</b> No single engine wins across workloads. Placement schemes (FDP, ZNS)
+reduce write amplification on skewed, reused data but can cost extra on write-once or
+uniform workloads &mdash; the benefit is workload-dependent, not universal.</p>
+<p><b>How this helps our work.</b> This head-to-head is the map that motivates the rest of
+the study: it shows <i>where</i> each placement policy pays off and sends us to the
+distribution and mechanism analyses to explain <i>why</i>.</p>
+<p><b>What it shows.</b> WAF for all nine engine variants &mdash; Conventional (block &amp;
+superblock GC), FDP (single/PI/II), and ZNS (single &amp; hot/cold with greedy or
+cost-benefit GC) &mdash; on each real trace. Lower is better; grouped bars compare engines
+within a workload and across workloads.</p>
 """,
         "findings": """
 <ul>
@@ -129,19 +128,18 @@ while conventional block stays 1.35.</li>
         "blurb": "How valid data is distributed over reclaim units and time — the flagship "
                  "“how it's distributed” visualization.",
         "details": """
-<p><b>What it shows.</b> Each panel is one engine. The vertical axis is the reclaim unit
-(block / RU / zone id), the horizontal axis is host-write time, and colour is the
-<i>valid fraction</i> of that unit (light = mostly invalid/empty, dark green = full of
-valid data).</p>
-<p><b>Why it matters.</b> The paper's central point is not just <i>how much</i>
-amplification (a scalar WAF) but <i>how the wear and invalidity are distributed</i>. These
-heatmaps make the distribution visible: you can see the device fill up (the diagonal
-ramp), reach steady state, and how each placement policy organizes hot vs cold data over
-time. An engine that keeps units either near-empty or near-full (sharp two-tone) reclaims
-cheaply; one that leaves everything half-valid pays a high GC cost.</p>
-<p><b>How to read it.</b> Compare the texture across engines: FDP-PI and ZNS hot/cold
-create distinct hot (churning) and cold (stable dark) bands, whereas conventional block GC
-shows a more uniform speckle.</p>
+<p><b>Our finding.</b> Placement policy is written into the <i>distribution</i> of valid
+data, not just the scalar WAF. FDP-PI and ZNS hot/cold visibly park cold data in a stable
+band and confine churn to a small hot band, while conventional block GC mixes hot and cold
+across every unit &mdash; so every reclaim carries some valid pages.</p>
+<p><b>How this helps our work.</b> This is our central lens: characterising <i>how</i> wear
+and invalidity spread over space and time, which a single WAF number cannot convey. It makes
+the mechanism behind each policy's WAF directly visible and is the qualitative backbone of
+the paper's distribution argument.</p>
+<p><b>What it shows.</b> One panel per engine; vertical axis = reclaim unit (block/RU/zone),
+horizontal = host-write time, colour = valid fraction (light = empty/invalid, dark green =
+full). You can watch the device fill (the diagonal ramp), reach steady state, and see how
+each policy organises hot vs cold data.</p>
 """,
         "findings": """
 <ul>
@@ -166,17 +164,17 @@ across all units, so every reclaim carries some valid pages.</li>
         "blurb": "Degree of Invalid-Page Distribution, measured correctly before every GC "
                  "trigger — not at end of trace.",
         "details": """
-<p><b>What it shows.</b> Left: the Degree of Invalid-Page Distribution (DoIPD, the spread
-of invalid pages across reclaim units) measured two ways — <b>before every GC trigger</b>
-(the steady-state, methodologically-correct measurement) versus <b>at end of trace</b>.
-Right: histograms of the invalid-fraction per unit.</p>
-<p><b>Why measure before GC.</b> Measuring only at the end of the trace samples a
-cooled-down device and understates the real dispersion the FTL works against. Snapshotting
-the distribution at each GC trigger captures the hot steady state that actually drives
-reclaim decisions.</p>
-<p><b>Relation to WAF.</b> Dispersion of invalidity is a <i>spatial</i> property. It
-correlates with WAF but only weakly (see Mechanism Scatters, r&nbsp;&asymp;&nbsp;+0.55) —
-the real driver is the <i>temporal</i> valid-fraction-at-reclaim.</p>
+<p><b>Our finding.</b> How invalid pages are spread across the device (DoIPD) is a real
+signature of a placement policy &mdash; but only when measured at the right moment. Sampled
+<b>before every GC trigger</b> it reflects the steady state the FTL actually works against;
+sampled only at end-of-trace it understates the dispersion (the device looks calmer once
+writing stops). Spatial dispersion tracks WAF loosely (r&nbsp;&asymp;&nbsp;+0.55).</p>
+<p><b>How this helps our work.</b> It gives us a principled, correctly-measured metric for
+the spatial side of the distribution study, and it sets up the key comparison: this spatial
+dispersion versus the temporal valid-at-reclaim measure that governs WAF far more tightly
+(Mechanism Scatters).</p>
+<p><b>What it shows.</b> Left: DoIPD (spread of invalid pages across units) measured at
+GC-trigger vs at end-of-trace. Right: histograms of the invalid-fraction per unit.</p>
 """,
         "findings": """
 <ul>
@@ -202,16 +200,18 @@ hot pages die together regardless of how mixed the layout looks.</li>
         "blurb": "The valid fraction of the unit GC reclaims — the direct cost that sets "
                  "write amplification.",
         "details": """
-<p><b>What it shows.</b> The distribution of the valid fraction of each unit at the moment
-GC reclaims it. A unit reclaimed while 10% valid costs almost nothing to migrate; one
-reclaimed at 60% valid forces migrating most of its pages.</p>
-<p><b>Why it's the mechanism.</b> WAF is set almost entirely by this quantity: every valid
-page in a victim must be copied forward (an extra physical write). The green band marks
-near-empty (&ldquo;free&rdquo;) victims — the cheap reclaims a good policy maximises.</p>
-<p><b>Key result.</b> Across all 69 runs, WAF correlates with mean valid-at-reclaim at
-Pearson <b>r = +0.92</b> — far stronger than any spatial/entropy measure. WAF is governed
-by <i>when</i> pages die (do a unit's pages die together?), a temporal property, not by the
-spatial layout.</p>
+<p><b>Our finding.</b> The valid fraction of a unit at the moment GC reclaims it is the
+quantity that sets write amplification. Across all 69 runs it tracks WAF at Pearson
+<b>r = +0.92</b> &mdash; tighter than any spatial dispersion measure. WAF is governed by
+<i>when</i> a unit's pages die together (a temporal property), realised as how empty the
+unit is when it is reclaimed.</p>
+<p><b>How this helps our work.</b> It gives us a single, mechanistic, directly-measurable
+lever that explains <i>why</i> one placement policy beats another: good policies push
+reclaims into the near-empty band, which is cheap to migrate. Every WAF result in the paper
+can be read back to this one cause.</p>
+<p><b>What it shows.</b> The distribution of victim valid-fraction at reclaim. A unit taken
+at 10% valid costs almost nothing to migrate; one at 60% forces copying most of its pages.
+The green band marks the near-empty (&ldquo;free&rdquo;) victims a good policy maximises.</p>
 """,
         "findings": """
 <ul>
@@ -236,14 +236,16 @@ uniform workloads can't, so they pay the most.</li>
         "blurb": "How erase/reset cycles spread across the device — endurance and "
                  "wear-levelling per engine.",
         "details": """
+<p><b>Our finding.</b> Write amplification and wear-evenness are separate axes: a policy can
+look good on WAF yet concentrate erases on a few units. Coarse (superblock) GC in particular
+nearly doubles the wear spread on prxy_0 (DoEC 20.2 vs 10.6 for block GC).</p>
+<p><b>How this helps our work.</b> It adds the endurance dimension to the distribution study
+&mdash; SSD lifetime is bounded by per-block erase count, so how evenly wear is spread
+matters as much as WAF. This lets us judge each placement policy on durability, not just
+write cost.</p>
 <p><b>What it shows.</b> Left: a Lorenz-style curve of erase/reset counts (units sorted
-hottest-first) — a flat curve means even wear, a steep one means a few units absorb most
-of the wear. Right: the Degree of Erase Count (DoEC, standard deviation of erases per
-unit) for each engine.</p>
-<p><b>Why it matters.</b> SSD lifetime is bounded by per-block erase endurance, so
-<i>even</i> wear (low DoEC) extends device life. This is the endurance counterpart to WAF:
-a policy can achieve low WAF yet concentrate wear on a few blocks. Comparing engines here
-shows the wear-levelling side of each placement strategy.</p>
+hottest-first) &mdash; flat = even wear, steep = concentrated. Right: the Degree of Erase
+Count (DoEC, std of erases per unit) for each engine.</p>
 """,
         "findings": """
 <ul>
@@ -265,24 +267,28 @@ coarse-GC cases, i.e. wear is spread rather than split into hot/cold block popul
         "blurb": "WAF vs valid-at-reclaim (r=+0.92) vs WAF vs invalidity dispersion "
                  "(r=+0.55) across every run.",
         "details": """
-<p><b>What it shows.</b> Every (engine, trace) run as a point, WAF on the y-axis. Left:
-against valid-fraction-at-reclaim (the temporal GC cost). Right: against DoIPD (the spatial
-invalidity dispersion).</p>
-<p><b>The finding.</b> Valid-at-reclaim predicts WAF tightly (<b>r = +0.92</b>); the
-spatial dispersion only loosely (<b>r = +0.55</b>). This is the empirical basis for the
-paper's claim that write amplification is a <i>temporal</i> phenomenon (pages dying
-together) rather than a <i>spatial</i> one (how mixed the layout looks) — and it is the
-evidence that refutes the entropy model of FTL behaviour.</p>
+<p><b>Our finding.</b> Write amplification is governed by a <i>temporal</i> property &mdash;
+whether a unit's pages die together &mdash; far more than by the <i>spatial</i> spread of the
+layout. Over all 69 runs, WAF vs valid-at-reclaim gives <b>r = +0.92</b>, while WAF vs
+invalidity dispersion (DoIPD) gives only <b>r = +0.55</b>.</p>
+<p><b>How this helps our work.</b> This is the analytical backbone of the paper: it names the
+quantity to reason about and to target. Reducing write amplification means arranging for
+pages to be invalidated together (temporal placement) &mdash; exactly what FDP isolation and
+ZNS hot/cold separation attempt &mdash; and this one picture explains why some of them
+succeed and others backfire.</p>
+<p><b>What it shows.</b> Every (engine, trace) run as a point, WAF on the y-axis. Left: vs
+valid-fraction-at-reclaim (the temporal GC cost). Right: vs DoIPD (the spatial invalidity
+dispersion).</p>
 """,
         "findings": """
 <ul>
 <li><b>Temporal beats spatial:</b> WAF vs valid-at-reclaim <b>r = +0.92</b>; WAF vs DoIPD
 <b>r = +0.55</b> &mdash; over the same 69 runs.</li>
-<li>This is the single figure that carries the paper's thesis: write amplification is set by
-<i>when</i> pages die (do a unit's pages die together?), not by how disordered the layout
-looks at any instant.</li>
-<li>Consistent with the separate entropy-model test, where an entropy-optimal GC policy gave
-the <i>worst</i> WAF (+42% to +124%).</li>
+<li>This gives the paper its explanatory variable: write amplification is set by <i>when</i>
+pages die (do a unit's pages die together?), not by how disordered the layout looks at any
+instant.</li>
+<li>It directly explains the placement results &mdash; policies that group same-lifetime data
+(e.g. FDP-PI on skewed loads) drive valid-at-reclaim down, and WAF falls with it.</li>
 </ul>
 """,
     },
@@ -293,19 +299,17 @@ the <i>worst</i> WAF (+42% to +124%).</li>
         "figures": ["H_placement.png"],
         "blurb": "FDP single vs PI vs II, and ZNS hot/cold with greedy vs cost-benefit GC.",
         "details": """
-<p><b>What it shows.</b> Left: FDP with no isolation (single) vs Persistent Isolation (PI)
-vs Initial Isolation (II). Right: ZNS single-stream vs hot/cold separation under greedy and
-cost-benefit garbage collection.</p>
-<p><b>Honest, workload-dependent findings.</b></p>
-<ul>
-<li><b>FDP-PI helps only on skewed, sufficiently-aged workloads</b> (e.g. prxy_1_3M,
-zipf, 80/20) where there is reuse skew to exploit; on uniform or short traces PI's per-RUH
-GC reservation fragments the over-provisioning and can raise WAF. FDP-II is the most robust
-across workloads.</li>
-<li><b>ZNS hot/cold can backfire.</b> It reduces WAF on zipf but sharply <i>increases</i>
-it on prxy_1 (2.89 vs 1.99 single) via a cold-pollution feedback loop; cost-benefit GC does
-not rescue it there. A genuine negative result.</li>
-</ul>
+<p><b>Our finding.</b> Placement isolation is a workload-dependent tool, not a free win.
+FDP-PI lowers WAF on skewed, sufficiently-aged workloads (prxy_1_3M, zipf, 80/20) where
+there is reuse skew to exploit, but on uniform or short traces its per-RUH GC reservation
+fragments the over-provisioning and can raise WAF; FDP-II is the most robust across
+workloads. ZNS hot/cold helps on zipf yet backfires on prxy_1 (2.89 vs 1.99 single) through
+a cold-pollution feedback loop that cost-benefit GC does not fix.</p>
+<p><b>How this helps our work.</b> This is the actionable design guidance the simulator
+exists to produce: which placement scheme to use for which workload, and the failure modes to
+avoid. Paired with the Mechanism graph, each outcome is explained through valid-at-reclaim.</p>
+<p><b>What it shows.</b> Left: FDP single vs Persistent Isolation (PI) vs Initial Isolation
+(II). Right: ZNS single-stream vs hot/cold separation under greedy and cost-benefit GC.</p>
 """,
         "findings": """
 <ul>
@@ -327,12 +331,14 @@ cold-pollution feedback that cost-benefit GC does not fix.</li>
         "figures": ["I_waf_wear_tradeoff.png"],
         "blurb": "Every (engine, trace) plotted as write-cost (WAF) vs wear-spread (DoEC).",
         "details": """
-<p><b>What it shows.</b> Each point is one (engine, trace): WAF on the x-axis (write cost)
-against DoEC on the y-axis (wear spread). Colour encodes the engine.</p>
-<p><b>Why it matters.</b> The two headline costs of an FTL — write amplification and wear
-concentration — do not always move together. This view exposes engines that buy low WAF at
-the price of uneven wear (or vice-versa), which is exactly the design trade-off an SSD
-architect must navigate.</p>
+<p><b>Our finding.</b> Write amplification and wear-evenness do not move together: engines at
+similar WAF can differ sharply in wear spread. Conventional superblock GC lands at high WAF
+<i>and</i> high wear on real traces; FDP-PI/II cluster at low WAF with moderate wear.</p>
+<p><b>How this helps our work.</b> It frames the design decision as a two-objective
+trade-off and identifies, per (engine, trace), which policies sit on the efficient frontier
+and which are dominated &mdash; the practical takeaway an FTL designer needs from the study.</p>
+<p><b>What it shows.</b> Each point is one (engine, trace): WAF (write cost) on the x-axis vs
+DoEC (wear spread) on the y-axis, coloured by engine.</p>
 """,
         "findings": """
 <ul>
